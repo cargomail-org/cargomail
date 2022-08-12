@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "app"
+		},
+		{
+			"name": "server",
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"app": true
+		}
+	},
+}
