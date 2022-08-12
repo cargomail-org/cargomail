@@ -1,2 +1,1 @@
-# fedemail
-Fedemail
+# Fedemail server & app
