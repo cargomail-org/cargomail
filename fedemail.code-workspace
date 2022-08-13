@@ -11,6 +11,7 @@
 	"settings": {
 		"files.exclude": {
 			"app": true
-		}
+		},
+		"liveServer.settings.multiRootWorkspaceName": "app"
 	},
 }
