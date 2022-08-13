@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+  _ "github.com/spf13/cobra"
+  _ "github.com/spf13/viper"
+  "github.com/umalabs/fedemail/cmd"
+)
 
 func main() {
-	fmt.Println("Hello Fedemail!")
+  cmd.Execute()
 }

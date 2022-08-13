@@ -1,0 +1,9 @@
+logging:
+  level: debug 
+  formatter:
+    name: text
+    options:
+      disable_timestamp: true
+
+# http port
+port: 8180      

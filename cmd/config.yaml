@@ -1,0 +1,6 @@
+logging:
+  level: info 
+  formatter:
+    name: text
+    options:
+      disable_timestamp: true
