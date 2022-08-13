@@ -16,7 +16,7 @@ import (
 var defaultConfig []byte
 
 var rootCmd = &cobra.Command{
-	Use: "Fedemail",
+	Use: "fedemail",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return errors.New("no command provided")
 	},
@@ -51,16 +51,16 @@ func loadConfig() *Config {
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(("."))
 
-  err := viper.ReadInConfig();
-  if err == nil {
-    fmt.Println("...config loaded")
-    return NewConfig(viper.GetViper())
-  }
+	err := viper.ReadInConfig()
+	if err == nil {
+		fmt.Println("...config loaded")
+		return NewConfig(viper.GetViper())
+	}
 
-  fmt.Println("...config file not found, using default config...")
-  if err := viper.ReadConfig(bytes.NewBuffer(defaultConfig)); err != nil {
-    log.Fatal(err)
-  }
-	fmt.Println("... default config loaded")
-  return NewConfig(viper.GetViper())
+	fmt.Println("...config file not found, using default config...")
+	if err := viper.ReadConfig(bytes.NewBuffer(defaultConfig)); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("...default config loaded")
+	return NewConfig(viper.GetViper())
 }

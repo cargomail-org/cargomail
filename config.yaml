@@ -5,5 +5,5 @@ logging:
     options:
       disable_timestamp: true
 
-# http port
+# gRPC Web port
 port: 8180      

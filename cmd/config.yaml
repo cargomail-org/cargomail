@@ -4,3 +4,6 @@ logging:
     name: text
     options:
       disable_timestamp: true
+
+# gRPC Web port
+port: 8080

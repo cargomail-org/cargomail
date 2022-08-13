@@ -11,9 +11,6 @@
             "mode": "auto",
             "program": "main.go",
             "args": ["start"],
-            "env": {
-                "DOMAIN": "localhost",
-            },
         }
     ]
 }
