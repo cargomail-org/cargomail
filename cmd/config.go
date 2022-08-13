@@ -9,7 +9,12 @@ import (
 )
 
 type Config struct {
-	Port uint16
+	MDA Server
+	MTA Server
+}
+
+type Server struct {
+	Port int32
 }
 
 var config *Config
@@ -29,3 +34,4 @@ func NewConfig(v *viper.Viper) *Config {
 
 	return config
 }
+

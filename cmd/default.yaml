@@ -5,5 +5,10 @@ logging:
     options:
       disable_timestamp: true
 
-# gRPC Web port
-port: 8080
+# gRPC MDA
+mda:
+  port: 8080
+
+# gRPC MTA
+mta:
+  port: 8025

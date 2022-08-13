@@ -1,9 +1,14 @@
 logging:
-  level: debug 
+  level: debug
   formatter:
     name: text
     options:
       disable_timestamp: true
 
-# gRPC Web port
-port: 8180      
+# gRPC MDA
+mda:
+  port: 8180
+
+# gRPC MTA
+mta:
+  port: 8125

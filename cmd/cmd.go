@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-//go:embed config.yaml
+//go:embed default.yaml
 var defaultConfig []byte
 
 var rootCmd = &cobra.Command{

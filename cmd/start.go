@@ -8,6 +8,7 @@ import (
 var startCmd = &cobra.Command{
   Use: "start",
   Run: func(cmd *cobra.Command, args []string) {
-	logrus.Info("HTTP Port: ", config.Port)
+	logrus.Info("MDA Port: ", config.MDA.Port)
+	logrus.Info("MTA Port: ", config.MTA.Port)
   },
 }
