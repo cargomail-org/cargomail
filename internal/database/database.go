@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"strings"
 
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 
 	cfg "github.com/umalabs/fedemail/internal/config"
 )
@@ -60,8 +62,8 @@ func ConnectAsUser(config *cfg.Config) (*sql.DB, error) {
 	return connect(c, int(config.MaxOpenConns))
 }
 
-func connect(config string, maxOpenConns int) (*sql.DB, error) {
-	client, err := sql.Open("postgres", config)
+func connect(databaseURL string, maxOpenConns int) (*sql.DB, error) {
+	client, err := sql.Open("postgres", databaseURL)
 	if err != nil {
 		return nil, err
 	}
@@ -72,5 +74,21 @@ func connect(config string, maxOpenConns int) (*sql.DB, error) {
 		return nil, err
 	}
 
-	return client, nil
+	baseConn, err := pq.NewConnector(databaseURL)
+	if err != nil {
+		return nil, err
+	}
+
+	loggingConn := pq.ConnectorWithNoticeHandler(baseConn, func(e *pq.Error) {
+		switch e.Severity {
+		case "WARNING":
+			logrus.Warning(e.Message)
+		default:
+			logrus.Debug(e.Message)
+		}
+	})
+
+	db := sql.OpenDB(loggingConn)
+
+	return db, nil
 }
