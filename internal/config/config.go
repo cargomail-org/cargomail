@@ -1,4 +1,4 @@
-package cmd
+package config
 
 import (
 	"log"
@@ -9,15 +9,41 @@ import (
 )
 
 type Config struct {
-	MDA Server
-	MTA Server
+	Mda Server
+	Mta Server
+	Database
 }
 
 type Server struct {
-	Port int32
+	Port int
 }
 
-var config *Config
+type Database struct {
+	Host     string
+	Port     string
+	DatabaseName string `mapstructure:"database_name"`
+	MaxOpenConns int `mapstructure:"max_open_conns"`
+	Admin
+	User
+	SSL
+}
+
+type SSL struct {
+	Mode string
+	RootCert string `mapstructure:"root_cert"`
+	Cert string
+	Key string
+}
+
+type Admin struct {
+	Username string
+	Password string
+}
+
+type User struct {
+	Username string
+	Password string
+}
 
 func NewConfig(v *viper.Viper) *Config {
 	config := new(Config)
@@ -34,4 +60,3 @@ func NewConfig(v *viper.Viper) *Config {
 
 	return config
 }
-

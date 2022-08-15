@@ -12,3 +12,21 @@ mda:
 # gRPC MTA
 mta:
   port: 8025
+
+# Database config
+database:
+  host: localhost
+  port: 1234
+  max_open_conns: 20
+  database_name: federizer
+  ssl:
+    mode: disable
+    root_cert: ""
+    cert: ""
+    Key: ""
+  admin:
+    username: postgres
+    password: password
+  user:
+    username: fuser
+    password: fpassword

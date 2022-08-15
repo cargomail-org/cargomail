@@ -32,6 +32,7 @@ require (
 require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/heirko/go-contrib v0.0.0-20200825160048-11fc5e2235fa
+	github.com/lib/pq v1.10.6
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.12.0

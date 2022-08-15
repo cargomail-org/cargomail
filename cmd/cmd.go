@@ -10,6 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+  cfg "github.com/umalabs/fedemail/internal/config"
 )
 
 //go:embed default.yaml
@@ -45,7 +47,7 @@ func init() {
 	rootCmd.AddCommand(startCmd)
 }
 
-func loadConfig() *Config {
+func loadConfig() *cfg.Config {
 	fmt.Println("loading config file...")
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
@@ -54,7 +56,7 @@ func loadConfig() *Config {
 	err := viper.ReadInConfig()
 	if err == nil {
 		fmt.Println("...config loaded")
-		return NewConfig(viper.GetViper())
+		return cfg.NewConfig(viper.GetViper())
 	}
 
 	fmt.Println("...config file not found, using default config...")
@@ -62,5 +64,5 @@ func loadConfig() *Config {
 		log.Fatal(err)
 	}
 	fmt.Println("...default config loaded")
-	return NewConfig(viper.GetViper())
+	return cfg.NewConfig(viper.GetViper())
 }
