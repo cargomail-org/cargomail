@@ -33,13 +33,13 @@ func init() {
 	config = loadConfig()
 
 	// create database cmd
-	rootCmd.AddCommand(createDbCmd)
+	rootCmd.AddCommand(initialize)
 
 	// create database schema cmd
-	rootCmd.AddCommand(schemaDbCmd)
+	rootCmd.AddCommand(setup)
 
-	// create database demo data cmd
-	rootCmd.AddCommand(demoDbCmd)
+	// create database data cmd
+	rootCmd.AddCommand(data)
 
 	// start cmd
 	rootCmd.AddCommand(startCmd)

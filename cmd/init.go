@@ -4,9 +4,9 @@ import (
   "github.com/spf13/cobra"
 )
 
-var demoDbCmd = &cobra.Command{
-  Use: "demodb",
+var initialize = &cobra.Command{
+  Use: "init",
   Run: func(cmd *cobra.Command, args []string) {
-    println("Database demo data created...")
+    println("Database created...")
   },
 }

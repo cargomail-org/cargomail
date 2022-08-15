@@ -4,9 +4,9 @@ import (
   "github.com/spf13/cobra"
 )
 
-var createDbCmd = &cobra.Command{
-  Use: "createdb",
+var data = &cobra.Command{
+  Use: "data",
   Run: func(cmd *cobra.Command, args []string) {
-    println("Database created...")
+    println("Database data created...")
   },
 }
