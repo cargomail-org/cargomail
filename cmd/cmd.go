@@ -11,11 +11,12 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-  cfg "github.com/federizer/fedemail/internal/config"
+	cfg "github.com/federizer/fedemail/internal/config"
 )
 
 //go:embed default.yaml
 var defaultConfig []byte
+var config *cfg.Config
 
 var rootCmd = &cobra.Command{
 	Use: "fedemail",

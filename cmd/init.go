@@ -11,34 +11,30 @@ import (
 	"github.com/federizer/fedemail/internal/database"
 )
 
-var config *cfg.Config
-
 var (
 	//go:embed sql/init_database.sql
-	initDabaseSql string
+	initDabaseStmt string
 )
 
 var initialize = &cobra.Command{
 	Use: "init",
 	Run: func(cmd *cobra.Command, args []string) {
-		err := initDb(config.Database.Admin.Username, config.Database.Admin.Password)
+		err := initDb(config)
 		if err != nil {
 			logrus.WithError(err).Fatal("unable to create the database")
 		}
-    logrus.Info("database created")
+		logrus.Info("database created")
 	},
 }
 
-func initDb(username, password string) error {
-	logrus.WithFields(logrus.Fields{"username": username}).Info("init user")
-
+func initDb(config *cfg.Config) error {
 	db, err := database.ConnectAsAdmin(config)
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-	stmt := fmt.Sprintf(initDabaseSql, config.User.Username, config.User.Password, config.DatabaseName)
+	stmt := fmt.Sprintf(initDabaseStmt, config.User.Username, config.User.Password, config.User.DatabaseName)
 	_, err = db.Exec(stmt)
 	if err != nil {
 		return err

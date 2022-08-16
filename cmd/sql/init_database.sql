@@ -1,7 +1,7 @@
--- replace %[1]s with the user
--- replace %[2]s with the password
--- replace %[3]s with the database name
-do $$
+-- %[1]s user
+-- %[2]s password
+-- %[3]s database name
+do $do$
 DECLARE 
 BEGIN
     CREATE EXTENSION IF NOT EXISTS dblink;
@@ -17,4 +17,4 @@ BEGIN
         GRANT ALL ON DATABASE "%[3]s" TO "%[1]s";
     END IF;
 END
-$$;
+$do$;

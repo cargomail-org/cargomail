@@ -39,6 +39,9 @@ func getAdminConfig(config *cfg.Config) string {
 		"user=" + config.Admin.Username,
 		"password=" + config.Admin.Password,
 	}
+	if config.Admin.DatabaseName != "" {
+		fields = append(fields, "dbname="+config.Admin.DatabaseName)
+	}
 
 	return strings.Join(fields, " ")
 }
@@ -48,18 +51,21 @@ func getUserConfig(config *cfg.Config) string {
 		"user=" + config.User.Username,
 		"password=" + config.User.Password,
 	}
+	if config.User.DatabaseName != "" {
+		fields = append(fields, "dbname="+config.User.DatabaseName)
+	}
 
 	return strings.Join(fields, " ")
 }
 
 func ConnectAsAdmin(config *cfg.Config) (*sql.DB, error) {
-	c := getDbConfig(config) + " " + getAdminConfig(config)
-	return connect(c, int(config.MaxOpenConns))
+	databaseURL := getDbConfig(config) + " " + getAdminConfig(config)
+	return connect(databaseURL, int(config.MaxOpenConns))
 }
 
 func ConnectAsUser(config *cfg.Config) (*sql.DB, error) {
-	c := getDbConfig(config) + " " + getUserConfig(config)
-	return connect(c, int(config.MaxOpenConns))
+	databaseURL := getDbConfig(config) + " " + getUserConfig(config)
+	return connect(databaseURL, int(config.MaxOpenConns))
 }
 
 func connect(databaseURL string, maxOpenConns int) (*sql.DB, error) {

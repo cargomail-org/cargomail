@@ -19,9 +19,8 @@ type Server struct {
 }
 
 type Database struct {
-	Host     string
-	Port     string
-	DatabaseName string `mapstructure:"database_name"`
+	Host         string
+	Port         string
 	MaxOpenConns int `mapstructure:"max_open_conns"`
 	Admin
 	User
@@ -29,20 +28,22 @@ type Database struct {
 }
 
 type SSL struct {
-	Mode string
+	Mode     string
 	RootCert string `mapstructure:"root_cert"`
-	Cert string
-	Key string
+	Cert     string
+	Key      string
 }
 
 type Admin struct {
-	Username string
-	Password string
+	DatabaseName string `mapstructure:"database_name"`
+	Username     string
+	Password     string
 }
 
 type User struct {
-	Username string
-	Password string
+	DatabaseName string `mapstructure:"database_name"`
+	Username     string
+	Password     string
 }
 
 func NewConfig(v *viper.Viper) *Config {

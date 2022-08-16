@@ -18,7 +18,6 @@ database:
   host: localhost
   port: 1234
   max_open_conns: 20
-  database_name: federizer
   ssl:
     mode: disable
     root_cert: ""
@@ -28,5 +27,6 @@ database:
     username: postgres
     password: password
   user:
+    database_name: federizer
     username: fuser
     password: fpassword
