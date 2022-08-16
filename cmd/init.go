@@ -7,8 +7,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	cfg "github.com/umalabs/fedemail/internal/config"
-	"github.com/umalabs/fedemail/internal/database"
+	cfg "github.com/federizer/fedemail/internal/config"
+	"github.com/federizer/fedemail/internal/database"
 )
 
 var config *cfg.Config

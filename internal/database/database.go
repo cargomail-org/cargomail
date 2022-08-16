@@ -8,7 +8,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 
-	cfg "github.com/umalabs/fedemail/internal/config"
+	cfg "github.com/federizer/fedemail/internal/config"
 )
 
 const (

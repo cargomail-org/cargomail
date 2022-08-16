@@ -1,4 +1,4 @@
-module github.com/umalabs/fedemail
+module github.com/federizer/fedemail
 
 go 1.19
 

@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-  cfg "github.com/umalabs/fedemail/internal/config"
+  cfg "github.com/federizer/fedemail/internal/config"
 )
 
 //go:embed default.yaml
