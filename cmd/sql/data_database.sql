@@ -1,4 +1,4 @@
-do $do$
+do $main$
 DECLARE 
 BEGIN
     -- Labels
@@ -241,4 +241,4 @@ BEGIN
 
     RAISE INFO 'data inserted into federizer/people';
 END
-$do$;
+$main$;

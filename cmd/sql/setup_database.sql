@@ -1,4 +1,4 @@
-do $do$
+do $main$
 DECLARE 
 BEGIN
     CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
@@ -231,4 +231,4 @@ BEGIN
 
     RAISE INFO 'database schema "people" created';
 END
-$do$;
+$main$;
