@@ -8,7 +8,24 @@ logging:
 # gRPC MDA
 mda:
   port: 8080
-
+  cors:
+    allowed_origins: ["*"]
+    allowed_methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
+    allowed_headers:
+      [
+        "origin",
+        "content-type",
+        "accept",
+        "accept-language",
+        "authorization",
+        "x-grpc-web",
+        "x-user-agent",
+        "client-sent-security-token",
+        "x-requested-with",
+      ]
+    max_age: 600
+    allow_credentials: true
+      
 # gRPC MTA
 mta:
   port: 8025

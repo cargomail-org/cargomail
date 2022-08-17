@@ -16,6 +16,15 @@ type Config struct {
 
 type Server struct {
 	Port int
+	Cors
+}
+
+type Cors struct {
+	AllowedOrigins   []string `mapstructure:"allowed_origins"`
+	AllowedMethods   []string `mapstructure:"allowed_methods"`
+	AllowedHeaders   []string `mapstructure:"allowed_headers"`
+	MaxAge           int      `mapstructure:"max_age"`
+	AllowCredentials bool     `mapstructure:"allow_credentials"`
 }
 
 type Database struct {
