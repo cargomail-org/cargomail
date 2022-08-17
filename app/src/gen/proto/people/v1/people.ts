@@ -307,5 +307,5 @@ export const Person = new Person$Type();
  * @generated ServiceType for protobuf service people.v1.People
  */
 export const People = new ServiceType("people.v1.People", [
-    { name: "PeopleConnectionsList", options: {}, I: Empty, O: ListConnectionsResponse }
+    { name: "ConnectionsList", options: {}, I: Empty, O: ListConnectionsResponse }
 ]);

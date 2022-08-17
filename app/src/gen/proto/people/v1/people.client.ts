@@ -14,9 +14,9 @@ import type { RpcOptions } from "@protobuf-ts/runtime-rpc";
  */
 export interface IPeopleClient {
     /**
-     * @generated from protobuf rpc: PeopleConnectionsList(google.protobuf.Empty) returns (people.v1.ListConnectionsResponse);
+     * @generated from protobuf rpc: ConnectionsList(google.protobuf.Empty) returns (people.v1.ListConnectionsResponse);
      */
-    peopleConnectionsList(input: Empty, options?: RpcOptions): UnaryCall<Empty, ListConnectionsResponse>;
+    connectionsList(input: Empty, options?: RpcOptions): UnaryCall<Empty, ListConnectionsResponse>;
 }
 /**
  * @generated from protobuf service people.v1.People
@@ -28,9 +28,9 @@ export class PeopleClient implements IPeopleClient, ServiceInfo {
     constructor(private readonly _transport: RpcTransport) {
     }
     /**
-     * @generated from protobuf rpc: PeopleConnectionsList(google.protobuf.Empty) returns (people.v1.ListConnectionsResponse);
+     * @generated from protobuf rpc: ConnectionsList(google.protobuf.Empty) returns (people.v1.ListConnectionsResponse);
      */
-    peopleConnectionsList(input: Empty, options?: RpcOptions): UnaryCall<Empty, ListConnectionsResponse> {
+    connectionsList(input: Empty, options?: RpcOptions): UnaryCall<Empty, ListConnectionsResponse> {
         const method = this.methods[0], opt = this._transport.mergeOptions(options);
         return stackIntercept<Empty, ListConnectionsResponse>("unary", this._transport, method, opt, input);
     }

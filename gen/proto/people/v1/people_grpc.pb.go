@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PeopleClient interface {
-	PeopleConnectionsList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListConnectionsResponse, error)
+	ConnectionsList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListConnectionsResponse, error)
 }
 
 type peopleClient struct {
@@ -34,9 +34,9 @@ func NewPeopleClient(cc grpc.ClientConnInterface) PeopleClient {
 	return &peopleClient{cc}
 }
 
-func (c *peopleClient) PeopleConnectionsList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListConnectionsResponse, error) {
+func (c *peopleClient) ConnectionsList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListConnectionsResponse, error) {
 	out := new(ListConnectionsResponse)
-	err := c.cc.Invoke(ctx, "/people.v1.People/PeopleConnectionsList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/people.v1.People/ConnectionsList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func (c *peopleClient) PeopleConnectionsList(ctx context.Context, in *emptypb.Em
 // All implementations must embed UnimplementedPeopleServer
 // for forward compatibility
 type PeopleServer interface {
-	PeopleConnectionsList(context.Context, *emptypb.Empty) (*ListConnectionsResponse, error)
+	ConnectionsList(context.Context, *emptypb.Empty) (*ListConnectionsResponse, error)
 	mustEmbedUnimplementedPeopleServer()
 }
 
@@ -55,8 +55,8 @@ type PeopleServer interface {
 type UnimplementedPeopleServer struct {
 }
 
-func (UnimplementedPeopleServer) PeopleConnectionsList(context.Context, *emptypb.Empty) (*ListConnectionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PeopleConnectionsList not implemented")
+func (UnimplementedPeopleServer) ConnectionsList(context.Context, *emptypb.Empty) (*ListConnectionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConnectionsList not implemented")
 }
 func (UnimplementedPeopleServer) mustEmbedUnimplementedPeopleServer() {}
 
@@ -71,20 +71,20 @@ func RegisterPeopleServer(s grpc.ServiceRegistrar, srv PeopleServer) {
 	s.RegisterService(&People_ServiceDesc, srv)
 }
 
-func _People_PeopleConnectionsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _People_ConnectionsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PeopleServer).PeopleConnectionsList(ctx, in)
+		return srv.(PeopleServer).ConnectionsList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/people.v1.People/PeopleConnectionsList",
+		FullMethod: "/people.v1.People/ConnectionsList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PeopleServer).PeopleConnectionsList(ctx, req.(*emptypb.Empty))
+		return srv.(PeopleServer).ConnectionsList(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -97,8 +97,8 @@ var People_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PeopleServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "PeopleConnectionsList",
-			Handler:    _People_PeopleConnectionsList_Handler,
+			MethodName: "ConnectionsList",
+			Handler:    _People_ConnectionsList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
