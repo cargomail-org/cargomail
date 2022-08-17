@@ -14,7 +14,7 @@ var (
 	setupDabaseStmt string
 )
 
-var setup = &cobra.Command{
+var setupCmd = &cobra.Command{
 	Use: "setup",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := setupDb(config)

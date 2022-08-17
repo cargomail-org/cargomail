@@ -14,7 +14,7 @@ var (
 	insertDataStmt string
 )
 
-var data = &cobra.Command{
+var dataCmd = &cobra.Command{
 	Use: "data",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := insertData(config)

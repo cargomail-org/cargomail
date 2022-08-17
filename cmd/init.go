@@ -16,7 +16,7 @@ var (
 	initDabaseStmt string
 )
 
-var initialize = &cobra.Command{
+var initializeCmd = &cobra.Command{
 	Use: "init",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := initDb(config)
