@@ -48,7 +48,6 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 	grpcWebServer := grpcweb.WrapServer(grpcServer)
 
 	svc := &GrpcService{}
-
 	grpc_health_v1.RegisterHealthServer(grpcServer, svc)
 
 	mixedHandler := newCorsHandler(config, newHTTPandGRPCMux(httpMux, grpcServer, grpcWebServer))
