@@ -36,8 +36,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) {
 		}
 	}()
 
-	svc := &GrpcService{}
-	grpc_health_v1.RegisterHealthServer(grpcServer, svc)
+	grpc_health_v1.RegisterHealthServer(grpcServer, &GrpcHealthService{})
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
@@ -52,14 +51,14 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) {
 	}()
 }
 
-type GrpcService struct {
+type GrpcHealthService struct {
 	grpc_health_v1.UnimplementedHealthServer
 }
 
-func (m *GrpcService) Check(_ context.Context, _ *grpc_health_v1.HealthCheckRequest) (*grpc_health_v1.HealthCheckResponse, error) {
+func (m *GrpcHealthService) Check(_ context.Context, _ *grpc_health_v1.HealthCheckRequest) (*grpc_health_v1.HealthCheckResponse, error) {
 	return &grpc_health_v1.HealthCheckResponse{Status: grpc_health_v1.HealthCheckResponse_SERVING}, nil
 }
 
-func (m *GrpcService) Watch(req *grpc_health_v1.HealthCheckRequest, stream grpc_health_v1.Health_WatchServer) error {
+func (m *GrpcHealthService) Watch(req *grpc_health_v1.HealthCheckRequest, stream grpc_health_v1.Health_WatchServer) error {
 	return status.Error(codes.Unimplemented, "Watch is not implemented")
 }

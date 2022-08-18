@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package fedemail;
+package fedemail.v1;
 
 import "google/protobuf/descriptor.proto";
 

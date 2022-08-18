@@ -26,6 +26,13 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
+
+	"github.com/federizer/fedemail/gen/proto/fedemail/v1"
+	"github.com/federizer/fedemail/gen/proto/people/v1"
+	fedemailRepository "github.com/federizer/fedemail/internal/repository/fedemail/v1"
+	peopleRepository "github.com/federizer/fedemail/internal/repository/people/v1"
+	fedemailHandler "github.com/federizer/fedemail/pkg/api/fedemail/v1"
+	peopleHandler "github.com/federizer/fedemail/pkg/api/people/v1"
 )
 
 func Start(wg *sync.WaitGroup, config *cfg.Config) error {
@@ -43,12 +50,13 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(AuthInterceptor))
 
+	grpc_health_v1.RegisterHealthServer(grpcServer, &GrpcHealthService{})
+	peoplev1.RegisterPeopleServer(grpcServer, peopleHandler.NewHandler(peopleRepository.NewRepository(db)))
+	fedemailv1.RegisterFedemailServer(grpcServer, fedemailHandler.NewHandler(fedemailRepository.NewRepository(db)))
+
 	httpMux := http.NewServeMux()
 
 	grpcWebServer := grpcweb.WrapServer(grpcServer)
-
-	svc := &GrpcService{}
-	grpc_health_v1.RegisterHealthServer(grpcServer, svc)
 
 	mixedHandler := newCorsHandler(config, newHTTPandGRPCMux(httpMux, grpcServer, grpcWebServer))
 	http2Server := &http2.Server{}
@@ -58,7 +66,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 	if err != nil {
 		logrus.Fatalf("tcp listener on %s failed: %w", httpPort, err)
 	}
-	
+
 	mta.Start(wg, config)
 
 	errCh := make(chan error, 1)
@@ -86,15 +94,15 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 	}
 }
 
-type GrpcService struct {
+type GrpcHealthService struct {
 	grpc_health_v1.UnimplementedHealthServer
 }
 
-func (m *GrpcService) Check(_ context.Context, _ *grpc_health_v1.HealthCheckRequest) (*grpc_health_v1.HealthCheckResponse, error) {
+func (m *GrpcHealthService) Check(_ context.Context, _ *grpc_health_v1.HealthCheckRequest) (*grpc_health_v1.HealthCheckResponse, error) {
 	return &grpc_health_v1.HealthCheckResponse{Status: grpc_health_v1.HealthCheckResponse_SERVING}, nil
 }
 
-func (m *GrpcService) Watch(req *grpc_health_v1.HealthCheckRequest, stream grpc_health_v1.Health_WatchServer) error {
+func (m *GrpcHealthService) Watch(req *grpc_health_v1.HealthCheckRequest, stream grpc_health_v1.Health_WatchServer) error {
 	ticker := time.NewTicker(1 * time.Second)
 	for ; true; <-ticker.C {
 		err := stream.Send(&grpc_health_v1.HealthCheckResponse{Status: grpc_health_v1.HealthCheckResponse_SERVING})

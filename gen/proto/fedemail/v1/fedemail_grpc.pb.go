@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: proto/fedemail/v1/fedemail.proto
 
-package v1
+package fedemailv1
 
 import (
 	context "context"
@@ -63,7 +63,7 @@ func NewFedemailClient(cc grpc.ClientConnInterface) FedemailClient {
 
 func (c *fedemailClient) DraftsList(ctx context.Context, in *DraftsListRequest, opts ...grpc.CallOption) (*ListDraftsResponse, error) {
 	out := new(ListDraftsResponse)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/DraftsList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/DraftsList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func (c *fedemailClient) DraftsList(ctx context.Context, in *DraftsListRequest, 
 
 func (c *fedemailClient) DraftsCreate(ctx context.Context, in *DraftsCreateRequest, opts ...grpc.CallOption) (*Draft, error) {
 	out := new(Draft)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/DraftsCreate", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/DraftsCreate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (c *fedemailClient) DraftsCreate(ctx context.Context, in *DraftsCreateReque
 
 func (c *fedemailClient) DraftsSend(ctx context.Context, in *DraftsSendRequest, opts ...grpc.CallOption) (*Message, error) {
 	out := new(Message)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/DraftsSend", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/DraftsSend", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func (c *fedemailClient) DraftsSend(ctx context.Context, in *DraftsSendRequest, 
 
 func (c *fedemailClient) DraftsGet(ctx context.Context, in *DraftsGetRequest, opts ...grpc.CallOption) (*Draft, error) {
 	out := new(Draft)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/DraftsGet", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/DraftsGet", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (c *fedemailClient) DraftsGet(ctx context.Context, in *DraftsGetRequest, op
 
 func (c *fedemailClient) DraftsUpdate(ctx context.Context, in *DraftsUpdateRequest, opts ...grpc.CallOption) (*Draft, error) {
 	out := new(Draft)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/DraftsUpdate", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/DraftsUpdate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (c *fedemailClient) DraftsUpdate(ctx context.Context, in *DraftsUpdateReque
 
 func (c *fedemailClient) DraftsDelete(ctx context.Context, in *DraftsDeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/DraftsDelete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/DraftsDelete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +117,7 @@ func (c *fedemailClient) DraftsDelete(ctx context.Context, in *DraftsDeleteReque
 
 func (c *fedemailClient) LabelsList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListLabelsResponse, error) {
 	out := new(ListLabelsResponse)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/LabelsList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/LabelsList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -126,7 +126,7 @@ func (c *fedemailClient) LabelsList(ctx context.Context, in *emptypb.Empty, opts
 
 func (c *fedemailClient) LabelsCreate(ctx context.Context, in *LabelsCreateRequest, opts ...grpc.CallOption) (*Label, error) {
 	out := new(Label)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/LabelsCreate", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/LabelsCreate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +135,7 @@ func (c *fedemailClient) LabelsCreate(ctx context.Context, in *LabelsCreateReque
 
 func (c *fedemailClient) LabelsGet(ctx context.Context, in *LabelsGetRequest, opts ...grpc.CallOption) (*Label, error) {
 	out := new(Label)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/LabelsGet", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/LabelsGet", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +144,7 @@ func (c *fedemailClient) LabelsGet(ctx context.Context, in *LabelsGetRequest, op
 
 func (c *fedemailClient) LabelsUpdate(ctx context.Context, in *LabelsUpdateRequest, opts ...grpc.CallOption) (*Label, error) {
 	out := new(Label)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/LabelsUpdate", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/LabelsUpdate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -153,7 +153,7 @@ func (c *fedemailClient) LabelsUpdate(ctx context.Context, in *LabelsUpdateReque
 
 func (c *fedemailClient) LabelsDelete(ctx context.Context, in *LabelsDeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/LabelsDelete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/LabelsDelete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -162,7 +162,7 @@ func (c *fedemailClient) LabelsDelete(ctx context.Context, in *LabelsDeleteReque
 
 func (c *fedemailClient) LabelsPatch(ctx context.Context, in *LabelsPatchRequest, opts ...grpc.CallOption) (*Label, error) {
 	out := new(Label)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/LabelsPatch", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/LabelsPatch", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -171,7 +171,7 @@ func (c *fedemailClient) LabelsPatch(ctx context.Context, in *LabelsPatchRequest
 
 func (c *fedemailClient) MessagesList(ctx context.Context, in *MessagesListRequest, opts ...grpc.CallOption) (*ListMessagesResponse, error) {
 	out := new(ListMessagesResponse)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/MessagesList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/MessagesList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -180,7 +180,7 @@ func (c *fedemailClient) MessagesList(ctx context.Context, in *MessagesListReque
 
 func (c *fedemailClient) MessagesBatchDelete(ctx context.Context, in *MessagesBatchDeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/MessagesBatchDelete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/MessagesBatchDelete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +189,7 @@ func (c *fedemailClient) MessagesBatchDelete(ctx context.Context, in *MessagesBa
 
 func (c *fedemailClient) MessagesBatchModify(ctx context.Context, in *MessagesBatchModifyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/MessagesBatchModify", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/MessagesBatchModify", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -198,7 +198,7 @@ func (c *fedemailClient) MessagesBatchModify(ctx context.Context, in *MessagesBa
 
 func (c *fedemailClient) MessagesSend(ctx context.Context, in *MessagesSendRequest, opts ...grpc.CallOption) (*Message, error) {
 	out := new(Message)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/MessagesSend", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/MessagesSend", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -207,7 +207,7 @@ func (c *fedemailClient) MessagesSend(ctx context.Context, in *MessagesSendReque
 
 func (c *fedemailClient) MessagesGet(ctx context.Context, in *MessagesGetRequest, opts ...grpc.CallOption) (*Message, error) {
 	out := new(Message)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/MessagesGet", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/MessagesGet", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -216,7 +216,7 @@ func (c *fedemailClient) MessagesGet(ctx context.Context, in *MessagesGetRequest
 
 func (c *fedemailClient) MessagesDelete(ctx context.Context, in *MessagesDeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/MessagesDelete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/MessagesDelete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -225,7 +225,7 @@ func (c *fedemailClient) MessagesDelete(ctx context.Context, in *MessagesDeleteR
 
 func (c *fedemailClient) MessagesModify(ctx context.Context, in *MessagesModifyRequest, opts ...grpc.CallOption) (*Message, error) {
 	out := new(Message)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/MessagesModify", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/MessagesModify", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -234,7 +234,7 @@ func (c *fedemailClient) MessagesModify(ctx context.Context, in *MessagesModifyR
 
 func (c *fedemailClient) MessagesTrash(ctx context.Context, in *MessagesTrashRequest, opts ...grpc.CallOption) (*Message, error) {
 	out := new(Message)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/MessagesTrash", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/MessagesTrash", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -243,7 +243,7 @@ func (c *fedemailClient) MessagesTrash(ctx context.Context, in *MessagesTrashReq
 
 func (c *fedemailClient) MessagesUntrash(ctx context.Context, in *MessagesUntrashRequest, opts ...grpc.CallOption) (*Message, error) {
 	out := new(Message)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/MessagesUntrash", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/MessagesUntrash", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -252,7 +252,7 @@ func (c *fedemailClient) MessagesUntrash(ctx context.Context, in *MessagesUntras
 
 func (c *fedemailClient) MessagesAttachmentsGet(ctx context.Context, in *MessagesAttachmentsGetRequest, opts ...grpc.CallOption) (*MessagePartBody, error) {
 	out := new(MessagePartBody)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/MessagesAttachmentsGet", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/MessagesAttachmentsGet", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -261,7 +261,7 @@ func (c *fedemailClient) MessagesAttachmentsGet(ctx context.Context, in *Message
 
 func (c *fedemailClient) ThreadsList(ctx context.Context, in *ThreadsListRequest, opts ...grpc.CallOption) (*ListThreadsResponse, error) {
 	out := new(ListThreadsResponse)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/ThreadsList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/ThreadsList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -270,7 +270,7 @@ func (c *fedemailClient) ThreadsList(ctx context.Context, in *ThreadsListRequest
 
 func (c *fedemailClient) ThreadsGet(ctx context.Context, in *ThreadsGetRequest, opts ...grpc.CallOption) (*Thread, error) {
 	out := new(Thread)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/ThreadsGet", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/ThreadsGet", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -279,7 +279,7 @@ func (c *fedemailClient) ThreadsGet(ctx context.Context, in *ThreadsGetRequest, 
 
 func (c *fedemailClient) ThreadsDelete(ctx context.Context, in *ThreadsDeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/ThreadsDelete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/ThreadsDelete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -288,7 +288,7 @@ func (c *fedemailClient) ThreadsDelete(ctx context.Context, in *ThreadsDeleteReq
 
 func (c *fedemailClient) ThreadsModify(ctx context.Context, in *ThreadsModifyRequest, opts ...grpc.CallOption) (*Thread, error) {
 	out := new(Thread)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/ThreadsModify", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/ThreadsModify", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -297,7 +297,7 @@ func (c *fedemailClient) ThreadsModify(ctx context.Context, in *ThreadsModifyReq
 
 func (c *fedemailClient) ThreadsTrash(ctx context.Context, in *ThreadsTrashRequest, opts ...grpc.CallOption) (*Thread, error) {
 	out := new(Thread)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/ThreadsTrash", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/ThreadsTrash", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -306,7 +306,7 @@ func (c *fedemailClient) ThreadsTrash(ctx context.Context, in *ThreadsTrashReque
 
 func (c *fedemailClient) ThreadsUntrash(ctx context.Context, in *ThreadsUntrashRequest, opts ...grpc.CallOption) (*Thread, error) {
 	out := new(Thread)
-	err := c.cc.Invoke(ctx, "/fedemail.Fedemail/ThreadsUntrash", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fedemail.v1.Fedemail/ThreadsUntrash", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -459,7 +459,7 @@ func _Fedemail_DraftsList_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/DraftsList",
+		FullMethod: "/fedemail.v1.Fedemail/DraftsList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).DraftsList(ctx, req.(*DraftsListRequest))
@@ -477,7 +477,7 @@ func _Fedemail_DraftsCreate_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/DraftsCreate",
+		FullMethod: "/fedemail.v1.Fedemail/DraftsCreate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).DraftsCreate(ctx, req.(*DraftsCreateRequest))
@@ -495,7 +495,7 @@ func _Fedemail_DraftsSend_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/DraftsSend",
+		FullMethod: "/fedemail.v1.Fedemail/DraftsSend",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).DraftsSend(ctx, req.(*DraftsSendRequest))
@@ -513,7 +513,7 @@ func _Fedemail_DraftsGet_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/DraftsGet",
+		FullMethod: "/fedemail.v1.Fedemail/DraftsGet",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).DraftsGet(ctx, req.(*DraftsGetRequest))
@@ -531,7 +531,7 @@ func _Fedemail_DraftsUpdate_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/DraftsUpdate",
+		FullMethod: "/fedemail.v1.Fedemail/DraftsUpdate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).DraftsUpdate(ctx, req.(*DraftsUpdateRequest))
@@ -549,7 +549,7 @@ func _Fedemail_DraftsDelete_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/DraftsDelete",
+		FullMethod: "/fedemail.v1.Fedemail/DraftsDelete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).DraftsDelete(ctx, req.(*DraftsDeleteRequest))
@@ -567,7 +567,7 @@ func _Fedemail_LabelsList_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/LabelsList",
+		FullMethod: "/fedemail.v1.Fedemail/LabelsList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).LabelsList(ctx, req.(*emptypb.Empty))
@@ -585,7 +585,7 @@ func _Fedemail_LabelsCreate_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/LabelsCreate",
+		FullMethod: "/fedemail.v1.Fedemail/LabelsCreate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).LabelsCreate(ctx, req.(*LabelsCreateRequest))
@@ -603,7 +603,7 @@ func _Fedemail_LabelsGet_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/LabelsGet",
+		FullMethod: "/fedemail.v1.Fedemail/LabelsGet",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).LabelsGet(ctx, req.(*LabelsGetRequest))
@@ -621,7 +621,7 @@ func _Fedemail_LabelsUpdate_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/LabelsUpdate",
+		FullMethod: "/fedemail.v1.Fedemail/LabelsUpdate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).LabelsUpdate(ctx, req.(*LabelsUpdateRequest))
@@ -639,7 +639,7 @@ func _Fedemail_LabelsDelete_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/LabelsDelete",
+		FullMethod: "/fedemail.v1.Fedemail/LabelsDelete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).LabelsDelete(ctx, req.(*LabelsDeleteRequest))
@@ -657,7 +657,7 @@ func _Fedemail_LabelsPatch_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/LabelsPatch",
+		FullMethod: "/fedemail.v1.Fedemail/LabelsPatch",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).LabelsPatch(ctx, req.(*LabelsPatchRequest))
@@ -675,7 +675,7 @@ func _Fedemail_MessagesList_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/MessagesList",
+		FullMethod: "/fedemail.v1.Fedemail/MessagesList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).MessagesList(ctx, req.(*MessagesListRequest))
@@ -693,7 +693,7 @@ func _Fedemail_MessagesBatchDelete_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/MessagesBatchDelete",
+		FullMethod: "/fedemail.v1.Fedemail/MessagesBatchDelete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).MessagesBatchDelete(ctx, req.(*MessagesBatchDeleteRequest))
@@ -711,7 +711,7 @@ func _Fedemail_MessagesBatchModify_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/MessagesBatchModify",
+		FullMethod: "/fedemail.v1.Fedemail/MessagesBatchModify",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).MessagesBatchModify(ctx, req.(*MessagesBatchModifyRequest))
@@ -729,7 +729,7 @@ func _Fedemail_MessagesSend_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/MessagesSend",
+		FullMethod: "/fedemail.v1.Fedemail/MessagesSend",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).MessagesSend(ctx, req.(*MessagesSendRequest))
@@ -747,7 +747,7 @@ func _Fedemail_MessagesGet_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/MessagesGet",
+		FullMethod: "/fedemail.v1.Fedemail/MessagesGet",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).MessagesGet(ctx, req.(*MessagesGetRequest))
@@ -765,7 +765,7 @@ func _Fedemail_MessagesDelete_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/MessagesDelete",
+		FullMethod: "/fedemail.v1.Fedemail/MessagesDelete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).MessagesDelete(ctx, req.(*MessagesDeleteRequest))
@@ -783,7 +783,7 @@ func _Fedemail_MessagesModify_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/MessagesModify",
+		FullMethod: "/fedemail.v1.Fedemail/MessagesModify",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).MessagesModify(ctx, req.(*MessagesModifyRequest))
@@ -801,7 +801,7 @@ func _Fedemail_MessagesTrash_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/MessagesTrash",
+		FullMethod: "/fedemail.v1.Fedemail/MessagesTrash",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).MessagesTrash(ctx, req.(*MessagesTrashRequest))
@@ -819,7 +819,7 @@ func _Fedemail_MessagesUntrash_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/MessagesUntrash",
+		FullMethod: "/fedemail.v1.Fedemail/MessagesUntrash",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).MessagesUntrash(ctx, req.(*MessagesUntrashRequest))
@@ -837,7 +837,7 @@ func _Fedemail_MessagesAttachmentsGet_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/MessagesAttachmentsGet",
+		FullMethod: "/fedemail.v1.Fedemail/MessagesAttachmentsGet",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).MessagesAttachmentsGet(ctx, req.(*MessagesAttachmentsGetRequest))
@@ -855,7 +855,7 @@ func _Fedemail_ThreadsList_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/ThreadsList",
+		FullMethod: "/fedemail.v1.Fedemail/ThreadsList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).ThreadsList(ctx, req.(*ThreadsListRequest))
@@ -873,7 +873,7 @@ func _Fedemail_ThreadsGet_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/ThreadsGet",
+		FullMethod: "/fedemail.v1.Fedemail/ThreadsGet",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).ThreadsGet(ctx, req.(*ThreadsGetRequest))
@@ -891,7 +891,7 @@ func _Fedemail_ThreadsDelete_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/ThreadsDelete",
+		FullMethod: "/fedemail.v1.Fedemail/ThreadsDelete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).ThreadsDelete(ctx, req.(*ThreadsDeleteRequest))
@@ -909,7 +909,7 @@ func _Fedemail_ThreadsModify_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/ThreadsModify",
+		FullMethod: "/fedemail.v1.Fedemail/ThreadsModify",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).ThreadsModify(ctx, req.(*ThreadsModifyRequest))
@@ -927,7 +927,7 @@ func _Fedemail_ThreadsTrash_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/ThreadsTrash",
+		FullMethod: "/fedemail.v1.Fedemail/ThreadsTrash",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).ThreadsTrash(ctx, req.(*ThreadsTrashRequest))
@@ -945,7 +945,7 @@ func _Fedemail_ThreadsUntrash_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fedemail.Fedemail/ThreadsUntrash",
+		FullMethod: "/fedemail.v1.Fedemail/ThreadsUntrash",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FedemailServer).ThreadsUntrash(ctx, req.(*ThreadsUntrashRequest))
@@ -957,7 +957,7 @@ func _Fedemail_ThreadsUntrash_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Fedemail_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "fedemail.Fedemail",
+	ServiceName: "fedemail.v1.Fedemail",
 	HandlerType: (*FedemailServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
