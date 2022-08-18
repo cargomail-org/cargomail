@@ -69,7 +69,7 @@ BEGIN
 
     CREATE TRIGGER message_message_inserted BEFORE INSERT ON fedemail.message FOR EACH ROW EXECUTE PROCEDURE fedemail.message_table_inserted();
 
-    CREATE OR REPLACE FUNCTION fedemail.labels_list(IN _owner character varying)
+    CREATE OR REPLACE FUNCTION fedemail.labels_list_v1(IN _owner character varying)
     RETURNS TABLE(label jsonb) AS
     $BODY$
     BEGIN
@@ -89,7 +89,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.threads_list(IN _owner character varying)
+    CREATE OR REPLACE FUNCTION fedemail.threads_list_v1(IN _owner character varying)
     RETURNS TABLE(thread jsonb) AS
     $BODY$
     BEGIN
@@ -111,7 +111,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.threads_get(IN _owner character varying, IN _thread_id bigint)
+    CREATE OR REPLACE FUNCTION fedemail.threads_get_v1(IN _owner character varying, IN _thread_id bigint)
     RETURNS TABLE(thread jsonb) AS
     $BODY$
     BEGIN
@@ -133,7 +133,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.drafts_delete(IN _owner character varying, IN _id bigint)
+    CREATE OR REPLACE FUNCTION fedemail.drafts_delete_v1(IN _owner character varying, IN _id bigint)
     RETURNS bigint AS
     $BODY$
     DECLARE
@@ -208,7 +208,7 @@ BEGIN
     CREATE TRIGGER people_connection_inserted BEFORE INSERT ON people.connection FOR EACH ROW EXECUTE PROCEDURE people.connection_table_inserted();
     CREATE TRIGGER people_connection_updated BEFORE UPDATE ON people.connection FOR EACH ROW EXECUTE PROCEDURE people.connection_table_updated();
 
-    CREATE OR REPLACE FUNCTION people.connections_list(IN _owner character varying)
+    CREATE OR REPLACE FUNCTION people.connections_list_v1(IN _owner character varying)
     RETURNS TABLE(thread jsonb) AS
     $BODY$
     BEGIN

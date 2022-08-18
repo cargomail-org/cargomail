@@ -23,7 +23,7 @@ var initializeCmd = &cobra.Command{
 		if err != nil {
 			logrus.WithError(err).Fatal("unable to create the database")
 		}
-		logrus.Info("database created")
+		logrus.Info("script finished")
 	},
 }
 

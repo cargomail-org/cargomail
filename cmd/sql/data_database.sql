@@ -151,7 +151,7 @@ BEGIN
         "mime_type": "text/html",
         "body": {"data": "SGVsbG8gOi0tKQ==", "size": 10},
         "headers": [
-            {"name": "From", "value": "Diana Barry <diana.barry@federizer.org>"},
+            {"name": "From", "value": "Diana Barry <diana.barry@demo.localhost>"},
             {"name": "To", "value": "matthew.cuthbert@demo.localhost"},
             {"name": "Subject", "value": "Hello from Diana!"},
             {"name": "Message-ID", "value": "1002@demo.localhost"},
@@ -172,7 +172,7 @@ BEGIN
         "mime_type": "text/html",
         "body": {"data": "SGF2ZSBhIG5pY2UgZGF5IDop", "size": 18},
         "headers": [
-            {"name": "From", "value": "Anne Shirley <anne.shirley@federizer.org>"},
+            {"name": "From", "value": "Anne Shirley <anne.shirley@demo.localhost>"},
             {"name": "To", "value": "matthew.cuthbert@demo.localhost"},
             {"name": "Subject", "value": "Hello from Anna!"},
             {"name": "Message-ID", "value": "1003@demo.localhost"}
@@ -204,7 +204,7 @@ BEGIN
         ]',
         '[
             {
-                "value": "anne.shirley@federizer.org",
+                "value": "anne.shirley@demo.localhost",
                 "type": "home"
             }
         ]'),
@@ -232,7 +232,7 @@ BEGIN
         ]',
         '[
             {
-                "value": "diana.barry@federizer.org",
+                "value": "diana.barry@demo.localhost",
                 "type": "home"
             }
         ]');

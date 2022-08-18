@@ -21,7 +21,7 @@ var dataCmd = &cobra.Command{
 		if err != nil {
 			logrus.WithError(err).Fatal("unable to insert data to the database")
 		}
-		logrus.Info("data inserted")
+		logrus.Info("script finished")
 	},
 }
 

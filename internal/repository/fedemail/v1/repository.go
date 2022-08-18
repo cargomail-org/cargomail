@@ -28,7 +28,7 @@ func NewRepository(db *sql.DB) *Repository {
 func (r *Repository) LabelsList() ([]*fedemailv1.Label, error) {
 	var labels []*fedemailv1.Label
 
-	sqlStatement := `SELECT fedemail.labels_list($1);`
+	sqlStatement := `SELECT fedemail.labels_list_v1($1);`
 	rows, err := r.db.Query(sqlStatement, "matthew.cuthbert@demo.localhost")
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func (r *Repository) LabelsList() ([]*fedemailv1.Label, error) {
 func (r *Repository) ThreadsList() ([]*fedemailv1.Thread, error) {
 	var threads []*fedemailv1.Thread
 
-	sqlStatement := `SELECT fedemail.threads_list($1);`
+	sqlStatement := `SELECT fedemail.threads_list_v1($1);`
 	rows, err := r.db.Query(sqlStatement, "matthew.cuthbert@demo.localhost")
 	if err != nil {
 		return nil, err
@@ -80,7 +80,7 @@ func (r *Repository) ThreadsList() ([]*fedemailv1.Thread, error) {
 func (r *Repository) ThreadsGet(threadId int64) (*fedemailv1.Thread, error) {
 	var thread fedemailv1.Thread
 
-	sqlStatement := `SELECT fedemail.threads_get($1, $2);`
+	sqlStatement := `SELECT fedemail.threads_get_v1($1, $2);`
 	rows, err := r.db.Query(sqlStatement, "matthew.cuthbert@demo.localhost", threadId)
 	if err != nil {
 		return nil, err
@@ -146,7 +146,7 @@ func (r *Repository) DraftsUpdate(messageId int64, draft *fedemailv1.Draft) (*fe
 func (r *Repository) DraftsDelete(id int64) int64 {
 	var cnt int64
 
-	sqlStatement := `SELECT fedemail.drafts_delete($1, $2);`
+	sqlStatement := `SELECT fedemail.drafts_delete_v1($1, $2);`
 	err := r.db.QueryRow(sqlStatement, "matthew.cuthbert@demo.localhost", id).Scan(&cnt)
 	if err != nil {
 		return 0

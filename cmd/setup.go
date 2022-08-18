@@ -21,7 +21,7 @@ var setupCmd = &cobra.Command{
 		if err != nil {
 			logrus.WithError(err).Fatal("unable to setup the database")
 		}
-		logrus.Info("setup done")
+		logrus.Info("script finished")
 	},
 }
 

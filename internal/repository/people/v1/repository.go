@@ -21,7 +21,7 @@ func NewRepository(db *sql.DB) *Repository {
 func (r *Repository) ConnectionsList() ([]*peoplev1.Person, error) {
 	var people []*peoplev1.Person
 
-	sqlStatement := `SELECT people.connections_list($1);`
+	sqlStatement := `SELECT people.connections_list_v1($1);`
 	rows, err := r.db.Query(sqlStatement, "matthew.cuthbert@demo.localhost")
 	if err != nil {
 		return nil, err
