@@ -1,19 +1,28 @@
-import React from 'react';
-import { Box, CssBaseline, Paper, Typography } from '@mui/material';
+import React, { useEffect } from 'react'
+import { useCurrentUser, useCurrentUserRepository } from './packages/core/auth'
+import { Route, Routes } from 'react-router-dom'
+import { Index } from './pages/Inbox'
+import { Accounts } from './pages/user/Accounts'
+import { NotFound } from './pages/NotFound'
 
-function App() {
-    return (
-        <div>
-            <CssBaseline />
-            <Box height="100vh" display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-                <Paper elevation={3} sx={{ padding: '1rem', backgroundColor: 'secondary.light' }}>
-                    <Typography color="primary.dark" variant="h1">
-                        Hello Fedemail!
-                    </Typography>
-                </Paper>
-            </Box>
-        </div>
-    );
+function AppRoutes() {
+  const currentUser = useCurrentUser()
+  const isUserLoggedIn = currentUser.type === 'authenticated'
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      {isUserLoggedIn && <Route path="/user/accounts" element={<Accounts />} />}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  )
 }
 
-export default App;
+function App() {
+  const currentUserRepo = useCurrentUserRepository()
+  useEffect(() => {
+    currentUserRepo.init()
+  }, [currentUserRepo])
+  return <AppRoutes />
+}
+
+export default App
