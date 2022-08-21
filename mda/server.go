@@ -27,8 +27,8 @@ import (
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 
-	"github.com/federizer/fedemail/gen/proto/fedemail/v1"
-	"github.com/federizer/fedemail/gen/proto/people/v1"
+	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
+	"github.com/federizer/fedemail/generated/proto/people/v1"
 	fedemailRepository "github.com/federizer/fedemail/internal/repository/fedemail/v1"
 	peopleRepository "github.com/federizer/fedemail/internal/repository/people/v1"
 	fedemailHandler "github.com/federizer/fedemail/pkg/api/fedemail/v1"

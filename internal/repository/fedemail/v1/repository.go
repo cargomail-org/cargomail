@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"strconv"
 
-	"github.com/federizer/fedemail/gen/proto/fedemail/v1"
+	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
 )
 
 type Repo interface {

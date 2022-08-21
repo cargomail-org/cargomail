@@ -7,8 +7,8 @@ import MailIcon from '@mui/icons-material/Mail'
 
 import { GrpcWebFetchTransport, GrpcWebOptions } from '@protobuf-ts/grpcweb-transport'
 // import { RpcError } from '@protobuf-ts/runtime-rpc'
-// import { FailRequest } from './gen/proto/fedemail/v1/fedemail'
-import { FedemailClient, IFedemailClient } from '../../api/gen/proto/fedemail/v1/fedemail.client'
+// import { FailRequest } from './generated/proto/fedemail/v1/fedemail'
+import { FedemailClient, IFedemailClient } from '../../api/generated/proto/fedemail/v1/fedemail.client'
 import { RpcError, RpcOptions, UnaryCall } from '@protobuf-ts/runtime-rpc'
 
 const transport = new GrpcWebFetchTransport({

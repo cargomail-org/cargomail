@@ -25,11 +25,10 @@
         "react-scripts": "5.0.1",
         "styled-components": "^5.3.5",
         "typescript": "^4.7.4",
-        "web-vitals": "^2.1.4",
-        "react-oauth2-code-pkce": "../../react-oauth2-pkce"
+        "web-vitals": "^2.1.4"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "start": "sh -ac '. ./.env; react-scripts start'",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",

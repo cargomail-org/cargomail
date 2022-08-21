@@ -4,7 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 
-	"github.com/federizer/fedemail/gen/proto/people/v1"
+	"github.com/federizer/fedemail/generated/proto/people/v1"
 )
 
 type ScanPerson struct {

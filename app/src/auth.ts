@@ -9,4 +9,5 @@ export const authConfig = {
     localStorage.setItem('preLoginPath', `${window.location.pathname}${window.location.search}${window.location.hash}`),
   postLogin: () =>
     window.location.replace(localStorage.getItem('preLoginPath') ?? (process.env.REACT_APP_AUTH_REDIRECT_URI || '')),
+  decodeToken: !(process.env.REACT_APP_DECODE_TOKEN === 'false'),
 }

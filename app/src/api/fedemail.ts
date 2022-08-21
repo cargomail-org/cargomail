@@ -1,7 +1,7 @@
 import { GrpcWebFetchTransport } from '@protobuf-ts/grpcweb-transport'
 // import { RpcError } from '@protobuf-ts/runtime-rpc'
-// import { FailRequest } from './gen/proto/fedemail/v1/fedemail'
-import { FedemailClient, IFedemailClient } from './gen/proto/fedemail/v1/fedemail.client'
+// import { FailRequest } from './generated/proto/fedemail/v1/fedemail'
+import { FedemailClient, IFedemailClient } from './generated/proto/fedemail/v1/fedemail.client'
 
 const transport = new GrpcWebFetchTransport({
   baseUrl: 'http://localhost:8180',

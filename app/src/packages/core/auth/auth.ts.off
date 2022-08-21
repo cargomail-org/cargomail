@@ -1,0 +1,14 @@
+import { TAuthConfig } from '../../../react-oauth2-code-pkce/index'
+
+export const authConfig: TAuthConfig = {
+  clientId: process.env.REACT_APP_AUTH_CLIENT_ID || '',
+  authorizationEndpoint: process.env.REACT_APP_AUTH_ENDPOINT || '',
+  tokenEndpoint: process.env.REACT_APP_TOKEN_ENDPOINT || '',
+  scope: process.env.REACT_APP_AUTH_SCOPE || '',
+  redirectUri: process.env.REACT_APP_AUTH_REDIRECT_URI || '',
+  logoutEndpoint: process.env.REACT_APP_LOGOUT_ENDPOINT || '',
+  // Example to redirect back to original path after login has completed
+  preLogin: () => localStorage.setItem('preLoginPath', window.location.pathname),
+  postLogin: () => window.location.replace(localStorage.getItem('preLoginPath') || ''),
+  decodeToken: process.env.REACT_APP_DECODE_TOKEN || '',
+}

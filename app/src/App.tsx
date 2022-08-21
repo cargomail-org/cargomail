@@ -4,6 +4,10 @@ import { Route, Routes } from 'react-router-dom'
 import { Index } from './pages/Inbox'
 import { Accounts } from './pages/user/Accounts'
 import { NotFound } from './pages/NotFound'
+import { AuthProvider } from './react-oauth2-code-pkce/index'
+import { authConfig } from './auth'
+
+const hasUnsafeAuthConfig = process.env.REACT_APP_AUTH !== '1'
 
 function AppRoutes() {
   const currentUser = useCurrentUser()
@@ -22,7 +26,13 @@ function App() {
   useEffect(() => {
     currentUserRepo.init()
   }, [currentUserRepo])
-  return <AppRoutes />
+  return hasUnsafeAuthConfig ? (
+    <AppRoutes />
+  ) : (
+    <AuthProvider authConfig={authConfig}>
+      <AppRoutes />
+    </AuthProvider>
+  )
 }
 
 export default App
