@@ -1,30 +1,18 @@
-import React, { FC, useEffect, useState } from 'react'
-//Mui
+import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer'
-
-//Icons
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-//Custom
 import { Labels } from '../main/Labels'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
-// import AvatarMenu from './AvatarMenu'
-
-import { FunctionalLink, RoutingLink } from '../../packages/core/routing'
-import { anonymousAuthUser, useCurrentUser, useCurrentUserRepository } from '../../packages/core/auth'
-import { useNavigate } from 'react-router-dom'
 import { useConfig } from '../../packages/core/config'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
-import { Avatar, Button, Hidden, Menu, MenuItem, Tooltip, Typography } from '@mui/material'
+import { Hidden, Typography } from '@mui/material'
 import AvatarMenu from '../main/AvatarMenu'
 
 const drawerWidth = 240
-
-const settings = ['Account', 'Logout']
-
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean
 }
@@ -62,16 +50,6 @@ const DrawerMobile = styled(MuiDrawer)(({ theme }) => ({
 }))
 
 export function Navigation() {
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
-
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget)
-  }
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null)
-  }
-
   const [open, setOpen] = useState(window.innerWidth < 769 ? false : true)
   const toggleDrawer = () => {
     setOpen(!open)
@@ -89,22 +67,6 @@ export function Navigation() {
   })
 
   const { productName } = useConfig()
-  const navigate = useNavigate()
-  const currentUserRepo = useCurrentUserRepository()
-  const currentUser = useCurrentUser()
-  const isLoggedIn = currentUser.type === 'authenticated'
-  function loginUser() {
-    // currentUserRepo.setCurrentUser({
-    //   type: 'authenticated',
-    //   data: {
-    //     id: 'foo',
-    //     username: 'matthew.cuthbert@demo.localhost',
-    //     userFirst: 'Matthew',
-    //     userLast: 'Cuthbert',
-    //     userEmailAddress: 'matthew.cuthbert@demo.localhost',
-    //   },
-    // })
-  }
 
   return (
     <React.Fragment>
@@ -123,44 +85,7 @@ export function Navigation() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {productName}
           </Typography>
-          {/* <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}>
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box> */}
-          {/* <Button color="inherit">Login</Button> */}
           <AvatarMenu />
-          {/* {!isLoggedIn && (
-            <>
-              <FunctionalLink onClick={loginUser} noWrap variant="button" href="/" sx={{ p: 1, flexShrink: 0 }}>
-                Login
-              </FunctionalLink>{' '}
-            </>
-          )}
-          {isLoggedIn && <LoggedInUserMenu />} */}
         </Toolbar>
       </AppBar>
       <Hidden smDown>
@@ -201,59 +126,5 @@ export function Navigation() {
         </DrawerMobile>
       </Hidden>
     </React.Fragment>
-  )
-}
-
-const LoggedInUserMenu: FC = () => {
-  const navigate = useNavigate()
-  const currentUserRepo = useCurrentUserRepository()
-  const currentUser = useCurrentUser()
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  if (currentUser.type !== 'authenticated') {
-    return null
-  }
-  function logoutUser() {
-    currentUserRepo.setCurrentUser(anonymousAuthUser)
-    navigate('/')
-  }
-  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
-    setAnchorEl(event.currentTarget)
-  }
-  function closeMenu() {
-    setAnchorEl(null)
-  }
-  const isMenuOpen = !!anchorEl
-  return (
-    <>
-      <Button
-        id="basic-button"
-        aria-controls={isMenuOpen ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={isMenuOpen ? 'true' : undefined}
-        onClick={handleClick}>
-        {currentUser.data?.username}
-      </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={isMenuOpen}
-        onClose={closeMenu}
-        MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
-        <MenuItem
-          onClick={() => {
-            navigate('/user/accounts')
-            closeMenu()
-          }}>
-          Accounts
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            logoutUser()
-            closeMenu()
-          }}>
-          Logout
-        </MenuItem>
-      </Menu>
-    </>
   )
 }

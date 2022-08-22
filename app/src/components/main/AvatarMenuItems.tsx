@@ -29,7 +29,7 @@ export const AvatarMenuItems = (props: any) => {
           currentUserRepo.setCurrentUser(anonymousAuthUser)
           navigate(ROUTES.LOGIN)
         }}>
-        Log out
+        Sign out
       </MenuItem>
     </React.Fragment>
   )

@@ -1,23 +1,9 @@
 import React, { useState } from 'react'
-import { Avatar, Icon, Button, styled, Menu, Typography, Skeleton, Box, IconButton } from '@mui/material'
+import { Avatar, Menu, Box, IconButton } from '@mui/material'
 import { AvatarMenuItems } from './AvatarMenuItems'
-// import { useCurrentUser } from '../../context/currentUserContext'
-import { anonymousAuthUser, AuthenticatedAuthUser, useCurrentUser } from '../../packages/core/auth'
-
-const AvatarButton = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-  color: theme.palette.text.primary,
-  '&:hover': {
-    backgroundColor: theme.palette.background.paper[100],
-    color: theme.palette.primary.main,
-  },
-  fontWeight: 'normal',
-  border: 'none',
-  textTransform: 'lowercase',
-}))
+import { AuthenticatedAuthUser, useCurrentUser } from '../../packages/core/auth'
 
 function AvatarMenuContent() {
-  // const { userFirst, userLast, userEmailAddress } = useCurrentUser()
   const currentUser = useCurrentUser() as AuthenticatedAuthUser
   const nameFirstLetter = currentUser.data?.userFirst?.charAt(0).toUpperCase()
   const surnameFirstLetter = currentUser.data?.userLast?.charAt(0).toUpperCase()

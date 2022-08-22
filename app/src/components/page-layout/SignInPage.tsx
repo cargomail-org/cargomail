@@ -1,7 +1,8 @@
 import { Grid, Link } from '@mui/material'
-import { FC, ReactNode, useEffect } from 'react'
+import { FC, ReactNode, useContext } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { useConfig } from '../../packages/core/config'
+import { AuthContext, IAuthContext } from '../../packages/react-oauth2-code-pkce/index'
 
 export type LoginPageProps = {
   title: string
@@ -9,6 +10,7 @@ export type LoginPageProps = {
 }
 
 export const LoginPage: FC<LoginPageProps> = (props) => {
+  const { sigIn }: IAuthContext = useContext(AuthContext)
   const { productName } = useConfig()
   const titleParts: string[] = []
   if (props.title) {
@@ -17,11 +19,13 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
   if (productName) {
     titleParts.push(productName)
   }
-  useEffect(() => {
-    if (document) {
-      document.title = titleParts.join(' :: ')
-    }
-  })
+
+  function signInUser() {
+    // currentUserRepo.setCurrentUser(anonymousAuthUser)
+    // navigate('/')
+    sigIn()
+  }
+
   return (
     <Grid
       container
@@ -31,7 +35,13 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
       justifyContent="center"
       style={{ minHeight: '100vh' }}>
       <Grid item xs={3}>
-        <Link variant="subtitle1" component={RouterLink} to="/">
+        <Link
+          variant="subtitle1"
+          component={RouterLink}
+          onClick={() => {
+            signInUser()
+          }}
+          to="/">
           Sign in
         </Link>
       </Grid>

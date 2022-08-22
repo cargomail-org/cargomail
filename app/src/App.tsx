@@ -21,9 +21,9 @@ function AppRoutes() {
   const isUserLoggedIn = currentUser.type === 'authenticated'
   return (
     <Routes>
-      {isUserLoggedIn && <Route path="/" element={<Index />} />}
+      <Route path="/" element={isUserLoggedIn ? <Index /> : <Login />} />
       <Route path="/login" element={<Login />} />
-      {isUserLoggedIn && <Route path="/user/accounts" element={<Accounts />} />}
+      <Route path="/account" element={isUserLoggedIn ? <Accounts /> : <Login />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

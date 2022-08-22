@@ -37,6 +37,7 @@ export interface IAuthProvider {
 export interface IAuthContext {
   token: string
   logOut: () => void
+  sigIn: () => void
   error: string | null
   tokenData?: TTokenData
   idToken?: string
