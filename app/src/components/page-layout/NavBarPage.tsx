@@ -34,7 +34,7 @@ const LoggedInUserMenu: FC = () => {
         aria-haspopup="true"
         aria-expanded={isMenuOpen ? 'true' : undefined}
         onClick={handleClick}>
-        {currentUser.data.username}
+        {currentUser.data?.username}
       </Button>
       <Menu
         id="basic-menu"
@@ -70,7 +70,6 @@ const Nav: FC = () => {
   function loginUser() {
     currentUserRepo.setCurrentUser({
       type: 'authenticated',
-      apiKey: 'foo',
       data: {
         id: 'foo',
         username: 'matthew.cuthbert@demo.localhost',
