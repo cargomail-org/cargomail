@@ -1,3 +1,3 @@
 export * from './BlankPage'
-export * from './NavBarPage'
+export * from './LoginPage'
 export * from './Navigation'

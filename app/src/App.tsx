@@ -1,7 +1,8 @@
-import React, { useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { useCurrentUser, useCurrentUserRepository } from './packages/core/auth'
 import { Route, Routes } from 'react-router-dom'
 import { Index } from './pages/Inbox'
+import { Login } from './pages/Login'
 import { Accounts } from './pages/user/Accounts'
 import { NotFound } from './pages/NotFound'
 import { AuthProvider, AuthContext } from './packages/react-oauth2-code-pkce/index'
@@ -20,7 +21,8 @@ function AppRoutes() {
   const isUserLoggedIn = currentUser.type === 'authenticated'
   return (
     <Routes>
-      <Route path="/" element={<Index />} />
+      {isUserLoggedIn && <Route path="/" element={<Index />} />}
+      <Route path="/login" element={<Login />} />
       {isUserLoggedIn && <Route path="/user/accounts" element={<Accounts />} />}
       <Route path="*" element={<NotFound />} />
     </Routes>

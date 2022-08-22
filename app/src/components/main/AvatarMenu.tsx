@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Avatar, Icon, Button, styled, Menu, Typography, Skeleton } from '@mui/material'
+import { Avatar, Icon, Button, styled, Menu, Typography, Skeleton, Box, IconButton } from '@mui/material'
 import { AvatarMenuItems } from './AvatarMenuItems'
 // import { useCurrentUser } from '../../context/currentUserContext'
-import { useCurrentUser, useCurrentUserRepository } from '../../packages/core/auth'
+import { anonymousAuthUser, AuthenticatedAuthUser, useCurrentUser } from '../../packages/core/auth'
 
 const AvatarButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -17,9 +17,10 @@ const AvatarButton = styled(Button)(({ theme }) => ({
 }))
 
 function AvatarMenuContent() {
-  const { userFirst, userLast, userEmailAddress } = useCurrentUser()
-  const nameFirstLetter: string = userFirst?.charAt(0).toUpperCase()
-  const surnameFirstLetter: string = userLast?.charAt(0).toUpperCase()
+  // const { userFirst, userLast, userEmailAddress } = useCurrentUser()
+  const currentUser = useCurrentUser() as AuthenticatedAuthUser
+  const nameFirstLetter = currentUser.data?.userFirst?.charAt(0).toUpperCase()
+  const surnameFirstLetter = currentUser.data?.userLast?.charAt(0).toUpperCase()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const openAvatar = Boolean(anchorEl)
@@ -32,26 +33,26 @@ function AvatarMenuContent() {
 
   return (
     <>
-      {userEmailAddress === undefined ? (
-        <Skeleton width={226} height={42} />
-      ) : (
-        <AvatarButton onClick={handleClick}>
-          <Icon sx={{ mr: 1, width: 30, height: 30 }}>
+      {
+        <Box onClick={handleClick}>
+          <IconButton>
             <Avatar
               sx={{
                 width: 30,
                 height: 30,
-                bgcolor: 'primary.main',
-                color: 'common.white',
+                bgcolor: 'common.white',
+                color: 'primary.main',
                 fontSize: 14,
+                '&:hover': {
+                  bgcolor: '#eeeeee',
+                },
               }}>
               {nameFirstLetter}
               {surnameFirstLetter}
             </Avatar>
-          </Icon>
-          <Typography variant="body2">{userEmailAddress}</Typography>
-        </AvatarButton>
-      )}
+          </IconButton>
+        </Box>
+      }
 
       <Menu
         anchorEl={anchorEl}

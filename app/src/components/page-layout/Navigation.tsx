@@ -19,6 +19,7 @@ import { useConfig } from '../../packages/core/config'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import { Avatar, Button, Hidden, Menu, MenuItem, Tooltip, Typography } from '@mui/material'
+import AvatarMenu from '../main/AvatarMenu'
 
 const drawerWidth = 240
 
@@ -122,7 +123,7 @@ export function Navigation() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {productName}
           </Typography>
-          <Box sx={{ flexGrow: 0 }}>
+          {/* <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -149,9 +150,9 @@ export function Navigation() {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </Box> */}
           {/* <Button color="inherit">Login</Button> */}
-          {/* <AvatarMenu /> */}
+          <AvatarMenu />
           {/* {!isLoggedIn && (
             <>
               <FunctionalLink onClick={loginUser} noWrap variant="button" href="/" sx={{ p: 1, flexShrink: 0 }}>
