@@ -1,4 +1,6 @@
-export const authConfig = {
+import { TAuthConfig } from './packages/react-oauth2-code-pkce/index'
+
+export const authConfig: TAuthConfig = {
   clientId: process.env.REACT_APP_AUTH_CLIENT_ID || '',
   authorizationEndpoint: process.env.REACT_APP_AUTH_ENDPOINT || '',
   tokenEndpoint: process.env.REACT_APP_TOKEN_ENDPOINT || '',
