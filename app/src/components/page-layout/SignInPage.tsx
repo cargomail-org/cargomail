@@ -10,7 +10,7 @@ export type LoginPageProps = {
 }
 
 export const LoginPage: FC<LoginPageProps> = (props) => {
-  const { sigIn }: IAuthContext = useContext(AuthContext)
+  const { signIn }: IAuthContext = useContext(AuthContext)
   const { productName } = useConfig()
   const titleParts: string[] = []
   if (props.title) {
@@ -21,9 +21,7 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
   }
 
   function signInUser() {
-    // currentUserRepo.setCurrentUser(anonymousAuthUser)
-    // navigate('/')
-    sigIn()
+    signIn()
   }
 
   return (

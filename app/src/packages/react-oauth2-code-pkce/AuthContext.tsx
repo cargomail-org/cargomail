@@ -17,7 +17,7 @@ const FALLBACK_EXPIRE_TIME = 600 // 10minutes
 export const AuthContext = createContext<IAuthContext>({
   token: '',
   logOut: () => null,
-  sigIn: () => null,
+  signIn: () => null,
   error: null,
 })
 
@@ -62,7 +62,7 @@ export const AuthProvider = ({ authConfig, children }: IAuthProvider) => {
     setLoginInProgress(false)
   }
 
-  function sigIn() {
+  function signIn() {
     setLoginInProgress(true)
     logIn(config)
   }
@@ -155,6 +155,6 @@ export const AuthProvider = ({ authConfig, children }: IAuthProvider) => {
   }, []) // eslint-disable-line
 
   return (
-    <AuthContext.Provider value={{ tokenData, token, idToken, logOut, sigIn, error }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ tokenData, token, idToken, logOut, signIn, error }}>{children}</AuthContext.Provider>
   )
 }
