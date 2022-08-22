@@ -62,7 +62,7 @@ const LoggedInUserMenu: FC = () => {
 }
 
 const Nav: FC = () => {
-  const { companyName } = useConfig()
+  const { productName } = useConfig()
   const navigate = useNavigate()
   const currentUserRepo = useCurrentUserRepository()
   const currentUser = useCurrentUser()
@@ -85,7 +85,7 @@ const Nav: FC = () => {
         <Home />
       </RoutingLink>
       <Typography component="h2" variant="h5" color="inherit" align="center" noWrap sx={{ flex: 1 }}>
-        {companyName}
+        {productName}
       </Typography>
       {!isLoggedIn && (
         <>

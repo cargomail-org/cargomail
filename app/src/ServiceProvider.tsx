@@ -16,7 +16,7 @@ export const ServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
   const [currentUserState, setCurrentUserState] = useState<AuthUser>(anonymousAuthUser)
   const browserCurrentUserRepositoryRef = useRef(new BrowserCurrentUserRepository(setCurrentUserState))
   const configRef = useRef<Config>({
-    companyName: 'Fedemail',
+    productName: 'Fedemail',
   })
   return (
     <MuiThemeProvider theme={theme}>

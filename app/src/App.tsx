@@ -10,30 +10,6 @@ import { authConfig } from './auth'
 const hasUnsafeAuthConfig = process.env.REACT_APP_AUTH !== '1'
 
 function AppRoutes() {
-  // const { tokenData, token, idToken, logOut, error } = useContext(AuthContext)
-  // const currentUserRepo = useCurrentUserRepository()
-
-  // if (token) {
-  //   if (idToken) {
-  //     console.log(tokenData)
-  //     console.log(idToken)
-  //     currentUserRepo.setCurrentUser({
-  //       type: 'authenticated',
-  //       data: {
-  //         id: 'id1',
-  //         username: 'matthew.cuthbert@demo.localhost',
-  //         userFirst: 'Matthew',
-  //         userLast: 'Cuthbert',
-  //         userEmailAddress: 'matthew.cuthbert@demo.localhost',
-  //       },
-  //     })
-  //   } else {
-  //     currentUserRepo.setCurrentUser({
-  //       type: 'authenticated',
-  //     })
-  //   }
-  // }
-
   const { idToken } = useContext(AuthContext)
   const currentUserRepo = useCurrentUserRepository()
   useEffect(() => {

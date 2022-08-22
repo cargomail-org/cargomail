@@ -14,13 +14,13 @@ export type BlankPageProps = {
 }
 
 export const BlankPage: FC<BlankPageProps> = (props) => {
-  const { companyName } = useConfig()
+  const { productName } = useConfig()
   const titleParts: string[] = []
   if (props.title) {
     titleParts.push(props.title)
   }
-  if (companyName) {
-    titleParts.push(companyName)
+  if (productName) {
+    titleParts.push(productName)
   }
   useEffect(() => {
     if (document) {

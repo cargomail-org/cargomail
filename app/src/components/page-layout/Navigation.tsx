@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom'
 import { useConfig } from '../../packages/core/config'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
-import { Button, Hidden, Menu, MenuItem } from '@mui/material'
+import { Button, Hidden, Menu, MenuItem, Typography } from '@mui/material'
 
 const drawerWidth = 240
 
@@ -46,7 +46,11 @@ const AppBar = styled(MuiAppBar, {
   },
 }))
 
-const DrawerDesktop = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({}))
+const DrawerDesktop = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+  '& .MuiDrawer-paper': {
+    paddingTop: 10,
+  },
+}))
 
 const DrawerMobile = styled(MuiDrawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {
@@ -71,22 +75,22 @@ export function Navigation() {
     })
   })
 
-  const { companyName } = useConfig()
+  const { productName } = useConfig()
   const navigate = useNavigate()
   const currentUserRepo = useCurrentUserRepository()
   const currentUser = useCurrentUser()
   const isLoggedIn = currentUser.type === 'authenticated'
   function loginUser() {
-    currentUserRepo.setCurrentUser({
-      type: 'authenticated',
-      data: {
-        id: 'foo',
-        username: 'matthew.cuthbert@demo.localhost',
-        userFirst: 'Matthew',
-        userLast: 'Cuthbert',
-        userEmailAddress: 'matthew.cuthbert@demo.localhost',
-      },
-    })
+    // currentUserRepo.setCurrentUser({
+    //   type: 'authenticated',
+    //   data: {
+    //     id: 'foo',
+    //     username: 'matthew.cuthbert@demo.localhost',
+    //     userFirst: 'Matthew',
+    //     userLast: 'Cuthbert',
+    //     userEmailAddress: 'matthew.cuthbert@demo.localhost',
+    //   },
+    // })
   }
 
   return (
@@ -103,6 +107,10 @@ export function Navigation() {
               <MenuIcon />
             </IconButton>
           </Hidden>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            {productName}
+          </Typography>
+          <Button color="inherit">Login</Button>
           {/* <AvatarMenu /> */}
           {/* {!isLoggedIn && (
             <>

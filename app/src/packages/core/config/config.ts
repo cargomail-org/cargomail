@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react'
 
 export type Config = {
-  companyName: string
+  productName: string
 }
 
 const configContext = createContext<Config | null>(null)
