@@ -12,6 +12,8 @@ const transport = new GrpcWebFetchTransport({
 
 const client = new FedemailClient(transport)
 
+const storageKey = 'ROCP_token'
+
 const options: GrpcWebOptions = {
   baseUrl,
   deadline: Date.now() + 2000,
@@ -22,11 +24,16 @@ const options: GrpcWebOptions = {
   interceptors: [
     {
       interceptUnary(next, method, input, options): UnaryCall {
+        const token = JSON.parse(localStorage.getItem(storageKey) || '')
+
         if (!options.meta) {
           options.meta = {}
         }
-        options.meta.Authorization = 'abc'
-        console.log('unary interceptor added authorization header (gRPC-web transport)')
+
+        if (token) {
+          options.meta.Authorization = `Bearer ${token}`
+        }
+
         return next(method, input, options)
       },
     },

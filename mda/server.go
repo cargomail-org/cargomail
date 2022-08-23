@@ -154,8 +154,22 @@ func AuthInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServe
 	if !ok {
 		return nil, status.Error(codes.Unauthenticated, "missing context metadata")
 	}
-	if len(meta["authorization"]) != 1 {
-		return nil, status.Error(codes.Unauthenticated, "missing authorization token")
+
+	values := meta["authorization"]
+	if len(values) == 0 {
+		return nil, status.Errorf(codes.Unauthenticated, "missing authorization token")
 	}
+
+	parts := strings.Split(values[0], "Bearer ")
+	if len(parts) != 2 {
+		return nil, status.Errorf(codes.Unauthenticated, "invalid token")
+	}
+	accessToken := parts[1]
+	logrus.Info(accessToken)
+	// err := auth.Verify(accessToken)
+	// if err != nil {
+	// 	return nil, status.Errorf(codes.Unauthenticated, "access token is invalid: %v", err)
+	// }
+
 	return handler(ctx, req)
 }

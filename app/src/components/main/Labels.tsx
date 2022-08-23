@@ -8,7 +8,6 @@ import CheckIcon from '@mui/icons-material/Check'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import * as ROUTES from '../../routes'
-import { LabelsList } from '../../api/grpc'
 
 export const Labels = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(0)
@@ -17,7 +16,7 @@ export const Labels = () => {
 
   useEffect(() => {
     switch (location.pathname) {
-      case '/':
+      case ROUTES.INBOX:
         setSelectedIndex(0)
         break
       default:
@@ -28,9 +27,23 @@ export const Labels = () => {
 
   const handleListItemClick = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
     setSelectedIndex(index)
-    console.log('clicked', index)
-    // await callUnary(client, options)
-    await LabelsList()
+    switch (index) {
+      case 0:
+        navigate(ROUTES.INBOX)
+        break
+      case 1:
+        navigate(ROUTES.DONE)
+        break
+      case 2:
+        navigate(ROUTES.DRAFTS)
+        break
+      case 3:
+        navigate(ROUTES.TRASH)
+        break
+      default:
+        navigate(ROUTES.NOT_FOUND)
+        break
+    }
   }
 
   return (

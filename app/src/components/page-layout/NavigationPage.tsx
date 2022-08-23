@@ -9,7 +9,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import { useConfig } from '../../packages/core/config'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
-import { Hidden, Typography } from '@mui/material'
+import { Grid, Hidden, Link, Typography } from '@mui/material'
 import AvatarMenu from '../main/AvatarMenu'
 
 const drawerWidth = 240
@@ -49,7 +49,7 @@ const DrawerMobile = styled(MuiDrawer)(({ theme }) => ({
   },
 }))
 
-export function Navigation() {
+export function Navigation({ children }: any) {
   const [open, setOpen] = useState(window.innerWidth < 769 ? false : true)
   const toggleDrawer = () => {
     setOpen(!open)
@@ -111,6 +111,17 @@ export function Navigation() {
           <Labels />
           <Toolbar />
         </DrawerDesktop>
+        <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          style={{ minHeight: '100vh' }}>
+          <Box>
+            <>{children}</>
+          </Box>
+        </Grid>
       </Hidden>
 
       <Hidden smUp>
@@ -124,6 +135,9 @@ export function Navigation() {
             <Labels />
           </Box>
         </DrawerMobile>
+        <Box>
+          <>{children}</>
+        </Box>
       </Hidden>
     </React.Fragment>
   )
