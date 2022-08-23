@@ -5,12 +5,12 @@ managed:
     default: github.com/federizer/fedemail/gen
 plugins:
   - remote: buf.build/timostamm/plugins/protobuf-ts:v2.7.0-1
-    out: ./app/src/gen/
+    out: ./app/src/api/generated
   - remote: buf.build/protocolbuffers/plugins/go:v1.28.1-1
-    out: ./gen
+    out: ./generated
     opt:
       - paths=source_relative
   - remote: buf.build/grpc/plugins/go:v1.2.0-1
-    out: ./gen
+    out: ./generated
     opt:
       - paths=source_relative

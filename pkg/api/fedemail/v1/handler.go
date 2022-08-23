@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/federizer/fedemail/gen/proto/fedemail/v1"
+	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
 	"github.com/federizer/fedemail/internal/repository/fedemail/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

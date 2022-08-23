@@ -3,7 +3,7 @@ package repository
 import (
 	"database/sql"
 
-	"github.com/federizer/fedemail/gen/proto/people/v1"
+	"github.com/federizer/fedemail/generated/proto/people/v1"
 )
 
 type Repo interface {
