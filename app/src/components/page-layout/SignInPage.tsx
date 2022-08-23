@@ -40,7 +40,7 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
             signInUser()
           }}
           to="/">
-          Sign in
+          Sign in into Fedemail
         </Link>
       </Grid>
     </Grid>

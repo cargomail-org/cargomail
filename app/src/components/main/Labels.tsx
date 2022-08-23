@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import InboxIcon from '@mui/icons-material/MoveToInbox'
 import { useNavigate, useLocation } from 'react-router-dom'
-// import * as ROUTES from '../../constants/routes'
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, styled } from '@mui/material'
-import MailIcon from '@mui/icons-material/Mail'
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+// import MailIcon from '@mui/icons-material/Mail'
+import InboxIcon from '@mui/icons-material/Inbox'
+import DraftsIcon from '@mui/icons-material/Drafts'
+import CheckIcon from '@mui/icons-material/Check'
+import DeleteIcon from '@mui/icons-material/Delete'
+import AccountBoxIcon from '@mui/icons-material/AccountBox'
+import * as ROUTES from '../../routes'
 
 import { GrpcWebFetchTransport, GrpcWebOptions } from '@protobuf-ts/grpcweb-transport'
 // import { RpcError } from '@protobuf-ts/runtime-rpc'
@@ -36,35 +40,6 @@ async function callUnary(client: IFedemailClient, options: RpcOptions) {
 
   console.log(response)
 }
-
-const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
-  // fontWeight: 'bold',
-  // color: theme.palette.text.secondary,
-  padding: '16px 24px',
-  '&:hover': {
-    color: theme.palette.primary.main,
-    backgroundColor: theme.palette.background.default,
-    '& .MuiListItemIcon-root': {
-      color: theme.palette.primary.main,
-    },
-  },
-  '&.Mui-selected': {
-    color: theme.palette.text.primary,
-    backgroundColor: theme.palette.background.paper,
-    borderTopRightRadius: 4,
-    borderBottomRightRadius: 4,
-    '& .MuiListItemIcon-root': {
-      color: theme.palette.text.primary,
-    },
-  },
-  '&.Mui-selected:hover': {
-    color: theme.palette.primary.main,
-    backgroundColor: theme.palette.background.paper,
-    '& .MuiListItemIcon-root': {
-      color: theme.palette.primary.main,
-    },
-  },
-}))
 
 export const Labels = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(0)
@@ -113,31 +88,55 @@ export const Labels = () => {
   }
 
   return (
-    // <List component="nav" sx={{ bgcolor: 'Background.default' }}>
-    //   <StyledListItemButton
-    //     onClick={(e) => {
-    //       // navigate(ROUTES.MAIN)
-    //       handleListItemClick(e, 0)
-    //     }}
-    //     selected={selectedIndex === 0}>
-    //     <ListItemIcon>
-    //       <InboxIcon />
-    //     </ListItemIcon>
-    //     <ListItemText primary="Inbox" disableTypography />
-    //   </StyledListItemButton>
-    // </List>
     <List>
-      {['Inbox', 'Starred', 'Sent', 'Drafts'].map((text, index) => (
-        <ListItem key={text} disablePadding>
-          <ListItemButton
-            onClick={(e) => {
-              handleListItemClick(e, 0)
-            }}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItemButton>
-        </ListItem>
-      ))}
+      <ListItem disablePadding>
+        <ListItemButton
+          onClick={(e) => {
+            // navigate(ROUTES.INBOX)
+            handleListItemClick(e, 0)
+          }}>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Inbox" />
+        </ListItemButton>
+      </ListItem>
+      <ListItem disablePadding>
+        <ListItemButton
+          onClick={(e) => {
+            // navigate(ROUTES.DONE)
+            handleListItemClick(e, 1)
+          }}>
+          <ListItemIcon>
+            <CheckIcon />
+          </ListItemIcon>
+          <ListItemText primary="Done" />
+        </ListItemButton>
+      </ListItem>
+      <ListItem disablePadding>
+        <ListItemButton
+          onClick={(e) => {
+            // navigate(ROUTES.DRAFTS)
+            handleListItemClick(e, 2)
+          }}>
+          <ListItemIcon>
+            <DraftsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Drafts" />
+        </ListItemButton>
+      </ListItem>
+      <ListItem disablePadding>
+        <ListItemButton
+          onClick={(e) => {
+            // navigate(ROUTES.TRASH)
+            handleListItemClick(e, 3)
+          }}>
+          <ListItemIcon>
+            <DeleteIcon />
+          </ListItemIcon>
+          <ListItemText primary="Trash" />
+        </ListItemButton>
+      </ListItem>
     </List>
   )
 }
