@@ -8,67 +8,12 @@ import CheckIcon from '@mui/icons-material/Check'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import * as ROUTES from '../../routes'
-
-import { GrpcWebFetchTransport, GrpcWebOptions } from '@protobuf-ts/grpcweb-transport'
-// import { RpcError } from '@protobuf-ts/runtime-rpc'
-// import { FailRequest } from './generated/proto/fedemail/v1/fedemail'
-import { FedemailClient, IFedemailClient } from '../../api/generated/proto/fedemail/v1/fedemail.client'
-import { RpcError, RpcOptions, UnaryCall } from '@protobuf-ts/runtime-rpc'
-
-const transport = new GrpcWebFetchTransport({
-  baseUrl: 'http://localhost:8180',
-})
-
-const client = new FedemailClient(transport)
-
-async function callUnary(client: IFedemailClient, options: RpcOptions) {
-  const call = client.labelsList({}, options)
-
-  console.log(`### calling method "${call.method.name}"...`)
-
-  const headers = await call.headers
-  console.log('got response headers: ', headers)
-
-  const response = await call.response
-  console.log('got response message: ', response)
-
-  const status = await call.status
-  console.log('got status: ', status)
-
-  const trailers = await call.trailers
-  console.log('got trailers: ', trailers)
-
-  console.log(response)
-}
+import { LabelsList } from '../../api/grpc'
 
 export const Labels = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(0)
   const navigate = useNavigate()
   const location = useLocation()
-
-  const options: GrpcWebOptions = {
-    baseUrl: 'http://localhost:8180',
-    deadline: Date.now() + 2000,
-    format: 'text',
-
-    // simple example for how to add auth headers to each request
-    // see `RpcInterceptor` for documentation
-    interceptors: [
-      {
-        interceptUnary(next, method, input, options): UnaryCall {
-          if (!options.meta) {
-            options.meta = {}
-          }
-          options.meta.Authorization = 'abc'
-          console.log('unary interceptor added authorization header (gRPC-web transport)')
-          return next(method, input, options)
-        },
-      },
-    ],
-
-    // you can set global request headers here
-    meta: {},
-  }
 
   useEffect(() => {
     switch (location.pathname) {
@@ -84,7 +29,8 @@ export const Labels = () => {
   const handleListItemClick = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
     setSelectedIndex(index)
     console.log('clicked', index)
-    await callUnary(client, options)
+    // await callUnary(client, options)
+    await LabelsList()
   }
 
   return (
