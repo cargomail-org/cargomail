@@ -24,7 +24,10 @@ const options: GrpcWebOptions = {
   interceptors: [
     {
       interceptUnary(next, method, input, options): UnaryCall {
-        const token = JSON.parse(localStorage.getItem(storageKey) || '')
+        let token = localStorage.getItem(storageKey) || ''
+        if (token) {
+          token = JSON.parse(token)
+        }
 
         if (!options.meta) {
           options.meta = {}

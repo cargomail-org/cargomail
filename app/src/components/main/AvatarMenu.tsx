@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Avatar, Menu, Box, IconButton } from '@mui/material'
 import { AvatarMenuItems } from './AvatarMenuItems'
-import { AuthenticatedAuthUser, useCurrentUser } from '../../packages/core/auth'
+import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
+import { decodeCurrentUser } from '../../auth'
 
 function AvatarMenuContent() {
-  const currentUser = useCurrentUser() as AuthenticatedAuthUser
-  const nameFirstLetter = currentUser.data?.userFirst?.charAt(0).toUpperCase()
-  const surnameFirstLetter = currentUser.data?.userLast?.charAt(0).toUpperCase()
+  const { idToken } = useContext(AuthContext)
+  const currentUser = decodeCurrentUser(idToken)
+  const nameFirstLetter = currentUser.name?.charAt(0).toUpperCase()
+  const surnameFirstLetter = currentUser.surname?.charAt(0).toUpperCase()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const openAvatar = Boolean(anchorEl)
