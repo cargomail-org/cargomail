@@ -1,5 +1,6 @@
 import { GrpcWebFetchTransport, GrpcWebOptions } from '@protobuf-ts/grpcweb-transport'
 import { UnaryCall } from '@protobuf-ts/runtime-rpc'
+import { getTokenFromStorage } from '../auth'
 // import { RpcError } from '@protobuf-ts/runtime-rpc'
 // import { FailRequest } from './generated/proto/fedemail/v1/fedemail'
 import { FedemailClient, IFedemailClient } from './generated/proto/fedemail/v1/fedemail.client'
@@ -12,8 +13,6 @@ const transport = new GrpcWebFetchTransport({
 
 const client = new FedemailClient(transport)
 
-const storageKey = 'ROCP_token'
-
 const options: GrpcWebOptions = {
   baseUrl,
   deadline: Date.now() + 2000,
@@ -24,10 +23,7 @@ const options: GrpcWebOptions = {
   interceptors: [
     {
       interceptUnary(next, method, input, options): UnaryCall {
-        let token = localStorage.getItem(storageKey) || ''
-        if (token) {
-          token = JSON.parse(token)
-        }
+        const token = getTokenFromStorage()
 
         if (!options.meta) {
           options.meta = {}

@@ -70,3 +70,13 @@ export function decodeCurrentUser(idToken?: string): IUser {
     }
   }
 }
+
+const storageKey = 'ROCP_token'
+
+export function getTokenFromStorage(): string {
+  let token = localStorage.getItem(storageKey) || ''
+  if (token) {
+    return (token = JSON.parse(token))
+  }
+  return ''
+}

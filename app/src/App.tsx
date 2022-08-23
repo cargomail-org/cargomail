@@ -7,7 +7,7 @@ import { Trash } from './pages/Trash'
 import { Account } from './pages/user/Account'
 import { NotFound } from './pages/NotFound'
 import { AuthProvider } from './packages/react-oauth2-code-pkce/index'
-import { authConfig } from './auth'
+import { authConfig, getTokenFromStorage } from './auth'
 import { LabelsList } from './api/grpc'
 import * as ROUTES from './routes'
 import { useEffect } from 'react'
@@ -16,11 +16,7 @@ const AUTH_DISABLED = process.env.REACT_APP_AUTH !== '1'
 
 function AppRoutes() {
   const location = useLocation()
-  const storageKey = 'ROCP_token'
-  let token = localStorage.getItem(storageKey) || ''
-  if (token) {
-    token = JSON.parse(token)
-  }
+  const token = getTokenFromStorage()
 
   // const { getLabels } = useFedemailAPI()
   // useEffect(LabelsList, [])
