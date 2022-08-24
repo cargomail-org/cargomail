@@ -8,7 +8,7 @@ import { Account } from './pages/user/Account'
 import { NotFound } from './pages/NotFound'
 import { AuthProvider } from './packages/react-oauth2-code-pkce/index'
 import { authConfig, getTokenFromStorage } from './auth'
-import { LabelsList } from './api/grpc'
+import LabelsList from './api/grpc'
 import * as ROUTES from './routes'
 import { useEffect } from 'react'
 
