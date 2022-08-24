@@ -1,3 +1,3 @@
 # Fedemail server & app
 
-A proof of concept: gRPC MTA, gRPC MDA, and Webmail App.
+A proof of concept: gRPC MTA, Webmail, and Webapp.

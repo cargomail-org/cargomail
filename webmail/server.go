@@ -1,4 +1,4 @@
-package mda
+package webmail
 
 import (
 	"context"
@@ -46,7 +46,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 	}
 	defer db.Close()
 
-	httpPort := fmt.Sprintf("%d", config.Mda.Port)
+	httpPort := fmt.Sprintf("%d", config.Webmail.Port)
 
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(AuthInterceptor))
 
@@ -75,7 +75,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 	go func() {
 		defer wg.Done()
 
-		logrus.Infof("mda server is listening on %s", lis.Addr().String())
+		logrus.Infof("webmail server is listening on %s", lis.Addr().String())
 		errCh <- http1Server.Serve(lis)
 	}()
 
@@ -127,15 +127,15 @@ func newHTTPandGRPCMux(httpHand http.Handler, grpcHandler http.Handler, grpcWebH
 }
 
 func newCorsHandler(config *cfg.Config, srv http.Handler) http.Handler {
-	if len(config.Mda.Cors.AllowedOrigins) == 0 {
+	if len(config.Webmail.Cors.AllowedOrigins) == 0 {
 		return srv
 	}
 	c := cors.New(cors.Options{
-		AllowedOrigins:   config.Mda.Cors.AllowedOrigins,
-		AllowedMethods:   config.Mda.Cors.AllowedMethods,
-		MaxAge:           config.Mda.Cors.MaxAge,
-		AllowedHeaders:   config.Mda.Cors.AllowedHeaders,
-		AllowCredentials: config.Mda.Cors.AllowCredentials,
+		AllowedOrigins:   config.Webmail.Cors.AllowedOrigins,
+		AllowedMethods:   config.Webmail.Cors.AllowedMethods,
+		MaxAge:           config.Webmail.Cors.MaxAge,
+		AllowedHeaders:   config.Webmail.Cors.AllowedHeaders,
+		AllowCredentials: config.Webmail.Cors.AllowCredentials,
 	})
 	return c.Handler(srv)
 }
@@ -143,9 +143,9 @@ func newCorsHandler(config *cfg.Config, srv http.Handler) http.Handler {
 func shutdownServer(ctx context.Context, server *http.Server) error {
 	err := server.Shutdown(ctx)
 	if err != nil {
-		return fmt.Errorf("mda could not shutdown gracefully: %w", err)
+		return fmt.Errorf("webmail could not shutdown gracefully: %w", err)
 	}
-	logrus.Info("mda server shutdown gracefully")
+	logrus.Info("webmail server shutdown gracefully")
 	return nil
 }
 

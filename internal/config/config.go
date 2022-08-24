@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	Mda Server
+	Webmail Server
 	Mta Server
 	Database
 }
