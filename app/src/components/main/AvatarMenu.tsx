@@ -7,8 +7,8 @@ import { decodeCurrentUser } from '../../auth'
 function AvatarMenuContent() {
   const { idToken } = useContext(AuthContext)
   const currentUser = decodeCurrentUser(idToken)
-  const nameFirstLetter = currentUser.name?.charAt(0).toUpperCase()
-  const surnameFirstLetter = currentUser.surname?.charAt(0).toUpperCase()
+  const nameFirstLetter = currentUser?.name?.charAt(0).toUpperCase()
+  const surnameFirstLetter = currentUser?.surname?.charAt(0).toUpperCase()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const openAvatar = Boolean(anchorEl)

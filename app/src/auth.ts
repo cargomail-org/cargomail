@@ -57,17 +57,11 @@ function jwtToAuthenticatedAuthUser(jwt: TTokenData): IUser {
   return user
 }
 
-export function decodeCurrentUser(idToken?: string): IUser {
+export function decodeCurrentUser(idToken?: string): IUser | null {
   if (idToken) {
     return jwtToAuthenticatedAuthUser(decodeJWT(idToken))
   } else {
-    return {
-      uid: '999999',
-      username: 'jdoe@example.com',
-      name: 'John',
-      surname: 'Doe',
-      emailAddress: 'jdoe@example.com',
-    }
+    return null
   }
 }
 
