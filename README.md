@@ -2,10 +2,10 @@
 
 A gRPC MTA proof of concept.
 
-# Model
+# Architecture
 
-![Model](./images/fedemail_model.svg)
+![Architecture](./images/fedemail_architecture.svg)
 
 <p class="figure">
-Fig.&nbsp;1.&emsp;Fedemail Model
+Fig.&nbsp;1.&emsp;Fedemail Architecture
 </p>
