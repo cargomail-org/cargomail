@@ -31,12 +31,16 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
       alignItems="center"
       justifyContent="center"
       style={{ minHeight: '100vh' }}>
-      <Grid item xs={3}>
+      <Grid>
         <Button
+          sx={{
+            textTransform: 'none',
+            fontSize: 22,
+          }}
           onClick={() => {
             signInUser()
           }}>
-          Sign in into Fedemail
+          Sign in to Fedemail
         </Button>
       </Grid>
     </Grid>
