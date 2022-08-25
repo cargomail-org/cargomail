@@ -64,13 +64,3 @@ export function decodeCurrentUser(idToken?: string): IUser | null {
     return null
   }
 }
-
-const storageKey = 'ROCP_token'
-
-export function getTokenFromStorage(): string {
-  let token = localStorage.getItem(storageKey) || ''
-  if (token) {
-    return (token = JSON.parse(token))
-  }
-  return ''
-}

@@ -6,25 +6,21 @@ import { Drafts } from './pages/Drafts'
 import { Trash } from './pages/Trash'
 import { Account } from './pages/user/Account'
 import { NotFound } from './pages/NotFound'
-import { AuthProvider } from './packages/react-oauth2-code-pkce/index'
-import { authConfig, getTokenFromStorage } from './auth'
-import LabelsList from './api/grpc'
+import { AuthProvider, AuthContext } from './packages/react-oauth2-code-pkce/index'
+import { authConfig } from './auth'
+import useFedemailAPI from './api/grpc'
 import * as ROUTES from './routes'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 
 const AUTH_DISABLED = process.env.REACT_APP_AUTH !== '1'
-
 function AppRoutes() {
   const location = useLocation()
-  const token = getTokenFromStorage()
+  const { token } = useContext(AuthContext)
+  const { labelsList } = useFedemailAPI()
 
-  // const { getLabels } = useFedemailAPI()
-  // useEffect(LabelsList, [])
   useEffect(() => {
-    if (token) {
-      LabelsList()
-    }
-  }, [token])
+    labelsList()
+  }, []) // eslint-disable-line
 
   if (!(location.pathname === ROUTES.AUTH_CALLBACK || location.pathname === ROUTES.SIGNIN)) {
     localStorage.setItem('preLoginPath', location.pathname)

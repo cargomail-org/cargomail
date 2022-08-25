@@ -1,11 +1,11 @@
 import React, { useContext } from 'react'
 import { MenuItem } from '@mui/material'
-import { AuthContext, IAuthContext } from '../../packages/react-oauth2-code-pkce/index'
+import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
 import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../../routes'
 
 export const AvatarMenuItems = (props: any) => {
-  const { logOut }: IAuthContext = useContext(AuthContext)
+  const { logOut } = useContext(AuthContext)
   const navigate = useNavigate()
 
   const handleClose = () => {

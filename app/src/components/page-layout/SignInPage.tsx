@@ -1,7 +1,7 @@
 import { Button, Grid } from '@mui/material'
 import { FC, ReactNode, useContext } from 'react'
 import { useConfig } from '../../packages/core/config'
-import { AuthContext, IAuthContext } from '../../packages/react-oauth2-code-pkce/index'
+import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
 
 export type LoginPageProps = {
   title: string
@@ -9,7 +9,7 @@ export type LoginPageProps = {
 }
 
 export const LoginPage: FC<LoginPageProps> = (props) => {
-  const { signIn }: IAuthContext = useContext(AuthContext)
+  const { signIn } = useContext(AuthContext)
   const { productName } = useConfig()
   const titleParts: string[] = []
   if (props.title) {
