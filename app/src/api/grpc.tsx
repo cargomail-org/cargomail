@@ -3,6 +3,7 @@ import { UnaryCall } from '@protobuf-ts/runtime-rpc'
 import { useContext } from 'react'
 import { FedemailClient } from './generated/proto/fedemail/v1/fedemail.client'
 import { AuthContext } from '../packages/react-oauth2-code-pkce/index'
+import { LabelsContext } from '../context/LabelsContext'
 
 const baseUrl: string = process.env.REACT_APP_SERVER_BASE_URL || ''
 
@@ -14,6 +15,7 @@ const client = new FedemailClient(transport)
 
 const useFedemailAPI = () => {
   const { token } = useContext(AuthContext)
+  const { updateLabels } = useContext(LabelsContext)
 
   const options: GrpcWebOptions = {
     baseUrl,
@@ -54,13 +56,20 @@ const useFedemailAPI = () => {
       const userLabels = response.response.labels.filter((label) => label.type === 1)
       const personal = systemAll.find((label) => label.name === 'CATEGORY_PERSONAL')
 
+      // const labels = {
+      //   category,
+      //   system,
+      //   personal,
+      //   user: userLabels,
+      // }
+
       const labels = {
-        category,
-        system,
-        personal,
-        userLabels,
+        category: ['a', 'b'],
+        system: ['c', 'd'],
+        user: ['e', 'f'],
       }
-      // updateLabels.updateLabels()
+
+      updateLabels(labels)
 
       console.log(userLabels)
     })

@@ -157,12 +157,14 @@ func AuthInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServe
 
 	values := meta["authorization"]
 	if len(values) == 0 {
-		return nil, status.Errorf(codes.Unauthenticated, "missing authorization token")
+		logrus.Errorf("%v: missing authorization token", codes.Unauthenticated)
+		return nil, status.Error(codes.Unauthenticated, "missing authorization token")
 	}
 
 	parts := strings.Split(values[0], "Bearer ")
 	if len(parts) != 2 {
-		return nil, status.Errorf(codes.Unauthenticated, "invalid token")
+		logrus.Errorf("%v: invalid token", codes.Unauthenticated)
+		return nil, status.Error(codes.Unauthenticated, "invalid token")
 	}
 	accessToken := parts[1]
 	logrus.Info(accessToken)

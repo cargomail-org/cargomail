@@ -11,6 +11,7 @@ import { authConfig } from './auth'
 import useFedemailAPI from './api/grpc'
 import * as ROUTES from './routes'
 import { useContext, useEffect } from 'react'
+import AllContextProviders from './context'
 
 const AUTH_DISABLED = process.env.REACT_APP_AUTH !== '1'
 function AppRoutes() {
@@ -19,7 +20,9 @@ function AppRoutes() {
   const { labelsList } = useFedemailAPI()
 
   useEffect(() => {
-    labelsList()
+    if (token) {
+      labelsList()
+    }
   }, []) // eslint-disable-line
 
   if (!(location.pathname === ROUTES.AUTH_CALLBACK || location.pathname === ROUTES.SIGNIN)) {
@@ -44,7 +47,9 @@ function App() {
     <AppRoutes />
   ) : (
     <AuthProvider authConfig={authConfig}>
-      <AppRoutes />
+      <AllContextProviders>
+        <AppRoutes />
+      </AllContextProviders>
     </AuthProvider>
   )
 }
