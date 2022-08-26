@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import { Grid, Hidden, Link, Typography } from '@mui/material'
 import AvatarMenu from '../main/AvatarMenu'
+import NewMailButton from '../main/NewMailButton'
 
 const drawerWidth = 240
 interface AppBarProps extends MuiAppBarProps {
@@ -120,6 +121,7 @@ export function Navigation({ children }: any) {
           style={{ minHeight: '100vh' }}>
           <Box>
             <>{children}</>
+            <NewMailButton />
           </Box>
         </Grid>
       </Hidden>

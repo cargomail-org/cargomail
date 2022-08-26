@@ -64,13 +64,16 @@ const useFedemailAPI = () => {
       }
 
       updateLabels(labels)
-
-      console.log(userLabels)
     })
+  }
+
+  const createDraft = (draft: any) => {
+    console.log(draft)
   }
 
   return {
     labelsList,
+    createDraft,
   }
 }
 

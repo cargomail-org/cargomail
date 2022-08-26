@@ -35,7 +35,6 @@ export const LabelsProvider = (props: any) => {
       ...prev,
       ...updates,
     }))
-    console.log('Provider:', labels)
   }
 
   return <LabelsContext.Provider value={{ labels, updateLabels }}>{props.children}</LabelsContext.Provider>
