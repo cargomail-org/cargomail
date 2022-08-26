@@ -121,8 +121,8 @@ export function Navigation({ children }: any) {
           style={{ minHeight: '100vh' }}>
           <Box>
             <>{children}</>
-            <NewMailButton />
           </Box>
+          <NewMailButton />
         </Grid>
       </Hidden>
 
@@ -140,6 +140,7 @@ export function Navigation({ children }: any) {
         <Box>
           <>{children}</>
         </Box>
+        <NewMailButton />
       </Hidden>
     </React.Fragment>
   )
