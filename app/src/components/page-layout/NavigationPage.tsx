@@ -11,7 +11,6 @@ import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import { Grid, Hidden, Link, Typography } from '@mui/material'
 import AvatarMenu from '../main/AvatarMenu'
-import { LabelsContext } from '../../context/LabelsContext'
 
 const drawerWidth = 240
 interface AppBarProps extends MuiAppBarProps {
@@ -69,8 +68,6 @@ export function Navigation({ children }: any) {
 
   const { productName } = useConfig()
 
-  const { labels } = useContext(LabelsContext)
-
   return (
     <React.Fragment>
       <AppBar position="absolute" open={false}>
@@ -111,7 +108,6 @@ export function Navigation({ children }: any) {
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
-          <>{labels.user}</>
           <Labels />
           <Toolbar />
         </DrawerDesktop>

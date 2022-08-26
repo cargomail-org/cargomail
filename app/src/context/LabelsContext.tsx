@@ -1,4 +1,5 @@
 import { useState, createContext, ReactNode, Component } from 'react'
+import type { Label } from '../api/generated/proto/fedemail/v1/fedemail'
 
 export interface ILabelsProvider {
   children: ReactNode
@@ -6,30 +7,30 @@ export interface ILabelsProvider {
 
 export interface ILabelsContext {
   labels: {
-    category: string[]
-    system: string[]
-    user: string[]
+    category: Label[]
+    system: Label[]
+    user: Label[]
   }
-  updateLabels: (labels: { category: string[]; system: string[]; user: string[] }) => void
+  updateLabels: (labels: { category: Label[]; system: Label[]; user: Label[] }) => void
 }
 
 export const LabelsContext = createContext<ILabelsContext>({
   labels: {
-    category: [] as string[],
-    system: [] as string[],
-    user: ['x', 'y', 'z'] as string[],
+    category: [] as Label[],
+    system: [] as Label[],
+    user: [] as Label[],
   },
   updateLabels: () => null,
 })
 
 export const LabelsProvider = (props: any) => {
   const [labels, setLabels] = useState({
-    category: [] as string[],
-    system: [] as string[],
-    user: ['q', 'w', 'e', 'r', 't', 'y'] as string[],
+    category: [] as Label[],
+    system: [] as Label[],
+    user: [] as Label[],
   })
 
-  const updateLabels = (updates: { category: string[]; system: string[]; user: string[] }) => {
+  const updateLabels = (updates: { category: Label[]; system: Label[]; user: Label[] }) => {
     setLabels((prev) => ({
       ...prev,
       ...updates,

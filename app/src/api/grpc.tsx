@@ -56,17 +56,11 @@ const useFedemailAPI = () => {
       const userLabels = response.response.labels.filter((label) => label.type === 1)
       const personal = systemAll.find((label) => label.name === 'CATEGORY_PERSONAL')
 
-      // const labels = {
-      //   category,
-      //   system,
-      //   personal,
-      //   user: userLabels,
-      // }
-
       const labels = {
-        category: ['a', 'b'],
-        system: ['c', 'd'],
-        user: ['e', 'f'],
+        category,
+        system,
+        personal,
+        user: userLabels,
       }
 
       updateLabels(labels)

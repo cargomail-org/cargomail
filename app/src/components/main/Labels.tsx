@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 // import MailIcon from '@mui/icons-material/Mail'
@@ -6,18 +6,33 @@ import InboxIcon from '@mui/icons-material/Inbox'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import CheckIcon from '@mui/icons-material/Check'
 import DeleteIcon from '@mui/icons-material/Delete'
+import EmailIcon from '@mui/icons-material/Email'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import * as ROUTES from '../../routes'
+import { LabelsContext } from '../../context/LabelsContext'
 
 export const Labels = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(0)
   const navigate = useNavigate()
   const location = useLocation()
+  const { labels } = useContext(LabelsContext)
+
+  // Inbox, Done, Drafts, Trash
+  const STATIC_LABELS_COUNT = 4
 
   useEffect(() => {
     switch (location.pathname) {
       case ROUTES.INBOX:
         setSelectedIndex(0)
+        break
+      case ROUTES.DONE:
+        setSelectedIndex(1)
+        break
+      case ROUTES.DRAFTS:
+        setSelectedIndex(2)
+        break
+      case ROUTES.TRASH:
+        setSelectedIndex(3)
         break
       default:
         setSelectedIndex(null)
@@ -50,8 +65,8 @@ export const Labels = () => {
     <List>
       <ListItem disablePadding>
         <ListItemButton
+          selected={selectedIndex === 0}
           onClick={(e) => {
-            // navigate(ROUTES.INBOX)
             handleListItemClick(e, 0)
           }}>
           <ListItemIcon>
@@ -62,8 +77,8 @@ export const Labels = () => {
       </ListItem>
       <ListItem disablePadding>
         <ListItemButton
+          selected={selectedIndex === 1}
           onClick={(e) => {
-            // navigate(ROUTES.DONE)
             handleListItemClick(e, 1)
           }}>
           <ListItemIcon>
@@ -74,8 +89,8 @@ export const Labels = () => {
       </ListItem>
       <ListItem disablePadding>
         <ListItemButton
+          selected={selectedIndex === 2}
           onClick={(e) => {
-            // navigate(ROUTES.DRAFTS)
             handleListItemClick(e, 2)
           }}>
           <ListItemIcon>
@@ -86,8 +101,8 @@ export const Labels = () => {
       </ListItem>
       <ListItem disablePadding>
         <ListItemButton
+          selected={selectedIndex === 3}
           onClick={(e) => {
-            // navigate(ROUTES.TRASH)
             handleListItemClick(e, 3)
           }}>
           <ListItemIcon>
@@ -96,6 +111,22 @@ export const Labels = () => {
           <ListItemText primary="Trash" />
         </ListItemButton>
       </ListItem>
+      {labels.user
+        ?.filter((label) => label.type === 1)
+        .map((label, index) => (
+          <ListItem key={label.id} disablePadding>
+            <ListItemButton
+              selected={selectedIndex === STATIC_LABELS_COUNT + index}
+              onClick={(e) => {
+                handleListItemClick(e, STATIC_LABELS_COUNT + index)
+              }}>
+              <ListItemIcon>
+                <EmailIcon />
+              </ListItemIcon>
+              <ListItemText primary={label.name} />
+            </ListItemButton>
+          </ListItem>
+        ))}
     </List>
   )
 }
