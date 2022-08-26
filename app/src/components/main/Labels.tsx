@@ -12,7 +12,7 @@ import * as ROUTES from '../../routes'
 import { LabelsContext } from '../../context/LabelsContext'
 
 export const Labels = () => {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(0)
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const navigate = useNavigate()
   const location = useLocation()
   const { labels } = useContext(LabelsContext)
