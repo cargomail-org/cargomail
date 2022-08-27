@@ -4,6 +4,7 @@ import { useContext } from 'react'
 import { FedemailClient } from './generated/proto/fedemail/v1/fedemail.client'
 import { AuthContext } from '../packages/react-oauth2-code-pkce/index'
 import { LabelsContext } from '../context/LabelsContext'
+import { DraftsContext } from '../context/DraftsContext'
 
 const baseUrl: string = process.env.REACT_APP_SERVER_BASE_URL || ''
 
@@ -11,11 +12,12 @@ const transport = new GrpcWebFetchTransport({
   baseUrl,
 })
 
-const client = new FedemailClient(transport)
+const fedemailClient = new FedemailClient(transport)
 
 const useFedemailAPI = () => {
   const { token } = useContext(AuthContext)
   const { updateLabels } = useContext(LabelsContext)
+  const { updateDrafts } = useContext(DraftsContext)
 
   const options: GrpcWebOptions = {
     baseUrl,
@@ -41,7 +43,7 @@ const useFedemailAPI = () => {
   }
 
   const labelsList = () => {
-    const unaryCall = client.labelsList({}, options)
+    const unaryCall = fedemailClient.labelsList({}, options)
 
     unaryCall.then((response) => {
       if (response.status.code !== 'OK') {
@@ -67,13 +69,47 @@ const useFedemailAPI = () => {
     })
   }
 
+  const draftsList = () => {
+    const unaryCall = fedemailClient.draftsList(
+      {
+        maxResults: 0n,
+      },
+      options
+    )
+
+    unaryCall.then((response) => {
+      if (response.status.code !== 'OK') {
+        console.log(response.status.code, response.status.detail)
+        return null
+      }
+
+      updateDrafts(response.response.drafts)
+    })
+  }
+
   const createDraft = (draft: any) => {
     console.log(draft)
   }
 
+  const updateDraft = (draft: any) => {
+    console.log(draft)
+  }
+
+  const sendDraft = (id: any) => {
+    console.log(id)
+  }
+
+  const deleteDraft = (id: any) => {
+    console.log(id)
+  }
+
   return {
     labelsList,
+    draftsList,
     createDraft,
+    updateDraft,
+    sendDraft,
+    deleteDraft,
   }
 }
 

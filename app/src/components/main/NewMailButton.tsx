@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
 
-import useFedemailAPI from '../../api/grpc'
+import useFedemailAPI from '../../api/FedemailAPI'
 
 const fabStyle = {
   position: 'fixed',

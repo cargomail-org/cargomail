@@ -12,6 +12,8 @@ import Toolbar from '@mui/material/Toolbar'
 import { Grid, Hidden, Link, Typography } from '@mui/material'
 import AvatarMenu from '../main/AvatarMenu'
 import NewMailButton from '../main/NewMailButton'
+import DraftsContainer from '../main/DraftsContainer'
+import { DraftsContext } from '../../context/DraftsContext'
 
 const drawerWidth = 240
 interface AppBarProps extends MuiAppBarProps {
@@ -69,6 +71,8 @@ export function Navigation({ children }: any) {
 
   const { productName } = useConfig()
 
+  const { drafts } = useContext(DraftsContext)
+
   return (
     <React.Fragment>
       <AppBar position="absolute" open={false}>
@@ -123,6 +127,7 @@ export function Navigation({ children }: any) {
             <>{children}</>
           </Box>
           <NewMailButton />
+          <DraftsContainer drafts={drafts} />
         </Grid>
       </Hidden>
 
@@ -141,6 +146,7 @@ export function Navigation({ children }: any) {
           <>{children}</>
         </Box>
         <NewMailButton />
+        <DraftsContainer drafts={drafts} />
       </Hidden>
     </React.Fragment>
   )
