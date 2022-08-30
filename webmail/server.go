@@ -22,10 +22,10 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/health/grpc_health_v1"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
+	grpc_mw "github.com/zitadel/zitadel-go/v2/pkg/api/middleware/grpc"
 
 	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
 	"github.com/federizer/fedemail/generated/proto/people/v1"
@@ -48,7 +48,12 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 
 	httpPort := fmt.Sprintf("%d", config.Webmail.Port)
 
-	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(AuthInterceptor))
+	introspection, err := grpc_mw.NewIntrospectionInterceptor(config.Oidc.Issuer, config.Oidc.ClientId, config.Oidc.ClientSecret)
+	if err != nil {
+		logrus.WithError(err).Fatal("could not create an introspection interceptor: %v", err)
+	}
+
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(introspection.Unary()))
 
 	grpc_health_v1.RegisterHealthServer(grpcServer, &GrpcHealthService{})
 	peoplev1.RegisterPeopleServer(grpcServer, peopleHandler.NewHandler(peopleRepository.NewRepository(db)))
@@ -147,31 +152,4 @@ func shutdownServer(ctx context.Context, server *http.Server) error {
 	}
 	logrus.Info("webmail server shutdown gracefully")
 	return nil
-}
-
-func AuthInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	meta, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return nil, status.Error(codes.Unauthenticated, "missing context metadata")
-	}
-
-	values := meta["authorization"]
-	if len(values) == 0 {
-		logrus.Errorf("%v: missing authorization token", codes.Unauthenticated)
-		return nil, status.Error(codes.Unauthenticated, "missing authorization token")
-	}
-
-	parts := strings.Split(values[0], "Bearer ")
-	if len(parts) != 2 {
-		logrus.Errorf("%v: invalid token", codes.Unauthenticated)
-		return nil, status.Error(codes.Unauthenticated, "invalid token")
-	}
-	accessToken := parts[1]
-	logrus.Info(accessToken)
-	// err := auth.Verify(accessToken)
-	// if err != nil {
-	// 	return nil, status.Errorf(codes.Unauthenticated, "access token is invalid: %v", err)
-	// }
-
-	return handler(ctx, req)
 }

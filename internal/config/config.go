@@ -10,8 +10,9 @@ import (
 
 type Config struct {
 	Webmail Server
-	Mta Server
+	Mta     Server
 	Database
+	Oidc
 }
 
 type Server struct {
@@ -53,6 +54,13 @@ type User struct {
 	DatabaseName string `mapstructure:"database_name"`
 	Username     string
 	Password     string
+}
+
+type Oidc struct {
+	Issuer  string
+	ClientId  string `mapstructure:"client_id"`
+	ClientSecret  string `mapstructure:"client_secret"`
+	KeyPath string `mapstructure:"key_path"`
 }
 
 func NewConfig(v *viper.Viper) *Config {

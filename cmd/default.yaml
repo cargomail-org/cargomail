@@ -5,6 +5,13 @@ logging:
     options:
       disable_timestamp: true
 
+# OIDC
+oidc:
+  issuer: http://localhost:9998/
+  client_id: api
+  client_secret: secret
+  key_path: ../fedemail-zitadel-oidc/example/server/client-key1.json    
+
 # gRPC Webmail
 webmail:
   port: 8080
