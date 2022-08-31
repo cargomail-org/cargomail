@@ -5,7 +5,6 @@ go 1.19
 require (
 	github.com/rs/cors v1.7.0
 	github.com/zitadel/oidc v1.7.0
-	github.com/zitadel/zitadel-go/v2 v2.0.0-v2-alpha.5
 	google.golang.org/grpc v1.48.0
 	google.golang.org/protobuf v1.28.1
 )
@@ -13,14 +12,11 @@ require (
 require (
 	github.com/cenkalti/backoff/v4 v4.1.1 // indirect
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
-	github.com/envoyproxy/protoc-gen-validate v0.6.7 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/gogap/env_json v0.0.0-20150503135429-86150085ddbe // indirect
 	github.com/gogap/env_strings v0.0.1 // indirect
 	github.com/gorilla/schema v1.2.0 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/heralight/logrus_mate v1.0.1 // indirect
 	github.com/hoisie/redis v0.0.0-20160730154456-b5c6e81454e0 // indirect

@@ -17,15 +17,16 @@ import (
 	mta "github.com/federizer/fedemail/mta"
 	"github.com/rs/cors"
 	"github.com/sirupsen/logrus"
+	"github.com/zitadel/oidc/pkg/client/rs"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/health/grpc_health_v1"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
-	grpc_mw "github.com/zitadel/zitadel-go/v2/pkg/api/middleware/grpc"
 
 	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
 	"github.com/federizer/fedemail/generated/proto/people/v1"
@@ -34,6 +35,10 @@ import (
 	fedemailHandler "github.com/federizer/fedemail/pkg/api/fedemail/v1"
 	peopleHandler "github.com/federizer/fedemail/pkg/api/people/v1"
 )
+
+type AuthIterceptor struct {
+	AuthService rs.ResourceServer
+}
 
 func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 	ctx := context.Background()
@@ -48,12 +53,14 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 
 	httpPort := fmt.Sprintf("%d", config.Webmail.Port)
 
-	introspection, err := grpc_mw.NewIntrospectionInterceptor(config.Oidc.Issuer, config.Oidc.ClientId, config.Oidc.ClientSecret)
+	provider, err := rs.NewResourceServerClientCredentials(config.Issuer, config.ClientId, config.ClientSecret)
 	if err != nil {
-		logrus.WithError(err).Fatal("could not create an introspection interceptor: %v", err)
+		logrus.Fatalf("error creating provider %s", err.Error())
 	}
 
-	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(introspection.Unary()))
+	auth := AuthIterceptor{AuthService: provider}
+
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(auth.UnaryInterceptor))
 
 	grpc_health_v1.RegisterHealthServer(grpcServer, &GrpcHealthService{})
 	peoplev1.RegisterPeopleServer(grpcServer, peopleHandler.NewHandler(peopleRepository.NewRepository(db)))
@@ -152,4 +159,39 @@ func shutdownServer(ctx context.Context, server *http.Server) error {
 	}
 	logrus.Info("webmail server shutdown gracefully")
 	return nil
+}
+
+func (s *AuthIterceptor) UnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "missing context metadata")
+	}
+
+	values := md["authorization"]
+	if len(values) == 0 {
+		logrus.Errorf("%v: missing authorization token", codes.Unauthenticated)
+		return nil, status.Error(codes.Unauthenticated, "missing authorization token")
+	}
+
+	parts := strings.Split(values[0], "Bearer ")
+	if len(parts) != 2 {
+		logrus.Errorf("%v: invalid token", codes.Unauthenticated)
+		return nil, status.Error(codes.Unauthenticated, "invalid token")
+	}
+	token := parts[1]
+
+	resp, err := rs.Introspect(ctx, s.AuthService, token)
+	if err != nil {
+		return nil, status.Errorf(codes.Unauthenticated, "unauthenticated: %v", err)
+	}
+
+	value, ok := resp.GetClaim("username").(string)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "claim 'username' does't not exists")
+	}
+
+	md.Append("username", value)
+	ctx = metadata.NewIncomingContext(ctx, md)
+
+	return handler(ctx, req)
 }
