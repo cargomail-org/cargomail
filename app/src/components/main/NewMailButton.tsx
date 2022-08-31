@@ -20,7 +20,7 @@ const NewMailButton = ({ classes }: any) => {
         content: '',
         receipients: '',
       }),
-    []
+    []  // eslint-disable-line
   )
 
   return (

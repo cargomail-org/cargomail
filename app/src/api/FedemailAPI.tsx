@@ -17,7 +17,7 @@ const fedemailClient = new FedemailClient(transport)
 const useFedemailAPI = () => {
   const { token } = useContext(AuthContext)
   const { updateLabels } = useContext(LabelsContext)
-  const { updateDrafts } = useContext(DraftsContext)
+  const { updateDrafts, newDraftEdit, updateDraftEdit, closeDraftEdit } = useContext(DraftsContext)
 
   const options: GrpcWebOptions = {
     baseUrl,
@@ -88,7 +88,29 @@ const useFedemailAPI = () => {
   }
 
   const createDraft = (draft: any) => {
-    console.log(draft)
+    const unaryCall = fedemailClient.draftsCreate(
+      {
+        messageRaw: draft,
+      },
+      options
+    )
+
+    unaryCall.then((response) => {
+      if (response.status.code !== 'OK') {
+        console.log(response.status.code, response.status.detail)
+        return null
+      }
+
+      console.log(response.response)
+
+      draft.content = response.response.message?.raw
+
+      newDraftEdit({
+        id: response.response.id,
+        // sender: userId, // userId???
+        ...draft,
+      })
+    })
   }
 
   const updateDraft = (draft: any) => {
