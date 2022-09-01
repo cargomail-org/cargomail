@@ -1,4 +1,4 @@
-import { createContext, ReactNode, Component, useReducer } from 'react'
+import { createContext, ReactNode, useReducer } from 'react'
 import type { Draft } from '../api/generated/proto/fedemail/v1/fedemail'
 import useActionCreator from '../utils/hooks/action_creator'
 
@@ -13,29 +13,30 @@ const reducer = (state: any, action: any) => {
   const { payload } = action
   switch (action.type) {
     case actions.updateDrafts:
-      return { ...state, drafts: payload }
+      return {
+        ...state,
+        drafts: payload,
+      }
     case actions.newDraftEdit:
       return {
         ...state,
-        editing: {
-          ...state.editing,
-          [payload.id]: payload,
-        },
+        editing: [...state.editing, payload],
       }
     case actions.updateDraftEdit:
       return {
         ...state,
-        editing: {
-          ...state.editing,
-          [payload.id]: {
-            ...state[payload.id],
-            ...payload,
-          },
-        },
+        editing: state.editing.map((draft: { id: any }) => {
+          if (draft.id === payload.id) {
+            return { ...draft, ...payload }
+          }
+          return draft
+        }),
       }
     case actions.closeDraftEdit: {
-      const { [payload]: discard, ...editing } = state.editing
-      return { ...state, editing }
+      return {
+        ...state,
+        editing: state.editing.filter((draft: { id: any }) => draft.id !== payload),
+      }
     }
     default:
       return state
@@ -47,7 +48,7 @@ export interface IDraftsProvider {
 }
 
 export interface IDraftsContext {
-  drafts: Draft[]
+  draftsAll: { drafts: Draft[]; editing: Draft[] }
   updateDrafts: (drafts: Draft[]) => void
   newDraftEdit: (draft: Draft) => void
   updateDraftEdit: (draft: Draft) => void
@@ -55,7 +56,7 @@ export interface IDraftsContext {
 }
 
 export const DraftsContext = createContext<IDraftsContext>({
-  drafts: [] as Draft[],
+  draftsAll: { drafts: [] as Draft[], editing: [] as Draft[] },
   updateDrafts: () => null,
   newDraftEdit: () => null,
   updateDraftEdit: () => null,
@@ -63,9 +64,9 @@ export const DraftsContext = createContext<IDraftsContext>({
 })
 
 export const DraftsProvider = (props: any) => {
-  const [drafts, dispatch] = useReducer(reducer, {
+  const [draftsAll, dispatch] = useReducer(reducer, {
     drafts: [] as Draft[],
-    editing: {} as Draft,
+    editing: [] as Draft[],
   })
 
   const updateDrafts = useActionCreator(actions.updateDrafts, dispatch)
@@ -74,7 +75,7 @@ export const DraftsProvider = (props: any) => {
   const closeDraftEdit = useActionCreator(actions.closeDraftEdit, dispatch)
 
   return (
-    <DraftsContext.Provider value={{ drafts, updateDrafts, newDraftEdit, updateDraftEdit, closeDraftEdit }}>
+    <DraftsContext.Provider value={{ draftsAll, updateDrafts, newDraftEdit, updateDraftEdit, closeDraftEdit }}>
       {props.children}
     </DraftsContext.Provider>
   )

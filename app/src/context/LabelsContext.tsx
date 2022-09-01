@@ -1,4 +1,4 @@
-import { useState, createContext, ReactNode, Component } from 'react'
+import { useState, createContext, ReactNode } from 'react'
 import type { Label } from '../api/generated/proto/fedemail/v1/fedemail'
 
 export interface ILabelsProvider {

@@ -16,8 +16,6 @@ import {
 import DraftsIcon from '@mui/icons-material/Drafts'
 import ClearIcon from '@mui/icons-material/Clear'
 import MinimizeIcon from '@mui/icons-material/Minimize'
-// import classNames from 'classnames'
-
 import { ContactsContext } from '../../context/ContactsContext'
 import { DraftsContext } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
@@ -71,8 +69,8 @@ const styles = () => ({
   },
 })
 
-const EditDraft = ({ classes, sender, id, subject, receipients, content }: any) => {
-  // const { closeDraftEdit } = useContext(DraftsContext)
+const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
+  const { closeDraftEdit } = useContext(DraftsContext)
   const { contacts } = useContext(ContactsContext)
   const { updateDraft, sendDraft, deleteDraft } = useFedemailAPI()
   const draft = {
@@ -85,25 +83,28 @@ const EditDraft = ({ classes, sender, id, subject, receipients, content }: any) 
   const update = (field: string) => (e: { target: { value: any } }) =>
     updateDraft({ ...draft, [field]: e.target.value })
   return (
-    <div className={classes.root}>
-      <Card className={classes.card}>
+    <div>
+      {(window as any).debug(sender)}
+      {(window as any).debug(id)}
+      {(window as any).debug(subject)}
+      {(window as any).debug(receipients)}
+      {(window as any).debug(content)}
+
+      <Card>
         <CardHeader
-          className={classes.header}
-          //   avatar={<DraftsIcon className={classNames(classes.icon, classes.logoIcon)} />}
+          avatar={<DraftsIcon />}
           action={
             <span>
-              <IconButton className={classes.iconButton}>
-                <MinimizeIcon className={classes.icon} />
+              <IconButton>
+                <MinimizeIcon />
               </IconButton>
-              {/* <IconButton
-                className={classes.iconButton}
-                onClick={() => (content ? closeDraftEdit(id) : deleteDraft(id))}>
-                <ClearIcon className={classes.icon} />
-              </IconButton> */}
+              <IconButton onClick={() => (content ? closeDraftEdit(id) : deleteDraft(id))}>
+                <ClearIcon />
+              </IconButton>
             </span>
           }
         />
-        <CardContent className={classes.content}>
+        <CardContent>
           <Select
             multiple
             autoWidth
@@ -117,7 +118,6 @@ const EditDraft = ({ classes, sender, id, subject, receipients, content }: any) 
             input={
               <InputBase
                 placeholder="Receipient"
-                className={classes.input}
                 inputProps={{
                   'aria-label': 'Receipient',
                 }}
@@ -131,7 +131,7 @@ const EditDraft = ({ classes, sender, id, subject, receipients, content }: any) 
           </Select>
 
           <Divider />
-          <div className={classes.input}>
+          <div>
             <Typography variant="caption">{'Sender'}: </Typography>
             <InputBase
               placeholder={'Sender'}
@@ -145,7 +145,6 @@ const EditDraft = ({ classes, sender, id, subject, receipients, content }: any) 
           <Divider />
           <InputBase
             placeholder={'Subject'}
-            className={classes.subject}
             inputProps={{
               'aria-label': 'Subject',
             }}
@@ -155,7 +154,6 @@ const EditDraft = ({ classes, sender, id, subject, receipients, content }: any) 
           <br />
           <InputBase
             placeholder={'Content'}
-            className={classes.input}
             multiline
             rows={10}
             inputProps={{

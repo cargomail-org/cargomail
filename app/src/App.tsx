@@ -12,6 +12,8 @@ import useFedemailAPI from './api/FedemailAPI'
 import * as ROUTES from './routes'
 import { useContext, useEffect } from 'react'
 import AllContextProviders from './context'
+import debug from './utils/debug'
+;(window as any).debug = debug
 
 const AUTH_DISABLED = process.env.REACT_APP_AUTH !== '1'
 function AppRoutes() {

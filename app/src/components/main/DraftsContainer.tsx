@@ -10,12 +10,12 @@ const styles = () => ({
   },
 })
 
-const DraftsContainer = ({ classes }: any, drafts: Draft[]) => (
-  <div className={classes}>
-    {Object.entries(drafts).map(([id, draft]) => (
-      <EditDraft key={id} {...draft} />
-    ))}
-  </div>
+interface Props {
+  drafts: Draft[]
+}
+
+const DraftsContainer = ({ drafts }: Props) => (
+  <div>{drafts && Object.entries(drafts).map(([id, draft]) => <EditDraft key={id} {...draft} />)}</div>
 )
 
 export default DraftsContainer

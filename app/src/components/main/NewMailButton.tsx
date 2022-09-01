@@ -10,7 +10,7 @@ const fabStyle = {
   bottom: 24,
 }
 
-const NewMailButton = ({ classes }: any) => {
+const NewMailButton = () => {
   const { createDraft } = useFedemailAPI()
 
   const createNewDraftEdit = useCallback(
@@ -24,7 +24,7 @@ const NewMailButton = ({ classes }: any) => {
   )
 
   return (
-    <div className={classes}>
+    <div>
       <Fab color="primary" sx={fabStyle} onClick={createNewDraftEdit}>
         <AddIcon />
       </Fab>

@@ -1,4 +1,4 @@
-import { useState, createContext, ReactNode, Component } from 'react'
+import { useState, createContext, ReactNode } from 'react'
 import type { Person } from '../api/generated/proto/people/v1/people'
 
 export interface IContactsProvider {

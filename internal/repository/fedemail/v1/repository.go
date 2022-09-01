@@ -3,7 +3,9 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"math/rand"
 	"strconv"
+	"time"
 
 	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
 	"google.golang.org/grpc/metadata"
@@ -129,13 +131,27 @@ func (r *Repository) MessagesModify(ctx context.Context, messageId int64, addLab
 	return &message, nil
 }
 
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
+func randSeq(n int) string {
+    b := make([]rune, n)
+    for i := range b {
+        b[i] = letters[rand.Intn(len(letters))]
+    }
+    return string(b)
+}
+
 func (r *Repository) DraftsCreate(ctx context.Context, draft *fedemailv1.Draft) (*fedemailv1.Draft, error) {
 	var message fedemailv1.Message
 	message.Id = strconv.FormatInt(200, 10)
 	message.ThreadId = "300"
 	message.LabelIds = append(message.LabelIds, "DRAFT")
 
-	draft.Id = "4"
+	draft.Id = randSeq(10)
 	draft.Message = &message
 
 	return draft, nil

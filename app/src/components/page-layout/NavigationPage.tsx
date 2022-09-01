@@ -9,7 +9,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import { useConfig } from '../../packages/core/config'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
-import { Grid, Hidden, Link, Typography } from '@mui/material'
+import { Grid, Hidden, Typography } from '@mui/material'
 import AvatarMenu from '../main/AvatarMenu'
 import NewMailButton from '../main/NewMailButton'
 import DraftsContainer from '../main/DraftsContainer'
@@ -71,7 +71,9 @@ export function Navigation({ children }: any) {
 
   const { productName } = useConfig()
 
-  const { drafts } = useContext(DraftsContext)
+  const { draftsAll } = useContext(DraftsContext)
+
+  console.log('NavigationPage', draftsAll)
 
   return (
     <React.Fragment>
@@ -127,7 +129,7 @@ export function Navigation({ children }: any) {
             <>{children}</>
           </Box>
           <NewMailButton />
-          <DraftsContainer drafts={drafts} />
+          <DraftsContainer drafts={draftsAll.editing} />
         </Grid>
       </Hidden>
 
@@ -146,7 +148,7 @@ export function Navigation({ children }: any) {
           <>{children}</>
         </Box>
         <NewMailButton />
-        <DraftsContainer drafts={drafts} />
+        <DraftsContainer drafts={draftsAll.editing} />
       </Hidden>
     </React.Fragment>
   )

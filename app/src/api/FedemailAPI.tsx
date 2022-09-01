@@ -101,28 +101,30 @@ const useFedemailAPI = () => {
         return null
       }
 
-      console.log(response.response)
+      console.log('FedemailAPI', response.response)
 
       draft.content = response.response.message?.raw
 
       newDraftEdit({
         id: response.response.id,
-        // sender: userId, // userId???
+        sender: 'me',
         ...draft,
       })
     })
   }
 
   const updateDraft = (draft: any) => {
-    console.log(draft)
+    console.log('FedemailAPI', draft)
+    updateDraftEdit(draft)
   }
 
   const sendDraft = (id: any) => {
-    console.log(id)
+    console.log('FedemailAPI', id)
   }
 
   const deleteDraft = (id: any) => {
-    console.log(id)
+    console.log('FedemailAPI', id)
+    closeDraftEdit(id)
   }
 
   return {
