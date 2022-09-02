@@ -120,7 +120,7 @@ export function Navigation({ children }: any) {
         </DrawerDesktop>
         <Grid
           container
-          spacing={0}
+          spacing={2}
           direction="column"
           alignItems="center"
           justifyContent="center"
@@ -144,9 +144,19 @@ export function Navigation({ children }: any) {
             <Labels />
           </Box>
         </DrawerMobile>
-        <Box>
-          <>{children}</>
-        </Box>
+        <Grid
+          container
+          spacing={2}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          style={{ minHeight: '100vh' }}>
+          <Box>
+            <>{children}</>
+          </Box>
+          <NewMailButton />
+          <DraftsContainer drafts={draftsAll.editing} />
+        </Grid>
         <NewMailButton />
         <DraftsContainer drafts={draftsAll.editing} />
       </Hidden>

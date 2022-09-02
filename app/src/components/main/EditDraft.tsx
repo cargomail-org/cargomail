@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -20,55 +21,6 @@ import { ContactsContext } from '../../context/ContactsContext'
 import { DraftsContext } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
 
-const styles = () => ({
-  root: {
-    position: 'absolute',
-    bottom: 0,
-    zIndex: 9999,
-    right: 0,
-    marginRight: '8px',
-    marginLeft: '8px',
-    maxHeight: 'calc(100vh - 80px)',
-  },
-  card: {
-    width: '480px',
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    boxShadow: '0 8px 16px rgba(0,0,0,0.45)',
-  },
-  header: {
-    background: colors.grey[800],
-    height: 40,
-  },
-  icon: {
-    height: 18,
-    width: 18,
-  },
-  logoIcon: {
-    color: colors.grey[50],
-  },
-  iconButton: {
-    padding: 0,
-    margin: '0 4px',
-    color: colors.grey[400],
-    transition: 'color 0.2s',
-    '&:hover': {
-      color: colors.grey[50],
-    },
-  },
-  content: {
-    padding: 0,
-  },
-  input: {
-    padding: '4px 12px',
-    display: 'block',
-  },
-  subject: {
-    padding: '12px 12px',
-    fontWeight: 'bold',
-  },
-})
-
 const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
   const { closeDraftEdit } = useContext(DraftsContext)
   const { contacts } = useContext(ContactsContext)
@@ -83,28 +35,63 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
   const update = (field: string) => (e: { target: { value: any } }) =>
     updateDraft({ ...draft, [field]: e.target.value })
   return (
-    <div>
-      {(window as any).debug(sender)}
+    <Box
+      sx={{
+        position: 'absolute',
+        bottom: 0,
+        zIndex: 9999,
+        right: 0,
+        marginRight: '8px',
+        marginLeft: '8px',
+        maxHeight: 'calc(100vh - 80px)',
+      }}>
+      {/* {(window as any).debug(sender)}
       {(window as any).debug(id)}
       {(window as any).debug(subject)}
       {(window as any).debug(receipients)}
-      {(window as any).debug(content)}
-
-      <Card>
+      {(window as any).debug(content)} */}
+      <Card
+        sx={{
+          width: 'calc(100vw - 15px)',
+          maxWidth: '480px',
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
+          boxShadow: '0 8px 16px rgba(0,0,0,0.45)',
+        }}>
         <CardHeader
-          avatar={<DraftsIcon />}
+          sx={{ background: colors.grey[800], height: 10 }}
+          avatar={<DraftsIcon sx={{ height: 18, width: 18, color: colors.grey[50] }} />}
           action={
             <span>
-              <IconButton>
-                <MinimizeIcon />
+              <IconButton
+                sx={{
+                  padding: 0,
+                  margin: '0 4px',
+                  color: colors.grey[400],
+                  transition: 'color 0.2s',
+                  '&:hover': {
+                    color: colors.grey[50],
+                  },
+                }}>
+                <MinimizeIcon sx={{ height: 18, width: 18 }} />
               </IconButton>
-              <IconButton onClick={() => (content ? closeDraftEdit(id) : deleteDraft(id))}>
-                <ClearIcon />
+              <IconButton
+                sx={{
+                  padding: 0,
+                  margin: '0 4px',
+                  color: colors.grey[400],
+                  transition: 'color 0.2s',
+                  '&:hover': {
+                    color: colors.grey[50],
+                  },
+                }}
+                onClick={() => (content ? closeDraftEdit(id) : deleteDraft(id))}>
+                <ClearIcon sx={{ height: 18, width: 18 }} />
               </IconButton>
             </span>
           }
         />
-        <CardContent>
+        <CardContent sx={{ padding: 0 }}>
           <Select
             multiple
             autoWidth
@@ -117,6 +104,7 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
             }
             input={
               <InputBase
+                sx={{ padding: '4px 12px', display: 'block' }}
                 placeholder="Receipient"
                 inputProps={{
                   'aria-label': 'Receipient',
@@ -131,8 +119,10 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
           </Select>
 
           <Divider />
-          <div>
-            <Typography variant="caption">{'Sender'}: </Typography>
+          {/* <Box sx={{ padding: '4px 12px', display: 'block' }}>
+            <Typography sx={{ fontSize: '1.0rem' }} variant="caption">
+              {'Sender'}:{' '}
+            </Typography>
             <InputBase
               placeholder={'Sender'}
               inputProps={{
@@ -141,9 +131,10 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
               value={sender}
               onChange={update('sender')}
             />
-          </div>
-          <Divider />
+          </Box>
+          <Divider /> */}
           <InputBase
+            sx={{ padding: '4px 12px', fontWeight: 'bold' }}
             placeholder={'Subject'}
             inputProps={{
               'aria-label': 'Subject',
@@ -151,8 +142,9 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
             value={subject}
             onChange={update('subject')}
           />
-          <br />
+          <Divider />
           <InputBase
+            sx={{ padding: '4px 12px', display: 'block' }}
             placeholder={'Content'}
             multiline
             rows={10}
@@ -169,7 +161,7 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
           </Button>
         </CardActions>
       </Card>
-    </div>
+    </Box>
   )
 }
 
