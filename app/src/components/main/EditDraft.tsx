@@ -12,11 +12,9 @@ import {
   InputBase,
   MenuItem,
   Select,
-  Typography,
 } from '@mui/material'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import ClearIcon from '@mui/icons-material/Clear'
-import MinimizeIcon from '@mui/icons-material/Minimize'
 import { ContactsContext } from '../../context/ContactsContext'
 import { DraftsContext } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
@@ -119,20 +117,6 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
           </Select>
 
           <Divider />
-          {/* <Box sx={{ padding: '4px 12px', display: 'block' }}>
-            <Typography sx={{ fontSize: '1.0rem' }} variant="caption">
-              {'Sender'}:{' '}
-            </Typography>
-            <InputBase
-              placeholder={'Sender'}
-              inputProps={{
-                'aria-label': 'Sender',
-              }}
-              value={sender}
-              onChange={update('sender')}
-            />
-          </Box>
-          <Divider /> */}
           <InputBase
             sx={{ padding: '4px 12px', fontWeight: 'bold' }}
             placeholder={'Subject'}

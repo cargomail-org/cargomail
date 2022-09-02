@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 // import MailIcon from '@mui/icons-material/Mail'
 import InboxIcon from '@mui/icons-material/Inbox'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import CheckIcon from '@mui/icons-material/Check'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EmailIcon from '@mui/icons-material/Email'
-import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import * as ROUTES from '../../routes'
 import { LabelsContext } from '../../context/LabelsContext'
 
@@ -87,6 +86,7 @@ export const Labels = () => {
           <ListItemText primary="Done" />
         </ListItemButton>
       </ListItem>
+      <Divider />
       <ListItem disablePadding>
         <ListItemButton
           selected={selectedIndex === 2}
