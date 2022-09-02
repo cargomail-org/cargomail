@@ -73,7 +73,7 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
                     color: colors.grey[50],
                   },
                 }}>
-                <MinimizeIcon sx={{ height: 18, width: 18 }} />
+                {/* <MinimizeIcon sx={{ height: 18, width: 18 }} /> */}
               </IconButton>
               <IconButton
                 sx={{
