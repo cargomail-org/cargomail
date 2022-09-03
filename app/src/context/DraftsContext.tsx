@@ -43,20 +43,28 @@ const reducer = (state: any, action: any) => {
   }
 }
 
+export interface IDraftEdit {
+  id: string
+  sender: string
+  recipients: string
+  subject: string
+  content: string
+}
+
 export interface IDraftsProvider {
   children: ReactNode
 }
 
 export interface IDraftsContext {
-  draftsAll: { drafts: Draft[]; editing: Draft[] }
+  draftsAll: { drafts: Draft[]; editing: IDraftEdit[] }
   updateDrafts: (drafts: Draft[]) => void
-  newDraftEdit: (draft: Draft) => void
-  updateDraftEdit: (draft: Draft) => void
+  newDraftEdit: (draft: IDraftEdit) => void
+  updateDraftEdit: (draft: IDraftEdit) => void
   closeDraftEdit: (id: string) => void
 }
 
 export const DraftsContext = createContext<IDraftsContext>({
-  draftsAll: { drafts: [] as Draft[], editing: [] as Draft[] },
+  draftsAll: { drafts: [] as Draft[], editing: [] as IDraftEdit[] },
   updateDrafts: () => null,
   newDraftEdit: () => null,
   updateDraftEdit: () => null,
@@ -66,7 +74,7 @@ export const DraftsContext = createContext<IDraftsContext>({
 export const DraftsProvider = (props: any) => {
   const [draftsAll, dispatch] = useReducer(reducer, {
     drafts: [] as Draft[],
-    editing: [] as Draft[],
+    editing: [] as IDraftEdit[],
   })
 
   const updateDrafts = useActionCreator(actions.updateDrafts, dispatch)

@@ -11,16 +11,18 @@ const fabStyle = {
 }
 
 const NewMailButton = () => {
-  const { createDraft } = useFedemailAPI()
+  const { draftsCreate } = useFedemailAPI()
 
   const createNewDraftEdit = useCallback(
     () =>
-      createDraft({
+      draftsCreate({
+        id: '',
+        sender: '',
+        recipients: '',
         subject: '',
         content: '',
-        receipients: '',
       }),
-    []  // eslint-disable-line
+    [] // eslint-disable-line
   )
 
   return (

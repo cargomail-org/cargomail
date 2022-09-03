@@ -1,9 +1,9 @@
 import { Box } from '@mui/material'
-import { Draft } from '../../api/generated/proto/fedemail/v1/fedemail'
+import { IDraftEdit } from '../../context/DraftsContext'
 import EditDraft from './EditDraft'
 
 interface Props {
-  drafts: Draft[]
+  drafts: IDraftEdit[]
 }
 
 const DraftsContainer = ({ drafts }: Props) => (

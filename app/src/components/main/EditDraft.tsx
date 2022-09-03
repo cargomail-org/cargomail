@@ -19,19 +19,19 @@ import { ContactsContext } from '../../context/ContactsContext'
 import { DraftsContext } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
 
-const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
+const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
   const { closeDraftEdit } = useContext(DraftsContext)
   const { contacts } = useContext(ContactsContext)
-  const { updateDraft, sendDraft, deleteDraft } = useFedemailAPI()
-  const draft = {
+  const { draftsUpdate, draftsSend, draftsDelete } = useFedemailAPI()
+  const draftEdit = {
     id,
-    receipients,
     sender,
+    recipients,
     subject,
     content,
   }
   const update = (field: string) => (e: { target: { value: any } }) =>
-    updateDraft({ ...draft, [field]: e.target.value })
+    draftsUpdate({ ...draftEdit, [field]: e.target.value })
   return (
     <Box
       sx={{
@@ -43,10 +43,10 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
         marginLeft: '8px',
         maxHeight: 'calc(100vh - 80px)',
       }}>
-      {/* {(window as any).debug(sender)}
-      {(window as any).debug(id)}
+      {/* {(window as any).debug(id)}
+      {(window as any).debug(sender)}
+      {(window as any).debug(recipients)}
       {(window as any).debug(subject)}
-      {(window as any).debug(receipients)}
       {(window as any).debug(content)} */}
       <Card
         sx={{
@@ -83,7 +83,7 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
                     color: colors.grey[50],
                   },
                 }}
-                onClick={() => (content ? closeDraftEdit(id) : deleteDraft(id))}>
+                onClick={() => (content ? closeDraftEdit(id) : draftsDelete(id))}>
                 <ClearIcon sx={{ height: 18, width: 18 }} />
               </IconButton>
             </span>
@@ -93,11 +93,11 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
           <Select
             multiple
             autoWidth
-            value={receipients.slice().split(',')}
+            value={recipients.slice().split(',')}
             onChange={(e) =>
-              updateDraft({
-                ...draft,
-                receipients: `${receipients},${e.target.value}`,
+              draftsUpdate({
+                ...draftEdit,
+                recipients: `${recipients},${e.target.value}`,
               })
             }
             input={
@@ -140,7 +140,7 @@ const EditDraft = ({ sender, id, subject, receipients, content }: any) => {
           />
         </CardContent>
         <CardActions disableSpacing>
-          <Button variant="contained" color="primary" onClick={() => sendDraft(id)}>
+          <Button variant="contained" color="primary" onClick={() => draftsSend(id)}>
             {'Send'}
           </Button>
         </CardActions>

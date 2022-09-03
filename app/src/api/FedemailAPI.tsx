@@ -4,7 +4,10 @@ import { useContext } from 'react'
 import { FedemailClient } from './generated/proto/fedemail/v1/fedemail.client'
 import { AuthContext } from '../packages/react-oauth2-code-pkce/index'
 import { LabelsContext } from '../context/LabelsContext'
-import { DraftsContext } from '../context/DraftsContext'
+import { DraftsContext, IDraftEdit } from '../context/DraftsContext'
+import { Draft } from './generated/proto/fedemail/v1/fedemail'
+import encode from '../utils/mails/encode'
+import { decodeCurrentUser } from '../auth'
 
 const baseUrl: string = process.env.REACT_APP_SERVER_BASE_URL || ''
 
@@ -15,7 +18,7 @@ const transport = new GrpcWebFetchTransport({
 const fedemailClient = new FedemailClient(transport)
 
 const useFedemailAPI = () => {
-  const { token } = useContext(AuthContext)
+  const { token, idToken } = useContext(AuthContext)
   const { updateLabels } = useContext(LabelsContext)
   const { updateDrafts, newDraftEdit, updateDraftEdit, closeDraftEdit } = useContext(DraftsContext)
 
@@ -87,7 +90,7 @@ const useFedemailAPI = () => {
     })
   }
 
-  const createDraft = (draft: any) => {
+  const draftsCreate = (draft: IDraftEdit) => {
     const unaryCall = fedemailClient.draftsCreate(
       {
         messageRaw: draft,
@@ -103,26 +106,26 @@ const useFedemailAPI = () => {
 
       console.log('FedemailAPI', response.response)
 
-      draft.content = response.response.message?.raw
-
       newDraftEdit({
-        id: response.response.id,
-        sender: 'me',
         ...draft,
+        id: response.response.id,
+        sender: decodeCurrentUser(idToken)?.username || '',
       })
     })
   }
 
-  const updateDraft = (draft: any) => {
-    console.log('FedemailAPI', draft)
+  const draftsUpdate = (draft: IDraftEdit) => {
+    console.log('FedemailAPI, draft', draft)
     updateDraftEdit(draft)
+    const message = { raw: encode(draft) }
+    console.log('FedemailAPI, message', message)
   }
 
-  const sendDraft = (id: any) => {
+  const draftsSend = (id: any) => {
     console.log('FedemailAPI', id)
   }
 
-  const deleteDraft = (id: any) => {
+  const draftsDelete = (id: any) => {
     console.log('FedemailAPI', id)
     closeDraftEdit(id)
   }
@@ -130,10 +133,10 @@ const useFedemailAPI = () => {
   return {
     labelsList,
     draftsList,
-    createDraft,
-    updateDraft,
-    sendDraft,
-    deleteDraft,
+    draftsCreate,
+    draftsUpdate,
+    draftsSend,
+    draftsDelete,
   }
 }
 

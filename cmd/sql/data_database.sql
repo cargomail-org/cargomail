@@ -187,21 +187,19 @@ BEGIN
 
     RAISE INFO 'data inserted into federizer/fedemail';
 
-    -- Connections
+    -- Contacts
     do $$
     DECLARE 
         thread_1 bigint;
         thread_2 bigint;
     BEGIN
-        INSERT INTO people.connection (owner, names, email_addresses) VALUES 
+        INSERT INTO people.connection (owner, name, email_addresses) VALUES 
         ('matthew.cuthbert@demo.localhost',
-        '[
-            {
-                "display_name": "Anne Shirley",
-                "family_name": "Shirley",
-                "given_name": "Anne"
-            }
-        ]',
+        '{
+            "display_name": "Anne Shirley",
+            "family_name": "Shirley",
+            "given_name": "Anne"
+        }',
         '[
             {
                 "value": "anne.shirley@demo.localhost",
@@ -209,13 +207,11 @@ BEGIN
             }
         ]'),
         ('matthew.cuthbert@demo.localhost',
-        '[
-            {
-                "display_name": "Gilbert Blythe",
-                "family_name": "Blythe",
-                "given_name": "Gilbert"
-            }
-        ]',
+        '{
+            "display_name": "Gilbert Blythe",
+            "family_name": "Blythe",
+            "given_name": "Gilbert"
+        }',
         '[
             {
                 "value": "gilbert.blythe@demo.localhost",
@@ -223,13 +219,11 @@ BEGIN
             }
         ]'),
         ('matthew.cuthbert@demo.localhost',
-        '[
-            {
-                "display_name": "Diana Barry",
-                "family_name": "Barry",
-                "given_name": "Diana"
-            }
-        ]',
+        '{
+            "display_name": "Diana Barry",
+            "family_name": "Barry",
+            "given_name": "Diana"
+        }',
         '[
             {
                 "value": "diana.barry@demo.localhost",

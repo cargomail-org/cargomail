@@ -4,6 +4,7 @@ import { useContext } from 'react'
 import { PeopleClient } from './generated/proto/people/v1/people.client'
 import { AuthContext } from '../packages/react-oauth2-code-pkce/index'
 import { ContactsContext } from '../context/ContactsContext'
+import { Person } from './generated/proto/people/v1/people'
 
 const baseUrl: string = process.env.REACT_APP_SERVER_BASE_URL || ''
 
@@ -15,7 +16,7 @@ const peopleClient = new PeopleClient(transport)
 
 const usePeopleAPI = () => {
   const { token } = useContext(AuthContext)
-  const { updateContacts } = useContext(ContactsContext)
+  const { updateContacts /*, updateContact */ } = useContext(ContactsContext)
 
   const options: GrpcWebOptions = {
     baseUrl,
@@ -40,20 +41,41 @@ const usePeopleAPI = () => {
     meta: {},
   }
 
-  const getContacts = () => {
-    const unaryCall = peopleClient.connectionsList({}, options)
+  const contactsList = () => {
+    const unaryCall = peopleClient.contactsList(
+      {
+        maxResults: 0n,
+      },
+      options
+    )
 
     unaryCall.then((response) => {
       if (response.status.code !== 'OK') {
         console.log(response.status.code, response.status.detail)
         return null
       }
-      updateContacts(response.response.connections)
+
+      updateContacts(response.response.contacts)
     })
   }
 
+  const contactsUpdate = (person: Person) => {
+    const unaryCall = peopleClient.contactsUpdate(person, options)
+
+    unaryCall.then((response) => {
+      if (response.status.code !== 'OK') {
+        console.log(response.status.code, response.status.detail)
+        return null
+      }
+
+      // updateContact(response.response)
+    })
+    console.log('PeopleAPI', person)
+  }
+
   return {
-    getContacts,
+    contactsList,
+    contactsUpdate,
   }
 }
 

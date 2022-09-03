@@ -176,21 +176,21 @@ BEGIN
     CREATE TABLE people.connection (
         id BIGSERIAL PRIMARY KEY,
         owner character varying(255) NOT NULL,
-        names JSONB,
+        name JSONB,
         email_addresses JSONB,
         timeline_id bigint DEFAULT nextval('people.timeline_id_seq'::regclass) NOT NULL,
-        search_names tsvector,
+        search_name tsvector,
         search_email_addresses tsvector
     );
 
-    CREATE INDEX idx_connection_names ON people.connection USING gin (names);
+    CREATE INDEX idx_connection_name ON people.connection USING gin (name);
     CREATE INDEX idx_connection_email_addresses ON people.connection USING gin (email_addresses);
 
     CREATE FUNCTION people.connection_table_inserted() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$
     begin
-        NEW.search_names = to_tsvector(NEW.names);
+        NEW.search_name = to_tsvector(NEW.name);
         NEW.search_email_addresses = to_tsvector(NEW.email_addresses);
         RETURN NEW;	
     END; $$;
@@ -200,7 +200,7 @@ BEGIN
     AS $$ 
     begin
         NEW.timeline_id := nextval('email.timeline_id_seq'::regclass);
-        NEW.search_names = to_tsvector(NEW.names);
+        NEW.search_name = to_tsvector(NEW.name);
         NEW.search_email_addresses = to_tsvector(NEW.email_addresses);
         RETURN NEW; 
     END; $$;
@@ -218,8 +218,8 @@ BEGIN
         END IF;
 
         RETURN QUERY
-            SELECT jsonb_build_object('resource_name', id::varchar(255),
-                                    'names', names,
+            SELECT jsonb_build_object('id', id::varchar(255),
+                                    'name', name,
                                     'email_addresses', email_addresses,
                                     'history_id', timeline_id::varchar(255))
             FROM people.connection

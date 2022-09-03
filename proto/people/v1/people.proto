@@ -12,8 +12,8 @@ message EmailAddress {
   string value = 2;
 }
 
-message ListConnectionsResponse {
-  repeated Person connections = 1;
+message ListContactsResponse {
+  repeated Person contacts = 1;
 }
 
 message Name {
@@ -29,13 +29,41 @@ message Name {
 message Person {
   string id = 1;
 
-  repeated EmailAddress email_addresses = 2;
+  Name name = 2;
 
-  repeated Name names = 3;
+  repeated EmailAddress email_addresses = 3;
+}
+
+message ContactsListRequest {
+  int64 max_results = 1;
+}
+
+message ContactsCreateRequest {
+  Person person = 1;
+}
+
+message ContactsGetRequest {
+  string id = 1;
+}
+
+message ContactsUpdateRequest {
+  string id = 1;
+
+  Person person = 2;
+}
+
+message ContactsDeleteRequest {
+  string id = 1;
 }
 
 service People {
-  rpc ConnectionsList ( google.protobuf.Empty ) returns ( ListConnectionsResponse ) {
+  rpc ContactsList ( ContactsListRequest ) returns ( ListContactsResponse ) {
+  }
+  rpc ContactsCreate ( ContactsCreateRequest ) returns ( Person ) {
+  }
+  rpc ContactsUpdate ( ContactsUpdateRequest ) returns ( Person ) {
+  }
+  rpc ContactsDelete ( ContactsDeleteRequest ) returns ( google.protobuf.Empty ) {
   }
 }
 

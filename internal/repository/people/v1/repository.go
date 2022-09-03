@@ -1,13 +1,15 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 
 	"github.com/federizer/fedemail/generated/proto/people/v1"
+	"google.golang.org/grpc/metadata"
 )
 
 type Repo interface {
-	ConnectionsList() ([]*peoplev1.Person, error)
+	ContactsList(context.Context, *peoplev1.ContactsListRequest) ([]*peoplev1.Person, error)
 }
 
 type Repository struct {
@@ -18,11 +20,19 @@ func NewRepository(db *sql.DB) *Repository {
 	return &Repository{db}
 }
 
-func (r *Repository) ConnectionsList() ([]*peoplev1.Person, error) {
+func getUsername(ctx context.Context) string {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok && len(md["username"]) > 0 {
+		return md["username"][0]
+	}
+	return ""
+}
+
+func (r *Repository) ContactsList(ctx context.Context, in *peoplev1.ContactsListRequest) ([]*peoplev1.Person, error) {
 	var people []*peoplev1.Person
 
 	sqlStatement := `SELECT people.connections_list_v1($1);`
-	rows, err := r.db.Query(sqlStatement, "matthew.cuthbert@demo.localhost")
+	rows, err := r.db.Query(sqlStatement, getUsername(ctx))
 	if err != nil {
 		return nil, err
 	}

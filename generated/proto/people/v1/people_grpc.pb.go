@@ -23,7 +23,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PeopleClient interface {
-	ConnectionsList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListConnectionsResponse, error)
+	ContactsList(ctx context.Context, in *ContactsListRequest, opts ...grpc.CallOption) (*ListContactsResponse, error)
+	ContactsCreate(ctx context.Context, in *ContactsCreateRequest, opts ...grpc.CallOption) (*Person, error)
+	ContactsUpdate(ctx context.Context, in *ContactsUpdateRequest, opts ...grpc.CallOption) (*Person, error)
+	ContactsDelete(ctx context.Context, in *ContactsDeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type peopleClient struct {
@@ -34,9 +37,36 @@ func NewPeopleClient(cc grpc.ClientConnInterface) PeopleClient {
 	return &peopleClient{cc}
 }
 
-func (c *peopleClient) ConnectionsList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListConnectionsResponse, error) {
-	out := new(ListConnectionsResponse)
-	err := c.cc.Invoke(ctx, "/people.v1.People/ConnectionsList", in, out, opts...)
+func (c *peopleClient) ContactsList(ctx context.Context, in *ContactsListRequest, opts ...grpc.CallOption) (*ListContactsResponse, error) {
+	out := new(ListContactsResponse)
+	err := c.cc.Invoke(ctx, "/people.v1.People/ContactsList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *peopleClient) ContactsCreate(ctx context.Context, in *ContactsCreateRequest, opts ...grpc.CallOption) (*Person, error) {
+	out := new(Person)
+	err := c.cc.Invoke(ctx, "/people.v1.People/ContactsCreate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *peopleClient) ContactsUpdate(ctx context.Context, in *ContactsUpdateRequest, opts ...grpc.CallOption) (*Person, error) {
+	out := new(Person)
+	err := c.cc.Invoke(ctx, "/people.v1.People/ContactsUpdate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *peopleClient) ContactsDelete(ctx context.Context, in *ContactsDeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/people.v1.People/ContactsDelete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +77,10 @@ func (c *peopleClient) ConnectionsList(ctx context.Context, in *emptypb.Empty, o
 // All implementations must embed UnimplementedPeopleServer
 // for forward compatibility
 type PeopleServer interface {
-	ConnectionsList(context.Context, *emptypb.Empty) (*ListConnectionsResponse, error)
+	ContactsList(context.Context, *ContactsListRequest) (*ListContactsResponse, error)
+	ContactsCreate(context.Context, *ContactsCreateRequest) (*Person, error)
+	ContactsUpdate(context.Context, *ContactsUpdateRequest) (*Person, error)
+	ContactsDelete(context.Context, *ContactsDeleteRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedPeopleServer()
 }
 
@@ -55,8 +88,17 @@ type PeopleServer interface {
 type UnimplementedPeopleServer struct {
 }
 
-func (UnimplementedPeopleServer) ConnectionsList(context.Context, *emptypb.Empty) (*ListConnectionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ConnectionsList not implemented")
+func (UnimplementedPeopleServer) ContactsList(context.Context, *ContactsListRequest) (*ListContactsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ContactsList not implemented")
+}
+func (UnimplementedPeopleServer) ContactsCreate(context.Context, *ContactsCreateRequest) (*Person, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ContactsCreate not implemented")
+}
+func (UnimplementedPeopleServer) ContactsUpdate(context.Context, *ContactsUpdateRequest) (*Person, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ContactsUpdate not implemented")
+}
+func (UnimplementedPeopleServer) ContactsDelete(context.Context, *ContactsDeleteRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ContactsDelete not implemented")
 }
 func (UnimplementedPeopleServer) mustEmbedUnimplementedPeopleServer() {}
 
@@ -71,20 +113,74 @@ func RegisterPeopleServer(s grpc.ServiceRegistrar, srv PeopleServer) {
 	s.RegisterService(&People_ServiceDesc, srv)
 }
 
-func _People_ConnectionsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+func _People_ContactsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ContactsListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PeopleServer).ConnectionsList(ctx, in)
+		return srv.(PeopleServer).ContactsList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/people.v1.People/ConnectionsList",
+		FullMethod: "/people.v1.People/ContactsList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PeopleServer).ConnectionsList(ctx, req.(*emptypb.Empty))
+		return srv.(PeopleServer).ContactsList(ctx, req.(*ContactsListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _People_ContactsCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ContactsCreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeopleServer).ContactsCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/people.v1.People/ContactsCreate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeopleServer).ContactsCreate(ctx, req.(*ContactsCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _People_ContactsUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ContactsUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeopleServer).ContactsUpdate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/people.v1.People/ContactsUpdate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeopleServer).ContactsUpdate(ctx, req.(*ContactsUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _People_ContactsDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ContactsDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeopleServer).ContactsDelete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/people.v1.People/ContactsDelete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeopleServer).ContactsDelete(ctx, req.(*ContactsDeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -97,8 +193,20 @@ var People_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PeopleServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ConnectionsList",
-			Handler:    _People_ConnectionsList_Handler,
+			MethodName: "ContactsList",
+			Handler:    _People_ContactsList_Handler,
+		},
+		{
+			MethodName: "ContactsCreate",
+			Handler:    _People_ContactsCreate_Handler,
+		},
+		{
+			MethodName: "ContactsUpdate",
+			Handler:    _People_ContactsUpdate_Handler,
+		},
+		{
+			MethodName: "ContactsDelete",
+			Handler:    _People_ContactsDelete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
