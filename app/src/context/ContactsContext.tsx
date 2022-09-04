@@ -1,24 +1,31 @@
 import { useState, createContext, ReactNode } from 'react'
-import type { Person } from '../api/generated/proto/people/v1/people'
 
 export interface IContactsProvider {
   children: ReactNode
 }
 
+export interface IContact {
+  inputValue?: string
+  id?: string
+  givenName: string
+  familyName: string
+  emailAddress: string
+}
+
 export interface IContactsContext {
-  contacts: Person[]
-  updateContacts: (contacts: Person[]) => void
+  contacts: IContact[]
+  updateContacts: (contacts: IContact[]) => void
 }
 
 export const ContactsContext = createContext<IContactsContext>({
-  contacts: [] as Person[],
+  contacts: [] as IContact[],
   updateContacts: () => null,
 })
 
 export const ContactsProvider = (props: any) => {
-  const [contacts, setContacts] = useState([] as Person[])
+  const [contacts, setContacts] = useState([] as IContact[])
 
-  const updateContacts = (updates: Person[]) => {
+  const updateContacts = (updates: IContact[]) => {
     setContacts((prev) => ({
       ...prev,
       ...updates,

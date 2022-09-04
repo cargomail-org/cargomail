@@ -7,7 +7,14 @@ interface Props {
 }
 
 const DraftsContainer = ({ drafts }: Props) => (
-  <Box sx={{ position: 'fixed', zIndex: { xs: 0, sm: 99999 }, right: { xs: 0, sm: 100 }, bottom: 0, display: 'flex' }}>
+  <Box
+    sx={{
+      position: 'fixed',
+      zIndex: { xs: 0, sm: 99999 },
+      right: { xs: 0, sm: 100 },
+      bottom: 0,
+      display: 'flex',
+    }}>
     {drafts && Object.entries(drafts).map(([id, draft]) => <EditDraft key={id} {...draft} />)}
   </Box>
 )

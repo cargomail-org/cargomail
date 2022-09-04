@@ -43,16 +43,16 @@ const reducer = (state: any, action: any) => {
   }
 }
 
+export interface IDraftsProvider {
+  children: ReactNode
+}
+
 export interface IDraftEdit {
   id: string
   sender: string
   recipients: string
   subject: string
   content: string
-}
-
-export interface IDraftsProvider {
-  children: ReactNode
 }
 
 export interface IDraftsContext {

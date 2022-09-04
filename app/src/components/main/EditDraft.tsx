@@ -11,15 +11,18 @@ import {
   IconButton,
   InputBase,
   MenuItem,
-  Select,
+  useMediaQuery,
 } from '@mui/material'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import ClearIcon from '@mui/icons-material/Clear'
 import { ContactsContext } from '../../context/ContactsContext'
 import { DraftsContext } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
+import { RecipientsSelect } from './Recipients'
 
 const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
+  const isMobileLandscape = useMediaQuery('(max-height: 520px)')
+
   const { closeDraftEdit } = useContext(DraftsContext)
   const { contacts } = useContext(ContactsContext)
   const { draftsUpdate, draftsSend, draftsDelete } = useFedemailAPI()
@@ -89,8 +92,8 @@ const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
             </span>
           }
         />
-        <CardContent sx={{ padding: 0 }}>
-          <Select
+        <CardContent sx={{ padding: 0, '&:last-child': { pb: 1 } }}>
+          {/* <Select
             multiple
             autoWidth
             value={recipients.slice().split(',')}
@@ -110,15 +113,22 @@ const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
               />
             }>
             {Object.values(contacts).map((contact) => (
-              <MenuItem key={contact.id} value={contact.emailAddresses[0].value}>
-                {contact.emailAddresses[0].value}
+              <MenuItem key={contact.id} value={contact.emailAddress}>
+                {contact.emailAddress}
               </MenuItem>
             ))}
-          </Select>
-
+          </Select> */}
+          <RecipientsSelect sx={{ marginTop: 1 }}>
+            Hello
+            {Object.values(contacts).map((contact) => (
+              <MenuItem key={contact.id} value={contact.emailAddress}>
+                {contact.emailAddress}
+              </MenuItem>
+            ))}
+          </RecipientsSelect>
           <Divider />
           <InputBase
-            sx={{ padding: '4px 12px', fontWeight: 'bold' }}
+            sx={{ width: '100%', padding: '4px 12px', fontWeight: 'bold' }}
             placeholder={'Subject'}
             inputProps={{
               'aria-label': 'Subject',
@@ -127,23 +137,38 @@ const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
             onChange={update('subject')}
           />
           <Divider />
-          <InputBase
-            sx={{ padding: '4px 12px', display: 'block' }}
-            placeholder={'Content'}
-            multiline
-            rows={10}
-            inputProps={{
-              'aria-label': 'Content',
-            }}
-            value={content}
-            onChange={update('content')}
-          />
+          {!isMobileLandscape && (
+            <InputBase
+              sx={{ padding: '4px 12px', display: 'block' }}
+              placeholder={'Content'}
+              multiline
+              rows={10}
+              inputProps={{
+                'aria-label': 'Content',
+              }}
+              value={content}
+              onChange={update('content')}
+            />
+          )}
+          {isMobileLandscape && (
+            <InputBase
+              sx={{ padding: '4px 12px', display: 'block' }}
+              placeholder={'Content'}
+              multiline
+              rows={3}
+              inputProps={{
+                'aria-label': 'Content',
+              }}
+              value={content}
+              onChange={update('content')}
+            />
+          )}
+          <CardActions disableSpacing>
+            <Button variant="contained" color="primary" onClick={() => draftsSend(id)}>
+              {'Send'}
+            </Button>
+          </CardActions>
         </CardContent>
-        <CardActions disableSpacing>
-          <Button variant="contained" color="primary" onClick={() => draftsSend(id)}>
-            {'Send'}
-          </Button>
-        </CardActions>
       </Card>
     </Box>
   )

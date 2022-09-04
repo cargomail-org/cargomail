@@ -3,7 +3,7 @@ import { UnaryCall } from '@protobuf-ts/runtime-rpc'
 import { useContext } from 'react'
 import { PeopleClient } from './generated/proto/people/v1/people.client'
 import { AuthContext } from '../packages/react-oauth2-code-pkce/index'
-import { ContactsContext } from '../context/ContactsContext'
+import { ContactsContext, IContact } from '../context/ContactsContext'
 import { Person } from './generated/proto/people/v1/people'
 
 const baseUrl: string = process.env.REACT_APP_SERVER_BASE_URL || ''
@@ -55,7 +55,15 @@ const usePeopleAPI = () => {
         return null
       }
 
-      updateContacts(response.response.contacts)
+      const Contact: IContact[] = response.response.contacts.map((contact) => {
+        return {
+          givenName: contact.name?.givenName || '',
+          familyName: contact.name?.familyName || '',
+          emailAddress: contact.emailAddresses[0].value,
+        }
+      })
+
+      updateContacts(Contact)
     })
   }
 
