@@ -10,12 +10,10 @@ import {
   Divider,
   IconButton,
   InputBase,
-  MenuItem,
   useMediaQuery,
 } from '@mui/material'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import ClearIcon from '@mui/icons-material/Clear'
-import { ContactsContext } from '../../context/ContactsContext'
 import { DraftsContext } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { RecipientsSelect } from './Recipients'
@@ -24,7 +22,6 @@ const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
   const isMobileLandscape = useMediaQuery('(max-height: 520px)')
 
   const { closeDraftEdit } = useContext(DraftsContext)
-  const { contacts } = useContext(ContactsContext)
   const { draftsUpdate, draftsSend, draftsDelete } = useFedemailAPI()
   const draftEdit = {
     id,
@@ -93,39 +90,7 @@ const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
           }
         />
         <CardContent sx={{ padding: 0, '&:last-child': { pb: 1 } }}>
-          {/* <Select
-            multiple
-            autoWidth
-            value={recipients.slice().split(',')}
-            onChange={(e) =>
-              draftsUpdate({
-                ...draftEdit,
-                recipients: `${recipients},${e.target.value}`,
-              })
-            }
-            input={
-              <InputBase
-                sx={{ padding: '4px 12px', display: 'block' }}
-                placeholder="Receipient"
-                inputProps={{
-                  'aria-label': 'Receipient',
-                }}
-              />
-            }>
-            {Object.values(contacts).map((contact) => (
-              <MenuItem key={contact.id} value={contact.emailAddress}>
-                {contact.emailAddress}
-              </MenuItem>
-            ))}
-          </Select> */}
-          <RecipientsSelect sx={{ marginTop: 1 }}>
-            Hello
-            {Object.values(contacts).map((contact) => (
-              <MenuItem key={contact.id} value={contact.emailAddress}>
-                {contact.emailAddress}
-              </MenuItem>
-            ))}
-          </RecipientsSelect>
+          <RecipientsSelect sx={{ marginTop: 1 }}></RecipientsSelect>
           <Divider />
           <InputBase
             sx={{ width: '100%', padding: '4px 12px', fontWeight: 'bold' }}

@@ -2,7 +2,6 @@ import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
 import DialogActions from '@mui/material/DialogActions'
 import CircularProgress from '@mui/material/CircularProgress'
 import parse from 'autosuggest-highlight/parse'
@@ -11,6 +10,7 @@ import Button from '@mui/material/Button'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 import { FC, FormEvent, Fragment, ReactNode, useContext, useEffect, useState } from 'react'
 import { ContactsContext, IContact } from '../../context/ContactsContext'
+import usePeopleAPI from '../../api/PeopleAPI'
 
 const filter = createFilterOptions({
   matchFrom: 'start',
@@ -20,19 +20,36 @@ const filter = createFilterOptions({
 export type RecipientsSelectProps = {
   children?: ReactNode
   sx: Object
+  initialValue?: any
 }
 
 export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
   const [open, setOpen] = useState(false) // if dropdown open?
 
-  const [value, setValue] = useState<IContact[]>()
+  const [value, setValue] = useState([])
   const [openDialog, openDialogOpen] = useState(false)
 
-  const [data, setData] = useState<IContact[] | null>()
-
-  const loading = open && data?.length === 0 // is it still loading
+  const { contactsList } = usePeopleAPI()
 
   const { contacts } = useContext(ContactsContext)
+
+  const loading = open && contacts.length === 0 // is it still loading
+
+  useEffect(() => {
+    let active = true
+
+    if (!loading) {
+      return undefined
+    }
+
+    if (active) {
+      contactsList()
+    }
+
+    return () => {
+      active = false
+    }
+  }, [contacts, contactsList, loading])
 
   const [dialogValue, setDialogValue] = useState<IContact>({
     givenName: '',
@@ -52,17 +69,17 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
-    // setValue([
-    //   ...value,
-    //   {
-    //     givenName: dialogValue?.givenName,
-    //     familyName: dialogValue?.familyName,
-    //     emailAddress: dialogValue?.emailAddress,
-    //   },
-    // ])
+    setValue([
+      ...value,
+      {
+        givenName: dialogValue?.givenName,
+        familyName: dialogValue?.familyName,
+        emailAddress: dialogValue?.emailAddress,
+      } as never,
+    ])
 
-    // setData([
-    //   ...data,
+    // setContacts([
+    //   ...contacts,
     //   {
     //     givenName: dialogValue?.givenName,
     //     familyName: dialogValue?.familyName,
@@ -82,6 +99,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
     <Fragment>
       <form onSubmit={handleFormSubmit}>
         <Autocomplete
+          disablePortal
           open={open}
           onOpen={() => {
             setOpen(true)
@@ -112,7 +130,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
                 emailAddress: newValue.slice(-1)[0].inputValue || '',
               })
             } else {
-              setValue(newValue)
+              setValue(newValue as any)
             }
           }}
           filterOptions={(options, params) => {
@@ -123,16 +141,15 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
                 inputValue: params.inputValue,
                 givenName: '',
                 familyName: '',
-                emailAddress: `Add "${params.inputValue}" Category`,
+                emailAddress: `Add "${params.inputValue}" to Contacts`,
               })
             }
 
             return filtered
           }}
-          id="free-solo-dialog-demo"
+          id="recipients-select"
           options={contacts}
           getOptionLabel={(option) => {
-            // e.g value selected with enter, right from the input
             if (typeof option === 'string') {
               return option
             }
@@ -155,7 +172,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
                     <span
                       key={index}
                       style={{
-                        color: part.highlight ? 'red' : 'inherit',
+                        color: part.highlight ? 'green' : 'inherit',
                         fontWeight: part.highlight ? 700 : 400,
                       }}>
                       {part.text}
@@ -167,8 +184,17 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           }}
           renderInput={(params) => (
             <TextField
+              sx={{
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none',
+                },
+                '&.Mui-focused': {
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none',
+                  },
+                },
+              }}
               {...params}
-              variant="outlined"
               InputProps={{
                 ...params.InputProps,
                 endAdornment: (
@@ -183,13 +209,11 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           )}
           sx={props.sx}
         />
-        {/* <Button type="submit">Submit</Button> */}
       </form>
-      {/* <Dialog open={openDialog} onClose={handleClose}>
+      <Dialog sx={{ zIndex: 99999 }} open={openDialog} onClose={handleClose}>
         <form onSubmit={handleSubmit}>
           <DialogTitle>Add a new contact</DialogTitle>
           <DialogContent>
-            <DialogContentText>Please add a new contact!</DialogContentText>
             <TextField
               autoFocus
               margin="dense"
@@ -201,7 +225,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
                   givenName: event.target.value,
                 })
               }
-              label="givenName"
+              label="Given name"
               type="text"
               variant="standard"
             />
@@ -215,7 +239,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
                   familyName: event.target.value,
                 })
               }
-              label="familyName"
+              label="Family name"
               type="text"
               variant="standard"
             />
@@ -229,7 +253,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
                   emailAddress: event.target.value,
                 })
               }
-              label="emailAddress"
+              label="Email address"
               type="text"
               variant="standard"
             />
@@ -239,7 +263,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
             <Button type="submit">Add</Button>
           </DialogActions>
         </form>
-      </Dialog> */}
+      </Dialog>
     </Fragment>
   )
 }

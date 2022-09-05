@@ -55,15 +55,16 @@ const usePeopleAPI = () => {
         return null
       }
 
-      const Contact: IContact[] = response.response.contacts.map((contact) => {
-        return {
-          givenName: contact.name?.givenName || '',
-          familyName: contact.name?.familyName || '',
-          emailAddress: contact.emailAddresses[0].value,
-        }
-      })
+      const contacts: IContact[] = response.response.contacts.map((contact) => ({
+        id: contact.id,
+        givenName: contact.name?.givenName || '',
+        familyName: contact.name?.familyName || '',
+        emailAddress: contact.emailAddresses[0].value,
+      }))
 
-      updateContacts(Contact)
+      console.log('PeopleAPI', contacts)
+
+      updateContacts(contacts)
     })
   }
 

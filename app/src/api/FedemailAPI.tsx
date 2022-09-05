@@ -5,7 +5,6 @@ import { FedemailClient } from './generated/proto/fedemail/v1/fedemail.client'
 import { AuthContext } from '../packages/react-oauth2-code-pkce/index'
 import { LabelsContext } from '../context/LabelsContext'
 import { DraftsContext, IDraftEdit } from '../context/DraftsContext'
-import { Draft } from './generated/proto/fedemail/v1/fedemail'
 import encode from '../utils/mails/encode'
 import { decodeCurrentUser } from '../auth'
 
