@@ -9,7 +9,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import { useConfig } from '../../packages/core/config'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
-import { Grid, Hidden, Typography } from '@mui/material'
+import { Grid, Typography, useMediaQuery } from '@mui/material'
 import AvatarMenu from '../main/AvatarMenu'
 import NewMailButton from '../main/NewMailButton'
 import DraftsContainer from '../main/DraftsContainer'
@@ -53,6 +53,7 @@ const DrawerMobile = styled(MuiDrawer)(({ theme }) => ({
 }))
 
 export function Navigation({ children }: any) {
+  const isMobilePortrait = useMediaQuery('(max-width: 828px)')
   const [open, setOpen] = useState(window.innerWidth < 769 ? false : true)
   const toggleDrawer = () => {
     setOpen(!open)
@@ -84,82 +85,86 @@ export function Navigation({ children }: any) {
             pl: '28px!important',
             justifyContent: 'space-between',
           }}>
-          <Hidden smUp>
+          {isMobilePortrait && (
             <IconButton edge="start" aria-label="open drawer" onClick={toggleDrawer}>
               <MenuIcon />
             </IconButton>
-          </Hidden>
+          )}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {productName}
           </Typography>
           <AvatarMenu />
         </Toolbar>
       </AppBar>
-      <Hidden smDown>
-        <DrawerDesktop
-          variant="permanent"
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-          }}>
-          <Toolbar
+      {!isMobilePortrait && (
+        <Box>
+          <DrawerDesktop
+            variant="permanent"
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-              bgcolor: 'background.default',
+              width: drawerWidth,
+              flexShrink: 0,
+              [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
             }}>
-            <IconButton onClick={toggleDrawer} sx={{ display: open === true ? 'block' : 'none' }}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Labels />
-          <Toolbar />
-        </DrawerDesktop>
-        <Grid
-          container
-          spacing={2}
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          style={{ minHeight: '100vh' }}>
-          <Box>
-            <>{children}</>
-          </Box>
-          <NewMailButton />
-          <DraftsContainer drafts={draftsAll.editing} />
-        </Grid>
-      </Hidden>
-
-      <Hidden smUp>
-        <DrawerMobile
-          open={open}
-          onClose={toggleDrawer}
-          ModalProps={{
-            keepMounted: true,
-          }}>
-          <Box sx={{ width: drawerWidth }} role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+            <Toolbar
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                px: [1],
+                bgcolor: 'background.default',
+              }}>
+              <IconButton onClick={toggleDrawer} sx={{ display: open === true ? 'block' : 'none' }}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
             <Labels />
-          </Box>
-        </DrawerMobile>
-        <Grid
-          container
-          spacing={2}
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          style={{ minHeight: '100vh' }}>
-          <Box>
-            <>{children}</>
-          </Box>
+            <Toolbar />
+          </DrawerDesktop>
+          <Grid
+            container
+            spacing={2}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            style={{ minHeight: '100vh' }}>
+            <Box>
+              <>{children}</>
+            </Box>
+            <NewMailButton />
+            <DraftsContainer drafts={draftsAll.editing} />
+          </Grid>
+        </Box>
+      )}
+
+      {isMobilePortrait && (
+        <Box>
+          <DrawerMobile
+            open={open}
+            onClose={toggleDrawer}
+            ModalProps={{
+              keepMounted: true,
+            }}>
+            <Box sx={{ width: drawerWidth }} role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+              <Labels />
+            </Box>
+          </DrawerMobile>
+          <Grid
+            container
+            spacing={2}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            style={{ minHeight: '100vh' }}>
+            <Box>
+              <>{children}</>
+            </Box>
+            <NewMailButton />
+            <DraftsContainer drafts={draftsAll.editing} />
+          </Grid>
           <NewMailButton />
           <DraftsContainer drafts={draftsAll.editing} />
-        </Grid>
-        <NewMailButton />
-        <DraftsContainer drafts={draftsAll.editing} />
-      </Hidden>
+        </Box>
+      )}
     </React.Fragment>
   )
 }

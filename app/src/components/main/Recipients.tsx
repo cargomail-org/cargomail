@@ -11,6 +11,8 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 import { FC, FormEvent, Fragment, ReactNode, useContext, useEffect, useState } from 'react'
 import { ContactsContext, IContact } from '../../context/ContactsContext'
 import usePeopleAPI from '../../api/PeopleAPI'
+import { IDraftEdit } from '../../context/DraftsContext'
+import useFedemailAPI from '../../api/FedemailAPI'
 
 const filter = createFilterOptions({
   matchFrom: 'start',
@@ -21,17 +23,19 @@ export type RecipientsSelectProps = {
   children?: ReactNode
   sx: Object
   initialValue?: any
+  draftEdit: IDraftEdit
 }
 
 export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
   const [open, setOpen] = useState(false) // if dropdown open?
 
-  const [value, setValue] = useState([])
+  const [value, setValue] = useState<IContact[]>([])
   const [openDialog, openDialogOpen] = useState(false)
 
-  const { contactsList } = usePeopleAPI()
+  const { draftsUpdate } = useFedemailAPI()
 
-  const { contacts } = useContext(ContactsContext)
+  const { contactsList } = usePeopleAPI()
+  const { contacts, setContacts } = useContext(ContactsContext)
 
   const loading = open && contacts.length === 0 // is it still loading
 
@@ -52,6 +56,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
   }, [contacts, contactsList, loading])
 
   const [dialogValue, setDialogValue] = useState<IContact>({
+    id: '',
     givenName: '',
     familyName: '',
     emailAddress: '',
@@ -59,6 +64,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
 
   const handleClose = () => {
     setDialogValue({
+      id: '',
       givenName: '',
       familyName: '',
       emailAddress: '',
@@ -72,20 +78,32 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
     setValue([
       ...value,
       {
-        givenName: dialogValue?.givenName,
-        familyName: dialogValue?.familyName,
-        emailAddress: dialogValue?.emailAddress,
-      } as never,
+        id: dialogValue.id,
+        givenName: dialogValue.givenName,
+        familyName: dialogValue.familyName,
+        emailAddress: dialogValue.emailAddress,
+      },
     ])
 
-    // setContacts([
-    //   ...contacts,
-    //   {
-    //     givenName: dialogValue?.givenName,
-    //     familyName: dialogValue?.familyName,
-    //     emailAddress: dialogValue?.emailAddress,
-    //   },
-    // ])
+    draftsUpdate({
+      ...props.draftEdit,
+      recipients: buildDraftRecipients([
+        ...value,
+        {
+          id: dialogValue.id,
+          givenName: dialogValue.givenName,
+          familyName: dialogValue.familyName,
+          emailAddress: dialogValue.emailAddress,
+        },
+      ]),
+    })
+
+    setContacts({
+      id: dialogValue.id,
+      givenName: dialogValue.givenName,
+      familyName: dialogValue.familyName,
+      emailAddress: dialogValue.emailAddress,
+    })
 
     handleClose()
   }
@@ -95,10 +113,27 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
     console.log(value)
   }
 
+  const buildDraftRecipients = (contacts: IContact[]): string => {
+    const recipients = contacts
+      .map((contact) => {
+        const name = `${contact.givenName} ${contact.familyName}`
+        return `${name.trim().length > 0 ? `"${name}"` : ''} <${contact.emailAddress}>`.trimStart()
+      })
+      .join()
+    console.log(recipients)
+    return recipients
+  }
+
+  const validateEmailAddress = (value: string) => {
+    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]+$/i
+    return !regex.test(value.replace(/\s/g, ''))
+  }
+
   return (
     <Fragment>
       <form onSubmit={handleFormSubmit}>
         <Autocomplete
+          sx={props.sx}
           disablePortal
           open={open}
           onOpen={() => {
@@ -110,13 +145,14 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           loading={loading}
           multiple
           value={value}
-          isOptionEqualToValue={(option, value) => option.emailAddress === value.emailAddress}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
           onChange={(event, newValue) => {
             if (typeof newValue === 'string') {
               // timeout to avoid instant validation of the dialog's form.
               setTimeout(() => {
                 openDialogOpen(true)
                 setDialogValue({
+                  id: crypto.randomUUID(),
                   givenName: '',
                   familyName: '',
                   emailAddress: newValue,
@@ -124,21 +160,29 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
               })
             } else if (newValue.slice(-1)[0] && newValue.slice(-1)[0].inputValue) {
               openDialogOpen(true)
+              const newContact = (newValue.slice(-1)[0].inputValue || '').split(/\s+/)
               setDialogValue({
-                givenName: '',
-                familyName: '',
-                emailAddress: newValue.slice(-1)[0].inputValue || '',
+                id: crypto.randomUUID(),
+                givenName: newContact[1] || '', // newGivenName
+                familyName: newContact[2] || '', // newFamilyName
+                emailAddress: newContact[0] || '', // newEmailAddress
               })
             } else {
+              console.log(newValue)
               setValue(newValue as any)
+              draftsUpdate({
+                ...props.draftEdit,
+                recipients: buildDraftRecipients(newValue),
+              })
             }
           }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params)
-            const isExisting = options.some((option) => params.inputValue === option.emailAddress)
-            if (params.inputValue !== '' && !isExisting) {
+            const isExisting = options.some((option) => params.inputValue.split(' ')[0] === option.emailAddress)
+            if (params.inputValue.split(' ')[0] !== '' && !isExisting) {
               filtered.push({
                 inputValue: params.inputValue,
+                id: crypto.randomUUID(),
                 givenName: '',
                 familyName: '',
                 emailAddress: `Add "${params.inputValue}" to Contacts`,
@@ -162,7 +206,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           clearOnBlur
           handleHomeEndKeys
           renderOption={(props, option, { inputValue }) => {
-            const matches = match(option.emailAddress, inputValue)
+            const matches = match(option.emailAddress, inputValue.split(' ')[0])
             const parts = parse(option.emailAddress, matches)
 
             return (
@@ -207,13 +251,30 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
               label="Recipients"
             />
           )}
-          sx={props.sx}
         />
       </form>
-      <Dialog sx={{ zIndex: 99999 }} open={openDialog} onClose={handleClose}>
+      <Dialog sx={{ zIndex: 9999 }} open={openDialog} onClose={handleClose}>
         <form onSubmit={handleSubmit}>
           <DialogTitle>Add a new contact</DialogTitle>
           <DialogContent>
+            <TextField
+              margin="dense"
+              id="emailAddress"
+              value={dialogValue?.emailAddress}
+              onChange={(event) =>
+                setDialogValue({
+                  ...dialogValue,
+                  emailAddress: event.target.value,
+                })
+              }
+              required
+              label="Email address"
+              type="email"
+              autoComplete="email"
+              variant="standard"
+              error={validateEmailAddress(dialogValue?.emailAddress)}
+            />
+            <br />
             <TextField
               autoFocus
               margin="dense"
@@ -240,20 +301,6 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
                 })
               }
               label="Family name"
-              type="text"
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              id="emailAddress"
-              value={dialogValue?.emailAddress}
-              onChange={(event) =>
-                setDialogValue({
-                  ...dialogValue,
-                  emailAddress: event.target.value,
-                })
-              }
-              label="Email address"
               type="text"
               variant="standard"
             />

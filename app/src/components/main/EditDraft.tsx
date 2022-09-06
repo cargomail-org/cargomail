@@ -41,7 +41,7 @@ const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
         right: 0,
         marginRight: '8px',
         marginLeft: '8px',
-        maxHeight: 'calc(100vh - 80px)',
+        maxHeight: 'calc(100vh - 48px)',
       }}>
       {/* {(window as any).debug(id)}
       {(window as any).debug(sender)}
@@ -90,7 +90,9 @@ const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
           }
         />
         <CardContent sx={{ padding: 0, '&:last-child': { pb: 1 } }}>
-          <RecipientsSelect sx={{ marginTop: 1 }}></RecipientsSelect>
+          <RecipientsSelect
+            sx={{ maxHeight: 100, overflow: 'auto', paddingTop: 1 }}
+            draftEdit={draftEdit}></RecipientsSelect>
           <Divider />
           <InputBase
             sx={{ width: '100%', padding: '4px 12px', fontWeight: 'bold' }}

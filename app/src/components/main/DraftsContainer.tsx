@@ -10,8 +10,7 @@ const DraftsContainer = ({ drafts }: Props) => (
   <Box
     sx={{
       position: 'fixed',
-      zIndex: { xs: 0, sm: 99999 },
-      right: { xs: 0, sm: 100 },
+      right: { xs: 0, sm: 98 },
       bottom: 0,
       display: 'flex',
     }}>
