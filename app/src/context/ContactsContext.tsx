@@ -17,6 +17,7 @@ const reducer = (state: IContact[], action: any) => {
       return state
   }
 }
+
 export interface IContactsProvider {
   children: ReactNode
 }
@@ -32,7 +33,7 @@ export interface IContact {
 export interface IContactsContext {
   contacts: IContact[]
   updateContacts: (contacts: IContact[]) => void
-  setContacts: (contacts: IContact) => void
+  setContacts: (contact: IContact) => void
 }
 
 export const ContactsContext = createContext<IContactsContext>({

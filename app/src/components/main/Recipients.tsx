@@ -29,10 +29,8 @@ export type RecipientsSelectProps = {
 export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
   const [open, setOpen] = useState(false) // if dropdown open?
 
-  const [value, setValue] = useState<IContact[]>([])
-  const [openDialog, openDialogOpen] = useState(false)
-
   const { draftsUpdate } = useFedemailAPI()
+  const [openDialog, openDialogOpen] = useState(false)
 
   const { contactsList } = usePeopleAPI()
   const { contacts, setContacts } = useContext(ContactsContext)
@@ -75,27 +73,21 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
-    setValue([
-      ...value,
-      {
-        id: dialogValue.id,
-        givenName: dialogValue.givenName,
-        familyName: dialogValue.familyName,
-        emailAddress: dialogValue.emailAddress,
-      },
-    ])
 
     draftsUpdate({
-      ...props.draftEdit,
-      recipients: buildDraftRecipients([
-        ...value,
+      id: props.draftEdit.id,
+      sender: props.draftEdit.sender,
+      recipients: [
+        ...props.draftEdit.recipients,
         {
           id: dialogValue.id,
           givenName: dialogValue.givenName,
           familyName: dialogValue.familyName,
           emailAddress: dialogValue.emailAddress,
         },
-      ]),
+      ],
+      subject: props.draftEdit.subject,
+      content: props.draftEdit.content,
     })
 
     setContacts({
@@ -110,18 +102,6 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
 
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault()
-    console.log(value)
-  }
-
-  const buildDraftRecipients = (contacts: IContact[]): string => {
-    const recipients = contacts
-      .map((contact) => {
-        const name = `${contact.givenName} ${contact.familyName}`
-        return `${name.trim().length > 0 ? `"${name}"` : ''} <${contact.emailAddress}>`.trimStart()
-      })
-      .join()
-    console.log(recipients)
-    return recipients
   }
 
   const validateEmailAddress = (value: string) => {
@@ -144,7 +124,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           }}
           loading={loading}
           multiple
-          value={value}
+          value={props.draftEdit.recipients}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           onChange={(event, newValue) => {
             if (typeof newValue === 'string') {
@@ -168,11 +148,12 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
                 emailAddress: newContact[0] || '', // newEmailAddress
               })
             } else {
-              console.log(newValue)
-              setValue(newValue as any)
               draftsUpdate({
-                ...props.draftEdit,
-                recipients: buildDraftRecipients(newValue),
+                id: props.draftEdit.id,
+                sender: props.draftEdit.sender,
+                recipients: newValue as any,
+                subject: props.draftEdit.subject,
+                content: props.draftEdit.content,
               })
             }
           }}

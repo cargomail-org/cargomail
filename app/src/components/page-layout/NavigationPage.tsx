@@ -74,8 +74,6 @@ export function Navigation({ children }: any) {
 
   const { draftsAll } = useContext(DraftsContext)
 
-  console.log('NavigationPage', draftsAll)
-
   return (
     <React.Fragment>
       <AppBar position="absolute" open={false}>

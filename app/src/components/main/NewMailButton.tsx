@@ -18,7 +18,7 @@ const NewMailButton = () => {
       draftsCreate({
         id: '',
         sender: '',
-        recipients: '',
+        recipients: [],
         subject: '',
         content: '',
       }),

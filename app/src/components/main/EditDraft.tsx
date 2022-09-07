@@ -30,8 +30,9 @@ const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
     subject,
     content,
   }
-  const update = (field: string) => (e: { target: { value: any } }) =>
+  const update = (field: string) => (e: { target: { value: any } }) => {
     draftsUpdate({ ...draftEdit, [field]: e.target.value })
+  }
   return (
     <Box
       sx={{
