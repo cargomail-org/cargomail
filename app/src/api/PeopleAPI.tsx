@@ -68,15 +68,8 @@ const usePeopleAPI = () => {
     })
   }
 
-  const UUID_LENGTH = 36
-
-  const contactsCreate = (contact: IContact) => {
+  const contactsCreate = async (contact: IContact) => {
     console.log('PeopleAPI/contactsCreate', contact)
-
-    // id is generated on the client side
-    if (contact.id.length === UUID_LENGTH) {
-      addContact(contact)
-    }
 
     const person: Person = {
       id: contact.id,
@@ -91,19 +84,17 @@ const usePeopleAPI = () => {
 
     const unaryCall = peopleClient.contactsCreate({ person }, options)
 
-    unaryCall.then((response) => {
+    await unaryCall.then((response) => {
       if (response.status.code !== 'OK') {
         console.log(response.status.code, response.status.detail)
         return null
       }
 
-      // id should be generated on the server side
-      if (contact.id.length !== UUID_LENGTH) {
-        contact.id = response.response.id
-        addContact(contact)
-      }
-      console.log('PeopleAPI/contactsCreate', contact)
+      contact.id = response.response.id
     })
+
+    addContact(contact)
+    console.log('PeopleAPI/contactsCreate', contact)
   }
 
   const contactsUpdate = (person: Person) => {

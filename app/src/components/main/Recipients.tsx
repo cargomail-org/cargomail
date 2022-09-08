@@ -72,10 +72,10 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
     openDialogOpen(false)
   }
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
 
-    contactsCreate(dialogValue)
+    await contactsCreate(dialogValue)
 
     draftsUpdate({
       id: props.draftEdit.id,
@@ -138,7 +138,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
               openDialogOpen(true)
               const newContact = (newValue.slice(-1)[0].inputValue || '').split(/\s+/)
               setDialogValue({
-                id: crypto.randomUUID(),
+                id: '',
                 givenName: newContact[1] || '', // newGivenName
                 familyName: newContact[2] || '', // newFamilyName
                 emailAddress: newContact[0] || '', // newEmailAddress
@@ -159,7 +159,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
             if (params.inputValue.split(' ')[0] !== '' && !isExisting) {
               filtered.push({
                 inputValue: params.inputValue,
-                id: crypto.randomUUID(),
+                id: '',
                 givenName: '',
                 familyName: '',
                 emailAddress: `Add "${params.inputValue}" to Contacts`,
