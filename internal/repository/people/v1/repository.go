@@ -3,6 +3,8 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"math/rand"
+	"time"
 
 	"github.com/federizer/fedemail/generated/proto/people/v1"
 	"google.golang.org/grpc/metadata"
@@ -10,6 +12,7 @@ import (
 
 type Repo interface {
 	ContactsList(context.Context, *peoplev1.ContactsListRequest) ([]*peoplev1.Person, error)
+	ContactsCreate(context.Context, *peoplev1.ContactsCreateRequest) (*peoplev1.Person, error)
 }
 
 type Repository struct {
@@ -28,7 +31,7 @@ func getUsername(ctx context.Context) string {
 	return ""
 }
 
-func (r *Repository) ContactsList(ctx context.Context, in *peoplev1.ContactsListRequest) ([]*peoplev1.Person, error) {
+func (r *Repository) ContactsList(ctx context.Context, req *peoplev1.ContactsListRequest) ([]*peoplev1.Person, error) {
 	var people []*peoplev1.Person
 
 	sqlStatement := `SELECT people.connections_list_v1($1);`
@@ -52,4 +55,33 @@ func (r *Repository) ContactsList(ctx context.Context, in *peoplev1.ContactsList
 	}
 
 	return people, nil
+}
+
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
+func randSeq(n int) string {
+    b := make([]rune, n)
+    for i := range b {
+        b[i] = letters[rand.Intn(len(letters))]
+    }
+    return string(b)
+}
+
+func (r *Repository) ContactsCreate(ctx context.Context, req *peoplev1.ContactsCreateRequest) (*peoplev1.Person, error) {
+	person := req.Person
+
+	// sqlStatement := `SELECT people.connections_create_v1($1);`
+	// rows, err := r.db.Query(sqlStatement, getUsername(ctx))
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// defer rows.Close()
+
+	person.Id = randSeq(10)
+
+	return person, nil
 }

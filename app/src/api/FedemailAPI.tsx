@@ -114,10 +114,10 @@ const useFedemailAPI = () => {
   }
 
   const draftsUpdate = (draft: IDraftEdit) => {
-    console.log('FedemailAPI, draft', draft)
     updateDraftEdit(draft)
     const message = { raw: encode(draft) }
-    console.log('FedemailAPI, message', message)
+    console.log('FedemailAPI', message)
+    // here call the api
   }
 
   const draftsSend = (id: any) => {
@@ -126,6 +126,7 @@ const useFedemailAPI = () => {
 
   const draftsDelete = (id: any) => {
     console.log('FedemailAPI', id)
+    // here call the api then closeDraftEdit(id)
     closeDraftEdit(id)
   }
 

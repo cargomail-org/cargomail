@@ -16,7 +16,7 @@ const peopleClient = new PeopleClient(transport)
 
 const usePeopleAPI = () => {
   const { token } = useContext(AuthContext)
-  const { updateContacts /*, updateContact */ } = useContext(ContactsContext)
+  const { updateContacts, addContact } = useContext(ContactsContext)
 
   const options: GrpcWebOptions = {
     baseUrl,
@@ -68,6 +68,44 @@ const usePeopleAPI = () => {
     })
   }
 
+  const UUID_LENGTH = 36
+
+  const contactsCreate = (contact: IContact) => {
+    console.log('PeopleAPI/contactsCreate', contact)
+
+    // id is generated on the client side
+    if (contact.id.length === UUID_LENGTH) {
+      addContact(contact)
+    }
+
+    const person: Person = {
+      id: contact.id,
+      name: {
+        givenName: contact.givenName,
+        familyName: contact.familyName,
+        displayName: `${contact.givenName} ${contact.familyName}`,
+        displayNameLastFirst: `${contact.familyName} ${contact.givenName}`,
+      },
+      emailAddresses: [{ displayName: '', value: contact.emailAddress }],
+    }
+
+    const unaryCall = peopleClient.contactsCreate({ person }, options)
+
+    unaryCall.then((response) => {
+      if (response.status.code !== 'OK') {
+        console.log(response.status.code, response.status.detail)
+        return null
+      }
+
+      // id should be generated on the server side
+      if (contact.id.length !== UUID_LENGTH) {
+        contact.id = response.response.id
+        addContact(contact)
+      }
+      console.log('PeopleAPI/contactsCreate', contact)
+    })
+  }
+
   const contactsUpdate = (person: Person) => {
     const unaryCall = peopleClient.contactsUpdate(person, options)
 
@@ -84,6 +122,7 @@ const usePeopleAPI = () => {
 
   return {
     contactsList,
+    contactsCreate,
     contactsUpdate,
   }
 }

@@ -33,7 +33,8 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
   const [openDialog, openDialogOpen] = useState(false)
 
   const { contactsList } = usePeopleAPI()
-  const { contacts, setContacts } = useContext(ContactsContext)
+  const { contacts } = useContext(ContactsContext)
+  const { contactsCreate } = usePeopleAPI()
 
   const loading = open && contacts.length === 0 // is it still loading
 
@@ -74,6 +75,8 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 
+    contactsCreate(dialogValue)
+
     draftsUpdate({
       id: props.draftEdit.id,
       sender: props.draftEdit.sender,
@@ -88,13 +91,6 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
       ],
       subject: props.draftEdit.subject,
       content: props.draftEdit.content,
-    })
-
-    setContacts({
-      id: dialogValue.id,
-      givenName: dialogValue.givenName,
-      familyName: dialogValue.familyName,
-      emailAddress: dialogValue.emailAddress,
     })
 
     handleClose()
