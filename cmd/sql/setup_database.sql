@@ -60,7 +60,7 @@ BEGIN
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$
     begin
-        -- -- NEW.payload['Message_ID'] = to_json(public.gen_random_uuid()::text);
+        -- -- NEW.payload['Message_ID'] = to_jsonb(public.gen_random_uuid()::text);
         -- NEW.search_subject = to_tsvector(NEW.payload['Subject']);
         -- NEW.search_from = to_tsvector(NEW.payload['From']);
         -- NEW.search_recipients = to_tsvector(NEW.payload['Recipients']);
@@ -209,7 +209,7 @@ BEGIN
     CREATE TRIGGER people_connection_updated BEFORE UPDATE ON people.connection FOR EACH ROW EXECUTE PROCEDURE people.connection_table_updated();
 
     CREATE OR REPLACE FUNCTION people.connections_list_v1(IN _owner character varying)
-    RETURNS TABLE(thread jsonb) AS
+    RETURNS TABLE(people jsonb) AS
     $BODY$
     BEGIN
         -- _owner is required
@@ -225,6 +225,29 @@ BEGIN
             FROM people.connection
             WHERE owner = _owner
             ORDER BY timeline_id DESC;
+    END;			
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
+    CREATE OR REPLACE FUNCTION people.connections_create_v1(IN _owner character varying, IN _person jsonb)
+    RETURNS jsonb AS
+    $BODY$
+    DECLARE
+     _new_person jsonb;
+    BEGIN
+        -- _owner is required
+        IF coalesce(TRIM(_owner), '') = '' THEN
+            RAISE EXCEPTION '_owner is required.';
+        END IF;
+
+        INSERT INTO people.connection(owner, name, email_addresses)
+            VALUES (_owner, _person->'name', _person->'email_addresses')
+            RETURNING jsonb_build_object('id', id::varchar(255),
+                                    'name', name,
+                                    'email_addresses', email_addresses,
+                                    'history_id', timeline_id::varchar(255))
+            INTO _new_person;
+        RETURN _new_person;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
