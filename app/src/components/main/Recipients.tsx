@@ -52,8 +52,12 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
     }
 
     const fetchContactsList = async () => {
-      await contactsList()
-      if (active) {
+      try {
+        await contactsList()
+        if (active) {
+          setLoading(false)
+        }
+      } catch (e) {
         setLoading(false)
       }
     }
