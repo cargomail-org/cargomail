@@ -208,7 +208,7 @@ BEGIN
     CREATE TRIGGER people_connection_inserted BEFORE INSERT ON people.connection FOR EACH ROW EXECUTE PROCEDURE people.connection_table_inserted();
     CREATE TRIGGER people_connection_updated BEFORE UPDATE ON people.connection FOR EACH ROW EXECUTE PROCEDURE people.connection_table_updated();
 
-    CREATE OR REPLACE FUNCTION people.connections_list_v1(IN _owner character varying)
+    CREATE OR REPLACE FUNCTION people.contacts_list_v1(IN _owner character varying)
     RETURNS TABLE(people jsonb) AS
     $BODY$
     BEGIN
@@ -229,7 +229,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION people.connections_create_v1(IN _owner character varying, IN _person jsonb)
+    CREATE OR REPLACE FUNCTION people.contacts_create_v1(IN _owner character varying, IN _person jsonb)
     RETURNS jsonb AS
     $BODY$
     DECLARE

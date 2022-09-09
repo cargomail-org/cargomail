@@ -32,7 +32,7 @@ func getUsername(ctx context.Context) string {
 func (r *Repository) ContactsList(ctx context.Context, req *peoplev1.ContactsListRequest) ([]*peoplev1.Person, error) {
 	var people []*peoplev1.Person
 
-	sqlStatement := `SELECT people.connections_list_v1($1);`
+	sqlStatement := `SELECT people.contacts_list_v1($1);`
 	rows, err := r.db.Query(sqlStatement, getUsername(ctx))
 	if err != nil {
 		return nil, err
@@ -56,17 +56,14 @@ func (r *Repository) ContactsList(ctx context.Context, req *peoplev1.ContactsLis
 }
 
 func (r *Repository) ContactsCreate(ctx context.Context, req *peoplev1.ContactsCreateRequest) (*peoplev1.Person, error) {
-	person := req.Person
 	var scanPerson ScanPerson
+	scanPerson.Person =  req.Person
 
-	scanPerson.Person = person
-	sqlStatement := `SELECT people.connections_create_v1($1, $2);`
+	sqlStatement := `SELECT people.contacts_create_v1($1, $2);`
 	err := r.db.QueryRow(sqlStatement, getUsername(ctx), scanPerson).Scan(&scanPerson)
 	if err != nil {
 		return nil, err
 	}
 
-	person.Id = scanPerson.Id
-
-	return person, err
+	return  scanPerson.Person, err
 }
