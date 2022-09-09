@@ -36,7 +36,13 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
   const { contacts } = useContext(ContactsContext)
   const { contactsCreate } = usePeopleAPI()
 
-  const loading = open && contacts.length === 0 // is it still loading
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (open) {
+      setLoading(true)
+    }
+  }, [open])
 
   useEffect(() => {
     let active = true
@@ -45,14 +51,20 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
       return undefined
     }
 
-    if (active) {
-      contactsList()
+    const fetchContactsList = async () => {
+      await contactsList()
+      if (active) {
+        setLoading(false)
+      }
     }
+
+    fetchContactsList()
 
     return () => {
       active = false
     }
-  }, [contacts, contactsList, loading])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading])
 
   const [dialogValue, setDialogValue] = useState<IContact>({
     id: '',

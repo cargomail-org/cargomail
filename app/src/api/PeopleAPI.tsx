@@ -41,7 +41,7 @@ const usePeopleAPI = () => {
     meta: {},
   }
 
-  const contactsList = () => {
+  const contactsList = async () => {
     const unaryCall = peopleClient.contactsList(
       {
         maxResults: 0n,
@@ -49,7 +49,7 @@ const usePeopleAPI = () => {
       options
     )
 
-    unaryCall.then((response) => {
+    await unaryCall.then((response) => {
       if (response.status.code !== 'OK') {
         console.log(response.status.code, response.status.detail)
         return null
@@ -62,7 +62,7 @@ const usePeopleAPI = () => {
         emailAddress: contact.emailAddresses[0].value,
       }))
 
-      console.log('PeopleAPI', contacts)
+      console.log('PeopleAPI/contactsList', contacts)
 
       updateContacts(contacts)
     })
@@ -108,7 +108,7 @@ const usePeopleAPI = () => {
 
       // updateContact(response.response)
     })
-    console.log('PeopleAPI', person)
+    console.log('PeopleAPI/contactsUpdate', person)
   }
 
   return {
