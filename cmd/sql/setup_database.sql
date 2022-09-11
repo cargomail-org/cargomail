@@ -133,6 +133,97 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
+    CREATE OR REPLACE FUNCTION fedemail.drafts_list_v1(IN _owner character varying)
+    RETURNS TABLE(draft jsonb) AS
+    $BODY$
+    BEGIN
+        -- _owner is required
+        IF coalesce(TRIM(_owner), '') = '' THEN
+            RAISE EXCEPTION '_owner is required.';
+        END IF;
+
+        RETURN QUERY
+            SELECT jsonb_build_object('id', id::varchar(255),
+                                     'thread_id', thread_id::varchar(255),
+                                     'label_ids', labels) FROM fedemail.message                                   
+                WHERE owner = _owner AND labels @> '"DRAFT"'
+                ORDER BY timeline_id DESC;
+    END;			
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
+    CREATE OR REPLACE FUNCTION fedemail.drafts_get_v1(IN _owner character varying, IN _id bigint)
+    RETURNS jsonb AS
+    $BODY$
+    DECLARE
+      _draft jsonb;
+    BEGIN
+        -- _owner is required
+        IF coalesce(TRIM(_owner), '') = '' THEN
+            RAISE EXCEPTION '_owner is required.';
+        END IF;
+
+        SELECT jsonb_build_object('id', id::varchar(255),
+                                        'thread_id', thread_id::varchar(255),
+                                        'snippet', snippet,
+                                        'payload', payload,
+                                        'label_ids', labels,
+                                        'history_id', timeline_id::varchar(255)) FROM fedemail.message
+                WHERE owner = _owner AND id = _id AND labels @> '"DRAFT"'
+                INTO _draft;
+		RETURN _draft;                   
+    END;			
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
+    CREATE OR REPLACE FUNCTION fedemail.drafts_create_v1(IN _owner character varying, IN _payload jsonb)
+    RETURNS jsonb AS
+    $BODY$
+    DECLARE
+     _labels jsonb;
+     _new_draft jsonb;
+    BEGIN
+        -- _owner is required
+        IF coalesce(TRIM(_owner), '') = '' THEN
+            RAISE EXCEPTION '_owner is required.';
+        END IF;
+
+        _labels = to_jsonb('["DRAFT"]'::json);
+
+        INSERT INTO fedemail.message(owner, payload, labels)
+            VALUES (_owner, _payload, _labels)
+            RETURNING jsonb_build_object('id', id::varchar(255),
+                                        'thread_id', thread_id::varchar(255),
+                                        'label_ids', labels)
+            INTO _new_draft;
+        RETURN _new_draft;
+    END;			
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
+    CREATE OR REPLACE FUNCTION fedemail.drafts_update_v1(IN _owner character varying, IN _id bigint, IN _payload jsonb)
+    RETURNS jsonb AS
+    $BODY$
+    DECLARE
+     _updated_draft jsonb;
+    BEGIN
+        -- _owner is required
+        IF coalesce(TRIM(_owner), '') = '' THEN
+            RAISE EXCEPTION '_owner is required.';
+        END IF;
+
+        UPDATE fedemail.message
+            SET payload = _payload
+            WHERE owner = _owner AND id = _id AND labels @> '"DRAFT"'
+            RETURNING jsonb_build_object('id', id::varchar(255),
+                                        'thread_id', thread_id::varchar(255),
+                                        'label_ids', labels)
+            INTO _updated_draft;
+        RETURN _updated_draft;
+    END;			
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
     CREATE OR REPLACE FUNCTION fedemail.drafts_delete_v1(IN _owner character varying, IN _id bigint)
     RETURNS bigint AS
     $BODY$
@@ -146,8 +237,7 @@ BEGIN
 
         WITH affected_rows AS (
             DELETE FROM fedemail.message
-                WHERE id = _id AND owner = _owner AND
-                jsonb_path_exists(labels, 'strict $[*] ? (@ == "DRAFT")') RETURNING 1
+                WHERE owner = _owner AND id = _id AND labels @> '"DRAFT"' RETURNING 1
         ) SELECT COUNT(*) INTO _removed_cnt
             FROM affected_rows;		
         RETURN _removed_cnt;			
