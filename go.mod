@@ -42,6 +42,7 @@ require (
 )
 
 require (
+	github.com/emersion/go-message v0.16.0
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/heirko/go-contrib v0.0.0-20200825160048-11fc5e2235fa
 	github.com/improbable-eng/grpc-web v0.15.0

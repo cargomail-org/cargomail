@@ -76,7 +76,7 @@ func (h *handler) DraftsUpdate(ctx context.Context, req *fedemailv1.DraftsUpdate
 	if err != nil {
 		return nil, err
 	}
-	draft, err := h.repo.DraftsUpdate(ctx, id, req.MessageRaw)
+	draft, err := h.repo.DraftsUpdate(ctx, id, req.MessageRaw.Message)
 	if err != nil {
 		return nil, status.Error(codes.Aborted, err.Error())
 	}

@@ -3,11 +3,12 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"math/rand"
+	"encoding/base64"
+	"io"
 	"strconv"
-	"time"
 
 	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
+	mail "github.com/federizer/fedemail/internal/mail"
 	"google.golang.org/grpc/metadata"
 )
 
@@ -17,7 +18,7 @@ type Repo interface {
 	ThreadsGet(context.Context, int64) (*fedemailv1.Thread, error)
 	MessagesModify(context.Context, int64, []string, []string) (*fedemailv1.Message, error)
 	DraftsCreate(context.Context, *fedemailv1.Draft) (*fedemailv1.Draft, error)
-	DraftsUpdate(context.Context, int64, *fedemailv1.Draft) (*fedemailv1.Draft, error)
+	DraftsUpdate(context.Context, int64, *fedemailv1.Message) (*fedemailv1.Draft, error)
 	DraftsDelete(context.Context, int64) int64
 }
 
@@ -131,42 +132,55 @@ func (r *Repository) MessagesModify(ctx context.Context, messageId int64, addLab
 	return &message, nil
 }
 
-var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
-func randSeq(n int) string {
-    b := make([]rune, n)
-    for i := range b {
-        b[i] = letters[rand.Intn(len(letters))]
-    }
-    return string(b)
-}
-
 func (r *Repository) DraftsCreate(ctx context.Context, draft *fedemailv1.Draft) (*fedemailv1.Draft, error) {
-	var message fedemailv1.Message
-	message.Id = strconv.FormatInt(200, 10)
-	message.ThreadId = "300"
-	message.LabelIds = append(message.LabelIds, "DRAFT")
+	var scanDraft ScanDraft
+	scanDraft.Draft = draft
 
-	draft.Id = randSeq(10)
-	draft.Message = &message
+	sqlStatement := `SELECT fedemail.drafts_create_v1($1, $2);`
+	err := r.db.QueryRow(sqlStatement, getUsername(ctx), scanDraft).Scan(&scanDraft)
+	if err != nil {
+		return nil, err
+	}
 
-	return draft, nil
+	return scanDraft.Draft, err
 }
 
-func (r *Repository) DraftsUpdate(ctx context.Context, messageId int64, draft *fedemailv1.Draft) (*fedemailv1.Draft, error) {
-	// var message fedemailv1.Message
-	// message.Id = strconv.FormatInt(200, 10)
-	// message.ThreadId = "300"
-	// message.LabelIds = append(message.LabelIds, "DRAFT")
+func (r *Repository) DraftsUpdate(ctx context.Context, messageId int64, message *fedemailv1.Message) (*fedemailv1.Draft, error) {
+	var scanDraft ScanDraft
 
-	// draft.Id = "4"
-	// draft.Message = &message
+	var mailMessage mail.Message
 
-	return draft, nil
+	data, err := base64.URLEncoding.WithPadding(base64.NoPadding).DecodeString(message.Raw)
+	if err != nil {
+		return nil, err
+	}
+
+	mailMessage.Message = []byte(data)
+
+	h, b, err := mailMessage.HeaderAndBody()
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := io.ReadAll(b)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = base64.StdEncoding.Decode(data, body)
+	if err != nil {
+		return nil, err
+	}
+
+	// not ready yet
+
+	sqlStatement := `SELECT fedemail.drafts_update_v1($1, $2, $3);`
+	err = r.db.QueryRow(sqlStatement, getUsername(ctx), messageId, h).Scan(&scanDraft)
+	if err != nil {
+		return nil, err
+	}
+
+	return scanDraft.Draft, err
 }
 
 func (r *Repository) DraftsDelete(ctx context.Context, id int64) int64 {

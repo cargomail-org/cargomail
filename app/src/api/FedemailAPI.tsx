@@ -117,17 +117,56 @@ const useFedemailAPI = () => {
     updateDraftEdit(draft)
     const message = { raw: encode(draft) }
     console.log('FedemailAPI', message)
-    // here call the api
-  }
+    const unaryCall = fedemailClient.draftsUpdate(
+      {
+        id: draft.id,
+        messageRaw: {
+          id: '',
+          message: {
+            id: '',
+            raw: message.raw,
+            labelIds: [],
+            snippet: '',
+            threadId: '',
+            timelineId: '',
+            internalDate: '',
+          },
+        },
+      },
+      options
+    )
 
-  const draftsSend = (id: any) => {
-    console.log('FedemailAPI', id)
+    unaryCall.then((response) => {
+      if (response.status.code !== 'OK') {
+        console.log(response.status.code, response.status.detail)
+        return null
+      }
+
+      console.log('FedemailAPI', response.response)
+    })
   }
 
   const draftsDelete = (id: any) => {
     console.log('FedemailAPI', id)
-    // here call the api then closeDraftEdit(id)
-    closeDraftEdit(id)
+    const unaryCall = fedemailClient.draftsDelete(
+      {
+        id,
+      },
+      options
+    )
+
+    unaryCall.then((response) => {
+      if (response.status.code !== 'OK') {
+        console.log(response.status.code, response.status.detail)
+        return null
+      }
+
+      closeDraftEdit(id)
+    })
+  }
+
+  const draftsSend = (id: any) => {
+    console.log('FedemailAPI', id)
   }
 
   return {
