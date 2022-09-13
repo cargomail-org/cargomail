@@ -135,13 +135,7 @@ BEGIN
             {"name": "To", "value": ",,diana.barry@demo.localhost,,,diana.barry@demo.localhost,gilbert.blythe@demo.localhost.org"},
             {"name": "Subject", "value": "Hi there!"},
             {"name": "Message-ID", "value": "1001@demo.localhost"}
-        ],
-        "recipients": {"To": [
-            {"email_address": "diana.barry@demo.localhost",
-                "display_name": "Diana Barry"}],
-                "Cc": [
-            {"email_address": "gilbert.blythe@demo.localhost",
-                "display_name": "Gilbert Blythe"}]}
+        ]
         }',
         '["SENT"]'),
         ('matthew.cuthbert@demo.localhost',
@@ -157,10 +151,7 @@ BEGIN
             {"name": "Message-ID", "value": "1002@demo.localhost"},
             {"name": "In-Reply-To", "value": "1001@demo.localhost"},
             {"name": "References", "value": "1001@demo.localhost"}
-        ],
-        "recipients": {"To": [
-            {"email_address": "matthew.cuthbert@demo.localhost",
-                "display_name": "Matthew Cuthbert"}]}
+        ]
         }',
         '["CATEGORY_SOCIAL", "UNREAD", "INBOX"]');
         
@@ -176,10 +167,7 @@ BEGIN
             {"name": "To", "value": "matthew.cuthbert@demo.localhost"},
             {"name": "Subject", "value": "Hello from Anna!"},
             {"name": "Message-ID", "value": "1003@demo.localhost"}
-        ],
-        "recipients": {"To": [
-            {"email_address": "matthew.cuthbert@demo.localhost",
-                "display_name": "Matthew Cuthbert"}]}
+        ]
         }',
         '["CATEGORY_SOCIAL", "UNREAD", "INBOX"]');
     END

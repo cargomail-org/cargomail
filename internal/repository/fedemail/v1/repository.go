@@ -3,12 +3,10 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"encoding/base64"
-	"io"
 	"strconv"
 
 	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
-	mail "github.com/federizer/fedemail/internal/mail"
+	"github.com/federizer/fedemail/internal/mail"
 	"google.golang.org/grpc/metadata"
 )
 
@@ -147,35 +145,19 @@ func (r *Repository) DraftsCreate(ctx context.Context, draft *fedemailv1.Draft) 
 
 func (r *Repository) DraftsUpdate(ctx context.Context, messageId int64, message *fedemailv1.Message) (*fedemailv1.Draft, error) {
 	var scanDraft ScanDraft
+	var scanMessage ScanMessage
+	var mailMessage mail.MailMessage
 
-	var mailMessage mail.Message
-
-	data, err := base64.URLEncoding.WithPadding(base64.NoPadding).DecodeString(message.Raw)
+	mailMessage.Message = message
+	message, err := mailMessage.GetParsedMessage()
 	if err != nil {
 		return nil, err
 	}
 
-	mailMessage.Message = []byte(data)
-
-	h, b, err := mailMessage.HeaderAndBody()
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := io.ReadAll(b)
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = base64.StdEncoding.Decode(data, body)
-	if err != nil {
-		return nil, err
-	}
-
-	// not ready yet
+	scanMessage.Message = message
 
 	sqlStatement := `SELECT fedemail.drafts_update_v1($1, $2, $3);`
-	err = r.db.QueryRow(sqlStatement, getUsername(ctx), messageId, h).Scan(&scanDraft)
+	err = r.db.QueryRow(sqlStatement, getUsername(ctx), messageId, scanMessage).Scan(&scanDraft)
 	if err != nil {
 		return nil, err
 	}

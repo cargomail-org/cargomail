@@ -37,6 +37,7 @@ BEGIN
         owner character varying(255) NOT NULL,
         thread_id bigint DEFAULT nextval('fedemail.thread_id_seq'::regclass) NOT NULL,
         snippet character varying(255),
+        raw TEXT,
         payload JSONB,
         labels JSONB,
         timeline_id bigint DEFAULT nextval('fedemail.timeline_id_seq'::regclass) NOT NULL,
@@ -102,7 +103,7 @@ BEGIN
             SELECT DISTINCT
                 (SELECT jsonb_build_object('id', detail.thread_id::varchar(255),
                                         'snippet', detail.snippet,
-                                        'history_id', detail.timeline_id::varchar(255)) FROM fedemail.message detail
+                                        'timeline_id', detail.timeline_id::varchar(255)) FROM fedemail.message detail
                 WHERE thread_id = master.thread_id 
                 ORDER BY timeline_id DESC LIMIT 1)
             FROM fedemail.message AS master
@@ -126,7 +127,7 @@ BEGIN
                                         'snippet', snippet,
                                         'payload', payload,
                                         'label_ids', labels,
-                                        'history_id', timeline_id::varchar(255)) FROM fedemail.message
+                                        'timeline_id', timeline_id::varchar(255)) FROM fedemail.message
                 WHERE owner = _owner AND thread_id = _thread_id 
                 ORDER BY timeline_id DESC;
     END;			
@@ -168,7 +169,7 @@ BEGIN
                                         'snippet', snippet,
                                         'payload', payload,
                                         'label_ids', labels,
-                                        'history_id', timeline_id::varchar(255)) FROM fedemail.message
+                                        'timeline_id', timeline_id::varchar(255)) FROM fedemail.message
                 WHERE owner = _owner AND id = _id AND labels @> '"DRAFT"'
                 INTO _draft;
 		RETURN _draft;                   
@@ -213,7 +214,9 @@ BEGIN
         END IF;
 
         UPDATE fedemail.message
-            SET payload = _payload
+            SET payload = _payload->'payload',
+                snippet = _payload->>'snippet',
+                raw = _payload->>'raw'
             WHERE owner = _owner AND id = _id AND labels @> '"DRAFT"'
             RETURNING jsonb_build_object('id', id::varchar(255),
                                         'thread_id', thread_id::varchar(255),
@@ -311,7 +314,7 @@ BEGIN
             SELECT jsonb_build_object('id', id::varchar(255),
                                     'name', name,
                                     'email_addresses', email_addresses,
-                                    'history_id', timeline_id::varchar(255))
+                                    'timeline_id', timeline_id::varchar(255))
             FROM people.connection
             WHERE owner = _owner
             ORDER BY timeline_id DESC;
@@ -335,7 +338,7 @@ BEGIN
             RETURNING jsonb_build_object('id', id::varchar(255),
                                     'name', name,
                                     'email_addresses', email_addresses,
-                                    'history_id', timeline_id::varchar(255))
+                                    'timeline_id', timeline_id::varchar(255))
             INTO _new_person;
         RETURN _new_person;
     END;			

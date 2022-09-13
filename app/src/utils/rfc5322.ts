@@ -1,6 +1,6 @@
 const rfc5322 = (raw: any) =>
   `${
-    'Content-Type: text/html\n' +
+    'Content-Type: text/plain; charset="UTF-8"\n' +
     'Content-Transfer-Encoding: base64\n' +
     `From: ${raw.sender}\n` +
     `To: ${buildDraftRecipients(raw.recipients)}\n` +
