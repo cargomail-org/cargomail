@@ -128,7 +128,7 @@ const useFedemailAPI = () => {
             labelIds: [],
             snippet: '',
             threadId: '',
-            timelineId: '',
+            historyId: '',
             internalDate: '',
           },
         },

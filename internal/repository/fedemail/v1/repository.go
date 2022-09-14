@@ -109,7 +109,7 @@ func (r *Repository) ThreadsGet(ctx context.Context, threadId int64) (*fedemailv
 
 		if len(thread.Id) == 0 {
 			thread.Id = scanMessage.GetThreadId()
-			thread.TimelineId = scanMessage.GetTimelineId()
+			thread.HistoryId = scanMessage.GetHistoryId()
 			// thread.Snippet = scanMessage.GetSnippet()
 		}
 	}

@@ -55,7 +55,7 @@ message ListThreadsResponse {
 }
 
 message Message {
-  string timeline_id = 1;
+  string history_id = 1;
 
   string id = 2;
 
@@ -113,7 +113,7 @@ message ModifyThreadRequest {
 }
 
 message Thread {
-  string timeline_id = 1;
+  string history_id = 1;
 
   string id = 2;
 

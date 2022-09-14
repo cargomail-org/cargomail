@@ -7,7 +7,7 @@ export type DraftMessageProps = {
   snippet?: string
   payload?: MessagePart
   threadId?: string
-  timelineId?: string
+  historyId?: string
 }
 
 export const Draft: FC<DraftMessageProps> = ({ id, snippet, payload, threadId }) => {

@@ -123,9 +123,9 @@ export interface ListThreadsResponse {
  */
 export interface Message {
     /**
-     * @generated from protobuf field: string timeline_id = 1;
+     * @generated from protobuf field: string history_id = 1;
      */
-    timelineId: string;
+    historyId: string;
     /**
      * @generated from protobuf field: string id = 2;
      */
@@ -245,9 +245,9 @@ export interface ModifyThreadRequest {
  */
 export interface Thread {
     /**
-     * @generated from protobuf field: string timeline_id = 1;
+     * @generated from protobuf field: string history_id = 1;
      */
-    timelineId: string;
+    historyId: string;
     /**
      * @generated from protobuf field: string id = 2;
      */
@@ -951,7 +951,7 @@ export const ListThreadsResponse = new ListThreadsResponse$Type();
 class Message$Type extends MessageType<Message> {
     constructor() {
         super("fedemail.v1.Message", [
-            { no: 1, name: "timeline_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 1, name: "history_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "internal_date", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "label_ids", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
@@ -962,7 +962,7 @@ class Message$Type extends MessageType<Message> {
         ]);
     }
     create(value?: PartialMessage<Message>): Message {
-        const message = { timelineId: "", id: "", internalDate: "", labelIds: [], raw: "", snippet: "", threadId: "" };
+        const message = { historyId: "", id: "", internalDate: "", labelIds: [], raw: "", snippet: "", threadId: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Message>(this, message, value);
@@ -973,8 +973,8 @@ class Message$Type extends MessageType<Message> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string timeline_id */ 1:
-                    message.timelineId = reader.string();
+                case /* string history_id */ 1:
+                    message.historyId = reader.string();
                     break;
                 case /* string id */ 2:
                     message.id = reader.string();
@@ -1009,9 +1009,9 @@ class Message$Type extends MessageType<Message> {
         return message;
     }
     internalBinaryWrite(message: Message, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string timeline_id = 1; */
-        if (message.timelineId !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.timelineId);
+        /* string history_id = 1; */
+        if (message.historyId !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.historyId);
         /* string id = 2; */
         if (message.id !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.id);
@@ -1352,14 +1352,14 @@ export const ModifyThreadRequest = new ModifyThreadRequest$Type();
 class Thread$Type extends MessageType<Thread> {
     constructor() {
         super("fedemail.v1.Thread", [
-            { no: 1, name: "timeline_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 1, name: "history_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "messages", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Message },
             { no: 4, name: "snippet", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<Thread>): Thread {
-        const message = { timelineId: "", id: "", messages: [], snippet: "" };
+        const message = { historyId: "", id: "", messages: [], snippet: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Thread>(this, message, value);
@@ -1370,8 +1370,8 @@ class Thread$Type extends MessageType<Thread> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string timeline_id */ 1:
-                    message.timelineId = reader.string();
+                case /* string history_id */ 1:
+                    message.historyId = reader.string();
                     break;
                 case /* string id */ 2:
                     message.id = reader.string();
@@ -1394,9 +1394,9 @@ class Thread$Type extends MessageType<Thread> {
         return message;
     }
     internalBinaryWrite(message: Thread, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string timeline_id = 1; */
-        if (message.timelineId !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.timelineId);
+        /* string history_id = 1; */
+        if (message.historyId !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.historyId);
         /* string id = 2; */
         if (message.id !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.id);

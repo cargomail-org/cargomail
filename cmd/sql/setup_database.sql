@@ -10,7 +10,7 @@ BEGIN
 
     CREATE SCHEMA fedemail;
 
-    CREATE SEQUENCE fedemail.timeline_id_seq
+    CREATE SEQUENCE fedemail.history_id_seq
         START WITH 1
         INCREMENT BY 1
         NO MINVALUE
@@ -48,7 +48,7 @@ BEGIN
         raw TEXT,
         payload JSONB,
         labels JSONB,
-        timeline_id bigint DEFAULT nextval('fedemail.timeline_id_seq'::regclass) NOT NULL,
+        history_id bigint DEFAULT nextval('fedemail.history_id_seq'::regclass) NOT NULL,
         search_subject tsvector,
         search_from tsvector,
         search_recipients tsvector
@@ -113,9 +113,9 @@ BEGIN
             SELECT DISTINCT
                 (SELECT jsonb_build_object('id', detail.thread_id::varchar(255),
                                         'snippet', detail.snippet,
-                                        'timeline_id', detail.timeline_id::varchar(255)) FROM fedemail.message detail
+                                        'history_id', detail.history_id::varchar(255)) FROM fedemail.message detail
                 WHERE thread_id = master.thread_id 
-                ORDER BY timeline_id DESC LIMIT 1)
+                ORDER BY history_id DESC LIMIT 1)
             FROM fedemail.message AS master
             WHERE owner = _owner;
     END;			
@@ -137,9 +137,9 @@ BEGIN
                                         'snippet', snippet,
                                         'payload', payload,
                                         'label_ids', labels,
-                                        'timeline_id', timeline_id::varchar(255)) FROM fedemail.message
+                                        'history_id', history_id::varchar(255)) FROM fedemail.message
                 WHERE owner = _owner AND thread_id = _thread_id 
-                ORDER BY timeline_id DESC;
+                ORDER BY history_id DESC;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
@@ -160,7 +160,7 @@ BEGIN
                                         'thread_id', thread_id::varchar(255))
                                     ) FROM fedemail.message                                   
                 WHERE owner = _owner AND draft_id IS NOT NULL
-                ORDER BY timeline_id DESC;
+                ORDER BY history_id DESC;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
@@ -183,7 +183,7 @@ BEGIN
                                         'snippet', snippet,
                                         'payload', payload,
                                         'label_ids', labels,
-                                        'timeline_id', timeline_id::varchar(255))
+                                        'history_id', history_id::varchar(255))
                                     ) FROM fedemail.message
                 WHERE owner = _owner AND draft_id = _id
                 INTO _draft;
@@ -280,7 +280,7 @@ BEGIN
 
     CREATE SCHEMA people;
 
-    CREATE SEQUENCE people.timeline_id_seq
+    CREATE SEQUENCE people.history_id_seq
         START WITH 1
         INCREMENT BY 1
         NO MINVALUE
@@ -292,7 +292,7 @@ BEGIN
         owner character varying(255) NOT NULL,
         name JSONB,
         email_addresses JSONB,
-        timeline_id bigint DEFAULT nextval('people.timeline_id_seq'::regclass) NOT NULL,
+        history_id bigint DEFAULT nextval('people.history_id_seq'::regclass) NOT NULL,
         search_name tsvector,
         search_email_addresses tsvector
     );
@@ -313,7 +313,7 @@ BEGIN
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$ 
     begin
-        NEW.timeline_id := nextval('email.timeline_id_seq'::regclass);
+        NEW.history_id := nextval('email.history_id_seq'::regclass);
         NEW.search_name = to_tsvector(NEW.name);
         NEW.search_email_addresses = to_tsvector(NEW.email_addresses);
         RETURN NEW; 
@@ -335,10 +335,10 @@ BEGIN
             SELECT jsonb_build_object('id', id::varchar(255),
                                     'name', name,
                                     'email_addresses', email_addresses,
-                                    'timeline_id', timeline_id::varchar(255))
+                                    'history_id', history_id::varchar(255))
             FROM people.connection
             WHERE owner = _owner
-            ORDER BY timeline_id DESC;
+            ORDER BY history_id DESC;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
@@ -359,7 +359,7 @@ BEGIN
             RETURNING jsonb_build_object('id', id::varchar(255),
                                     'name', name,
                                     'email_addresses', email_addresses,
-                                    'timeline_id', timeline_id::varchar(255))
+                                    'history_id', history_id::varchar(255))
             INTO _new_person;
         RETURN _new_person;
     END;			
