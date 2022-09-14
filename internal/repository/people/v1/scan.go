@@ -16,6 +16,10 @@ func (s ScanPerson) Value() (driver.Value, error) {
 }
 
 func (s *ScanPerson) Scan(value interface{}) error {
-	err := json.Unmarshal(value.([]byte), &s)
-	return err
+	data, ok := value.([]byte)
+	if !ok {
+		s.Person = &peoplev1.Person{}
+		return nil
+	}
+	return json.Unmarshal(data, &s)
 }
