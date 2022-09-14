@@ -15,6 +15,8 @@ type Repo interface {
 	ThreadsList(context.Context) ([]*fedemailv1.Thread, error)
 	ThreadsGet(context.Context, int64) (*fedemailv1.Thread, error)
 	MessagesModify(context.Context, int64, []string, []string) (*fedemailv1.Message, error)
+	DraftsList(context.Context) ([]*fedemailv1.Draft, error)
+	DraftsGet(context.Context, int64) (*fedemailv1.Draft, error)
 	DraftsCreate(context.Context, *fedemailv1.Draft) (*fedemailv1.Draft, error)
 	DraftsUpdate(context.Context, int64, *fedemailv1.Message) (*fedemailv1.Draft, error)
 	DraftsDelete(context.Context, int64) int64
@@ -130,6 +132,44 @@ func (r *Repository) MessagesModify(ctx context.Context, messageId int64, addLab
 	return &message, nil
 }
 
+func (r *Repository) DraftsList(ctx context.Context) ([]*fedemailv1.Draft, error) {
+	var drafts []*fedemailv1.Draft
+
+	sqlStatement := `SELECT fedemail.drafts_list_v1($1);`
+	rows, err := r.db.Query(sqlStatement, getUsername(ctx))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var scanDraft ScanDraft
+		err = rows.Scan(&scanDraft)
+		if err != nil {
+			return nil, err
+		}
+		drafts = append(drafts, scanDraft.Draft)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	return drafts, nil
+}
+
+func (r *Repository) DraftsGet(ctx context.Context, id int64) (*fedemailv1.Draft, error) {
+	var scanDraft ScanDraft
+
+	sqlStatement := `SELECT fedemail.drafts_get_v1($1, $2);`
+	err := r.db.QueryRow(sqlStatement, getUsername(ctx), id).Scan(&scanDraft)
+	if err != nil {
+		return nil, err
+	}
+
+	return scanDraft.Draft, err
+}
+
 func (r *Repository) DraftsCreate(ctx context.Context, draft *fedemailv1.Draft) (*fedemailv1.Draft, error) {
 	var scanDraft ScanDraft
 	scanDraft.Draft = draft
@@ -143,7 +183,7 @@ func (r *Repository) DraftsCreate(ctx context.Context, draft *fedemailv1.Draft) 
 	return scanDraft.Draft, err
 }
 
-func (r *Repository) DraftsUpdate(ctx context.Context, messageId int64, message *fedemailv1.Message) (*fedemailv1.Draft, error) {
+func (r *Repository) DraftsUpdate(ctx context.Context, id int64, message *fedemailv1.Message) (*fedemailv1.Draft, error) {
 	var scanDraft ScanDraft
 	var scanMessage ScanMessage
 	var mailMessage mail.MailMessage
@@ -157,7 +197,7 @@ func (r *Repository) DraftsUpdate(ctx context.Context, messageId int64, message 
 	scanMessage.Message = message
 
 	sqlStatement := `SELECT fedemail.drafts_update_v1($1, $2, $3);`
-	err = r.db.QueryRow(sqlStatement, getUsername(ctx), messageId, scanMessage).Scan(&scanDraft)
+	err = r.db.QueryRow(sqlStatement, getUsername(ctx), id, scanMessage).Scan(&scanDraft)
 	if err != nil {
 		return nil, err
 	}

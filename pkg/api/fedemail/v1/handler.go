@@ -63,6 +63,27 @@ func (h *handler) MessagesModify(ctx context.Context, req *fedemailv1.MessagesMo
 	return message, nil
 }
 
+func (h *handler) DraftsList(ctx context.Context, req *fedemailv1.DraftsListRequest) (*fedemailv1.ListDraftsResponse, error) {
+	drafts, err := h.repo.DraftsList(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Aborted, err.Error())
+	}
+	draftList := &fedemailv1.ListDraftsResponse{Drafts: drafts}
+	return draftList, nil
+}
+
+func (h *handler) DraftsGet(ctx context.Context, req *fedemailv1.DraftsGetRequest) (*fedemailv1.Draft, error) {
+	id, err := strconv.ParseInt(req.GetId(), 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	draft, err := h.repo.DraftsGet(ctx, id)
+	if err != nil {
+		return nil, status.Error(codes.Aborted, err.Error())
+	}
+	return draft, nil
+}
+
 func (h *handler) DraftsCreate(ctx context.Context, req *fedemailv1.DraftsCreateRequest) (*fedemailv1.Draft, error) {
 	draft, err := h.repo.DraftsCreate(ctx, req.MessageRaw)
 	if err != nil {

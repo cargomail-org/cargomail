@@ -24,6 +24,13 @@ BEGIN
         NO MAXVALUE
         CACHE 1;
 
+    CREATE SEQUENCE fedemail.draft_id_seq
+        START WITH 1
+        INCREMENT BY 1
+        NO MINVALUE
+        NO MAXVALUE
+        CACHE 1;        
+
     CREATE TABLE fedemail.label (
         id BIGSERIAL PRIMARY KEY,
         owner character varying(255) NOT NULL,
@@ -36,6 +43,7 @@ BEGIN
         id BIGSERIAL PRIMARY KEY,
         owner character varying(255) NOT NULL,
         thread_id bigint DEFAULT nextval('fedemail.thread_id_seq'::regclass) NOT NULL,
+        draft_id bigint,
         snippet character varying(255),
         raw TEXT,
         payload JSONB,
@@ -45,6 +53,8 @@ BEGIN
         search_from tsvector,
         search_recipients tsvector
     );
+
+    CREATE UNIQUE INDEX idx_message_draft_id ON fedemail.message(draft_id);
 
     -- CREATE INDEX idx_message_payload_message_id ON fedemail.message USING gin ((payload->'Message-ID'));
     -- CREATE INDEX idx_message_payload_in_reply_to ON fedemail.message USING gin ((payload->'In-Reply-To'));
@@ -144,10 +154,12 @@ BEGIN
         END IF;
 
         RETURN QUERY
-            SELECT jsonb_build_object('id', id::varchar(255),
-                                     'thread_id', thread_id::varchar(255),
-                                     'label_ids', labels) FROM fedemail.message                                   
-                WHERE owner = _owner AND labels @> '"DRAFT"'
+            SELECT jsonb_build_object('id', draft_id::varchar(255),
+                                    'message', jsonb_build_object(
+                                        'id', id::varchar(255),
+                                        'thread_id', thread_id::varchar(255))
+                                    ) FROM fedemail.message                                   
+                WHERE owner = _owner AND draft_id IS NOT NULL
                 ORDER BY timeline_id DESC;
     END;			
     $BODY$
@@ -164,13 +176,16 @@ BEGIN
             RAISE EXCEPTION '_owner is required.';
         END IF;
 
-        SELECT jsonb_build_object('id', id::varchar(255),
+        SELECT jsonb_build_object('id', draft_id::varchar(255),
+                                    'message', jsonb_build_object(
+                                        'id', id::varchar(255),
                                         'thread_id', thread_id::varchar(255),
                                         'snippet', snippet,
                                         'payload', payload,
                                         'label_ids', labels,
-                                        'timeline_id', timeline_id::varchar(255)) FROM fedemail.message
-                WHERE owner = _owner AND id = _id AND labels @> '"DRAFT"'
+                                        'timeline_id', timeline_id::varchar(255))
+                                    ) FROM fedemail.message
+                WHERE owner = _owner AND draft_id = _id
                 INTO _draft;
 		RETURN _draft;                   
     END;			
@@ -191,11 +206,14 @@ BEGIN
 
         _labels = to_jsonb('["DRAFT"]'::json);
 
-        INSERT INTO fedemail.message(owner, payload, labels)
-            VALUES (_owner, _payload, _labels)
-            RETURNING jsonb_build_object('id', id::varchar(255),
-                                        'thread_id', thread_id::varchar(255),
-                                        'label_ids', labels)
+        INSERT INTO fedemail.message(owner, draft_id, payload, labels)
+            VALUES (_owner, nextval('fedemail.draft_id_seq'::regclass), _payload, _labels)
+            RETURNING jsonb_build_object('id', draft_id::varchar(255),
+                                         'message', jsonb_build_object(
+	                                        'id', id::varchar(255),
+	                                        'thread_id', thread_id::varchar(255),
+	                                        'label_ids', labels)
+                                        )
             INTO _new_draft;
         RETURN _new_draft;
     END;			
@@ -217,10 +235,13 @@ BEGIN
             SET payload = _payload->'payload',
                 snippet = _payload->>'snippet',
                 raw = _payload->>'raw'
-            WHERE owner = _owner AND id = _id AND labels @> '"DRAFT"'
-            RETURNING jsonb_build_object('id', id::varchar(255),
-                                        'thread_id', thread_id::varchar(255),
-                                        'label_ids', labels)
+            WHERE owner = _owner AND draft_id = _id
+            RETURNING jsonb_build_object('id', draft_id::varchar(255),
+                                         'message', jsonb_build_object(
+	                                        'id', id::varchar(255),
+	                                        'thread_id', thread_id::varchar(255),
+	                                        'label_ids', labels)
+                                        )
             INTO _updated_draft;
         RETURN _updated_draft;
     END;			
@@ -240,7 +261,7 @@ BEGIN
 
         WITH affected_rows AS (
             DELETE FROM fedemail.message
-                WHERE owner = _owner AND id = _id AND labels @> '"DRAFT"' RETURNING 1
+                WHERE owner = _owner AND draft_id = _id RETURNING 1
         ) SELECT COUNT(*) INTO _removed_cnt
             FROM affected_rows;		
         RETURN _removed_cnt;			
