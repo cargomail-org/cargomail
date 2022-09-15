@@ -7,6 +7,7 @@ import { LabelsContext } from '../context/LabelsContext'
 import { DraftsContext, IDraftEdit } from '../context/DraftsContext'
 import encode from '../utils/mails/encode'
 import { decodeCurrentUser } from '../auth'
+import { Draft } from './generated/proto/fedemail/v1/fedemail'
 
 const baseUrl: string = process.env.REACT_APP_SERVER_BASE_URL || ''
 
@@ -71,7 +72,7 @@ const useFedemailAPI = () => {
     })
   }
 
-  const draftsList = () => {
+  const draftsList = async () => {
     const unaryCall = fedemailClient.draftsList(
       {
         maxResults: 0n,
@@ -79,13 +80,40 @@ const useFedemailAPI = () => {
       options
     )
 
-    unaryCall.then((response) => {
+    await unaryCall.then((response) => {
       if (response.status.code !== 'OK') {
         console.log(response.status.code, response.status.detail)
         return null
       }
 
-      updateDrafts(response.response.drafts)
+      Promise.all((response.response.drafts || []).map(({ id }: any) => draftsGet(id)))
+        .then((responses) => {
+          const drafts = responses
+            .map((result) => result)
+            .reduce((accum, current) => ({ ...accum, [current!.id]: current }), [])
+          console.log(drafts)
+          updateDrafts(drafts)
+        })
+        .catch((error) => {
+          console.error(error.message)
+        })
+    })
+  }
+
+  const draftsGet = async (id: any): Promise<Draft> => {
+    const unaryCall = fedemailClient.draftsGet(
+      {
+        id,
+      },
+      options
+    )
+
+    return await unaryCall.then((response) => {
+      if (response.status.code !== 'OK') {
+        console.log(response.status.code, response.status.detail)
+        return Promise.reject(new Error(response.status.detail))
+      }
+      return Promise.resolve(response.response)
     })
   }
 

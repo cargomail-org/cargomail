@@ -16,7 +16,7 @@ export const Drafts: FC = () => {
   return (
     <Navigation>
       {Object.values(draftsAll.drafts).map((draft) => (
-        <Draft key={draft.id} id={draft.id} {...draft.message} />
+        <Draft key={draft.id} draftId={draft.id} {...draft.message} />
       ))}
     </Navigation>
   )
