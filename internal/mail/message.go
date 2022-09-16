@@ -71,7 +71,7 @@ func (m *MailMessage) headerAndBody(data []byte) (textproto.Header, io.Reader, e
 	return hdr, body, err
 }
 
-const snippet_max_length = 60
+const snippet_max_length = 240
 
 func (m *MailMessage) getSnippet(str string) string {
 	if len(str) > snippet_max_length {
