@@ -2,10 +2,14 @@ import { Accordion, AccordionDetails, Avatar, Box, colors, Typography } from '@m
 import AccordionSummary, { accordionSummaryClasses } from '@mui/material/AccordionSummary'
 import { FC, useContext, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete'
+import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import { MessagePart } from '../../api/generated/proto/fedemail/v1/fedemail'
-import parsePayload from '../../utils/mails/parsePayload'
+import parsePayload, { IRecipient } from '../../utils/mails/parsePayload'
 import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
 import { decodeCurrentUser } from '../../auth'
+import useFedemailAPI from '../../api/FedemailAPI'
+import { DraftsContext } from '../../context/DraftsContext'
+import { IContact } from '../../context/ContactsContext'
 
 export type DraftMessageProps = {
   draftId: string
@@ -24,6 +28,24 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
   const currentUser = decodeCurrentUser(idToken)
   const nameFirstLetter = currentUser?.name?.charAt(0).toUpperCase()
   const surnameFirstLetter = currentUser?.surname?.charAt(0).toUpperCase()
+
+  const { newDraftEdit } = useContext(DraftsContext)
+  const { draftsDelete } = useFedemailAPI()
+
+  function recipientsToContacts(recipients: IRecipient[]): IContact[] {
+    const contacts = recipients
+      ?.filter((recipient: IRecipient) => recipient.mail.length > 0)
+      .map((recipient: IRecipient) => {
+        const fullName = recipient.name.split(' ')
+        return {
+          id: crypto.randomUUID(),
+          emailAddress: recipient.mail,
+          givenName: fullName.length > 0 ? fullName[0] : '',
+          familyName: fullName.length > 1 ? fullName[1] : '',
+        } as IContact
+      })
+    return contacts
+  }
 
   return (
     <Accordion expanded={expanded} onChange={() => setExpanded((exp) => !exp)}>
@@ -97,6 +119,27 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
               padding: '0 !important',
               display: 'none',
             }}>
+            <ModeEditIcon
+              sx={{
+                margin: '0 4px',
+                fontSize: '1.2rem',
+                cursor: 'pointer',
+                opacity: 0.78,
+                '&:hover': {
+                  opacity: 1,
+                },
+              }}
+              onClick={(e) => {
+                newDraftEdit({
+                  id: draftId,
+                  sender: currentUser?.username || '',
+                  recipients: recipientsToContacts(parsed.to) || [],
+                  subject: parsed.subject,
+                  content: parsed.content,
+                })
+                e.stopPropagation()
+              }}
+            />
             <DeleteIcon
               sx={{
                 margin: '0 4px',
@@ -108,7 +151,7 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
                 },
               }}
               onClick={(e) => {
-                // trashDraft(threadId)
+                draftsDelete(draftId)
                 e.stopPropagation()
               }}
             />

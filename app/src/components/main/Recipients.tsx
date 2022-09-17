@@ -137,7 +137,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           loading={loading}
           multiple
           value={props.draftEdit.recipients}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
+          isOptionEqualToValue={(option, value) => option.emailAddress === value.emailAddress}
           onChange={(event, newValue) => {
             if (typeof newValue === 'string') {
               // timeout to avoid instant validation of the dialog's form.
@@ -154,7 +154,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
               openDialogOpen(true)
               const newContact = (newValue.slice(-1)[0].inputValue || '').split(/\s+/)
               setDialogValue({
-                id: '',
+                id: crypto.randomUUID(),
                 givenName: newContact[1] || '', // newGivenName
                 familyName: newContact[2] || '', // newFamilyName
                 emailAddress: newContact[0] || '', // newEmailAddress
@@ -185,7 +185,12 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
             return filtered
           }}
           id="recipients-select"
-          options={contacts}
+          // options={[...contacts, ...props.draftEdit.recipients]}
+          options={contacts.concat(
+            props.draftEdit.recipients.filter(
+              ({ emailAddress }: IContact) => !contacts.find((f) => f.emailAddress === emailAddress)
+            )
+          )}
           getOptionLabel={(option) => {
             if (typeof option === 'string') {
               return option

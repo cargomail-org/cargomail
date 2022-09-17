@@ -20,7 +20,8 @@ const fedemailClient = new FedemailClient(transport)
 const useFedemailAPI = () => {
   const { token, idToken } = useContext(AuthContext)
   const { updateLabels } = useContext(LabelsContext)
-  const { updateDrafts, newDraftEdit, updateDraftEdit, closeDraftEdit } = useContext(DraftsContext)
+  const { listDrafts, createDraft, deleteDraft, newDraftEdit, updateDraftEdit, closeDraftEdit } =
+    useContext(DraftsContext)
 
   const options: GrpcWebOptions = {
     baseUrl,
@@ -88,11 +89,11 @@ const useFedemailAPI = () => {
 
       Promise.all((response.response.drafts || []).map(({ id }: any) => draftsGet(id)))
         .then((responses) => {
-          const drafts = responses
-            .map((result) => result)
-            .reduce((accum, current) => ({ ...accum, [current!.id]: current }), [])
+          const drafts: Draft[] = Object.values(
+            responses.map((result) => result).reduce((accum, current) => ({ ...accum, [current!.id]: current }), [])
+          )
           console.log(drafts)
-          updateDrafts(drafts)
+          listDrafts(drafts)
         })
         .catch((error) => {
           console.error(error.message)
@@ -138,6 +139,7 @@ const useFedemailAPI = () => {
         id: response.response.id,
         sender: decodeCurrentUser(idToken)?.username || '',
       })
+      createDraft(response.response)
     })
   }
 
@@ -190,6 +192,7 @@ const useFedemailAPI = () => {
       }
 
       closeDraftEdit(id)
+      deleteDraft(id)
     })
   }
 

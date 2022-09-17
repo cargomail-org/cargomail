@@ -4,7 +4,9 @@ import useActionCreator from '../utils/hooks/action_creator'
 import { IContact } from './ContactsContext'
 
 const actions = {
-  updateDrafts: 'UPDATE_DRAFTS',
+  listDrafts: 'LIST_DRAFTS',
+  createDraft: 'CREATE_DRAFT',
+  deleteDraft: 'DELETE_DRAFT',
   newDraftEdit: 'NEW_DRAFT_EDIT',
   updateDraftEdit: 'UPDATE_DRAFT_EDIT',
   closeDraftEdit: 'CLOSE_DRAFT_EDIT',
@@ -13,11 +15,22 @@ const actions = {
 const reducer = (state: any, action: any) => {
   const { payload } = action
   switch (action.type) {
-    case actions.updateDrafts:
+    case actions.listDrafts:
       return {
         ...state,
         drafts: payload,
       }
+    case actions.createDraft:
+      return {
+        ...state,
+        drafts: [...state.drafts, payload],
+      }
+    case actions.deleteDraft: {
+      return {
+        ...state,
+        drafts: state.drafts.filter((draft: { id: any }) => draft.id !== payload),
+      }
+    }
     case actions.newDraftEdit:
       return {
         ...state,
@@ -58,7 +71,9 @@ export interface IDraftEdit {
 
 export interface IDraftsContext {
   draftsAll: { drafts: Draft[]; editing: IDraftEdit[] }
-  updateDrafts: (drafts: Draft[]) => void
+  listDrafts: (drafts: Draft[]) => void
+  createDraft: (draft: Draft) => void
+  deleteDraft: (id: string) => void
   newDraftEdit: (draft: IDraftEdit) => void
   updateDraftEdit: (draft: IDraftEdit) => void
   closeDraftEdit: (id: string) => void
@@ -66,7 +81,9 @@ export interface IDraftsContext {
 
 export const DraftsContext = createContext<IDraftsContext>({
   draftsAll: { drafts: [] as Draft[], editing: [] as IDraftEdit[] },
-  updateDrafts: () => null,
+  listDrafts: () => null,
+  createDraft: () => null,
+  deleteDraft: () => null,
   newDraftEdit: () => null,
   updateDraftEdit: () => null,
   closeDraftEdit: () => null,
@@ -78,13 +95,16 @@ export const DraftsProvider = (props: any) => {
     editing: [] as IDraftEdit[],
   })
 
-  const updateDrafts = useActionCreator(actions.updateDrafts, dispatch)
+  const listDrafts = useActionCreator(actions.listDrafts, dispatch)
+  const createDraft = useActionCreator(actions.createDraft, dispatch)
+  const deleteDraft = useActionCreator(actions.deleteDraft, dispatch)
   const newDraftEdit = useActionCreator(actions.newDraftEdit, dispatch)
   const updateDraftEdit = useActionCreator(actions.updateDraftEdit, dispatch)
   const closeDraftEdit = useActionCreator(actions.closeDraftEdit, dispatch)
 
   return (
-    <DraftsContext.Provider value={{ draftsAll, updateDrafts, newDraftEdit, updateDraftEdit, closeDraftEdit }}>
+    <DraftsContext.Provider
+      value={{ draftsAll, listDrafts, createDraft, deleteDraft, newDraftEdit, updateDraftEdit, closeDraftEdit }}>
       {props.children}
     </DraftsContext.Provider>
   )

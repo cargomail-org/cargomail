@@ -1,6 +1,11 @@
 import { Buffer } from 'buffer'
 
-const getNameAndMail = (value: any) => {
+export interface IRecipient {
+  name: string
+  mail: string
+}
+
+const getNameAndMail = (value: any): IRecipient => {
   if (!value) return { name: '', mail: '' }
   const delimiterIndex = value.lastIndexOf(' ')
   let name
@@ -63,15 +68,20 @@ const parseParts = ({ parts, headers, filename, body, mimeType }: any): any => {
 }
 
 const parsePayload = ({ id, payload }: any) => {
-  const findHeader = (field: any) => (payload.headers.find((e: any) => e.name === field) || {}).value
+  const findHeader = (field: any) => (payload?.headers.find((e: any) => e.name === field) || {}).value
 
-  const from = getNameAndMail(findHeader('From'))
+  const from = getNameAndMail(findHeader('From') || '')
+  const toArray = findHeader('To')?.split(',') || []
+  const to = toArray?.map((recipient: any) => {
+    return getNameAndMail(recipient)
+  })
   const subject = findHeader('Subject') || ''
 
   try {
-    const { content, attachments = [] } = parseParts(payload)
+    const { content = '', attachments = [] } = payload ? parseParts(payload) : {}
     return {
       from,
+      to,
       subject,
       content,
       attachments,
@@ -81,6 +91,7 @@ const parsePayload = ({ id, payload }: any) => {
     ;(window as any).debug(e)
     return {
       from,
+      to,
       subject,
       content: `Parse failed for Message ${id}`,
       attachments: [],
