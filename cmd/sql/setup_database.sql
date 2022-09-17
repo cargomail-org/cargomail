@@ -29,7 +29,14 @@ BEGIN
         INCREMENT BY 1
         NO MINVALUE
         NO MAXVALUE
-        CACHE 1;        
+        CACHE 1;
+
+    CREATE SEQUENCE fedemail.message_id_seq
+        START WITH 1
+        INCREMENT BY 1
+        NO MINVALUE
+        NO MAXVALUE
+        CACHE 1;            
 
     CREATE TABLE fedemail.label (
         id BIGSERIAL PRIMARY KEY,
@@ -40,7 +47,7 @@ BEGIN
     );	
 
     CREATE TABLE fedemail.message (
-        id BIGSERIAL PRIMARY KEY,
+        id  bigint DEFAULT nextval('fedemail.message_id_seq'::regclass) PRIMARY KEY,
         owner character varying(255) NOT NULL,
         thread_id bigint DEFAULT nextval('fedemail.thread_id_seq'::regclass) NOT NULL,
         draft_id bigint,
@@ -232,7 +239,8 @@ BEGIN
         END IF;
 
         UPDATE fedemail.message
-            SET payload = _payload->'payload',
+            SET id = nextval('fedemail.message_id_seq'::regclass),
+                payload = _payload->'payload',
                 snippet = _payload->>'snippet',
                 raw = _payload->>'raw'
             WHERE owner = _owner AND draft_id = _id
