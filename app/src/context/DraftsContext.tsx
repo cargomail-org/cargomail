@@ -6,6 +6,7 @@ import { IContact } from './ContactsContext'
 const actions = {
   listDrafts: 'LIST_DRAFTS',
   createDraft: 'CREATE_DRAFT',
+  updateDraft: 'UPDATE_DRAFT',
   deleteDraft: 'DELETE_DRAFT',
   newDraftEdit: 'NEW_DRAFT_EDIT',
   updateDraftEdit: 'UPDATE_DRAFT_EDIT',
@@ -23,7 +24,17 @@ const reducer = (state: any, action: any) => {
     case actions.createDraft:
       return {
         ...state,
-        drafts: [...state.drafts, payload],
+        drafts: [payload, ...state.drafts],
+      }
+    case actions.updateDraft:
+      return {
+        ...state,
+        drafts: state.drafts.map((draft: { id: any }) => {
+          if (draft.id === payload.id) {
+            return { ...draft, ...payload }
+          }
+          return draft
+        }),
       }
     case actions.deleteDraft: {
       return {
@@ -73,6 +84,7 @@ export interface IDraftsContext {
   draftsAll: { drafts: Draft[]; editing: IDraftEdit[] }
   listDrafts: (drafts: Draft[]) => void
   createDraft: (draft: Draft) => void
+  updateDraft: (draft: Draft) => void
   deleteDraft: (id: string) => void
   newDraftEdit: (draft: IDraftEdit) => void
   updateDraftEdit: (draft: IDraftEdit) => void
@@ -83,6 +95,7 @@ export const DraftsContext = createContext<IDraftsContext>({
   draftsAll: { drafts: [] as Draft[], editing: [] as IDraftEdit[] },
   listDrafts: () => null,
   createDraft: () => null,
+  updateDraft: () => null,
   deleteDraft: () => null,
   newDraftEdit: () => null,
   updateDraftEdit: () => null,
@@ -97,6 +110,7 @@ export const DraftsProvider = (props: any) => {
 
   const listDrafts = useActionCreator(actions.listDrafts, dispatch)
   const createDraft = useActionCreator(actions.createDraft, dispatch)
+  const updateDraft = useActionCreator(actions.updateDraft, dispatch)
   const deleteDraft = useActionCreator(actions.deleteDraft, dispatch)
   const newDraftEdit = useActionCreator(actions.newDraftEdit, dispatch)
   const updateDraftEdit = useActionCreator(actions.updateDraftEdit, dispatch)
@@ -104,7 +118,16 @@ export const DraftsProvider = (props: any) => {
 
   return (
     <DraftsContext.Provider
-      value={{ draftsAll, listDrafts, createDraft, deleteDraft, newDraftEdit, updateDraftEdit, closeDraftEdit }}>
+      value={{
+        draftsAll,
+        listDrafts,
+        createDraft,
+        updateDraft,
+        deleteDraft,
+        newDraftEdit,
+        updateDraftEdit,
+        closeDraftEdit,
+      }}>
       {props.children}
     </DraftsContext.Provider>
   )

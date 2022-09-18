@@ -74,7 +74,7 @@ BEGIN
 
     -- CREATE INDEX idx_message_labels ON fedemail.message USING gin (labels);
 
-    CREATE FUNCTION fedemail.message_table_inserted() RETURNS trigger
+    CREATE OR REPLACE FUNCTION fedemail.message_table_inserted() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$
     begin
@@ -85,7 +85,18 @@ BEGIN
         RETURN NEW;	
     END; $$;
 
+    CREATE OR REPLACE FUNCTION fedemail.message_table_updated() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$ 
+    begin
+        if (NEW.payload <> OLD.payload) then
+            NEW.history_id := nextval('fedemail.history_id_seq'::regclass);
+        end if;
+        RETURN NEW; 
+    END; $$;
+
     CREATE TRIGGER message_message_inserted BEFORE INSERT ON fedemail.message FOR EACH ROW EXECUTE PROCEDURE fedemail.message_table_inserted();
+    CREATE TRIGGER message_message_updated BEFORE UPDATE ON fedemail.message FOR EACH ROW EXECUTE PROCEDURE fedemail.message_table_updated();
 
     CREATE OR REPLACE FUNCTION fedemail.labels_list_v1(IN _owner character varying)
     RETURNS TABLE(label jsonb) AS
@@ -308,7 +319,7 @@ BEGIN
     CREATE INDEX idx_connection_name ON people.connection USING gin (name);
     CREATE INDEX idx_connection_email_addresses ON people.connection USING gin (email_addresses);
 
-    CREATE FUNCTION people.connection_table_inserted() RETURNS trigger
+    CREATE OR REPLACE FUNCTION people.connection_table_inserted() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$
     begin
@@ -317,11 +328,11 @@ BEGIN
         RETURN NEW;	
     END; $$;
 
-    CREATE FUNCTION people.connection_table_updated() RETURNS trigger
+    CREATE OR REPLACE FUNCTION people.connection_table_updated() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$ 
     begin
-        NEW.history_id := nextval('email.history_id_seq'::regclass);
+        NEW.history_id := nextval('people.history_id_seq'::regclass);
         NEW.search_name = to_tsvector(NEW.name);
         NEW.search_email_addresses = to_tsvector(NEW.email_addresses);
         RETURN NEW; 

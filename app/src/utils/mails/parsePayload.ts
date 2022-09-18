@@ -46,7 +46,7 @@ const parseParts = ({ parts, headers, filename, body, mimeType }: any): any => {
     case 'text/plain': {
       const uint8arr = new Uint8Array(Buffer.from(body.data, 'base64'))
       const content = new TextDecoder().decode(uint8arr)
-      return { content: `<pre>${content}</pre>` }
+      return { content }
     }
     case 'multipart/alternative':
       return parseParts(parts[parts.length - 1])
@@ -68,7 +68,7 @@ const parseParts = ({ parts, headers, filename, body, mimeType }: any): any => {
 }
 
 const parsePayload = ({ id, payload }: any) => {
-  const findHeader = (field: any) => (payload?.headers.find((e: any) => e.name === field) || {}).value
+  const findHeader = (field: any) => (payload?.headers?.find((e: any) => e.name === field) || {}).value
 
   const from = getNameAndMail(findHeader('From') || '')
   const toArray = findHeader('To')?.split(',') || []

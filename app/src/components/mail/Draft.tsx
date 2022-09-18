@@ -108,7 +108,7 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
                   sx={{
                     color: colors.grey[500],
                   }}>
-                  {parsed.subject ? ` - ${snippet}` : snippet}
+                  {parsed.subject ? (snippet ? ` - ${snippet}` : '') : snippet}
                 </Box>
               )}
             </>
@@ -162,9 +162,14 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
         sx={{
           padding: 2,
           display: 'block',
+          // maxHeight: '200px',
         }}>
         {/* eslint-disable-next-line */}
-        <div dangerouslySetInnerHTML={{ __html: parsed.content }} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: `<textarea disabled="true" style="border: none; resize: none; background-color: white; width: 100%; height: 200px;">${parsed.content}</textarea>`,
+          }}
+        />
       </AccordionDetails>
     </Accordion>
   )

@@ -8,6 +8,7 @@ import { DraftsContext, IDraftEdit } from '../context/DraftsContext'
 import encode from '../utils/mails/encode'
 import { decodeCurrentUser } from '../auth'
 import { Draft } from './generated/proto/fedemail/v1/fedemail'
+import { buildDraftRecipients, b64EncodeUnicode } from '../utils/rfc5322'
 
 const baseUrl: string = process.env.REACT_APP_SERVER_BASE_URL || ''
 
@@ -20,7 +21,7 @@ const fedemailClient = new FedemailClient(transport)
 const useFedemailAPI = () => {
   const { token, idToken } = useContext(AuthContext)
   const { updateLabels } = useContext(LabelsContext)
-  const { listDrafts, createDraft, deleteDraft, newDraftEdit, updateDraftEdit, closeDraftEdit } =
+  const { listDrafts, createDraft, updateDraft, deleteDraft, newDraftEdit, updateDraftEdit, closeDraftEdit } =
     useContext(DraftsContext)
 
   const options: GrpcWebOptions = {
@@ -81,24 +82,24 @@ const useFedemailAPI = () => {
       options
     )
 
-    await unaryCall.then((response) => {
+    const response = await unaryCall.then(async (response) => {
       if (response.status.code !== 'OK') {
         console.log(response.status.code, response.status.detail)
-        return null
+        return Promise.reject(new Error(response.status.detail))
+        // throw response.status.detail
       }
-
-      Promise.all((response.response.drafts || []).map(({ id }: any) => draftsGet(id)))
-        .then((responses) => {
-          const drafts: Draft[] = Object.values(
-            responses.map((result) => result).reduce((accum, current) => ({ ...accum, [current!.id]: current }), [])
-          )
-          console.log(drafts)
-          listDrafts(drafts)
-        })
-        .catch((error) => {
-          console.error(error.message)
-        })
+      return Promise.resolve(response.response)
+      // return response.response
     })
+
+    const drafts = await Promise.all((response.drafts || []).map(async ({ id }: any) => await draftsGet(id)))
+      .then((responses) => {
+        return responses.map((result) => result)
+      })
+      .catch((error) => {
+        console.error(error.message)
+      })
+    listDrafts(drafts || [])
   }
 
   const draftsGet = async (id: any): Promise<Draft> => {
@@ -109,13 +110,16 @@ const useFedemailAPI = () => {
       options
     )
 
-    return await unaryCall.then((response) => {
+    const response = await unaryCall.then(async (response) => {
       if (response.status.code !== 'OK') {
         console.log(response.status.code, response.status.detail)
         return Promise.reject(new Error(response.status.detail))
+        // throw response.status.detail
       }
       return Promise.resolve(response.response)
+      // return response.response
     })
+    return response
   }
 
   const draftsCreate = (draft: IDraftEdit) => {
@@ -141,6 +145,16 @@ const useFedemailAPI = () => {
       })
       createDraft(response.response)
     })
+  }
+
+  // must be the same as at the server side
+  const snippet_max_length = 240
+
+  const getSnippet = (str: string): string => {
+    if (str.length > snippet_max_length) {
+      return str.slice(0, snippet_max_length) + '...'
+    }
+    return str
   }
 
   const draftsUpdate = (draft: IDraftEdit) => {
@@ -172,7 +186,21 @@ const useFedemailAPI = () => {
         return null
       }
 
+      response.response.message!.payload = {
+        headers: [
+          { name: 'Subject', value: draft.subject },
+          { name: 'From', value: draft.sender },
+          { name: 'To', value: buildDraftRecipients(draft.recipients) },
+        ],
+        mimeType: 'text/html',
+        filename: '',
+        partId: '',
+        parts: [],
+        body: { attachmentId: '', data: b64EncodeUnicode(draft.content), size: draft.content.length },
+      }
+      response.response.message!.snippet = getSnippet(draft.content)
       console.log('FedemailAPI', response.response)
+      updateDraft(response.response)
     })
   }
 

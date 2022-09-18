@@ -1,3 +1,5 @@
+import { IContact } from '../context/ContactsContext'
+
 const rfc5322 = (raw: any) =>
   `${
     'Content-Type: text/html\n' +
@@ -7,7 +9,7 @@ const rfc5322 = (raw: any) =>
     `Subject: ${raw.subject}\n\n`
   }${b64EncodeUnicode(raw.content)}`
 
-const buildDraftRecipients = (contacts: []): string => {
+export const buildDraftRecipients = (contacts: IContact[]): string => {
   const recipients = contacts
     .map((contact: any) => {
       const name = `${contact.givenName} ${contact.familyName}`
@@ -27,14 +29,15 @@ export function b64EncodeUnicode(str: string) {
 }
 
 // Decoding base64 ⇢ UTF8
-export function b64DecodeUnicode(str: string) {
-  return decodeURIComponent(
-    Array.prototype.map
-      .call(atob(str), function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-      })
-      .join('')
-  )
+export function b64DecodeUnicode(base64: any) {
+  const text = atob(base64)
+  const length = text.length
+  const bytes = new Uint8Array(length)
+  for (let i = 0; i < length; i++) {
+    bytes[i] = text.charCodeAt(i)
+  }
+  const decoder = new TextDecoder() // default is utf-8
+  return decoder.decode(bytes)
 }
 
 export default rfc5322

@@ -16,6 +16,7 @@ import DraftsContainer from '../main/DraftsContainer'
 import { DraftsContext } from '../../context/DraftsContext'
 
 const drawerWidth = 240
+const hideDrawerWidth = 828
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean
 }
@@ -53,8 +54,8 @@ const DrawerMobile = styled(MuiDrawer)(({ theme }) => ({
 }))
 
 export function Navigation({ children }: any) {
-  const isMobilePortrait = useMediaQuery('(max-width: 828px)')
-  const [open, setOpen] = useState(window.innerWidth < 769 ? false : true)
+  const isMobilePortrait = useMediaQuery(`(max-width: ${hideDrawerWidth}px)`)
+  const [open, setOpen] = useState(window.innerWidth <= hideDrawerWidth ? false : true)
   const toggleDrawer = () => {
     setOpen(!open)
     if (open) {
@@ -64,7 +65,7 @@ export function Navigation({ children }: any) {
 
   useEffect(() => {
     window.addEventListener('resize', () => {
-      if (window.innerWidth <= 600) {
+      if (window.innerWidth <= hideDrawerWidth) {
         setOpen(false)
       }
     })
