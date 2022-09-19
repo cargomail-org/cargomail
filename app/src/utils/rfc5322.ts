@@ -1,8 +1,9 @@
 import { IContact } from '../context/ContactsContext'
+import { IDraftEdit } from '../context/DraftsContext'
 
-const rfc5322 = (raw: any) =>
+const rfc5322 = (raw: IDraftEdit) =>
   `${
-    'Content-Type: text/html\n' +
+    `Content-Type: ${raw.mimeType}\n` +
     'Content-Transfer-Encoding: base64\n' +
     `From: ${raw.sender}\n` +
     `To: ${buildDraftRecipients(raw.recipients)}\n` +

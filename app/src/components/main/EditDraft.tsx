@@ -14,25 +14,46 @@ import {
 } from '@mui/material'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import ClearIcon from '@mui/icons-material/Clear'
-import { DraftsContext } from '../../context/DraftsContext'
+import { DraftsContext, IDraftEdit } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { RecipientsSelect } from './Recipients'
 
-const EditDraft = ({ id, sender, recipients, subject, content }: any) => {
+const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content }: any) => {
   const isMobileLandscape = useMediaQuery('(max-height: 520px)')
 
   const { closeDraftEdit } = useContext(DraftsContext)
   const { draftsUpdate, draftsSend, draftsDelete } = useFedemailAPI()
-  const draftEdit = {
+
+  const draftEdit: IDraftEdit = {
     id,
+    mimeType,
     sender,
     recipients,
+    snippet,
     subject,
     content,
   }
+
+  const snippet_max_length = 240
+
+  const getSnippet = (str: string): string => {
+    if (str.length > snippet_max_length) {
+      return str.slice(0, snippet_max_length) + '...'
+    }
+    return str
+  }
+
   const update = (field: string) => (e: { target: { value: any } }) => {
+    if (field === 'content') {
+      if (draftEdit.mimeType === 'text/html') {
+        draftEdit.snippet = 'text/html'
+      } else {
+        draftEdit.snippet = getSnippet(e.target.value)
+      }
+    }
     draftsUpdate({ ...draftEdit, [field]: e.target.value })
   }
+
   return (
     <Box
       sx={{

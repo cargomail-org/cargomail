@@ -47,16 +47,12 @@ func (m *MailMessage) GetParsedMessage() (*fedemailv1.Message, error) {
 
 	decodedBody, err := base64.StdEncoding.DecodeString(string(body))
 	if err != nil {
-	    return nil, err
-	}
-
-	if len(decodedBody) > 0 {
-		m.Message.Snippet = m.getSnippet(string(decodedBody))
+		return nil, err
 	}
 
 	m.Message.Payload = &fedemailv1.MessagePart{
 		MimeType: mimeType,
-		Headers: messageHeaders,
+		Headers:  messageHeaders,
 		Body: &fedemailv1.MessagePartBody{
 			Data: string(body),
 			Size: int32(len(decodedBody)),
@@ -69,13 +65,4 @@ func (m *MailMessage) headerAndBody(data []byte) (textproto.Header, io.Reader, e
 	body := bufio.NewReader(bytes.NewReader(data))
 	hdr, err := textproto.ReadHeader(body)
 	return hdr, body, err
-}
-
-const snippet_max_length = 240
-
-func (m *MailMessage) getSnippet(str string) string {
-	if len(str) > snippet_max_length {
-		return str[:snippet_max_length] + "..."
-	}
-	return str
 }

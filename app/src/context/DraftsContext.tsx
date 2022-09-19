@@ -74,8 +74,10 @@ export interface IDraftsProvider {
 
 export interface IDraftEdit {
   id: string
+  mimeType: string
   sender: string
   recipients: IContact[]
+  snippet: string
   subject: string
   content: string
 }

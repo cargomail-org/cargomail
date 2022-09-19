@@ -128,7 +128,7 @@ BEGIN
         thread_1,
         'Hi :-)',
         '{
-        "mime_type": "text/html",
+        "mime_type": "text/plain",
         "body": {"data": "SGkgOi0p", "size": 6},
         "headers": [
             {"name": "From", "value": "Matthew Cuthbert <matthew.cuthbert@demo.localhost>"},
@@ -142,7 +142,7 @@ BEGIN
         thread_1,
         'Hello :--)',
         '{
-        "mime_type": "text/html",
+        "mime_type": "text/plain",
         "body": {"data": "SGVsbG8gOi0tKQ==", "size": 10},
         "headers": [
             {"name": "From", "value": "Diana Barry <diana.barry@demo.localhost>"},
@@ -160,7 +160,7 @@ BEGIN
         thread_2,
         'Have a nice day :)',
         '{
-        "mime_type": "text/html",
+        "mime_type": "text/plain",
         "body": {"data": "SGF2ZSBhIG5pY2UgZGF5IDop", "size": 18},
         "headers": [
             {"name": "From", "value": "Anne Shirley <anne.shirley@demo.localhost>"},

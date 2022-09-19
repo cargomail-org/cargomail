@@ -147,16 +147,6 @@ const useFedemailAPI = () => {
     })
   }
 
-  // must be the same as at the server side
-  const snippet_max_length = 240
-
-  const getSnippet = (str: string): string => {
-    if (str.length > snippet_max_length) {
-      return str.slice(0, snippet_max_length) + '...'
-    }
-    return str
-  }
-
   const draftsUpdate = (draft: IDraftEdit) => {
     updateDraftEdit(draft)
     const message = { raw: encode(draft) }
@@ -170,7 +160,7 @@ const useFedemailAPI = () => {
             id: '',
             raw: message.raw,
             labelIds: [],
-            snippet: '',
+            snippet: draft.snippet,
             threadId: '',
             historyId: '',
             internalDate: '',
@@ -192,13 +182,13 @@ const useFedemailAPI = () => {
           { name: 'From', value: draft.sender },
           { name: 'To', value: buildDraftRecipients(draft.recipients) },
         ],
-        mimeType: 'text/html',
+        mimeType: draft.mimeType,
         filename: '',
         partId: '',
         parts: [],
         body: { attachmentId: '', data: b64EncodeUnicode(draft.content), size: draft.content.length },
       }
-      response.response.message!.snippet = getSnippet(draft.content)
+      response.response.message!.snippet = draft.snippet
       console.log('FedemailAPI', response.response)
       updateDraft(response.response)
     })

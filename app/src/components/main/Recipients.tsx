@@ -95,6 +95,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
 
     draftsUpdate({
       id: props.draftEdit.id,
+      mimeType: props.draftEdit.mimeType,
       sender: props.draftEdit.sender,
       recipients: [
         ...props.draftEdit.recipients,
@@ -105,6 +106,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           emailAddress: dialogValue.emailAddress,
         },
       ],
+      snippet: props.draftEdit.snippet,
       subject: props.draftEdit.subject,
       content: props.draftEdit.content,
     })
@@ -162,8 +164,10 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
             } else {
               draftsUpdate({
                 id: props.draftEdit.id,
+                mimeType: props.draftEdit.mimeType,
                 sender: props.draftEdit.sender,
                 recipients: newValue as any,
+                snippet: props.draftEdit.snippet,
                 subject: props.draftEdit.subject,
                 content: props.draftEdit.content,
               })

@@ -132,8 +132,10 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
               onClick={(e) => {
                 newDraftEdit({
                   id: draftId,
+                  mimeType: payload?.mimeType || '',
                   sender: currentUser?.username || '',
                   recipients: recipientsToContacts(parsed.to) || [],
+                  snippet: snippet || '',
                   subject: parsed.subject,
                   content: parsed.content,
                 })
@@ -159,17 +161,20 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
         </>
       </AccordionSummary>
       <AccordionDetails
+        // consider to use sanitize-html-react library, see https://stackoverflow.com/a/69940844}
         sx={{
           padding: 2,
           display: 'block',
           // maxHeight: '200px',
         }}>
-        {/* eslint-disable-next-line */}
-        <div
-          dangerouslySetInnerHTML={{
-            __html: `<textarea disabled="true" style="border: none; resize: none; background-color: white; width: 100%; height: 200px;">${parsed.content}</textarea>`,
-          }}
-        />
+        {payload?.mimeType === 'text/plain' && (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: `<textarea disabled="true" style="border: none; resize: none; background-color: white; width: 100%; height: 200px;">${parsed.content}</textarea>`,
+            }}
+          />
+        )}
+        {payload?.mimeType === 'text/html' && <div dangerouslySetInnerHTML={{ __html: parsed.content }} />}
       </AccordionDetails>
     </Accordion>
   )
