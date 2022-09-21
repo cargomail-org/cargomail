@@ -12,6 +12,9 @@ import useFedemailAPI from './api/FedemailAPI'
 import * as ROUTES from './routes'
 import { useContext, useEffect } from 'react'
 import AllContextProviders from './context'
+
+import './i18n'
+
 import debug from './utils/debug'
 ;(window as any).debug = debug
 
@@ -19,11 +22,12 @@ const AUTH_DISABLED = process.env.REACT_APP_AUTH !== '1'
 function AppRoutes() {
   const location = useLocation()
   const { token } = useContext(AuthContext)
-  const { labelsList } = useFedemailAPI()
+  const { labelsList, threadsList } = useFedemailAPI()
 
   useEffect(() => {
     if (token) {
       labelsList()
+      threadsList()
     }
   }, []) // eslint-disable-line
 

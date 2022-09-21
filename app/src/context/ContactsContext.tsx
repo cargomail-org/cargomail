@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useReducer } from 'react'
-import useActionCreator from '../utils/hooks/action_creator'
+import useActionCreator from '../utils/hooks/actionCreator'
 
 const actions = {
   updateContacts: 'UPDATE_CONTACTS',

@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useReducer } from 'react'
 import type { Draft } from '../api/generated/proto/fedemail/v1/fedemail'
-import useActionCreator from '../utils/hooks/action_creator'
+import useActionCreator from '../utils/hooks/actionCreator'
 import { IContact } from './ContactsContext'
 
 const actions = {

@@ -21,13 +21,19 @@
         "@types/react-dom": "^18.0.6",
         "autosuggest-highlight": "^3.3.4",
         "buffer": "^6.0.3",
+        "css": "^3.0.0",
+        "dayjs": "^1.11.5",
+        "i18next": "^21.9.2",
+        "i18next-browser-languagedetector": "^6.1.5",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "react-i18next": "^11.18.6",
         "react-router-dom": "^6.3.0",
         "react-scripts": "5.0.1",
         "styled-components": "^5.3.5",
         "typescript": "^4.7.4",
-        "urlsafe-base64": "^1.0.0"
+        "urlsafe-base64": "^1.0.0",
+        "uuid": "^9.0.0"
     },
     "scripts": {
         "start": "sh -ac '. ./.env; react-scripts start'",
@@ -67,8 +73,10 @@
     },
     "devDependencies": {
         "@types/autosuggest-highlight": "^3.2.0",
+        "@types/css": "^0.0.33",
         "@types/styled-components": "^5.1.26",
         "@types/urlsafe-base64": "^1.0.28",
+        "@types/uuid": "^8.3.4",
         "eslint-plugin-prettier": "^4.2.1"
     }
 }
