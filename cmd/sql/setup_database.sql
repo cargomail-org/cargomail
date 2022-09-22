@@ -259,7 +259,8 @@ BEGIN
             SET id = nextval('fedemail.message_id_seq'::regclass),
                 payload = _payload->'payload',
                 snippet = _payload->>'snippet',
-                raw = _payload->>'raw'
+                raw = _payload->>'raw',
+                internal_date = extract(epoch from now())
             WHERE owner = _owner AND draft_id = _id
             RETURNING jsonb_build_object('id', draft_id::varchar(255),
                                          'message', jsonb_build_object(
