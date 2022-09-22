@@ -98,17 +98,7 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
   const senderUnreadList = Object.entries(senderUnreadMap)
   const isLastSender = (index: any) => index === senderUnreadList.length - 1
   const threadTitle = senderUnreadList.map(([name, unread], index) => (
-    // <Box component="span" key={name} sx={{ fontWeight: hasUnread ? 600 : 400 }}>
-    <Box
-      component="span"
-      key={name}
-      sx={
-        unread
-          ? {
-              fontWeight: 600,
-            }
-          : {}
-      }>
+    <Box component="span" key={name} sx={{ fontWeight: unread ? 600 : null }}>
       {name}
       {isLastSender(index) ? ', ' : ''}
     </Box>
@@ -117,7 +107,7 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
   const attachments = messages.flatMap((message: any) => message.attachments)
 
   return (
-    <Accordion expanded={expanded} onChange={() => setExpanded((exp) => !exp)}>
+    <Accordion square={true} expanded={expanded} onChange={() => setExpanded((exp) => !exp)}>
       <AccordionSummary
         sx={{
           display: 'flex',
@@ -139,8 +129,9 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
               <Avatar
                 alt=""
                 sx={{
-                  height: 24,
-                  width: 24,
+                  height: 26,
+                  width: 26,
+                  backgroundColor: 'info.light',
                 }}>
                 {firstSenderName[0]}
               </Avatar>
@@ -169,16 +160,7 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
                 letterSpacing: 0.2,
               }}
               component="div">
-              {/* <Box component="span" sx={{ fontWeight: hasUnread ? 600 : 400 }}> */}
-              <Box
-                component="span"
-                sx={
-                  hasUnread
-                    ? {
-                        fontWeight: 600,
-                      }
-                    : {}
-                }>
+              <Box component="span" sx={{ fontWeight: hasUnread ? 600 : null }}>
                 {messages[0].subject}
               </Box>
               <Box
@@ -272,6 +254,9 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
         sx={{
           padding: 0,
           display: 'block',
+          '& .MuiCard-root': {
+            borderRadius: 0,
+          },
         }}>
         {expanded
           ? messages.map((message: any, index: any) => (

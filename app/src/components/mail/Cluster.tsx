@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback, FC, ReactNode } from 'react'
+import { useState, useContext, useCallback, FC } from 'react'
 import { Accordion, AccordionDetails, Avatar, colors, Box } from '@mui/material'
 import AccordionSummary, { accordionSummaryClasses } from '@mui/material/AccordionSummary'
 import Typography, { typographyClasses } from '@mui/material/Typography'
@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Thread from './Thread'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { ThreadsContext } from '../../context/ThreadsContext'
+import { SYSTEM_LABEL } from '../../constants/system_labels'
 
 const theme = createTheme()
 
@@ -34,7 +35,20 @@ const getLabelIcon = (label: any) => {
   }
 }
 
-const getLabelClass = (label: any) => label.id.split('_')[1].toLowerCase()
+const getLabelColor = (label: any) => {
+  switch (label.id) {
+    case 'CATEGORY_FORUMS':
+      return colors.indigo[600]
+    case 'CATEGORY_UPDATES':
+      return colors.deepOrange[500]
+    case 'CATEGORY_PROMOTIONS':
+      return colors.cyan[300]
+    case 'CATEGORY_SOCIAL':
+      return colors.red[700]
+    default:
+      return null
+  }
+}
 
 export type ClusterProps = {
   primaryLabel: any
@@ -110,25 +124,16 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
 
   const isLastSender = (index: any) => index === senderUnreadList.length - 1
   const clusterTitle = senderUnreadList.map(([name, unread], index) => (
-    // <Box component="span" key={name} className={unread ? classes.unread : ''}>
-    <Box
-      component="span"
-      key={name}
-      sx={
-        unread
-          ? {
-              fontWeight: 600,
-            }
-          : {}
-      }>
+    <Box component="span" key={name} sx={{ fontWeight: unread ? 600 : null }}>
       {name}
-      {isLastSender(index) ? ', ' : ''}
+      {isLastSender(index) ? '' : ', '}
     </Box>
   ))
 
   return (
     <ThemeProvider theme={theme}>
       <Accordion
+        square={true}
         expanded={expanded}
         onChange={() => setExpanded((exp) => !exp)}
         sx={
@@ -139,7 +144,7 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                 // width: 'calc(100% + 48px)',
                 marginLeft: -24,
               }
-            : {}
+            : null
         }>
         <AccordionSummary
           sx={{
@@ -156,7 +161,7 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                   padding: '0 24px',
                 },
               }}>
-              {primaryLabel.type === 'system' ? t(primaryLabel.id) : primaryLabel.name}
+              {primaryLabel.type === SYSTEM_LABEL ? t(primaryLabel.id) : primaryLabel.name}
             </Typography>
           ) : (
             <>
@@ -167,38 +172,37 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                 }}>
                 <Avatar
                   alt=""
-                  // className={classNames(
-                  //   classes.avatar,
-                  //   primaryLabel.type === 'system' && classes.systemLabels,
-                  //   primaryLabel.type === 'system' && classes[getLabelClass(primaryLabel)]
-                  // )}
-                >
-                  {primaryLabel.type === 'system' ? getLabelIcon(primaryLabel) : primaryLabel.name[0]}
+                  sx={{
+                    height: 26,
+                    width: 26,
+                    background: primaryLabel.type === SYSTEM_LABEL ? 'transparent' : null,
+                    color: primaryLabel.type === SYSTEM_LABEL ? getLabelColor(primaryLabel) : null,
+                  }}>
+                  {primaryLabel.type === SYSTEM_LABEL ? getLabelIcon(primaryLabel) : primaryLabel.name[0]}
                 </Avatar>
                 <Typography
                   sx={{
-                    fontWeight: hasUnread ? 600 : 400,
+                    fontWeight: hasUnread ? 600 : null,
                     flex: 3,
                     minWidth: 0,
-                    width: 'calc(30vw - 40px)',
+                    // width: 'calc(30vw - 40px)',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    paddingLeft: 16,
-                    paddingRight: 16,
+                    paddingLeft: 2,
+                    paddingRight: 2,
                     letterSpacing: 0.2,
                   }}>
                   <Box
                     component="span"
-                    // className={primaryLabel.type === 'system' ? classes[getLabelClass(primaryLabel)] : null}
-                  >
-                    {primaryLabel.type === 'system' ? t(primaryLabel.id) : primaryLabel.name}
+                    sx={primaryLabel.type === SYSTEM_LABEL ? { color: getLabelColor(primaryLabel) } : null}>
+                    {primaryLabel.type === SYSTEM_LABEL ? t(primaryLabel.id) : primaryLabel.name}
                   </Box>
                   {threadCount > 1 && (
                     <Box
                       component="span"
                       sx={{
-                        paddingLeft: 4,
+                        paddingLeft: 0.5,
                         color: theme.palette.grey[700],
                       }}>{`(${threadCount})`}</Box>
                   )}
@@ -288,16 +292,15 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
         <AccordionDetails
           sx={{
             display: 'block',
-            border: `24px solid ${theme.palette.grey[300]}`,
+            // border: `24px solid ${theme.palette.grey[300]}`,
             padding: 0,
           }}>
           {Object.values(threads).map((nested: any) => (
-            <Box key={nested.label} sx={{}}>
+            <Box key={nested.label}>
               <Typography
                 variant="subtitle1"
                 sx={{
-                  paddingLeft: 24,
-                  margin: 5,
+                  paddingLeft: 2,
                 }}>
                 {t(`date:${nested.label}`, { date: nested.date })}
               </Typography>

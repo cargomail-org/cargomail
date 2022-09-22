@@ -16,15 +16,16 @@ const Header = ({ snippet, expanded, actions, name, onClick, handlers }: any) =>
     <Avatar
       alt=""
       sx={{
-        height: 32,
-        width: 32,
+        height: 26,
+        width: 26,
         margin: '4px 12px',
+        backgroundColor: 'info.light',
       }}>
       {name[0]}
     </Avatar>
     <Box
       sx={{
-        padding: 4,
+        padding: 2,
         width: 'calc(100% - 32px - 12px * 2)',
       }}>
       <Box

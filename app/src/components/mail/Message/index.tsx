@@ -25,7 +25,7 @@ const Message = ({ threadId, id, from, snippet, content, initialExpand, unread, 
 
   const markAsDone = useCallback(
     (e: any) => {
-      removeMessageLabel({ id, label: 'INBOX' })
+      // removeMessageLabel({ id, label: 'INBOX' }) // use numbers instead of literals
       modifyMessage({ id, remove: ['INBOX'] })
       e.stopPropagation()
     },

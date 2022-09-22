@@ -14,6 +14,7 @@ const useProcessedThreads = ({ includes, excludes, aggregate = true, sent = fals
   const { labels }: any = useContext(LabelsContext)
   const { threads }: any = useContext(ThreadsContext)
   const final = aggregate ? compose(groupByDate, classify(labels)) : (self: any) => self
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const process = useCallback(
     compose(final, map(markPrimaryLabel(labels, sent)), filterByLabel({ includes, excludes }), map(extract)),
     [threads]
