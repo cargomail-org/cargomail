@@ -15,7 +15,7 @@ BEGIN
         INCREMENT BY 1
         NO MINVALUE
         NO MAXVALUE
-        CACHE 1;  
+        CACHE 1;      
 
     CREATE SEQUENCE fedemail.thread_id_seq
         START WITH 1
@@ -56,6 +56,7 @@ BEGIN
         payload JSONB,
         labels JSONB,
         history_id bigint DEFAULT nextval('fedemail.history_id_seq'::regclass) NOT NULL,
+        internal_date bigint DEFAULT extract(epoch from now()) NOT NULL,
         search_subject tsvector,
         search_from tsvector,
         search_recipients tsvector
@@ -131,7 +132,8 @@ BEGIN
             SELECT DISTINCT
                 (SELECT jsonb_build_object('id', detail.thread_id::varchar(255),
                                         'snippet', detail.snippet,
-                                        'history_id', detail.history_id::varchar(255)) FROM fedemail.message detail
+                                        'history_id', detail.history_id::varchar(255),
+                                        'internal_date', detail.internal_date::varchar(255) || '000') FROM fedemail.message detail
                 WHERE thread_id = master.thread_id 
                 ORDER BY history_id DESC LIMIT 1)
             FROM fedemail.message AS master
@@ -155,7 +157,8 @@ BEGIN
                                         'snippet', snippet,
                                         'payload', payload,
                                         'label_ids', labels,
-                                        'history_id', history_id::varchar(255)) FROM fedemail.message
+                                        'history_id', history_id::varchar(255),
+                                        'internal_date', internal_date::varchar(255) || '000') FROM fedemail.message
                 WHERE owner = _owner AND thread_id = _thread_id 
                 ORDER BY history_id DESC;
     END;			
@@ -201,7 +204,8 @@ BEGIN
                                         'snippet', snippet,
                                         'payload', payload,
                                         'label_ids', labels,
-                                        'history_id', history_id::varchar(255))
+                                        'history_id', history_id::varchar(255),
+                                        'internal_date', internal_date::varchar(255) || '000')
                                     ) FROM fedemail.message
                 WHERE owner = _owner AND draft_id = _id
                 INTO _draft;
@@ -230,7 +234,9 @@ BEGIN
                                          'message', jsonb_build_object(
 	                                        'id', id::varchar(255),
 	                                        'thread_id', thread_id::varchar(255),
-	                                        'label_ids', labels)
+	                                        'label_ids', labels,
+                                            'history_id', history_id::varchar(255),
+                                            'internal_date', internal_date::varchar(255) || '000')
                                         )
             INTO _new_draft;
         RETURN _new_draft;
@@ -259,7 +265,9 @@ BEGIN
                                          'message', jsonb_build_object(
 	                                        'id', id::varchar(255),
 	                                        'thread_id', thread_id::varchar(255),
-	                                        'label_ids', labels)
+	                                        'label_ids', labels,
+                                            'history_id', history_id::varchar(255),
+                                            'internal_date', internal_date::varchar(255) || '000')
                                         )
             INTO _updated_draft;
         RETURN _updated_draft;
@@ -304,7 +312,7 @@ BEGIN
         INCREMENT BY 1
         NO MINVALUE
         NO MAXVALUE
-        CACHE 1;   
+        CACHE 1;
 
     CREATE TABLE people.connection (
         id BIGSERIAL PRIMARY KEY,
@@ -312,6 +320,7 @@ BEGIN
         name JSONB,
         email_addresses JSONB,
         history_id bigint DEFAULT nextval('people.history_id_seq'::regclass) NOT NULL,
+        internal_date bigint DEFAULT extract(epoch from now()) NOT NULL,
         search_name tsvector,
         search_email_addresses tsvector
     );
@@ -354,7 +363,8 @@ BEGIN
             SELECT jsonb_build_object('id', id::varchar(255),
                                     'name', name,
                                     'email_addresses', email_addresses,
-                                    'history_id', history_id::varchar(255))
+                                    'history_id', history_id::varchar(255),
+                                    'internal_date', internal_date::varchar(255) || '000')
             FROM people.connection
             WHERE owner = _owner
             ORDER BY history_id DESC;
@@ -378,7 +388,8 @@ BEGIN
             RETURNING jsonb_build_object('id', id::varchar(255),
                                     'name', name,
                                     'email_addresses', email_addresses,
-                                    'history_id', history_id::varchar(255))
+                                    'history_id', history_id::varchar(255),
+                                    'internal_date', internal_date::varchar(255) || '000')
             INTO _new_person;
         RETURN _new_person;
     END;			

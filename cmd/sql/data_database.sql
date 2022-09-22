@@ -123,7 +123,7 @@ BEGIN
         thread_1 = nextval('fedemail.thread_id_seq'); 
         thread_2 = nextval('fedemail.thread_id_seq'); 
 
-        INSERT INTO fedemail.message (owner, thread_id, snippet, payload, labels) VALUES 
+        INSERT INTO fedemail.message (owner, thread_id, snippet, payload, labels, internal_date) VALUES 
         ('matthew.cuthbert@demo.localhost',
         thread_1,
         'Hi :-)',
@@ -137,7 +137,8 @@ BEGIN
             {"name": "Message-ID", "value": "1001@demo.localhost"}
         ]
         }',
-        '["SENT"]'),
+        '["SENT"]',
+        extract(epoch from now() at time zone 'utc')-3600),
         ('matthew.cuthbert@demo.localhost',
         thread_1,
         'Hello :--)',
@@ -153,7 +154,8 @@ BEGIN
             {"name": "References", "value": "1001@demo.localhost"}
         ]
         }',
-        '["CATEGORY_SOCIAL", "UNREAD", "INBOX"]');
+        '["CATEGORY_SOCIAL", "UNREAD", "INBOX"]',
+        extract(epoch from now() at time zone 'utc')-1800);
         
         INSERT INTO fedemail.message (owner, thread_id, snippet, payload, labels) VALUES 
         ('matthew.cuthbert@demo.localhost',
