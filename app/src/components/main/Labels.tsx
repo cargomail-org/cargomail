@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EmailIcon from '@mui/icons-material/Email'
 import * as ROUTES from '../../routes'
 import { LabelsContext } from '../../context/LabelsContext'
+import { Label_Type } from '../../api/generated/proto/fedemail/v1/fedemail'
 
 export const Labels = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
@@ -112,7 +113,7 @@ export const Labels = () => {
         </ListItemButton>
       </ListItem>
       {labels.user
-        ?.filter((label) => label.type === 1)
+        ?.filter((label) => label.type === Label_Type.USER)
         .map((label, index) => (
           <ListItem key={label.id} disablePadding>
             <ListItemButton

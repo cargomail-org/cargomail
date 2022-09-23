@@ -8,7 +8,7 @@ import { ThreadsContext } from '../context/ThreadsContext'
 import { DraftsContext, IDraftEdit } from '../context/DraftsContext'
 import encode from '../utils/mails/encode'
 import { decodeCurrentUser } from '../auth'
-import { Draft, Message, Thread } from './generated/proto/fedemail/v1/fedemail'
+import { Draft, Label_Type, Message, Thread } from './generated/proto/fedemail/v1/fedemail'
 import { buildDraftRecipients, b64EncodeUnicode } from '../utils/rfc5322'
 
 const baseUrl: string = process.env.REACT_APP_SERVER_BASE_URL || ''
@@ -57,12 +57,12 @@ const useFedemailAPI = () => {
         console.log(response.status.code, response.status.detail)
         return null
       }
-      const systemAll = response.response.labels.filter((label) => label.type === 0)
+      const systemAll = response.response.labels.filter((label) => label.type === Label_Type.SYSTEM)
       const category = systemAll
         .filter((label) => label.name.startsWith('CATEGORY'))
         .filter((label) => !label.name.endsWith('PERSONAL'))
       const system = systemAll.filter((label) => !label.name.startsWith('CATEGORY'))
-      const userLabels = response.response.labels.filter((label) => label.type === 1)
+      const userLabels = response.response.labels.filter((label) => label.type === Label_Type.USER)
       const personal = systemAll.find((label) => label.name === 'CATEGORY_PERSONAL')
 
       const labels = {

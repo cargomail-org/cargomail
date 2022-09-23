@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Thread from './Thread'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { ThreadsContext } from '../../context/ThreadsContext'
-import { SYSTEM_LABEL } from '../../constants/system_labels'
+import { Label_Type } from '../../api/generated/proto/fedemail/v1/fedemail'
 
 const theme = createTheme()
 
@@ -161,7 +161,7 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                   padding: '0 24px',
                 },
               }}>
-              {primaryLabel.type === SYSTEM_LABEL ? t(primaryLabel.id) : primaryLabel.name}
+              {primaryLabel.type === Label_Type.SYSTEM ? t(primaryLabel.id) : primaryLabel.name}
             </Typography>
           ) : (
             <>
@@ -175,10 +175,10 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                   sx={{
                     height: 26,
                     width: 26,
-                    background: primaryLabel.type === SYSTEM_LABEL ? 'transparent' : null,
-                    color: primaryLabel.type === SYSTEM_LABEL ? getLabelColor(primaryLabel) : null,
+                    background: primaryLabel.type === Label_Type.SYSTEM ? 'transparent' : null,
+                    color: primaryLabel.type === Label_Type.SYSTEM ? getLabelColor(primaryLabel) : null,
                   }}>
-                  {primaryLabel.type === SYSTEM_LABEL ? getLabelIcon(primaryLabel) : primaryLabel.name[0]}
+                  {primaryLabel.type === Label_Type.SYSTEM ? getLabelIcon(primaryLabel) : primaryLabel.name[0]}
                 </Avatar>
                 <Typography
                   sx={{
@@ -195,8 +195,8 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                   }}>
                   <Box
                     component="span"
-                    sx={primaryLabel.type === SYSTEM_LABEL ? { color: getLabelColor(primaryLabel) } : null}>
-                    {primaryLabel.type === SYSTEM_LABEL ? t(primaryLabel.id) : primaryLabel.name}
+                    sx={primaryLabel.type === Label_Type.SYSTEM ? { color: getLabelColor(primaryLabel) } : null}>
+                    {primaryLabel.type === Label_Type.SYSTEM ? t(primaryLabel.id) : primaryLabel.name}
                   </Box>
                   {threadCount > 1 && (
                     <Box
