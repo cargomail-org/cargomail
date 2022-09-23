@@ -132,185 +132,191 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Accordion
-        square={true}
-        expanded={expanded}
-        onChange={() => setExpanded((exp) => !exp)}
-        sx={
-          expanded
-            ? {
-                transition: 'all .1s',
-                background: theme.palette.grey[300],
-                // width: 'calc(100% + 48px)',
-                marginLeft: -24,
-              }
-            : null
-        }>
-        <AccordionSummary
-          sx={{
-            display: 'flex',
-            [`& .${accordionSummaryClasses.content}`]: {
-              maxWidth: '100%',
-            },
-          }}>
-          {expanded ? (
-            <Typography
-              variant="h5"
-              sx={{
-                [`& .${typographyClasses.h5}`]: {
-                  padding: '0 24px',
-                },
-              }}>
-              {primaryLabel.type === Label_Type.SYSTEM ? t(primaryLabel.id) : primaryLabel.name}
-            </Typography>
-          ) : (
-            <>
-              <Box
-                sx={{
-                  flex: 1,
-                  display: 'flex',
-                }}>
-                <Avatar
-                  alt=""
-                  sx={{
-                    height: 26,
-                    width: 26,
-                    background: primaryLabel.type === Label_Type.SYSTEM ? 'transparent' : null,
-                    color: primaryLabel.type === Label_Type.SYSTEM ? getLabelColor(primaryLabel) : null,
-                  }}>
-                  {primaryLabel.type === Label_Type.SYSTEM ? getLabelIcon(primaryLabel) : primaryLabel.name[0]}
-                </Avatar>
-                <Typography
-                  sx={{
-                    fontWeight: hasUnread ? 600 : null,
-                    flex: 3,
-                    minWidth: 0,
-                    // width: 'calc(30vw - 40px)',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    paddingLeft: 2,
-                    paddingRight: 2,
-                    letterSpacing: 0.2,
-                  }}>
-                  <Box
-                    component="span"
-                    sx={primaryLabel.type === Label_Type.SYSTEM ? { color: getLabelColor(primaryLabel) } : null}>
-                    {primaryLabel.type === Label_Type.SYSTEM ? t(primaryLabel.id) : primaryLabel.name}
-                  </Box>
-                  {threadCount > 1 && (
-                    <Box
-                      component="span"
-                      sx={{
-                        paddingLeft: 0.5,
-                        color: theme.palette.grey[700],
-                      }}>{`(${threadCount})`}</Box>
-                  )}
-                </Typography>
-              </Box>
+      <Box sx={{ marginLeft: '12px', marginRight: '12px' }}>
+        <Accordion
+          square={true}
+          expanded={expanded}
+          onChange={() => setExpanded((exp) => !exp)}
+          sx={
+            expanded
+              ? {
+                  transition: 'all .1s',
+                  background: theme.palette.grey[300],
+                  // width: 'calc(100% + 48px)',
+                  // marginLeft: -24,
+                }
+              : null
+          }>
+          <AccordionSummary
+            sx={{
+              display: 'flex',
+              maxHeight: '50px !important',
+              minHeight: '40px !important',
+              [`& .${accordionSummaryClasses.content}`]: {
+                maxWidth: '100%',
+              },
+            }}>
+            {expanded ? (
               <Typography
+                variant="h5"
                 sx={{
-                  flex: 3,
-                  minWidth: 0,
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  letterSpacing: 0.2,
-                }}>
-                <span>{clusterTitle}</span>
-              </Typography>
-              <Box
-                sx={{
-                  padding: '0 !important',
-                  display: 'none',
-                  '$summary:hover &': {
-                    display: 'block',
+                  [`& .${typographyClasses.h5}`]: {
+                    padding: '0 24px',
                   },
                 }}>
-                {actions.backToInbox && (
-                  <InboxIcon
-                    sx={{
-                      color: colors.blue[500],
-                      margin: '0 4px',
-                      fontSize: '1.2rem',
-                      cursor: 'pointer',
-                      opacity: 0.78,
-                      '&:hover': {
-                        opacity: 1,
-                      },
-                    }}
-                    onClick={backToInbox}
-                  />
-                )}
-                {actions.markAsDone && (
-                  <CheckIcon
-                    sx={{
-                      color: colors.green[600],
-                      margin: '0 4px',
-                      fontSize: '1.2rem',
-                      cursor: 'pointer',
-                      opacity: 0.78,
-                      '&:hover': {
-                        opacity: 1,
-                      },
-                    }}
-                    onClick={markAsDone}
-                  />
-                )}
-                {actions.trash && (
-                  <DeleteIcon
-                    sx={{
-                      margin: '0 4px',
-                      fontSize: '1.2rem',
-                      cursor: 'pointer',
-                      opacity: 0.78,
-                      '&:hover': {
-                        opacity: 1,
-                      },
-                    }}
-                    onClick={trash}
-                  />
-                )}
-                {actions.permanentDelete && (
-                  <DeleteIcon
-                    sx={{
-                      margin: '0 4px',
-                      fontSize: '1.2rem',
-                      cursor: 'pointer',
-                      opacity: 0.78,
-                      '&:hover': {
-                        opacity: 1,
-                      },
-                    }}
-                    onClick={permanentDelete}
-                  />
-                )}
-              </Box>
-            </>
-          )}
-        </AccordionSummary>
-        <AccordionDetails
-          sx={{
-            display: 'block',
-            // border: `24px solid ${theme.palette.grey[300]}`,
-            padding: 0,
-          }}>
-          {Object.values(threads).map((nested: any) => (
-            <Box key={nested.label}>
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  paddingLeft: 2,
-                }}>
-                {t(`date:${nested.label}`, { date: nested.date })}
+                {primaryLabel.type === Label_Type.SYSTEM ? t(primaryLabel.id) : primaryLabel.name}
               </Typography>
-              {nested.threads.map((thread: any) => (
-                <Thread key={thread.id} {...thread} actions={actions} />
-              ))}
-            </Box>
-          ))}
-        </AccordionDetails>
-      </Accordion>
+            ) : (
+              <>
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: 'flex',
+                  }}>
+                  <Avatar
+                    alt=""
+                    sx={{
+                      height: 26,
+                      width: 26,
+                      background: primaryLabel.type === Label_Type.SYSTEM ? 'transparent' : null,
+                      color: primaryLabel.type === Label_Type.SYSTEM ? getLabelColor(primaryLabel) : null,
+                    }}>
+                    {primaryLabel.type === Label_Type.SYSTEM ? getLabelIcon(primaryLabel) : primaryLabel.name[0]}
+                  </Avatar>
+                  <Typography
+                    sx={{
+                      fontWeight: hasUnread ? 600 : null,
+                      flex: 3,
+                      minWidth: 0,
+                      // width: 'calc(30vw - 40px)',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      paddingLeft: 2,
+                      paddingRight: 2,
+                      letterSpacing: 0.2,
+                    }}>
+                    <Box
+                      component="span"
+                      sx={primaryLabel.type === Label_Type.SYSTEM ? { color: getLabelColor(primaryLabel) } : null}>
+                      {primaryLabel.type === Label_Type.SYSTEM ? t(primaryLabel.id) : primaryLabel.name}
+                    </Box>
+                    {threadCount > 1 && (
+                      <Box
+                        component="span"
+                        sx={{
+                          paddingLeft: 0.5,
+                          color: theme.palette.grey[700],
+                        }}>{`(${threadCount})`}</Box>
+                    )}
+                  </Typography>
+                </Box>
+                <Typography
+                  sx={{
+                    flex: 3,
+                    minWidth: 0,
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    letterSpacing: 0.2,
+                  }}>
+                  <span>{clusterTitle}</span>
+                </Typography>
+                <Box
+                  sx={{
+                    padding: '0 !important',
+                    display: 'none',
+                    '$summary:hover &': {
+                      display: 'block',
+                    },
+                  }}>
+                  {actions.backToInbox && (
+                    <InboxIcon
+                      sx={{
+                        color: colors.blue[500],
+                        margin: '0 4px',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                        opacity: 0.78,
+                        '&:hover': {
+                          opacity: 1,
+                        },
+                      }}
+                      onClick={backToInbox}
+                    />
+                  )}
+                  {actions.markAsDone && (
+                    <CheckIcon
+                      sx={{
+                        color: colors.green[600],
+                        margin: '0 4px',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                        opacity: 0.78,
+                        '&:hover': {
+                          opacity: 1,
+                        },
+                      }}
+                      onClick={markAsDone}
+                    />
+                  )}
+                  {actions.trash && (
+                    <DeleteIcon
+                      sx={{
+                        margin: '0 4px',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                        opacity: 0.78,
+                        '&:hover': {
+                          opacity: 1,
+                        },
+                      }}
+                      onClick={trash}
+                    />
+                  )}
+                  {actions.permanentDelete && (
+                    <DeleteIcon
+                      sx={{
+                        margin: '0 4px',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                        opacity: 0.78,
+                        '&:hover': {
+                          opacity: 1,
+                        },
+                      }}
+                      onClick={permanentDelete}
+                    />
+                  )}
+                </Box>
+              </>
+            )}
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{
+              display: 'block',
+              borderColor: `${theme.palette.grey[300]}`,
+              borderStyle: 'solid',
+              borderWidth: '0px 12px 24px 12px',
+              padding: 0,
+            }}>
+            {Object.values(threads).map((nested: any) => (
+              <Box key={nested.label}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    paddingLeft: 2,
+                  }}>
+                  {t(`date:${nested.label}`, { date: nested.date })}
+                </Typography>
+                {nested.threads.map((thread: any) => (
+                  <Thread key={thread.id} {...thread} actions={actions} />
+                ))}
+              </Box>
+            ))}
+          </AccordionDetails>
+        </Accordion>
+      </Box>
     </ThemeProvider>
   )
 }

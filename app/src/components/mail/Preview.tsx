@@ -1,3 +1,4 @@
+import { colors } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
 
@@ -12,6 +13,7 @@ const Preview = ({ clusters, actions = {} }: any) => {
         variant="subtitle1"
         sx={{
           paddingLeft: 2,
+          backgroundColor: colors.grey[100],
         }}>
         {t(clusters.label, { date: clusters.date })}
       </Typography>

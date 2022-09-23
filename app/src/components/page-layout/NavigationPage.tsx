@@ -9,7 +9,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import { useConfig } from '../../packages/core/config'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
-import { CssBaseline, Typography, useMediaQuery } from '@mui/material'
+import { colors, CssBaseline, Typography, useMediaQuery } from '@mui/material'
 import AvatarMenu from '../main/AvatarMenu'
 import NewMailButton from '../main/NewMailButton'
 import DraftsContainer from '../main/DraftsContainer'
@@ -44,12 +44,14 @@ const AppBar = styled(MuiAppBar, {
 const DrawerDesktop = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
   '& .MuiDrawer-paper': {
     paddingTop: 10,
+    backgroundColor: colors.grey[100],
   },
 }))
 
 const DrawerMobile = styled(MuiDrawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {
     paddingTop: 60,
+    backgroundColor: colors.grey[100],
   },
 }))
 
@@ -77,7 +79,7 @@ export function Navigation({ children }: any) {
 
   return (
     <React.Fragment>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', backgroundColor: colors.grey[100] }}>
         <CssBaseline />
         <AppBar position="absolute" open={false}>
           <Toolbar
@@ -112,7 +114,6 @@ export function Navigation({ children }: any) {
                   alignItems: 'center',
                   justifyContent: 'flex-end',
                   px: [1],
-                  bgcolor: 'background.default',
                 }}>
                 <IconButton onClick={toggleDrawer} sx={{ display: open === true ? 'block' : 'none' }}>
                   <ChevronLeftIcon />
