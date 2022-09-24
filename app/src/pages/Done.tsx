@@ -17,7 +17,7 @@ export const Done: FC = () => {
                 key={clusters.label}
                 clusters={clusters}
                 actions={{
-                  markAsDone: true,
+                  backToInbox: true,
                   trash: true,
                 }}
               />

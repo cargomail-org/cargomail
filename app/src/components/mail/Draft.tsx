@@ -61,7 +61,7 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
               maxWidth: '100%',
             },
             '&:hover': {
-              '& .deleteIconBox': {
+              '& .actionsBox': {
                 display: 'block',
               },
             },
@@ -119,7 +119,7 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
               </>
             </Typography>
             <Box
-              className="deleteIconBox"
+              className="actionsBox"
               sx={{
                 padding: '0 !important',
                 display: 'none',

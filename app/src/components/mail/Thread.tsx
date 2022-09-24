@@ -1,9 +1,6 @@
 import { useState, useCallback, useContext } from 'react'
 import { Accordion, AccordionDetails, Typography, Avatar, Chip, colors, Box } from '@mui/material'
 import AccordionSummary, { accordionSummaryClasses } from '@mui/material/AccordionSummary'
-import InboxIcon from '@mui/icons-material/Inbox'
-import DeleteIcon from '@mui/icons-material/Delete'
-import CheckIcon from '@mui/icons-material/Check'
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -13,6 +10,8 @@ import Message from './Message'
 import useFedemailAPI from '../../api/FedemailAPI'
 
 import { ThreadsContext } from '../../context/ThreadsContext'
+
+import ActionsBox from './ActionsBox'
 
 const theme = createTheme()
 
@@ -114,14 +113,35 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
           [`& .${accordionSummaryClasses.content}`]: {
             maxWidth: '100%',
           },
+          '&:hover': {
+            '& .actionsBox': {
+              display: 'block',
+            },
+          },
         }}>
         {expanded ? (
           <Box
-            component="span"
             sx={{
-              color: colors.grey[800],
+              flex: 1,
+              display: 'flex',
             }}>
-            {messages[0].subject}
+            <Box
+              component="span"
+              sx={{
+                flex: 3,
+                color: colors.grey[800],
+              }}>
+              {messages[0].subject}
+            </Box>
+            <ActionsBox
+              actions={actions}
+              handlers={{
+                backToInbox,
+                markAsDone,
+                trash,
+                permanentDelete,
+              }}
+            />
           </Box>
         ) : (
           <>
@@ -179,74 +199,15 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
                 </Box>
               )}
             </Typography>
-
-            <Box
-              sx={{
-                padding: '0 !important',
-                display: 'none',
-                '$summary:hover &': {
-                  display: 'block',
-                },
-              }}>
-              {actions.backToInbox && (
-                <InboxIcon
-                  sx={{
-                    color: colors.blue[500],
-                    margin: '0 4px',
-                    fontSize: '1.2rem',
-                    cursor: 'pointer',
-                    opacity: 0.78,
-                    '&:hover': {
-                      opacity: 1,
-                    },
-                  }}
-                  onClick={backToInbox}
-                />
-              )}
-              {actions.markAsDone && (
-                <CheckIcon
-                  sx={{
-                    color: colors.green[600],
-                    margin: '0 4px',
-                    fontSize: '1.2rem',
-                    cursor: 'pointer',
-                    opacity: 0.78,
-                    '&:hover': {
-                      opacity: 1,
-                    },
-                  }}
-                  onClick={markAsDone}
-                />
-              )}
-              {actions.trash && (
-                <DeleteIcon
-                  sx={{
-                    margin: '0 4px',
-                    fontSize: '1.2rem',
-                    cursor: 'pointer',
-                    opacity: 0.78,
-                    '&:hover': {
-                      opacity: 1,
-                    },
-                  }}
-                  onClick={trash}
-                />
-              )}
-              {actions.permanentDelete && (
-                <DeleteIcon
-                  sx={{
-                    margin: '0 4px',
-                    fontSize: '1.2rem',
-                    cursor: 'pointer',
-                    opacity: 0.78,
-                    '&:hover': {
-                      opacity: 1,
-                    },
-                  }}
-                  onClick={permanentDelete}
-                />
-              )}
-            </Box>
+            <ActionsBox
+              actions={actions}
+              handlers={{
+                backToInbox,
+                markAsDone,
+                trash,
+                permanentDelete,
+              }}
+            />
           </>
         )}
       </AccordionSummary>

@@ -1,12 +1,20 @@
-// import InboxIcon from '@mui/icons-material/Inbox'
-// import DeleteIcon from '@mui/icons-material/Delete'
-// import CheckIcon from '@mui/icons-material/Check'
+import InboxIcon from '@mui/icons-material/Inbox'
+import DeleteIcon from '@mui/icons-material/Delete'
+import CheckIcon from '@mui/icons-material/Check'
 
-// import { colors } from '@mui/material'
+import { Box, colors } from '@mui/material'
 
-const Actions = ({ actions, handlers }: any) => (
-  <div>
-    {/* {actions.backToInbox && (
+const ActionsBox = ({ actions, handlers }: any) => (
+  <Box
+    className="actionsBox"
+    sx={{
+      padding: '0 !important',
+      display: 'none',
+      '$summary:hover &': {
+        display: 'block',
+      },
+    }}>
+    {actions.backToInbox && (
       <InboxIcon
         sx={{
           color: colors.blue[500],
@@ -63,8 +71,8 @@ const Actions = ({ actions, handlers }: any) => (
         }}
         onClick={handlers.permanentDelete}
       />
-    )} */}
-  </div>
+    )}
+  </Box>
 )
 
-export default Actions
+export default ActionsBox

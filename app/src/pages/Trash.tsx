@@ -1,6 +1,28 @@
 import { FC } from 'react'
 import { Navigation } from '../components/page-layout'
+import useProcessedThreads from '../utils/hooks/processedThreads'
+import Thread from '../components/mail/Thread'
+import { Box } from '@mui/material'
+// import useFedemailAPI from '../api/FedemailAPI'
 
 export const Trash: FC = () => {
-  return <Navigation>Trash</Navigation>
+  const processed = useProcessedThreads({ includes: ['TRASH'], aggregate: false })
+  // const { threadsList } = useFedemailAPI()
+
+  return (
+    <Navigation>
+      <Box sx={{ marginTop: '28px', marginLeft: '12px', marginRight: '12px' }}>
+        {processed.map((thread: any) => (
+          <Thread
+            key={thread.id}
+            actions={{
+              backToInbox: true,
+              permanentDelete: true,
+            }}
+            {...thread}
+          />
+        ))}
+      </Box>
+    </Navigation>
+  )
 }

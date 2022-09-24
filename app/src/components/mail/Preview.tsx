@@ -12,7 +12,7 @@ const Preview = ({ clusters, actions = {} }: any) => {
       <Typography
         variant="subtitle1"
         sx={{
-          paddingLeft: 2,
+          paddingLeft: '40px',
           backgroundColor: colors.grey[100],
         }}>
         {t(clusters.label, { date: clusters.date })}

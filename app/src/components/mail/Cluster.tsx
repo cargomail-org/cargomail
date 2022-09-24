@@ -1,22 +1,21 @@
 import { useState, useContext, useCallback, FC } from 'react'
 import { Accordion, AccordionDetails, Avatar, colors, Box } from '@mui/material'
 import AccordionSummary, { accordionSummaryClasses } from '@mui/material/AccordionSummary'
-import Typography, { typographyClasses } from '@mui/material/Typography'
+import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
 
-import DeleteIcon from '@mui/icons-material/Delete'
 import LocalOfferIcon from '@mui/icons-material/LocalOffer'
-import InboxIcon from '@mui/icons-material/Inbox'
 import PeopleIcon from '@mui/icons-material/People'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
 import FlagIcon from '@mui/icons-material/Flag'
-import CheckIcon from '@mui/icons-material/Check'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import Thread from './Thread'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { ThreadsContext } from '../../context/ThreadsContext'
 import { Label_Type } from '../../api/generated/proto/fedemail/v1/fedemail'
+
+import ActionsBox from './ActionsBox'
 
 const theme = createTheme()
 
@@ -155,17 +154,38 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
               [`& .${accordionSummaryClasses.content}`]: {
                 maxWidth: '100%',
               },
+              '&:hover': {
+                '& .actionsBox': {
+                  display: 'block',
+                },
+              },
             }}>
             {expanded ? (
-              <Typography
-                variant="h5"
+              <Box
                 sx={{
-                  [`& .${typographyClasses.h5}`]: {
-                    padding: '0 24px',
-                  },
+                  flex: 1,
+                  display: 'flex',
                 }}>
-                {primaryLabel.type === Label_Type.SYSTEM ? t(primaryLabel.id) : primaryLabel.name}
-              </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    flex: 3,
+                    padding: '0 12px',
+                    fontWeight: 500,
+                    color: primaryLabel.type === Label_Type.SYSTEM ? getLabelColor(primaryLabel) : null,
+                  }}>
+                  {primaryLabel.type === Label_Type.SYSTEM ? t(primaryLabel.id) : primaryLabel.name}
+                </Typography>
+                <ActionsBox
+                  actions={actions}
+                  handlers={{
+                    backToInbox,
+                    markAsDone,
+                    trash,
+                    permanentDelete,
+                  }}
+                />
+              </Box>
             ) : (
               <>
                 <Box
@@ -222,73 +242,15 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                   }}>
                   <span>{clusterTitle}</span>
                 </Typography>
-                <Box
-                  sx={{
-                    padding: '0 !important',
-                    display: 'none',
-                    '$summary:hover &': {
-                      display: 'block',
-                    },
-                  }}>
-                  {actions.backToInbox && (
-                    <InboxIcon
-                      sx={{
-                        color: colors.blue[500],
-                        margin: '0 4px',
-                        fontSize: '1.2rem',
-                        cursor: 'pointer',
-                        opacity: 0.78,
-                        '&:hover': {
-                          opacity: 1,
-                        },
-                      }}
-                      onClick={backToInbox}
-                    />
-                  )}
-                  {actions.markAsDone && (
-                    <CheckIcon
-                      sx={{
-                        color: colors.green[600],
-                        margin: '0 4px',
-                        fontSize: '1.2rem',
-                        cursor: 'pointer',
-                        opacity: 0.78,
-                        '&:hover': {
-                          opacity: 1,
-                        },
-                      }}
-                      onClick={markAsDone}
-                    />
-                  )}
-                  {actions.trash && (
-                    <DeleteIcon
-                      sx={{
-                        margin: '0 4px',
-                        fontSize: '1.2rem',
-                        cursor: 'pointer',
-                        opacity: 0.78,
-                        '&:hover': {
-                          opacity: 1,
-                        },
-                      }}
-                      onClick={trash}
-                    />
-                  )}
-                  {actions.permanentDelete && (
-                    <DeleteIcon
-                      sx={{
-                        margin: '0 4px',
-                        fontSize: '1.2rem',
-                        cursor: 'pointer',
-                        opacity: 0.78,
-                        '&:hover': {
-                          opacity: 1,
-                        },
-                      }}
-                      onClick={permanentDelete}
-                    />
-                  )}
-                </Box>
+                <ActionsBox
+                  actions={actions}
+                  handlers={{
+                    backToInbox,
+                    markAsDone,
+                    trash,
+                    permanentDelete,
+                  }}
+                />
               </>
             )}
           </AccordionSummary>
