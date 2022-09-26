@@ -1,8 +1,6 @@
 import { Accordion, AccordionDetails, Avatar, Box, colors, Typography } from '@mui/material'
 import AccordionSummary, { accordionSummaryClasses } from '@mui/material/AccordionSummary'
 import { FC, useContext, useState } from 'react'
-import DeleteIcon from '@mui/icons-material/Delete'
-import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import { MessagePart } from '../../api/generated/proto/fedemail/v1/fedemail'
@@ -12,6 +10,8 @@ import { decodeCurrentUser } from '../../auth'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { DraftsContext } from '../../context/DraftsContext'
 import { IContact } from '../../context/ContactsContext'
+
+import ActionsBox from './ActionsBox'
 
 const theme = createTheme()
 
@@ -35,6 +35,29 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
 
   const { newDraftEdit } = useContext(DraftsContext)
   const { draftsDelete } = useFedemailAPI()
+
+  const actions = {
+    editDraft: true,
+    permanentDelete: true,
+  }
+
+  const editDraft = (e: any) => {
+    newDraftEdit({
+      id: draftId,
+      mimeType: payload?.mimeType || '',
+      sender: currentUser?.username || '',
+      recipients: recipientsToContacts(parsed.to) || [],
+      snippet: snippet || '',
+      subject: parsed.subject,
+      content: parsed.content,
+    })
+    e.stopPropagation()
+  }
+
+  const permanentDelete = (e: any) => {
+    draftsDelete(draftId)
+    e.stopPropagation()
+  }
 
   function recipientsToContacts(recipients: IRecipient[]): IContact[] {
     const contacts = recipients
@@ -60,11 +83,6 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
             [`& .${accordionSummaryClasses.content}`]: {
               maxWidth: '100%',
             },
-            '&:hover': {
-              '& .actionsBox': {
-                display: 'block',
-              },
-            },
           }}>
           <>
             <Box
@@ -74,15 +92,16 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
               <Avatar
                 alt=""
                 sx={{
-                  height: 26,
-                  width: 26,
+                  height: 30,
+                  width: 30,
                   backgroundColor: 'info.light',
                 }}>
                 {nameFirstLetter && nameFirstLetter.length > 0 ? nameFirstLetter : surnameFirstLetter}
               </Avatar>
               <Typography
                 sx={{
-                  flex: 3,
+                  flex: 1,
+                  marginTop: '3px !important',
                   minWidth: 0,
                   width: '120px',
                   whiteSpace: 'nowrap',
@@ -98,7 +117,8 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
             </Box>
             <Typography
               sx={{
-                flex: 3,
+                flex: 1,
+                marginTop: '3px !important',
                 minWidth: 0,
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
@@ -118,51 +138,13 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
                 )}
               </>
             </Typography>
-            <Box
-              className="actionsBox"
-              sx={{
-                padding: '0 !important',
-                display: 'none',
-              }}>
-              <ModeEditIcon
-                sx={{
-                  margin: '0 4px',
-                  fontSize: '1.2rem',
-                  cursor: 'pointer',
-                  opacity: 0.78,
-                  '&:hover': {
-                    opacity: 1,
-                  },
-                }}
-                onClick={(e) => {
-                  newDraftEdit({
-                    id: draftId,
-                    mimeType: payload?.mimeType || '',
-                    sender: currentUser?.username || '',
-                    recipients: recipientsToContacts(parsed.to) || [],
-                    snippet: snippet || '',
-                    subject: parsed.subject,
-                    content: parsed.content,
-                  })
-                  e.stopPropagation()
-                }}
-              />
-              <DeleteIcon
-                sx={{
-                  margin: '0 4px',
-                  fontSize: '1.2rem',
-                  cursor: 'pointer',
-                  opacity: 0.78,
-                  '&:hover': {
-                    opacity: 1,
-                  },
-                }}
-                onClick={(e) => {
-                  draftsDelete(draftId)
-                  e.stopPropagation()
-                }}
-              />
-            </Box>
+            <ActionsBox
+              actions={actions}
+              handlers={{
+                editDraft,
+                permanentDelete,
+              }}
+            />
           </>
         </AccordionSummary>
         <AccordionDetails

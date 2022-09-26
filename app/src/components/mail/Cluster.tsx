@@ -154,11 +154,6 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
               [`& .${accordionSummaryClasses.content}`]: {
                 maxWidth: '100%',
               },
-              '&:hover': {
-                '& .actionsBox': {
-                  display: 'block',
-                },
-              },
             }}>
             {expanded ? (
               <Box
@@ -169,7 +164,7 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                 <Typography
                   variant="h5"
                   sx={{
-                    flex: 3,
+                    flex: 1,
                     padding: '0 12px',
                     fontWeight: 500,
                     color: primaryLabel.type === Label_Type.SYSTEM ? getLabelColor(primaryLabel) : null,
@@ -196,8 +191,8 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                   <Avatar
                     alt=""
                     sx={{
-                      height: 26,
-                      width: 26,
+                      height: 30,
+                      width: 30,
                       background: primaryLabel.type === Label_Type.SYSTEM ? 'transparent' : null,
                       color: primaryLabel.type === Label_Type.SYSTEM ? getLabelColor(primaryLabel) : null,
                     }}>
@@ -206,7 +201,8 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                   <Typography
                     sx={{
                       fontWeight: hasUnread ? 600 : null,
-                      flex: 3,
+                      flex: 1,
+                      marginTop: '3px !important',
                       minWidth: 0,
                       // width: 'calc(30vw - 40px)',
                       whiteSpace: 'nowrap',
@@ -233,7 +229,8 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
                 </Box>
                 <Typography
                   sx={{
-                    flex: 3,
+                    flex: 999,
+                    marginTop: '3px !important',
                     minWidth: 0,
                     whiteSpace: 'nowrap',
                     textOverflow: 'ellipsis',

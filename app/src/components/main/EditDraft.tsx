@@ -17,6 +17,7 @@ import ClearIcon from '@mui/icons-material/Clear'
 import { DraftsContext, IDraftEdit } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { RecipientsSelect } from './Recipients'
+import { CenterFocusStrong } from '@mui/icons-material'
 
 const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content }: any) => {
   const isMobileLandscape = useMediaQuery('(max-height: 520px)')
@@ -79,10 +80,14 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
           boxShadow: '0 8px 16px rgba(0,0,0,0.45)',
         }}>
         <CardHeader
-          sx={{ background: colors.grey[800], height: 10 }}
+          sx={{
+            background: colors.grey[800],
+            height: 10,
+            '& .MuiCardHeader-action': { marginTop: '-11px' },
+          }}
           avatar={<DraftsIcon sx={{ height: 18, width: 18, color: colors.grey[50] }} />}
           action={
-            <span>
+            <Box component="span">
               <IconButton
                 sx={{
                   padding: 0,
@@ -108,7 +113,7 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
                 onClick={() => (content ? closeDraftEdit(id) : draftsDelete(id))}>
                 <ClearIcon sx={{ height: 18, width: 18 }} />
               </IconButton>
-            </span>
+            </Box>
           }
         />
         <CardContent sx={{ padding: 0, '&:last-child': { pb: 1 } }}>

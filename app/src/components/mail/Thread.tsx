@@ -99,7 +99,7 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
   const threadTitle = senderUnreadList.map(([name, unread], index) => (
     <Box component="span" key={name} sx={{ fontWeight: unread ? 600 : null }}>
       {name}
-      {isLastSender(index) ? ', ' : ''}
+      {isLastSender(index) ? '' : ', '}
     </Box>
   ))
 
@@ -112,11 +112,7 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
           display: 'flex',
           [`& .${accordionSummaryClasses.content}`]: {
             maxWidth: '100%',
-          },
-          '&:hover': {
-            '& .actionsBox': {
-              display: 'block',
-            },
+            // minHeight: '28px',
           },
         }}>
         {expanded ? (
@@ -128,7 +124,7 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
             <Box
               component="span"
               sx={{
-                flex: 3,
+                flex: 1,
                 color: colors.grey[800],
               }}>
               {messages[0].subject}
@@ -149,8 +145,8 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
               <Avatar
                 alt=""
                 sx={{
-                  height: 26,
-                  width: 26,
+                  height: 30,
+                  width: 30,
                   backgroundColor: 'info.light',
                 }}>
                 {firstSenderName[0]}
@@ -158,13 +154,14 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
               <Typography
                 sx={{
                   flex: 3,
+                  marginTop: '3px !important',
                   minWidth: 0,
                   width: 'calc(30vw - 40px)',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  paddingLeft: 16,
-                  paddingRight: 16,
+                  paddingLeft: 2,
+                  paddingRight: 2,
                   letterSpacing: 0.2,
                 }}>
                 {threadTitle}
@@ -173,6 +170,7 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
             <Typography
               sx={{
                 flex: 3,
+                marginTop: '3px !important',
                 minWidth: 0,
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',

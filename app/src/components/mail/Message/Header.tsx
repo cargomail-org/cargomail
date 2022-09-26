@@ -16,8 +16,8 @@ const Header = ({ snippet, expanded, actions, name, onClick, handlers }: any) =>
     <Avatar
       alt=""
       sx={{
-        height: 26,
-        width: 26,
+        height: 30,
+        width: 30,
         margin: '4px 12px',
         backgroundColor: 'info.light',
       }}>
