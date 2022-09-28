@@ -13,6 +13,7 @@ import * as ROUTES from './routes'
 import { useContext, useEffect } from 'react'
 import AllContextProviders from './context'
 
+import './components/editor/styles.css'
 import './i18n'
 
 import debug from './utils/debug'
