@@ -1,7 +1,7 @@
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
 import { AutoScrollPlugin } from '@lexical/react/LexicalAutoScrollPlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
-import { ContentEditable } from '@lexical/react/LexicalContentEditable'
+import ContentEditable from './ui/ContentEditable'
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin'
