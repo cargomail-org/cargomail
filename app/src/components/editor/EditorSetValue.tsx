@@ -9,7 +9,7 @@ export default function EditorSetValue({ value }: { value: string }) {
   useEffect(() => {
     if (value) setEditorState(editor)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  }, [])
 
   const setEditorState = (editor: LexicalEditor) => {
     editor.update(() => {

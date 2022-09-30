@@ -1,16 +1,16 @@
-import { EditorState, LexicalEditor } from 'lexical'
+import { $getRoot, EditorState, LexicalEditor } from 'lexical'
 import { $generateHtmlFromNodes } from '@lexical/html'
 
 export default function EditorOnChange(
   editorState: EditorState,
   editor: LexicalEditor,
-  onChange: (html: string) => void
+  onChange: (htmlBody: string, plainText: string) => void
 ) {
   editorState.toJSON()
   editor.update(() => {
-    const html = $generateHtmlFromNodes(editor)
-    const parser = new DOMParser()
-    const dom = parser.parseFromString(html, 'text/html')
-    onChange(dom.body.innerHTML)
+    const root = $getRoot()
+    const plainText = root.getTextContent()
+    const htmlBody = $generateHtmlFromNodes(editor, null)
+    onChange(htmlBody, plainText)
   })
 }

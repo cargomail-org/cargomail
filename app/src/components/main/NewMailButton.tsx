@@ -17,7 +17,7 @@ const NewMailButton = () => {
     () =>
       draftsCreate({
         id: '',
-        mimeType: 'text/plain', // only text/plain draft is supported
+        mimeType: 'text/html', // only text/html draft is supported
         sender: '',
         recipients: [],
         snippet: '',

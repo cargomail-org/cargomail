@@ -25,7 +25,7 @@ import { useRef, useState } from 'react'
 
 export interface EditorProps {
   initialValue?: string
-  onChange: (html: string) => void
+  onChange: (htmlBody: string, plainText: string) => void
   editMode: boolean
 }
 
@@ -60,7 +60,11 @@ const Editor = ({ initialValue, onChange, editMode }: EditorProps) => {
           placeholder={placeholder}
         />
         <EditorSetValue value={initialValue || ''} />
-        <OnChangePlugin onChange={(editorState, editor) => EditorOnChange(editorState, editor, onChange)} />
+        <OnChangePlugin
+          onChange={(editorState, editor) => {
+            EditorOnChange(editorState, editor, onChange)
+          }}
+        />
         <HistoryPlugin />
         <CheckListPlugin />
         <ListPlugin />

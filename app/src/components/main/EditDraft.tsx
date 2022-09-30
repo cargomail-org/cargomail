@@ -17,8 +17,6 @@ import ClearIcon from '@mui/icons-material/Clear'
 import { DraftsContext, IDraftEdit } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { RecipientsSelect } from './Recipients'
-import { CenterFocusStrong } from '@mui/icons-material'
-import { $getRoot, $getSelection, EditorState } from 'lexical'
 import Editor from '../editor/Editor'
 
 const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content }: any) => {
@@ -57,23 +55,14 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
     draftsUpdate({ ...draftEdit, [field]: e.target.value })
   }
 
-  // const editorOnChange = (editorState: EditorState) => {
-  //   editorState.read(() => {
-  //     // Read the contents of the EditorState here.
-  //     const root = $getRoot()
-  //     const selection = $getSelection()
-
-  //     console.log(root, selection)
-  //   })
-  //   // const newData = editorState.toJSON()
-  //   // if (isEqual(data, newData)) return
-  //   // rootEditor.update(() => {
-  //   //   const node = $getNodeByKey(nodeKey)
-  //   //   if ($isStickyNode(node)) {
-  //   //     node.setData(newData)
-  //   //   }
-  //   // })
-  // }
+  const updateContent = (htmlBody: string, plainText: string) => {
+    // editor is empty
+    if (htmlBody === '<p class="editor-paragraph"><br></p>') {
+      htmlBody = ''
+    }
+    draftEdit.snippet = getSnippet(plainText)
+    draftsUpdate({ ...draftEdit, content: htmlBody })
+  }
 
   return (
     <Box
@@ -152,42 +141,20 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
           />
           <Divider />
           {!isMobileLandscape && (
-            // <InputBase
-            //   sx={{ padding: '4px 12px', display: 'block' }}
-            //   placeholder={'Content'}
-            //   multiline
-            //   rows={10}
-            //   inputProps={{
-            //     'aria-label': 'Content',
-            //   }}
-            //   value={content}
-            //   onChange={update('content')}
-            // />
             <Editor
               editMode={true}
               initialValue={content}
-              onChange={(value) => {
-                update(value)
+              onChange={(htmlBody, plainText) => {
+                updateContent(htmlBody, plainText)
               }}
             />
           )}
           {isMobileLandscape && (
-            // <InputBase
-            //   sx={{ padding: '4px 12px', display: 'block' }}
-            //   placeholder={'Content'}
-            //   multiline
-            //   rows={3}
-            //   inputProps={{
-            //     'aria-label': 'Content',
-            //   }}
-            //   value={content}
-            //   onChange={update('content')}
-            // />
             <Editor
               editMode={true}
               initialValue={content}
-              onChange={(value) => {
-                update(value)
+              onChange={(htmlBody, plainText) => {
+                updateContent(htmlBody, plainText)
               }}
             />
           )}
