@@ -56,10 +56,6 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
   }
 
   const updateContent = (htmlBody: string, plainText: string) => {
-    // editor is empty
-    if (htmlBody === '<p class="editor-paragraph"><br></p>') {
-      htmlBody = ''
-    }
     draftEdit.snippet = getSnippet(plainText)
     draftsUpdate({ ...draftEdit, content: htmlBody })
   }
@@ -119,7 +115,9 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
                     color: colors.grey[50],
                   },
                 }}
-                onClick={() => (content ? closeDraftEdit(id) : draftsDelete(id))}>
+                onClick={() =>
+                  content && content !== '<p class="editor-paragraph"><br></p>' ? closeDraftEdit(id) : draftsDelete(id)
+                }>
                 <ClearIcon sx={{ height: 18, width: 18 }} />
               </IconButton>
             </Box>
@@ -142,7 +140,6 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
           <Divider />
           {!isMobileLandscape && (
             <Editor
-              editMode={true}
               initialValue={content}
               onChange={(htmlBody, plainText) => {
                 updateContent(htmlBody, plainText)
@@ -151,7 +148,6 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
           )}
           {isMobileLandscape && (
             <Editor
-              editMode={true}
               initialValue={content}
               onChange={(htmlBody, plainText) => {
                 updateContent(htmlBody, plainText)

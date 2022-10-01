@@ -12,6 +12,7 @@ import { DraftsContext } from '../../context/DraftsContext'
 import { IContact } from '../../context/ContactsContext'
 
 import ActionsBox from './ActionsBox'
+import Viewer from '../editor/Viewer'
 
 const theme = createTheme()
 
@@ -148,20 +149,18 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
           </>
         </AccordionSummary>
         <AccordionDetails
-          // consider to use sanitize-html-react library, see https://stackoverflow.com/a/69940844}
           sx={{
-            padding: 2,
+            padding: 0,
             display: 'block',
-            // maxHeight: '200px',
           }}>
-          {payload?.mimeType === 'text/plain' && (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<textarea disabled="true" style="border: none; resize: none; background-color: white; width: 100%; height: 200px;">${parsed.content}</textarea>`,
-              }}
-            />
-          )}
-          {payload?.mimeType === 'text/html' && <div dangerouslySetInnerHTML={{ __html: parsed.content }} />}
+          <Box
+            sx={{
+              marginLeft: '12px',
+              marginRight: '12px',
+              paddingBottom: '16px',
+            }}>
+            <Viewer initialValue={parsed.content} />
+          </Box>
         </AccordionDetails>
       </Accordion>
     </ThemeProvider>

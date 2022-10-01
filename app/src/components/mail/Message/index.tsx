@@ -7,6 +7,7 @@ import { ThreadsContext } from '../../../context/ThreadsContext'
 import useFedemailAPI from '../../../api/FedemailAPI'
 import processHTMLContent from '../../../utils/mails/processHTMLContent'
 import Header from './Header'
+import Viewer from '../../editor/Viewer'
 
 const Message = ({ threadId, id, from, snippet, content, initialExpand, unread, actions }: any) => {
   const { addMessageLabel, removeMessageLabel } = useContext(ThreadsContext)
@@ -89,12 +90,12 @@ const Message = ({ threadId, id, from, snippet, content, initialExpand, unread, 
           <Box
             id={scope.current}
             sx={{
-              marginLeft: 'calc(5% - 10px)',
-              marginRight: 'calc(5% - 10px)',
-              paddingBottom: '16px',
-            }}
-            dangerouslySetInnerHTML={{ __html: cooked.content } /* eslint-disable-line */}
-          />
+              marginLeft: '12px',
+              marginRight: '12px',
+              paddingBottom: '8px',
+            }}>
+            <Viewer initialValue={cooked.content} />
+          </Box>
         )}
       </CardContent>
     </Card>

@@ -16,9 +16,9 @@ function onError(error: any) {
   console.error(error)
 }
 
-const EditorConfig = {
-  namespace: 'MailEditor',
-  editable: true,
+const ViewerConfig = {
+  namespace: 'MailViewer',
+  editable: false,
   theme: EmailTheme,
   onError,
   nodes: [
@@ -38,4 +38,4 @@ const EditorConfig = {
   ],
 }
 
-export default EditorConfig
+export default ViewerConfig
