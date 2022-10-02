@@ -123,7 +123,8 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
             </Box>
           }
         />
-        <CardContent sx={{ padding: 0, '&:last-child': { pb: 1 } }}>
+        <CardContent
+          sx={{ display: 'flex', flexDirection: 'column', height: '570px', padding: 0, '&:last-child': { pb: 1 } }}>
           <RecipientsSelect
             sx={{ maxHeight: 100, overflow: 'auto', paddingTop: 1 }}
             draftEdit={draftEdit}></RecipientsSelect>
@@ -138,23 +139,25 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
             onChange={update('subject')}
           />
           <Divider />
-          {!isMobileLandscape && (
-            <Editor
-              initialValue={content}
-              onChange={(htmlBody, plainText) => {
-                updateContent(htmlBody, plainText)
-              }}
-            />
-          )}
-          {isMobileLandscape && (
-            <Editor
-              initialValue={content}
-              onChange={(htmlBody, plainText) => {
-                updateContent(htmlBody, plainText)
-              }}
-            />
-          )}
-          <CardActions sx={{ padding: '0 12px 4px' }} disableSpacing>
+          <Box sx={{ flex: 1, minHeight: 0 }}>
+            {!isMobileLandscape && (
+              <Editor
+                initialValue={content}
+                onChange={(htmlBody, plainText) => {
+                  updateContent(htmlBody, plainText)
+                }}
+              />
+            )}
+            {isMobileLandscape && (
+              <Editor
+                initialValue={content}
+                onChange={(htmlBody, plainText) => {
+                  updateContent(htmlBody, plainText)
+                }}
+              />
+            )}
+          </Box>
+          <CardActions sx={{ flex: 0, padding: '8px 12px 4px' }} disableSpacing>
             <Button variant="contained" color="primary" onClick={() => draftsSend(id)}>
               {'Send'}
             </Button>

@@ -1,6 +1,5 @@
 .editor-container {
   background: rgb(255, 255, 255);
-  margin: 12px auto 12px auto;
   border-radius: 2px;
   width: auto;
   color: rgb(0, 0, 0);
@@ -8,23 +7,28 @@
   line-height: 1.7;
   font-weight: 400;
   text-align: left;
-  display: block;
-}
-
-.editor {
   height: 100%;
-  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .editor-scroller {
+  margin: 12px auto auto auto;
   border: 0;
   resize: none;
   cursor: text;
-  display: block;
   position: relative;
   outline: 0;
   overflow: auto;
-  height: 210px;
+  height: 100%;
+}
+
+.editor {
+  flex-grow: 1;
+  height: 100%;
+  min-height: 0;
+  display: block;
+  position: relative;
 }
 
 .editor-placeholder {
@@ -1443,14 +1447,14 @@ button.action-button:disabled {
 }
 
 .toolbar {
+  flex-grow: 0;
   display: flex;
   margin-bottom: 1px;
   background: #fff;
   padding: 4px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
   vertical-align: middle;
   overflow: auto;
+  box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.3);
 }
 
 .toolbar button.toolbar-item {
