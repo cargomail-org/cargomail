@@ -262,7 +262,9 @@ const useFedemailAPI = () => {
         headers: [
           { name: 'Subject', value: draft.subject },
           { name: 'From', value: draft.sender },
-          { name: 'To', value: buildDraftRecipients(draft.recipients) },
+          { name: 'To', value: buildDraftRecipients(draft.to) },
+          { name: 'Cc', value: buildDraftRecipients(draft.cc) },
+          { name: 'Bcc', value: buildDraftRecipients(draft.bcc) },
         ],
         mimeType: draft.mimeType,
         filename: '',

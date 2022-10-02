@@ -19,7 +19,7 @@ import useFedemailAPI from '../../api/FedemailAPI'
 import { RecipientsSelect } from './Recipients'
 import Editor from '../editor/Editor'
 
-const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content }: any) => {
+const EditDraft = ({ id, mimeType, sender, to, cc, bcc, snippet, subject, content }: any) => {
   const isMobileLandscape = useMediaQuery('(max-height: 520px)')
 
   const { closeDraftEdit } = useContext(DraftsContext)
@@ -29,7 +29,9 @@ const EditDraft = ({ id, mimeType, sender, recipients, snippet, subject, content
     id,
     mimeType,
     sender,
-    recipients,
+    to,
+    cc,
+    bcc,
     snippet,
     subject,
     content,

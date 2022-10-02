@@ -76,10 +76,18 @@ export interface IDraftEdit {
   id: string
   mimeType: string
   sender: string
-  recipients: IContact[]
+  to: IContact[]
+  cc: IContact[]
+  bcc: IContact[]
   snippet: string
   subject: string
   content: string
+}
+
+export enum RecipientType {
+  To,
+  Cc,
+  Bcc,
 }
 
 export interface IDraftsContext {

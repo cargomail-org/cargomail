@@ -6,7 +6,9 @@ const rfc5322 = (raw: IDraftEdit) =>
     `Content-Type: ${raw.mimeType}\n` +
     'Content-Transfer-Encoding: base64\n' +
     `From: ${raw.sender}\n` +
-    `To: ${buildDraftRecipients(raw.recipients)}\n` +
+    `To: ${buildDraftRecipients(raw.to)}\n` +
+    `Cc: ${buildDraftRecipients(raw.cc)}\n` +
+    `Bcc: ${buildDraftRecipients(raw.bcc)}\n` +
     `Subject: ${raw.subject}\n\n`
   }${b64EncodeUnicode(raw.content)}`
 

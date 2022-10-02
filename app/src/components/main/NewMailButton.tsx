@@ -19,7 +19,9 @@ const NewMailButton = () => {
         id: '',
         mimeType: 'text/html', // only text/html draft is supported
         sender: '',
-        recipients: [],
+        to: [],
+        cc: [],
+        bcc: [],
         snippet: '',
         subject: '',
         content: '',

@@ -75,6 +75,14 @@ const parsePayload = ({ id, payload }: any) => {
   const to = toArray?.map((recipient: any) => {
     return getNameAndMail(recipient)
   })
+  const ccArray = findHeader('Cc')?.split(',') || []
+  const cc = ccArray?.map((recipient: any) => {
+    return getNameAndMail(recipient)
+  })
+  const bccArray = findHeader('Bcc')?.split(',') || []
+  const bcc = bccArray?.map((recipient: any) => {
+    return getNameAndMail(recipient)
+  })
   const subject = findHeader('Subject') || ''
 
   try {
@@ -82,6 +90,8 @@ const parsePayload = ({ id, payload }: any) => {
     return {
       from,
       to,
+      cc,
+      bcc,
       subject,
       content,
       attachments,
@@ -92,6 +102,8 @@ const parsePayload = ({ id, payload }: any) => {
     return {
       from,
       to,
+      cc,
+      bcc,
       subject,
       content: `Parse failed for Message ${id}`,
       attachments: [],

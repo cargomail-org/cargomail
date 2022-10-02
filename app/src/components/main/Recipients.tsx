@@ -4,11 +4,11 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
-import { FC, FormEvent, Fragment, ReactNode, useState } from 'react'
+import { FC, FormEvent, Fragment, ReactNode, useEffect, useState } from 'react'
 import { RecipientsAutocomplete } from './RecipientsAutocomplete'
 import { IContact } from '../../context/ContactsContext'
 import usePeopleAPI from '../../api/PeopleAPI'
-import { IDraftEdit } from '../../context/DraftsContext'
+import { IDraftEdit, RecipientType } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { Box, colors, FormControl } from '@mui/material'
 
@@ -20,8 +20,8 @@ export type RecipientsSelectProps = {
 }
 
 export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
-  const [isVisibleCc, onShowCC] = useState(false)
-  const [isVisibleBcc, onShowBcc] = useState(false)
+  const [isVisibleCc, showCc] = useState(false)
+  const [isVisibleBcc, showBcc] = useState(false)
 
   const { draftsUpdate } = useFedemailAPI()
   const [openDialog, openDialogOpen] = useState(false)
@@ -34,6 +34,16 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
     familyName: '',
     emailAddress: '',
   })
+
+  useEffect(() => {
+    if (props.draftEdit.cc.length > 0) {
+      showCc(true)
+    }
+    if (props.draftEdit.bcc.length > 0) {
+      showBcc(true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleClose = () => {
     setDialogValue({
@@ -55,8 +65,26 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
       id: props.draftEdit.id,
       mimeType: props.draftEdit.mimeType,
       sender: props.draftEdit.sender,
-      recipients: [
-        ...props.draftEdit.recipients,
+      to: [
+        ...props.draftEdit.to,
+        {
+          id: dialogValue.id,
+          givenName: dialogValue.givenName,
+          familyName: dialogValue.familyName,
+          emailAddress: dialogValue.emailAddress,
+        },
+      ],
+      cc: [
+        ...props.draftEdit.cc,
+        {
+          id: dialogValue.id,
+          givenName: dialogValue.givenName,
+          familyName: dialogValue.familyName,
+          emailAddress: dialogValue.emailAddress,
+        },
+      ],
+      bcc: [
+        ...props.draftEdit.bcc,
         {
           id: dialogValue.id,
           givenName: dialogValue.givenName,
@@ -99,7 +127,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           <RecipientsAutocomplete
             openDialogOpen={openDialogOpen}
             setDialogValue={setDialogValue}
-            label={'To'}
+            recipientType={RecipientType.To}
             sx={props.sx}
             draftEdit={props.draftEdit}
           />
@@ -123,7 +151,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
                       textDecoration: 'underline',
                     },
                   }}
-                  onClick={() => onShowCC(!isVisibleCc)}>
+                  onClick={() => showCc(!isVisibleCc)}>
                   Cc
                 </Box>
               ) : (
@@ -146,7 +174,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
                       textDecoration: 'underline',
                     },
                   }}
-                  onClick={() => onShowBcc(!isVisibleBcc)}>
+                  onClick={() => showBcc(!isVisibleBcc)}>
                   Bcc
                 </Box>
               ) : (
@@ -164,7 +192,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           <RecipientsAutocomplete
             openDialogOpen={openDialogOpen}
             setDialogValue={setDialogValue}
-            label={'Cc'}
+            recipientType={RecipientType.Cc}
             sx={props.sx}
             draftEdit={props.draftEdit}
           />
@@ -173,7 +201,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           <RecipientsAutocomplete
             openDialogOpen={openDialogOpen}
             setDialogValue={setDialogValue}
-            label={'Bcc'}
+            recipientType={RecipientType.Bcc}
             sx={props.sx}
             draftEdit={props.draftEdit}
           />

@@ -5,7 +5,7 @@ import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { ContactsContext, IContact } from '../../context/ContactsContext'
-import { IDraftEdit } from '../../context/DraftsContext'
+import { IDraftEdit, RecipientType } from '../../context/DraftsContext'
 import usePeopleAPI from '../../api/PeopleAPI'
 
 const filter = createFilterOptions({
@@ -17,7 +17,7 @@ export type RecipientsAutocompleteProps = {
   openDialogOpen: Function
   setDialogValue: Function
   sx: Object
-  label: string
+  recipientType: RecipientType
   initialValue?: any
   draftEdit: IDraftEdit
 }
@@ -64,6 +64,32 @@ export const RecipientsAutocomplete: FC<RecipientsAutocompleteProps> = (props) =
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
 
+  function getRecipientsByType(draftEdit: IDraftEdit, recipientType: RecipientType): IContact[] {
+    switch (recipientType) {
+      case RecipientType.To:
+        return draftEdit.to
+      case RecipientType.Cc:
+        return draftEdit.cc
+      case RecipientType.Bcc:
+        return draftEdit.bcc
+      default:
+        return []
+    }
+  }
+
+  function renderLabel(recipientType: RecipientType) {
+    switch (recipientType) {
+      case RecipientType.To:
+        return 'To'
+      case RecipientType.Cc:
+        return 'Cc'
+      case RecipientType.Bcc:
+        return 'Bcc'
+      default:
+        return 'Unknown'
+    }
+  }
+
   return (
     <Autocomplete
       sx={{ ...props.sx, flex: 1 }}
@@ -77,7 +103,7 @@ export const RecipientsAutocomplete: FC<RecipientsAutocompleteProps> = (props) =
       }}
       loading={loading}
       multiple
-      value={props.draftEdit.recipients}
+      value={getRecipientsByType(props.draftEdit, props.recipientType)}
       isOptionEqualToValue={(option, value) => option.emailAddress === value.emailAddress}
       onChange={(event, newValue) => {
         if (typeof newValue === 'string') {
@@ -105,7 +131,10 @@ export const RecipientsAutocomplete: FC<RecipientsAutocompleteProps> = (props) =
             id: props.draftEdit.id,
             mimeType: props.draftEdit.mimeType,
             sender: props.draftEdit.sender,
-            recipients: newValue as any,
+            to: props.recipientType === RecipientType.To ? (newValue as IContact[]) : props.draftEdit.to,
+            cc: props.recipientType === RecipientType.Cc ? (newValue as IContact[]) : props.draftEdit.cc,
+            bcc: props.recipientType === RecipientType.Bcc ? (newValue as IContact[]) : props.draftEdit.bcc,
+            // recipients: newValue as any,
             snippet: props.draftEdit.snippet,
             subject: props.draftEdit.subject,
             content: props.draftEdit.content,
@@ -130,7 +159,7 @@ export const RecipientsAutocomplete: FC<RecipientsAutocompleteProps> = (props) =
       id="recipients-select"
       // options={[...contacts, ...props.draftEdit.recipients]}
       options={contacts.concat(
-        props.draftEdit.recipients.filter(
+        getRecipientsByType(props.draftEdit, props.recipientType).filter(
           ({ emailAddress }: IContact) => !contacts.find((f) => f.emailAddress === emailAddress)
         )
       )}
@@ -189,7 +218,7 @@ export const RecipientsAutocomplete: FC<RecipientsAutocompleteProps> = (props) =
               </Fragment>
             ),
           }}
-          label={props.label}
+          label={renderLabel(props.recipientType)}
         />
       )}
     />
