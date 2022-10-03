@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { FC, useCallback, useContext, useState } from 'react'
 import {
   Box,
   Button,
@@ -7,6 +7,7 @@ import {
   CardContent,
   CardHeader,
   colors,
+  debounce,
   Divider,
   IconButton,
   InputBase,
@@ -19,25 +20,19 @@ import useFedemailAPI from '../../api/FedemailAPI'
 import { RecipientsSelect } from './Recipients'
 import Editor from '../editor/Editor'
 
-const EditDraft = ({ id, mimeType, sender, to, cc, bcc, snippet, subject, content }: any) => {
+export type EditDraftProps = {
+  draftEdit: IDraftEdit
+}
+
+const EditDraft: FC<EditDraftProps> = (props) => {
   const isMobileLandscape = useMediaQuery('(max-height: 520px)')
 
   const { closeDraftEdit } = useContext(DraftsContext)
   const { draftsUpdate, draftsSend, draftsDelete } = useFedemailAPI()
 
-  const draftEdit: IDraftEdit = {
-    id,
-    mimeType,
-    sender,
-    to,
-    cc,
-    bcc,
-    snippet,
-    subject,
-    content,
-  }
-
   const snippet_max_length = 240
+
+  const [subject, setSubject] = useState(props.draftEdit.subject)
 
   const getSnippet = (str: string): string => {
     if (str.length > snippet_max_length) {
@@ -46,13 +41,38 @@ const EditDraft = ({ id, mimeType, sender, to, cc, bcc, snippet, subject, conten
     return str
   }
 
-  const updateSubject = (field: string) => (e: { target: { value: any } }) => {
-    draftsUpdate({ ...draftEdit, subject: e.target.value })
+  const updateSubject = (draftEdit: IDraftEdit, subject: any) => {
+    draftsUpdate({ ...draftEdit, subject })
   }
 
-  const updateContent = (htmlBody: string, plainText: string) => {
-    draftEdit.snippet = getSnippet(plainText)
-    draftsUpdate({ ...draftEdit, content: htmlBody })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSubjectSave = useCallback(
+    debounce((draftEdit, subject) => updateSubject(draftEdit, subject), 1000),
+    [] // will be created only once initially
+  )
+
+  const handleSubjectChange = (event: any) => {
+    const value = event.target.value
+    props.draftEdit.subject = value
+    setSubject(value)
+    debouncedSubjectSave(props.draftEdit, value)
+  }
+
+  const updateContent = (draftEdit: IDraftEdit, htmlBody: string, plainText: string) => {
+    const snippet = getSnippet(plainText)
+    draftsUpdate({ ...draftEdit, content: htmlBody, snippet })
+  }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedContentSave = useCallback(
+    debounce((draftEdit, htmlBody, plainText) => updateContent(draftEdit, htmlBody, plainText), 1000),
+    [] // will be created only once initially
+  )
+
+  const handleContentChange = (htmlBody: string, plainText: string) => {
+    props.draftEdit.snippet = getSnippet(plainText)
+    props.draftEdit.content = htmlBody
+    debouncedContentSave(props.draftEdit, htmlBody, plainText)
   }
 
   return (
@@ -111,7 +131,9 @@ const EditDraft = ({ id, mimeType, sender, to, cc, bcc, snippet, subject, conten
                   },
                 }}
                 onClick={() =>
-                  content && content !== '<p class="editor-paragraph"><br></p>' ? closeDraftEdit(id) : draftsDelete(id)
+                  props.draftEdit.content && props.draftEdit.content !== '<p class="editor-paragraph"><br></p>'
+                    ? closeDraftEdit(props.draftEdit.id)
+                    : draftsDelete(props.draftEdit.id)
                 }>
                 <ClearIcon sx={{ height: 18, width: 18 }} />
               </IconButton>
@@ -122,7 +144,7 @@ const EditDraft = ({ id, mimeType, sender, to, cc, bcc, snippet, subject, conten
           sx={{ display: 'flex', flexDirection: 'column', height: '570px', padding: 0, '&:last-child': { pb: 1 } }}>
           <RecipientsSelect
             sx={{ maxHeight: 100, overflow: 'auto', paddingTop: 1 }}
-            draftEdit={draftEdit}></RecipientsSelect>
+            draftEdit={props.draftEdit}></RecipientsSelect>
           <Divider />
           <InputBase
             sx={{ width: '100%', padding: '4px 12px', fontWeight: 'bold' }}
@@ -131,29 +153,15 @@ const EditDraft = ({ id, mimeType, sender, to, cc, bcc, snippet, subject, conten
               'aria-label': 'Subject',
             }}
             value={subject}
-            onChange={updateSubject('subject')}
+            onChange={handleSubjectChange}
           />
           <Divider />
           <Box sx={{ flex: 1, minHeight: 0 }}>
-            {!isMobileLandscape && (
-              <Editor
-                initialValue={content}
-                onChange={(htmlBody, plainText) => {
-                  updateContent(htmlBody, plainText)
-                }}
-              />
-            )}
-            {isMobileLandscape && (
-              <Editor
-                initialValue={content}
-                onChange={(htmlBody, plainText) => {
-                  updateContent(htmlBody, plainText)
-                }}
-              />
-            )}
+            {!isMobileLandscape && <Editor initialValue={props.draftEdit.content} onChange={handleContentChange} />}
+            {isMobileLandscape && <Editor initialValue={props.draftEdit.content} onChange={handleContentChange} />}
           </Box>
           <CardActions sx={{ flex: 0, padding: '8px 12px 4px' }} disableSpacing>
-            <Button variant="contained" color="primary" onClick={() => draftsSend(id)}>
+            <Button variant="contained" color="primary" onClick={() => draftsSend(props.draftEdit.id)}>
               {'Send'}
             </Button>
           </CardActions>

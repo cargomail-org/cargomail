@@ -14,7 +14,7 @@ const DraftsContainer = ({ drafts }: Props) => (
       bottom: 0,
       display: 'flex',
     }}>
-    {drafts && Object.entries(drafts).map(([id, draft]) => <EditDraft key={id} {...draft} />)}
+    {drafts && Object.entries(drafts).map(([id, draft]) => <EditDraft key={id} draftEdit={draft} />)}
   </Box>
 )
 
