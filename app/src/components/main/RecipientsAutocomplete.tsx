@@ -1,12 +1,13 @@
 import { CircularProgress, TextField } from '@mui/material'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
-import { FC, Fragment, useContext, useEffect, useState } from 'react'
+import { Dispatch, FC, Fragment, SetStateAction, useContext, useEffect, useState } from 'react'
 import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { ContactsContext, IContact } from '../../context/ContactsContext'
 import { IDraftEdit, RecipientType } from '../../context/DraftsContext'
 import usePeopleAPI from '../../api/PeopleAPI'
+import { IDialogState } from './Recipients'
 
 const filter = createFilterOptions({
   matchFrom: 'start',
@@ -14,8 +15,8 @@ const filter = createFilterOptions({
 })
 
 export type RecipientsAutocompleteProps = {
-  openDialogOpen: Function
-  setDialogValue: Function
+  openDialogOpen: Dispatch<SetStateAction<IDialogState>>
+  setDialogValue: Dispatch<SetStateAction<IContact>>
   sx: Object
   recipientType: RecipientType
   initialValue?: any
@@ -109,7 +110,7 @@ export const RecipientsAutocomplete: FC<RecipientsAutocompleteProps> = (props) =
         if (typeof newValue === 'string') {
           // timeout to avoid instant validation of the dialog's form.
           setTimeout(() => {
-            props.openDialogOpen(true)
+            props.openDialogOpen({ opened: true, recipientType: props.recipientType })
             props.setDialogValue({
               id: crypto.randomUUID(),
               givenName: '',
@@ -118,7 +119,7 @@ export const RecipientsAutocomplete: FC<RecipientsAutocompleteProps> = (props) =
             })
           })
         } else if (newValue.slice(-1)[0] && newValue.slice(-1)[0].inputValue) {
-          props.openDialogOpen(true)
+          props.openDialogOpen({ opened: true, recipientType: props.recipientType })
           const newContact = (newValue.slice(-1)[0].inputValue || '').split(/\s+/)
           props.setDialogValue({
             id: crypto.randomUUID(),

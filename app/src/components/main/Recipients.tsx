@@ -18,15 +18,20 @@ export type RecipientsSelectProps = {
   initialValue?: any
   draftEdit: IDraftEdit
 }
+export interface IDialogState {
+  opened: boolean
+  recipientType?: RecipientType
+}
 
 export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
   const [isVisibleCc, showCc] = useState(false)
   const [isVisibleBcc, showBcc] = useState(false)
 
   const { draftsUpdate } = useFedemailAPI()
-  const [openDialog, openDialogOpen] = useState(false)
-
   const { contactsCreate } = usePeopleAPI()
+
+  const initialDialogState: IDialogState = { opened: false }
+  const [openDialog, openDialogOpen] = useState(initialDialogState)
 
   const [dialogValue, setDialogValue] = useState<IContact>({
     id: '',
@@ -53,7 +58,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
       emailAddress: '',
     })
 
-    openDialogOpen(false)
+    openDialogOpen({ opened: false })
   }
 
   const handleSubmit = async (event: FormEvent) => {
@@ -65,33 +70,42 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
       id: props.draftEdit.id,
       mimeType: props.draftEdit.mimeType,
       sender: props.draftEdit.sender,
-      to: [
-        ...props.draftEdit.to,
-        {
-          id: dialogValue.id,
-          givenName: dialogValue.givenName,
-          familyName: dialogValue.familyName,
-          emailAddress: dialogValue.emailAddress,
-        },
-      ],
-      cc: [
-        ...props.draftEdit.cc,
-        {
-          id: dialogValue.id,
-          givenName: dialogValue.givenName,
-          familyName: dialogValue.familyName,
-          emailAddress: dialogValue.emailAddress,
-        },
-      ],
-      bcc: [
-        ...props.draftEdit.bcc,
-        {
-          id: dialogValue.id,
-          givenName: dialogValue.givenName,
-          familyName: dialogValue.familyName,
-          emailAddress: dialogValue.emailAddress,
-        },
-      ],
+      to:
+        openDialog.recipientType === RecipientType.To
+          ? [
+              ...props.draftEdit.to,
+              {
+                id: dialogValue.id,
+                givenName: dialogValue.givenName,
+                familyName: dialogValue.familyName,
+                emailAddress: dialogValue.emailAddress,
+              },
+            ]
+          : [...props.draftEdit.to],
+      cc:
+        openDialog.recipientType === RecipientType.Cc
+          ? [
+              ...props.draftEdit.cc,
+              {
+                id: dialogValue.id,
+                givenName: dialogValue.givenName,
+                familyName: dialogValue.familyName,
+                emailAddress: dialogValue.emailAddress,
+              },
+            ]
+          : [...props.draftEdit.cc],
+      bcc:
+        openDialog.recipientType === RecipientType.Bcc
+          ? [
+              ...props.draftEdit.bcc,
+              {
+                id: dialogValue.id,
+                givenName: dialogValue.givenName,
+                familyName: dialogValue.familyName,
+                emailAddress: dialogValue.emailAddress,
+              },
+            ]
+          : [...props.draftEdit.bcc],
       snippet: props.draftEdit.snippet,
       subject: props.draftEdit.subject,
       content: props.draftEdit.content,
@@ -207,7 +221,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
           />
         ) : null}
       </FormControl>
-      <Dialog sx={{ zIndex: 9999 }} open={openDialog} onClose={handleClose}>
+      <Dialog sx={{ zIndex: 9999 }} open={openDialog.opened} onClose={handleClose}>
         <form onSubmit={handleSubmit}>
           <DialogTitle>Add a new contact</DialogTitle>
           <DialogContent>
