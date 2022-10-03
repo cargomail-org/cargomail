@@ -63,6 +63,7 @@ const Editor = ({ initialValue, onChange }: EditorProps) => {
           onChange={(editorState, editor) => {
             EditorOnChange(editorState, editor, onChange)
           }}
+          ignoreSelectionChange={true}
         />
         <HistoryPlugin />
         <CheckListPlugin />

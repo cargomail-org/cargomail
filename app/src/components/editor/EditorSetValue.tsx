@@ -1,6 +1,6 @@
 import { $generateNodesFromDOM } from '@lexical/html'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { $getRoot, $createParagraphNode, LexicalEditor } from 'lexical'
+import { LexicalEditor, $insertNodes } from 'lexical'
 import { useEffect } from 'react'
 
 export default function EditorSetValue({ value }: { value: string }) {
@@ -17,10 +17,7 @@ export default function EditorSetValue({ value }: { value: string }) {
       const dom = parser.parseFromString(value, 'text/html')
       const nodes = $generateNodesFromDOM(editor, dom)
 
-      const root = $getRoot()
-      const paragraphNode = $createParagraphNode()
-      nodes.forEach((node) => paragraphNode.append(node))
-      root.getFirstChild()?.replace(paragraphNode)
+      $insertNodes(nodes)
     })
   }
 

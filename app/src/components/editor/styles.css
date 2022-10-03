@@ -13,7 +13,7 @@
 }
 
 .editor-scroller {
-  margin: 12px auto auto auto;
+  margin: 10px 0px 0px 0px;
   border: 0;
   resize: none;
   cursor: text;
@@ -36,7 +36,7 @@
   overflow: hidden;
   position: absolute;
   text-overflow: ellipsis;
-  top: 2px;
+  top: 12px;
   left: 12px;
   font-size: 15px;
   user-select: none;

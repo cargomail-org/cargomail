@@ -46,15 +46,8 @@ const EditDraft = ({ id, mimeType, sender, to, cc, bcc, snippet, subject, conten
     return str
   }
 
-  const update = (field: string) => (e: { target: { value: any } }) => {
-    if (field === 'content') {
-      if (draftEdit.mimeType === 'text/html') {
-        draftEdit.snippet = 'text/html'
-      } else {
-        draftEdit.snippet = getSnippet(e.target.value)
-      }
-    }
-    draftsUpdate({ ...draftEdit, [field]: e.target.value })
+  const updateSubject = (field: string) => (e: { target: { value: any } }) => {
+    draftsUpdate({ ...draftEdit, subject: e.target.value })
   }
 
   const updateContent = (htmlBody: string, plainText: string) => {
@@ -138,7 +131,7 @@ const EditDraft = ({ id, mimeType, sender, to, cc, bcc, snippet, subject, conten
               'aria-label': 'Subject',
             }}
             value={subject}
-            onChange={update('subject')}
+            onChange={updateSubject('subject')}
           />
           <Divider />
           <Box sx={{ flex: 1, minHeight: 0 }}>
