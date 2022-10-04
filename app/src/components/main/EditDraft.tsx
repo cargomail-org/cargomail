@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import ClearIcon from '@mui/icons-material/Clear'
-import AttachFileIcon from '@mui/icons-material/AttachFile'
+// import AttachFileIcon from '@mui/icons-material/AttachFile'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { DraftsContext, IDraftEdit } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
