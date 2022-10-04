@@ -15,6 +15,8 @@ import {
 } from '@mui/material'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import ClearIcon from '@mui/icons-material/Clear'
+import AttachFileIcon from '@mui/icons-material/AttachFile'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { DraftsContext, IDraftEdit } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { RecipientsSelect } from './Recipients'
@@ -160,10 +162,36 @@ const EditDraft: FC<EditDraftProps> = (props) => {
             {!isMobileLandscape && <Editor initialValue={props.draftEdit.content} onChange={handleContentChange} />}
             {isMobileLandscape && <Editor initialValue={props.draftEdit.content} onChange={handleContentChange} />}
           </Box>
-          <CardActions sx={{ flex: 0, padding: '8px 12px 4px' }} disableSpacing>
-            <Button variant="contained" color="primary" onClick={() => draftsSend(props.draftEdit.id)}>
-              {'Send'}
-            </Button>
+          <CardActions sx={{ flex: 0, justifyContent: 'space-between', padding: '8px 12px 4px' }} disableSpacing>
+            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+              <Button variant="contained" color="primary" onClick={() => draftsSend(props.draftEdit.id)}>
+                {'Send'}
+              </Button>
+              {/* <Box sx={{ paddingLeft: '8px' }}></Box>
+              <AttachFileIcon
+                sx={{
+                  margin: '0 4px -5px',
+                  fontSize: '1.25rem',
+                  cursor: 'pointer',
+                  opacity: 0.78,
+                  '&:hover': {
+                    opacity: 1,
+                  },
+                }}
+              /> */}
+            </Box>
+            <DeleteIcon
+              sx={{
+                margin: '0 4px -5px',
+                fontSize: '1.25rem',
+                cursor: 'pointer',
+                opacity: 0.78,
+                '&:hover': {
+                  opacity: 1,
+                },
+              }}
+              onClick={() => draftsDelete(props.draftEdit.id)}
+            />
           </CardActions>
         </CardContent>
       </Card>
