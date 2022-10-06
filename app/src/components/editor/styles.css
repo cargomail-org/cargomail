@@ -13,7 +13,7 @@
 }
 
 .editor-scroller {
-  margin: 10px 0px 0px 0px;
+  padding: 10px 10px 10px 10px;
   border: 0;
   resize: none;
   cursor: text;
@@ -23,7 +23,7 @@
   height: 100%;
 }
 
-.editor {
+.rich-editor-container {
   flex-grow: 1;
   height: 100%;
   min-height: 0;
@@ -31,13 +31,31 @@
   position: relative;
 }
 
+.editor-drop-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  /* margin: 4px; */
+  outline-style: dotted;
+  outline-width: 2px;
+  outline-color: silver;
+  outline-offset: -6px;
+  color: silver;
+  font-size: x-large;
+}
+
+.editor {
+  height: 100%;
+}
+
 .editor-placeholder {
   color: #999;
   overflow: hidden;
   position: absolute;
   text-overflow: ellipsis;
-  top: 12px;
-  left: 12px;
+  top: 10px;
+  left: 10px;
   font-size: 15px;
   user-select: none;
   display: inline-block;

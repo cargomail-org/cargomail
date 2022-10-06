@@ -1,0 +1,40 @@
+.attachments-plugin {
+  margin: 6px 0 6px 0;
+  padding: 0 12px 0 12px;
+  height: auto;
+  min-height: 2.7rem;
+  max-height: 4.5rem;
+  border-style: dotted;
+  border-width: 2px;
+  border-color: silver;
+  overflow-y: auto;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+}
+
+.attachment-list:empty {
+  display: none;
+}
+
+.title {
+  color: silver;
+}
+
+.attachment-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+}
+
+.attachment-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.attachment-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

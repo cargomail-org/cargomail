@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import ClearIcon from '@mui/icons-material/Clear'
-// import AttachFileIcon from '@mui/icons-material/AttachFile'
+import AttachFileIcon from '@mui/icons-material/AttachFile'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { DraftsContext, IDraftEdit } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
@@ -149,7 +149,11 @@ const EditDraft: FC<EditDraftProps> = (props) => {
             draftEdit={props.draftEdit}></RecipientsSelect>
           <Divider />
           <InputBase
-            sx={{ width: '100%', padding: '4px 12px', fontWeight: 'bold' }}
+            sx={{
+              width: '100%',
+              padding: '4px 12px',
+              fontWeight: 'bold',
+            }}
             placeholder={'Subject'}
             inputProps={{
               'aria-label': 'Subject',
@@ -167,7 +171,7 @@ const EditDraft: FC<EditDraftProps> = (props) => {
               <Button variant="contained" color="primary" onClick={() => draftsSend(props.draftEdit.id)}>
                 {'Send'}
               </Button>
-              {/* <Box sx={{ paddingLeft: '8px' }}></Box>
+              <Box sx={{ paddingLeft: '8px' }}></Box>
               <AttachFileIcon
                 sx={{
                   margin: '0 4px -5px',
@@ -178,7 +182,7 @@ const EditDraft: FC<EditDraftProps> = (props) => {
                     opacity: 1,
                   },
                 }}
-              /> */}
+              />
             </Box>
             <DeleteIcon
               sx={{
