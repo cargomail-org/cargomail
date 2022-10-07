@@ -875,8 +875,7 @@ i.prettier-error {
   flex-direction: column-reverse;
   bottom: 45px;
   position: fixed;
-  box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
   min-height: 40px;
   background-color: #fff;
 }
@@ -896,7 +895,18 @@ i.prettier-error {
   border: 0;
   max-width: 250px;
   min-width: 100px;
-  box-shadow: 0px 8px 8px 2px rgba(0, 0, 0, 0.2);
+}
+
+@supports (not (-moz-appearance:button)) and (-webkit-appearance:none) {
+  .dropdown .item {
+    box-shadow: 0px 8px 8px 2px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@supports (-moz-appearance:button) and (contain:paint) {
+  .dropdown .item {
+    box-shadow: 0px -8px 8px 2px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .dropdown .item.fontsize-item,
@@ -919,7 +929,18 @@ i.prettier-error {
 .dropdown .item:last-child {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.2);
+}
+
+@supports (not (-moz-appearance:button)) and (-webkit-appearance:none) {
+  .dropdown .item:last-child {
+    box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@supports (-moz-appearance:button) and (contain:paint) {
+  .dropdown .item:last-child {
+    box-shadow: 0px -4px 8px 1px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .dropdown .item:hover {
@@ -1578,7 +1599,7 @@ button.action-button:disabled {
   margin: 0 4px;
 }
 
- .sticky-note-container {
+.sticky-note-container {
   position: absolute;
   z-index: 9;
   width: 120px;
@@ -1614,24 +1635,12 @@ button.action-button:disabled {
 
 .sticky-note.yellow {
   border-top: 1px solid #fdfd86;
-  background: linear-gradient(
-    135deg,
-    #ffff88 81%,
-    #ffff88 82%,
-    #ffff88 82%,
-    #ffffc6 100%
-  );
+  background: linear-gradient(135deg, #ffff88 81%, #ffff88 82%, #ffff88 82%, #ffffc6 100%);
 }
 
 .sticky-note.pink {
   border-top: 1px solid #e7d1e4;
-  background: linear-gradient(
-    135deg,
-    #f7cbe8 81%,
-    #f7cbe8 82%,
-    #f7cbe8 82%,
-    #e7bfe1 100%
-  );
+  background: linear-gradient(135deg, #f7cbe8 81%, #f7cbe8 82%, #f7cbe8 82%, #e7bfe1 100%);
 }
 
 .sticky-note-container.dragging {
