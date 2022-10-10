@@ -114,6 +114,24 @@ BEGIN
     END
     $$;
 
+    -- Attachments
+    do $$
+    DECLARE 
+    BEGIN
+        INSERT INTO fedemail.attachment (owner, filename, content_type, content_uri, payload) VALUES 
+        ('matthew.cuthbert@demo.localhost',
+        'Test_text.txt',
+        'text/plain',
+        'file:/50811c73-4bf6-47a0-94ce-3f07f9583786',
+        NULL),
+        ('matthew.cuthbert@demo.localhost',
+        'Fedemail concept.pdf',
+        'application/pdf',
+        'file:/867cc2b4-ba54-4d19-bae4-e608e57114f2',
+        NULL);
+    END
+    $$;
+
     -- Messages
     do $$
     DECLARE 
@@ -128,13 +146,64 @@ BEGIN
         thread_1,
         'Hi :-)',
         '{
-        "mime_type": "text/plain",
-        "body": {"data": "SGkgOi0p", "size": 6},
+        "mime_type": "multipart/mixed",
+        "body": {"size": 0},
         "headers": [
             {"name": "From", "value": "Matthew Cuthbert <matthew.cuthbert@demo.localhost>"},
             {"name": "To", "value": ",,diana.barry@demo.localhost,,,diana.barry@demo.localhost,gilbert.blythe@demo.localhost.org"},
             {"name": "Subject", "value": "Hi there!"},
-            {"name": "Message-ID", "value": "1001@demo.localhost"}
+            {"name": "Message-ID", "value": "1001@demo.localhost"},
+            {"name": "Content-Type", "value": "multipart/mixed; boundary=\"0000000000000da85a05ea7315ff\""}
+        ],
+        "parts": [
+            {
+            "part_id": "0",
+            "mime_type": "text/plain",
+            "body": {"data": "SGkgOi0p", "size": 6},
+            "headers": [
+                {"name": "Content-Type", "value": "text/plain"}
+            ]
+            },
+            {
+            "part_id": "1",
+            "mime_type": "message/external-body",
+            "access_type": "URL",
+            "expiration": "Mon, 26 June 2023 09:00:00 GMT",
+            "url": "http://localhost:9998/api/storage/50811c73-4bf6-47a0-94ce-3f07f9583786",
+            "size": 32,
+            "external" : {
+                "mime_type": "text/plain",
+                "filename": "plain_text.txt",
+                "headers": [
+                    {"name": "Content-Type", "value": "text/plain; name=\"plain_text.txt\"; charset=\"us-ascii\""},
+                    {"name": "Content-Disposition", "value": "attachment; filename=\"plain_text.txt\""},
+                    {"name": "Content-ID", "value": "<50811c73-4bf6-47a0-94ce-3f07f9583786>"}
+                    ]
+                },
+            "headers": [
+                {"name": "Content-Type", "value": "message/external-body; access-type=\"URL\"; expiration=\"Mon, 26 June 2023 09:00:00 GMT\"; URL=\"http://localhost:9998/api/storage/50811c73-4bf6-47a0-94ce-3f07f9583786\"; size=32"}
+            ]
+            },
+            {
+            "part_id": "2",
+            "mime_type": "message/external-body",
+            "access_type": "URL",
+            "expiration": "Mon, 26 June 2023 09:00:30 GMT",
+            "url": "http://localhost:9998/api/storage/867cc2b4-ba54-4d19-bae4-e608e57114f2",
+            "size": 55894,
+            "external": {
+                "mime_type": "application/pdf",
+                "filename": "Fedemail concept.pdf",
+                "headers": [
+                    {"name": "Content-Type", "value": "application/pdf; name=\"Fedemail concept.pdf\""},
+                    {"name": "Content-Disposition", "value": "attachment; filename=\"Fedemail concept.pdf\""},
+                    {"name": "Content-ID", "value": "<867cc2b4-ba54-4d19-bae4-e608e57114f2>"}
+                ]
+            },
+            "headers": [
+                {"name": "Content-Type", "value": "message/external-body; access-type=\"URL\"; expiration=\"Mon, 26 June 2023 09:00:30 GMT\"; URL=\"http://localhost:9998/api/storage/867cc2b4-ba54-4d19-bae4-e608e57114f2\"; size=55894"}
+            ]
+            }
         ]
         }',
         '["SENT"]',
@@ -151,7 +220,8 @@ BEGIN
             {"name": "Subject", "value": "Hello from Diana!"},
             {"name": "Message-ID", "value": "1002@demo.localhost"},
             {"name": "In-Reply-To", "value": "1001@demo.localhost"},
-            {"name": "References", "value": "1001@demo.localhost"}
+            {"name": "References", "value": "1001@demo.localhost"},
+            {"name": "Content-Type", "value": "text/plain"}
         ]
         }',
         '["CATEGORY_SOCIAL", "UNREAD", "INBOX"]',
@@ -168,7 +238,8 @@ BEGIN
             {"name": "From", "value": "Anne Shirley <anne.shirley@demo.localhost>"},
             {"name": "To", "value": "matthew.cuthbert@demo.localhost"},
             {"name": "Subject", "value": "Hello from Anna!"},
-            {"name": "Message-ID", "value": "1003@demo.localhost"}
+            {"name": "Message-ID", "value": "1003@demo.localhost"},
+            {"name": "Content-Type", "value": "text/plain"}
         ]
         }',
         '["CATEGORY_SOCIAL", "UNREAD", "INBOX"]');

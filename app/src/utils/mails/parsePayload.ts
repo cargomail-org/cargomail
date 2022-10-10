@@ -50,6 +50,7 @@ const parseParts = ({ parts, headers, filename, body, mimeType }: any): any => {
     }
     case 'multipart/alternative':
       return parseParts(parts[parts.length - 1])
+    case 'message/external-body':
     case 'multipart/related':
     case 'multipart/report':
     case 'multipart/mixed': {

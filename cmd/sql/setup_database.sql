@@ -36,7 +36,14 @@ BEGIN
         INCREMENT BY 1
         NO MINVALUE
         NO MAXVALUE
-        CACHE 1;            
+        CACHE 1;
+
+    CREATE SEQUENCE fedemail.attachment_id_seq
+        START WITH 1
+        INCREMENT BY 1
+        NO MINVALUE
+        NO MAXVALUE
+        CACHE 1;       
 
     CREATE TABLE fedemail.label (
         id BIGSERIAL PRIMARY KEY,
@@ -47,7 +54,7 @@ BEGIN
     );	
 
     CREATE TABLE fedemail.message (
-        id  bigint DEFAULT nextval('fedemail.message_id_seq'::regclass) PRIMARY KEY,
+        id bigint DEFAULT nextval('fedemail.message_id_seq'::regclass) PRIMARY KEY,
         owner character varying(255) NOT NULL,
         thread_id bigint DEFAULT nextval('fedemail.thread_id_seq'::regclass) NOT NULL,
         draft_id bigint,
@@ -60,6 +67,20 @@ BEGIN
         search_subject tsvector,
         search_from tsvector,
         search_recipients tsvector
+    );
+
+    CREATE TABLE fedemail.attachment (
+        id bigint DEFAULT nextval('fedemail.attachment_id_seq'::regclass) PRIMARY KEY,
+        owner character varying(255) NOT NULL,
+        filename character varying(255) NOT NULL,
+        content_type character varying(255) NOT NULL,
+        content_uri character varying(255) NOT NULL,
+        payload JSONB,
+        history_id bigint DEFAULT nextval('fedemail.history_id_seq'::regclass) NOT NULL,
+        internal_date bigint DEFAULT extract(epoch from now()) NOT NULL,
+        search_content_type tsvector,
+        search_filename tsvector,
+        search_content tsvector
     );
 
     CREATE UNIQUE INDEX idx_message_draft_id ON fedemail.message(draft_id);
@@ -96,8 +117,33 @@ BEGIN
         RETURN NEW; 
     END; $$;
 
-    CREATE TRIGGER message_message_inserted BEFORE INSERT ON fedemail.message FOR EACH ROW EXECUTE PROCEDURE fedemail.message_table_inserted();
-    CREATE TRIGGER message_message_updated BEFORE UPDATE ON fedemail.message FOR EACH ROW EXECUTE PROCEDURE fedemail.message_table_updated();
+    CREATE TRIGGER message_inserted BEFORE INSERT ON fedemail.message FOR EACH ROW EXECUTE PROCEDURE fedemail.message_table_inserted();
+    CREATE TRIGGER message_updated BEFORE UPDATE ON fedemail.message FOR EACH ROW EXECUTE PROCEDURE fedemail.message_table_updated();
+
+    CREATE OR REPLACE FUNCTION fedemail.attachment_table_inserted() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+    begin
+        -- -- NEW.payload['Message_ID'] = to_jsonb(public.gen_random_uuid()::text);
+        -- NEW.search_subject = to_tsvector(NEW.payload['Subject']);
+        -- NEW.search_from = to_tsvector(NEW.payload['From']);
+        -- NEW.search_recipients = to_tsvector(NEW.payload['Recipients']);
+        RETURN NEW;	
+    END; $$;
+
+    CREATE OR REPLACE FUNCTION fedemail.attachment_table_updated() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$ 
+    begin
+        if (NEW.payload <> OLD.payload) then
+            NEW.history_id := nextval('fedemail.history_id_seq'::regclass);
+        end if;
+        RETURN NEW; 
+    END; $$;
+
+    CREATE TRIGGER attachment_inserted BEFORE INSERT ON fedemail.attachment FOR EACH ROW EXECUTE PROCEDURE fedemail.attachment_table_inserted();
+    CREATE TRIGGER attachment_updated BEFORE UPDATE ON fedemail.attachment FOR EACH ROW EXECUTE PROCEDURE fedemail.attachment_table_updated();
+
 
     CREATE OR REPLACE FUNCTION fedemail.labels_list_v1(IN _owner character varying)
     RETURNS TABLE(label jsonb) AS
