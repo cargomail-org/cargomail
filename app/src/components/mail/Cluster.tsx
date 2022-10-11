@@ -15,6 +15,9 @@ import useFedemailAPI from '../../api/FedemailAPI'
 import { ThreadsContext } from '../../context/ThreadsContext'
 import { Label_Type } from '../../api/generated/proto/fedemail/v1/fedemail'
 
+import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
+import { decodeCurrentUser } from '../../auth'
+
 import ActionsBox from './ActionsBox'
 
 const theme = createTheme()
@@ -56,6 +59,7 @@ export type ClusterProps = {
 }
 
 const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
+  const { idToken } = useContext(AuthContext)
   const { batchModifyMessages, batchDeleteMessages } = useFedemailAPI()
   const { removeThreadLabel, addThreadLabel } = useContext(ThreadsContext)
   const [expanded, setExpanded] = useState(false)
@@ -110,9 +114,14 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
     .reduce((accum, current) => accum + current, 0)
   const senderUnreadMap = threads
     .flatMap((thread: any) => thread.threads)
-    .map((thread: any) => ({ from: thread.messages[0].from, unread: thread.hasUnread }))
+    .flatMap((thread: any) => thread.messages)
+    .filter((message: any) => message.unread === true) // to display from unread messages only
+    .map((message: any) => {
+      return { from: message.from, unread: message.unread }
+    })
     .reduce((accum: any, current: any) => {
-      const n = current.from.name
+      const username = decodeCurrentUser(idToken)?.username
+      const n = current.from.mail === username ? 'me' : current.from.name
       accum[n] = accum[n] || current.unread // eslint-disable-line
       return accum
     }, {})

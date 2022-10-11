@@ -67,7 +67,7 @@ func (r *Repository) LabelsList(ctx context.Context) ([]*fedemailv1.Label, error
 func (r *Repository) ThreadsList(ctx context.Context) ([]*fedemailv1.Thread, error) {
 	var threads []*fedemailv1.Thread
 
-	sqlStatement := `SELECT fedemail.threads_list_v1($1);`
+	sqlStatement := `SELECT * FROM fedemail.threads_list_v1($1) ORDER BY thread->>'history_id' DESC;` 
 	rows, err := r.db.Query(sqlStatement, getUsername(ctx))
 	if err != nil {
 		return nil, err

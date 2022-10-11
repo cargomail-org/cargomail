@@ -5,6 +5,9 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
+import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
+import { decodeCurrentUser } from '../../auth'
+
 import Message from './Message'
 
 import useFedemailAPI from '../../api/FedemailAPI'
@@ -17,6 +20,7 @@ const theme = createTheme()
 
 const Thread = ({ id, messages, hasUnread, actions }: any) => {
   const { trashThread, deleteThread, batchModifyMessages } = useFedemailAPI()
+  const { idToken } = useContext(AuthContext)
   const { removeThreadLabel, addThreadLabel } = useContext(ThreadsContext)
   const [expanded, setExpanded] = useState(false)
 
@@ -89,7 +93,8 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
   )
 
   const senderUnreadMap = messages.reduce((accum: any, current: any) => {
-    const n = current.from.name
+    const username = decodeCurrentUser(idToken)?.username
+    const n = current.from.mail === username ? 'me' : current.from.name
     accum[n] = accum[n] || current.unread //eslint-disable-line
     return accum
   }, {})

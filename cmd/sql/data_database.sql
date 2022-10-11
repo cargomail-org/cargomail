@@ -3,7 +3,6 @@ DECLARE
 BEGIN
     -- Labels
     do $$
-    DECLARE 
     BEGIN
         INSERT INTO fedemail.label (owner, name, type, payload) VALUES 
         ('matthew.cuthbert@demo.localhost',
@@ -116,7 +115,6 @@ BEGIN
 
     -- Attachments
     do $$
-    DECLARE 
     BEGIN
         INSERT INTO fedemail.attachment (owner, filename, content_type, content_uri, payload) VALUES 
         ('matthew.cuthbert@demo.localhost',
@@ -171,7 +169,7 @@ BEGIN
             "expiration": "Mon, 26 June 2023 09:00:00 GMT",
             "url": "http://localhost:9998/api/storage/50811c73-4bf6-47a0-94ce-3f07f9583786",
             "size": 32,
-            "external" : {
+            "external_body" : {
                 "mime_type": "text/plain",
                 "filename": "plain_text.txt",
                 "headers": [
@@ -191,7 +189,7 @@ BEGIN
             "expiration": "Mon, 26 June 2023 09:00:30 GMT",
             "url": "http://localhost:9998/api/storage/867cc2b4-ba54-4d19-bae4-e608e57114f2",
             "size": 55894,
-            "external": {
+            "external_body": {
                 "mime_type": "application/pdf",
                 "filename": "Fedemail concept.pdf",
                 "headers": [
@@ -207,7 +205,7 @@ BEGIN
         ]
         }',
         '["SENT"]',
-        extract(epoch from now() at time zone 'utc')-3600),
+        extract(epoch from now() at time zone 'utc')-86400),
         ('matthew.cuthbert@demo.localhost',
         thread_1,
         'Hello :--)',
@@ -217,7 +215,7 @@ BEGIN
         "headers": [
             {"name": "From", "value": "Diana Barry <diana.barry@demo.localhost>"},
             {"name": "To", "value": "matthew.cuthbert@demo.localhost"},
-            {"name": "Subject", "value": "Hello from Diana!"},
+            {"name": "Subject", "value": "Re: Hi there!"},
             {"name": "Message-ID", "value": "1002@demo.localhost"},
             {"name": "In-Reply-To", "value": "1001@demo.localhost"},
             {"name": "References", "value": "1001@demo.localhost"},
@@ -250,9 +248,6 @@ BEGIN
 
     -- Contacts
     do $$
-    DECLARE 
-        thread_1 bigint;
-        thread_2 bigint;
     BEGIN
         INSERT INTO people.connection (owner, name, email_addresses) VALUES 
         ('matthew.cuthbert@demo.localhost',

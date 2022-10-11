@@ -30,10 +30,20 @@ const categorize = (result: any, date: any, value: any) => {
   }
 }
 
+const latestMessageDate = (messages: any) => {
+  return messages.reduce((a: any, b: any) => (a.internalDate > b.internalDate ? a : b)).internalDate
+}
+
+const latestThreadMessageDate = (threads: any) => {
+  return latestMessageDate(
+    threads.reduce((a: any, b: any) => (latestMessageDate(a.messages) > latestMessageDate(b.messages) ? a : b)).messages
+  )
+}
+
 const groupThreadsByDate = (cluster: any) => {
   const threads: any[] = []
   cluster.threads.forEach((thread: any) => {
-    const date = dayjs(parseInt(thread.messages[0].internalDate, 10))
+    const date = dayjs(parseInt(latestMessageDate(thread.messages), 10))
     categorize(threads, date, thread)
   })
   return { ...cluster, threads }
@@ -44,8 +54,8 @@ const groupByDate = (clusters: any) => {
   clusters.forEach((clusterOrThread: any) => {
     const cluster = clusterOrThread.id ? clusterOrThread : groupThreadsByDate(clusterOrThread)
     const internalDate = clusterOrThread.id
-      ? clusterOrThread.messages[0].internalDate
-      : clusterOrThread.threads[0].messages[0].internalDate
+      ? latestMessageDate(clusterOrThread.messages)
+      : latestThreadMessageDate(clusterOrThread.threads)
     const date = dayjs(parseInt(internalDate, 10))
     categorize(result, date, cluster)
   })

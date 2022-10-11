@@ -206,7 +206,7 @@ BEGIN
                                         'history_id', history_id::varchar(255),
                                         'internal_date', internal_date::varchar(255) || '000') FROM fedemail.message
                 WHERE owner = _owner AND thread_id = _thread_id 
-                ORDER BY history_id DESC;
+                ORDER BY history_id ASC;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
