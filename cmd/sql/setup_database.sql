@@ -175,15 +175,18 @@ BEGIN
         END IF;
 
         RETURN QUERY
-            SELECT DISTINCT
-                (SELECT jsonb_build_object('id', detail.thread_id::varchar(255),
-                                        'snippet', detail.snippet,
-                                        'history_id', detail.history_id::varchar(255),
-                                        'internal_date', detail.internal_date::varchar(255) || '000') FROM fedemail.message detail
-                WHERE thread_id = master.thread_id 
-                ORDER BY history_id DESC LIMIT 1)
-            FROM fedemail.message AS master
-            WHERE owner = _owner;
+        	WITH results AS (
+	            SELECT DISTINCT
+	                (SELECT jsonb_build_object('id', detail.thread_id::varchar(255),
+	                                        'snippet', detail.snippet,
+	                                        'history_id', detail.history_id::varchar(255),
+	                                        'internal_date', detail.internal_date::varchar(255) || '000') FROM fedemail.message detail
+	                WHERE thread_id = master.thread_id 
+	                ORDER BY internal_date DESC LIMIT 1) AS thread
+	            FROM fedemail.message AS master
+	            WHERE owner = _owner
+	        ) SELECT results.thread FROM results
+	          ORDER BY results.thread->>'internal_date' DESC;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
@@ -206,7 +209,7 @@ BEGIN
                                         'history_id', history_id::varchar(255),
                                         'internal_date', internal_date::varchar(255) || '000') FROM fedemail.message
                 WHERE owner = _owner AND thread_id = _thread_id 
-                ORDER BY history_id ASC;
+                ORDER BY internal_date ASC;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
