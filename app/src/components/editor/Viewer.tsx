@@ -21,9 +21,10 @@ import { useRef, useState } from 'react'
 
 export interface EditorProps {
   initialValue?: string
+  mimeType?: string
 }
 
-const Viewer = ({ initialValue }: EditorProps) => {
+const Viewer = ({ initialValue, mimeType }: EditorProps) => {
   const scrollRef = useRef(null)
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null)
 
@@ -51,7 +52,7 @@ const Viewer = ({ initialValue }: EditorProps) => {
           }
           placeholder=""
         />
-        <ViewerSetValue value={initialValue || ''} />
+        <ViewerSetValue value={initialValue || ''} mimeType={mimeType || ''} />
         <HistoryPlugin />
         <CheckListPlugin />
         <ListPlugin />

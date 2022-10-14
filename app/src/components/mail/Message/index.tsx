@@ -1,15 +1,14 @@
-import { useState, useEffect, useContext, useCallback, useMemo, useRef } from 'react'
+import { useState, useEffect, useContext, useCallback, useRef } from 'react'
 import { Box, Card, CardContent, colors } from '@mui/material'
 
 import { v1 as uuid } from 'uuid'
 
 import { ThreadsContext } from '../../../context/ThreadsContext'
 import useFedemailAPI from '../../../api/FedemailAPI'
-import processHTMLContent from '../../../utils/mails/processHTMLContent'
 import Header from './Header'
 import Viewer from '../../editor/Viewer'
 
-const Message = ({ threadId, id, from, snippet, content, initialExpand, unread, actions }: any) => {
+const Message = ({ threadId, id, from, snippet, content, mimeType, initialExpand, unread, actions }: any) => {
   const { addMessageLabel, removeMessageLabel } = useContext(ThreadsContext)
   const { modifyMessage, trashMessage, deleteMessage } = useFedemailAPI()
   const [expanded, setExpanded] = useState(initialExpand)
@@ -59,8 +58,6 @@ const Message = ({ threadId, id, from, snippet, content, initialExpand, unread, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unread, expanded])
 
-  const cooked = useMemo(() => processHTMLContent(scope.current, content), [scope, content])
-
   return (
     <Card
       sx={{
@@ -75,7 +72,6 @@ const Message = ({ threadId, id, from, snippet, content, initialExpand, unread, 
         <Header
           expanded={expanded}
           onClick={() => setExpanded((exp: any) => !exp)}
-          content={cooked.content}
           snippet={snippet}
           name={from.name}
           actions={actions}
@@ -94,7 +90,7 @@ const Message = ({ threadId, id, from, snippet, content, initialExpand, unread, 
               marginRight: '12px',
               paddingBottom: '8px',
             }}>
-            <Viewer initialValue={cooked.content} />
+            <Viewer initialValue={content} mimeType={mimeType} />
           </Box>
         )}
       </CardContent>

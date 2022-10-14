@@ -17,7 +17,7 @@ const NewMailButton = () => {
     () =>
       draftsCreate({
         id: '',
-        mimeType: 'text/html', // only text/html draft is supported
+        mimeType: 'application/json', // only application/json draft is supported
         sender: '',
         to: [],
         cc: [],

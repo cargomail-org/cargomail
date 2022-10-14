@@ -38,12 +38,9 @@ const parseParts = ({ parts, headers, filename, body, mimeType }: any): any => {
 
       return { attachments: [attachment] }
     }
-    case 'text/html': {
-      const uint8arr = new Uint8Array(Buffer.from(body.data, 'base64'))
-      const content = new TextDecoder().decode(uint8arr)
-      return { content }
-    }
-    case 'text/plain': {
+    case 'text/html':
+    case 'text/plain':
+    case 'application/json': {
       const uint8arr = new Uint8Array(Buffer.from(body.data, 'base64'))
       const content = new TextDecoder().decode(uint8arr)
       return { content }
@@ -95,6 +92,7 @@ const parsePayload = ({ id, payload }: any) => {
       bcc,
       subject,
       content,
+      mimeType: payload?.mimeType,
       attachments,
     }
   } catch (e) {
@@ -107,6 +105,7 @@ const parsePayload = ({ id, payload }: any) => {
       bcc,
       subject,
       content: `Parse failed for Message ${id}`,
+      mimeType: payload?.mimeType,
       attachments: [],
     }
   }

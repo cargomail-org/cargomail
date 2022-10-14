@@ -4,13 +4,22 @@ import { $generateHtmlFromNodes } from '@lexical/html'
 export default function EditorOnChange(
   editorState: EditorState,
   editor: LexicalEditor,
-  onChange: (htmlBody: string, plainText: string) => void
+  mimeType: string,
+  onChange: (content: string, plainText: string) => void
 ) {
-  editorState.toJSON()
   editor.update(() => {
     const root = $getRoot()
     const plainText = root.getTextContent()
-    const htmlBody = $generateHtmlFromNodes(editor, null)
-    onChange(htmlBody, plainText)
+    switch (mimeType) {
+      case 'application/json': {
+        const content = JSON.stringify(editorState)
+        onChange(content, plainText)
+        break
+      }
+      default: {
+        const content = $generateHtmlFromNodes(editor, null)
+        onChange(content, plainText)
+      }
+    }
   })
 }

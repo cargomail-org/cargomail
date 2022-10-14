@@ -60,21 +60,21 @@ const EditDraft: FC<EditDraftProps> = (props) => {
     debouncedSubjectSave(props.draftEdit, value)
   }
 
-  const updateContent = (draftEdit: IDraftEdit, htmlBody: string, plainText: string) => {
+  const updateContent = (draftEdit: IDraftEdit, content: string, plainText: string) => {
     const snippet = getSnippet(plainText)
-    draftsUpdate({ ...draftEdit, content: htmlBody, snippet })
+    draftsUpdate({ ...draftEdit, content, snippet })
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedContentSave = useCallback(
-    debounce((draftEdit, htmlBody, plainText) => updateContent(draftEdit, htmlBody, plainText), 1000),
+    debounce((draftEdit, content, plainText) => updateContent(draftEdit, content, plainText), 1000),
     [] // will be created only once initially
   )
 
-  const handleContentChange = (htmlBody: string, plainText: string) => {
+  const handleContentChange = (content: string, plainText: string) => {
     props.draftEdit.snippet = getSnippet(plainText)
-    props.draftEdit.content = htmlBody
-    debouncedContentSave(props.draftEdit, htmlBody, plainText)
+    props.draftEdit.content = content
+    debouncedContentSave(props.draftEdit, content, plainText)
   }
 
   return (
@@ -163,8 +163,20 @@ const EditDraft: FC<EditDraftProps> = (props) => {
           />
           <Divider />
           <Box sx={{ flex: 1, minHeight: 0 }}>
-            {!isMobileLandscape && <Editor initialValue={props.draftEdit.content} onChange={handleContentChange} />}
-            {isMobileLandscape && <Editor initialValue={props.draftEdit.content} onChange={handleContentChange} />}
+            {!isMobileLandscape && (
+              <Editor
+                initialValue={props.draftEdit.content}
+                mimeType={props.draftEdit.mimeType}
+                onChange={handleContentChange}
+              />
+            )}
+            {isMobileLandscape && (
+              <Editor
+                initialValue={props.draftEdit.content}
+                mimeType={props.draftEdit.mimeType}
+                onChange={handleContentChange}
+              />
+            )}
           </Box>
           <CardActions sx={{ flex: 0, justifyContent: 'space-between', padding: '8px 12px 4px' }} disableSpacing>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>

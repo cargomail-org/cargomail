@@ -10,7 +10,7 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
 import EditorConfig from './EditorConfig'
 import EditorSetValue from './EditorSetValue'
-import AttachmentsPlugin from './plugins/AttachmentsPlugin'
+// import AttachmentsPlugin from './plugins/AttachmentsPlugin'
 import ToolbarPlugin from './plugins/ToolbarPlugin'
 import EditorOnChange from './EditorOnChange'
 import MentionsPlugin from './plugins/MentionsPlugin'
@@ -26,10 +26,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 export interface EditorProps {
   initialValue?: string
-  onChange: (htmlBody: string, plainText: string) => void
+  mimeType?: string
+  onChange: (content: string, plainText: string) => void
 }
 
-const Editor = ({ initialValue, onChange }: EditorProps) => {
+const Editor = ({ initialValue, mimeType, onChange }: EditorProps) => {
   const [animate, setAnimate] = useState<Boolean>(false)
   const text = 'Enter some text, or drop files or attachments...'
   const placeholder = <Placeholder className="editor-placeholder">{text}</Placeholder>
@@ -128,10 +129,10 @@ const Editor = ({ initialValue, onChange }: EditorProps) => {
         <ImagesPlugin />
         {/* <AttachmentsPlugin /> */}
         <ToolbarPlugin />
-        <EditorSetValue value={initialValue || ''} />
+        <EditorSetValue value={initialValue || ''} mimeType={mimeType || ''} />
         <OnChangePlugin
           onChange={(editorState, editor) => {
-            EditorOnChange(editorState, editor, onChange)
+            EditorOnChange(editorState, editor, mimeType || '', onChange)
           }}
           ignoreSelectionChange={true}
         />

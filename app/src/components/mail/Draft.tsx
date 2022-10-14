@@ -161,7 +161,7 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
               marginRight: '12px',
               paddingBottom: '16px',
             }}>
-            <Viewer initialValue={parsed.content} />
+            <Viewer initialValue={parsed.content} mimeType={payload?.mimeType} />
           </Box>
         </AccordionDetails>
       </Accordion>
