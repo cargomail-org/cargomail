@@ -144,64 +144,14 @@ BEGIN
         thread_1,
         'Hi :-)',
         '{
-        "mime_type": "multipart/mixed",
-        "body": {"size": 0},
+        "mime_type": "application/json",
+        "body": {"data": "eyJyb290Ijp7ImNoaWxkcmVuIjpbeyJjaGlsZHJlbiI6W3siZGV0YWlsIjowLCJmb3JtYXQiOjAsIm1vZGUiOiJub3JtYWwiLCJzdHlsZSI6IiIsInRleHQiOiJIaSA6LSkiLCJ0eXBlIjoidGV4dCIsInZlcnNpb24iOjF9XSwiZGlyZWN0aW9uIjoibHRyIiwiZm9ybWF0IjoiIiwiaW5kZW50IjowLCJ0eXBlIjoicGFyYWdyYXBoIiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJyb290IiwidmVyc2lvbiI6MX19", "size": 10},
         "headers": [
             {"name": "From", "value": "Matthew Cuthbert <matthew.cuthbert@demo.localhost>"},
             {"name": "To", "value": ",,diana.barry@demo.localhost,,,diana.barry@demo.localhost,gilbert.blythe@demo.localhost.org"},
             {"name": "Subject", "value": "Hi there!"},
             {"name": "Message-ID", "value": "1001@demo.localhost"},
-            {"name": "Content-Type", "value": "multipart/mixed; boundary=\"0000000000000da85a05ea7315ff\""}
-        ],
-        "parts": [
-            {
-            "part_id": "0",
-            "mime_type": "text/plain",
-            "body": {"data": "SGkgOi0p", "size": 6},
-            "headers": [
-                {"name": "Content-Type", "value": "text/plain"}
-            ]
-            },
-            {
-            "part_id": "1",
-            "mime_type": "message/external-body",
-            "access_type": "URL",
-            "expiration": "Mon, 26 June 2023 09:00:00 GMT",
-            "url": "http://localhost:9998/api/storage/50811c73-4bf6-47a0-94ce-3f07f9583786",
-            "size": 32,
-            "external_body" : {
-                "mime_type": "text/plain",
-                "filename": "plain_text.txt",
-                "headers": [
-                    {"name": "Content-Type", "value": "text/plain; name=\"plain_text.txt\"; charset=\"us-ascii\""},
-                    {"name": "Content-Disposition", "value": "attachment; filename=\"plain_text.txt\""},
-                    {"name": "Content-ID", "value": "<50811c73-4bf6-47a0-94ce-3f07f9583786>"}
-                    ]
-                },
-            "headers": [
-                {"name": "Content-Type", "value": "message/external-body; access-type=\"URL\"; expiration=\"Mon, 26 June 2023 09:00:00 GMT\"; URL=\"http://localhost:9998/api/storage/50811c73-4bf6-47a0-94ce-3f07f9583786\"; size=32"}
-            ]
-            },
-            {
-            "part_id": "2",
-            "mime_type": "message/external-body",
-            "access_type": "URL",
-            "expiration": "Mon, 26 June 2023 09:00:30 GMT",
-            "url": "http://localhost:9998/api/storage/867cc2b4-ba54-4d19-bae4-e608e57114f2",
-            "size": 55894,
-            "external_body": {
-                "mime_type": "application/pdf",
-                "filename": "Fedemail concept.pdf",
-                "headers": [
-                    {"name": "Content-Type", "value": "application/pdf; name=\"Fedemail concept.pdf\""},
-                    {"name": "Content-Disposition", "value": "attachment; filename=\"Fedemail concept.pdf\""},
-                    {"name": "Content-ID", "value": "<867cc2b4-ba54-4d19-bae4-e608e57114f2>"}
-                ]
-            },
-            "headers": [
-                {"name": "Content-Type", "value": "message/external-body; access-type=\"URL\"; expiration=\"Mon, 26 June 2023 09:00:30 GMT\"; URL=\"http://localhost:9998/api/storage/867cc2b4-ba54-4d19-bae4-e608e57114f2\"; size=55894"}
-            ]
-            }
+            {"name": "Content-Type", "value": "application/json"}
         ]
         }',
         '["SENT"]',
@@ -231,7 +181,7 @@ BEGIN
         'Hi Matt, I''ll come to visit you next week. Regards Anne',
         '{
         "mime_type": "application/json",
-        "body": {"data": "eyJlZGl0b3JTdGF0ZSI6eyJyb290Ijp7ImNoaWxkcmVuIjpbeyJjaGlsZHJlbiI6W3siZGV0YWlsIjowLCJmb3JtYXQiOjAsIm1vZGUiOiJub3JtYWwiLCJzdHlsZSI6IiIsInRleHQiOiJIaSBNYXR0LCIsInR5cGUiOiJ0ZXh0IiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfSx7ImNoaWxkcmVuIjpbXSwiZGlyZWN0aW9uIjpudWxsLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfSx7ImNoaWxkcmVuIjpbeyJkZXRhaWwiOjAsImZvcm1hdCI6MCwibW9kZSI6Im5vcm1hbCIsInN0eWxlIjoiIiwidGV4dCI6IkknbGwgY29tZSB0byB2aXNpdCB5b3UgbmV4dCB3ZWVrLiIsInR5cGUiOiJ0ZXh0IiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfSx7ImNoaWxkcmVuIjpbXSwiZGlyZWN0aW9uIjoibHRyIiwiZm9ybWF0IjoiIiwiaW5kZW50IjowLCJ0eXBlIjoicGFyYWdyYXBoIiwidmVyc2lvbiI6MX0seyJjaGlsZHJlbiI6W3siZGV0YWlsIjowLCJmb3JtYXQiOjAsIm1vZGUiOiJub3JtYWwiLCJzdHlsZSI6IiIsInRleHQiOiJSZWdhcmRzIiwidHlwZSI6InRleHQiLCJ2ZXJzaW9uIjoxfV0sImRpcmVjdGlvbiI6Imx0ciIsImZvcm1hdCI6IiIsImluZGVudCI6MCwidHlwZSI6InBhcmFncmFwaCIsInZlcnNpb24iOjF9LHsiY2hpbGRyZW4iOlt7ImRldGFpbCI6MCwiZm9ybWF0IjowLCJtb2RlIjoibm9ybWFsIiwic3R5bGUiOiIiLCJ0ZXh0IjoiQW5uZSIsInR5cGUiOiJ0ZXh0IiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfV0sImRpcmVjdGlvbiI6Imx0ciIsImZvcm1hdCI6IiIsImluZGVudCI6MCwidHlwZSI6InJvb3QiLCJ2ZXJzaW9uIjoxfX0sImxhc3RTYXZlZCI6MTY2NTY2Njg0NDc5NSwic291cmNlIjoiUGxheWdyb3VuZCIsInZlcnNpb24iOiIwLjQuMSJ9", "size": 1096},
+        "body": {"data": "eyJyb290Ijp7ImNoaWxkcmVuIjpbeyJjaGlsZHJlbiI6W3siZGV0YWlsIjowLCJmb3JtYXQiOjAsIm1vZGUiOiJub3JtYWwiLCJzdHlsZSI6IiIsInRleHQiOiJIaSBNYXR0LCIsInR5cGUiOiJ0ZXh0IiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfSx7ImNoaWxkcmVuIjpbXSwiZGlyZWN0aW9uIjpudWxsLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfSx7ImNoaWxkcmVuIjpbeyJkZXRhaWwiOjAsImZvcm1hdCI6MCwibW9kZSI6Im5vcm1hbCIsInN0eWxlIjoiIiwidGV4dCI6IkknbGwgY29tZSB0byB2aXNpdCB5b3UgbmV4dCB3ZWVrLiIsInR5cGUiOiJ0ZXh0IiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfSx7ImNoaWxkcmVuIjpbXSwiZGlyZWN0aW9uIjoibHRyIiwiZm9ybWF0IjoiIiwiaW5kZW50IjowLCJ0eXBlIjoicGFyYWdyYXBoIiwidmVyc2lvbiI6MX0seyJjaGlsZHJlbiI6W3siZGV0YWlsIjowLCJmb3JtYXQiOjAsIm1vZGUiOiJub3JtYWwiLCJzdHlsZSI6IiIsInRleHQiOiJSZWdhcmRzIiwidHlwZSI6InRleHQiLCJ2ZXJzaW9uIjoxfV0sImRpcmVjdGlvbiI6Imx0ciIsImZvcm1hdCI6IiIsImluZGVudCI6MCwidHlwZSI6InBhcmFncmFwaCIsInZlcnNpb24iOjF9LHsiY2hpbGRyZW4iOlt7ImRldGFpbCI6MCwiZm9ybWF0IjowLCJtb2RlIjoibm9ybWFsIiwic3R5bGUiOiIiLCJ0ZXh0IjoiQW5uZSIsInR5cGUiOiJ0ZXh0IiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfV0sImRpcmVjdGlvbiI6Imx0ciIsImZvcm1hdCI6IiIsImluZGVudCI6MCwidHlwZSI6InJvb3QiLCJ2ZXJzaW9uIjoxfX0=", "size": 1096},
         "headers": [
             {"name": "From", "value": "Anne Shirley <anne.shirley@demo.localhost>"},
             {"name": "To", "value": "matthew.cuthbert@demo.localhost"},
