@@ -50,6 +50,32 @@ func (s *ScanThread) Scan(value interface{}) error {
 	return json.Unmarshal(data, &s)
 }
 
+func (s ScanMessage) Value() (driver.Value, error) {
+	return json.Marshal(s)
+}
+
+func (s *ScanMessage) Scan(value interface{}) error {
+	data, ok := value.([]byte)
+	if !ok {
+		s.Message = &fedemailv1.Message{}
+		return nil
+	}
+	return json.Unmarshal(data, &s)
+}
+
+func (s ScanDraft) Value() (driver.Value, error) {
+	return json.Marshal(s)
+}
+
+func (s *ScanDraft) Scan(value interface{}) error {
+	data, ok := value.([]byte)
+	if !ok {
+		s.Draft = &fedemailv1.Draft{}
+		return nil
+	}
+	return json.Unmarshal(data, &s)
+}
+
 func (s *ScanMessage) MarshalJSON() ([]byte, error) {
 	j, err := json.Marshal(s)
 	if err != nil {
@@ -89,79 +115,38 @@ func (s *ScanMessage) MarshalJSON() ([]byte, error) {
 		}
 	}
 
-	if (s.Payload.MimeType == "application/json") {
+	if s.Payload.MimeType == "application/json" {
 		return json.Marshal(m)
 	}
 
 	return json.Marshal(s)
 }
 
-func (s ScanMessage) Value() (driver.Value, error) {
-	return json.Marshal(s)
-}
-
 func (s *ScanMessage) UnmarshalJSON(data []byte) error {
-	var applicationJsonData bool = false
+	type ScanMessageAlias ScanMessage
 
-	var f interface{}
-	if err := json.Unmarshal(data, &f); err != nil {
+	aux := &struct {
+		*ScanMessageAlias
+		Payload struct {
+			*fedemailv1.MessagePart
+			Body struct {
+				*fedemailv1.MessagePartBody
+				Data interface{} `json:"data,omitempty"`
+			} `json:"body,omitempty"`
+		} `json:"payload,omitempty"`
+	}{ScanMessageAlias: (*ScanMessageAlias)(s)}
+
+	err := json.Unmarshal(data, aux)
+	if err != nil {
 		return err
 	}
-	m := f.(map[string]interface{})
-	for k, v := range m {
-		if k == "payload" {
-			m2 := v.(map[string]interface{})
-			for k2, v2 := range m2 {
-				if k2 == "mime_type" && v2 == "application/json" {
-					for k2, v2 := range m2 {
-						if k2 == "body" {
-							m3 := v2.(map[string]interface{})
-							for k3, v3 := range m3 {
-								if k3 == "data" {
-									applicationJsonData = true
-									b, _ := json.Marshal(v3)
-									m3[k3] = base64.StdEncoding.WithPadding(base64.StdPadding).EncodeToString(b)
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+
+	if aux.Payload.MimeType == "application/json" {
+		b, _ := json.Marshal(aux.Payload.Body.Data)
+		aux.Payload.Body.Data = base64.StdEncoding.WithPadding(base64.StdPadding).EncodeToString(b)
 	}
 
-	if applicationJsonData {
-		b, err := json.Marshal(m)
-		if err != nil {
-			return err
-		}
-
-		type t ScanMessage
-		return json.Unmarshal(b, (*t)(s))
-	}
-
-	type t ScanMessage
-	return json.Unmarshal(data, (*t)(s))
-}
-
-func (s *ScanMessage) Scan(value interface{}) error {
-	data, ok := value.([]byte)
-	if !ok {
-		s.Message = &fedemailv1.Message{}
-		return nil
-	}
-	return json.Unmarshal(data, &s)
-}
-
-func (s ScanDraft) Value() (driver.Value, error) {
-	return json.Marshal(s)
-}
-
-func (s *ScanDraft) Scan(value interface{}) error {
-	data, ok := value.([]byte)
-	if !ok {
-		s.Draft = &fedemailv1.Draft{}
-		return nil
-	}
-	return json.Unmarshal(data, &s)
+	b, _ := json.Marshal(aux)
+	err = json.Unmarshal(b, (*ScanMessageAlias)(s))
+	return err
 }
