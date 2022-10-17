@@ -145,7 +145,7 @@ BEGIN
         'Hi :-)',
         '{
         "mime_type": "application/json",
-        "body": {"data": "eyJyb290Ijp7ImNoaWxkcmVuIjpbeyJjaGlsZHJlbiI6W3siZGV0YWlsIjowLCJmb3JtYXQiOjAsIm1vZGUiOiJub3JtYWwiLCJzdHlsZSI6IiIsInRleHQiOiJIaSA6LSkiLCJ0eXBlIjoidGV4dCIsInZlcnNpb24iOjF9XSwiZGlyZWN0aW9uIjoibHRyIiwiZm9ybWF0IjoiIiwiaW5kZW50IjowLCJ0eXBlIjoicGFyYWdyYXBoIiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJyb290IiwidmVyc2lvbiI6MX19", "size": 10},
+        "body": {"data": {"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Hi :-)","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}, "size": 10},
         "headers": [
             {"name": "From", "value": "Matthew Cuthbert <matthew.cuthbert@demo.localhost>"},
             {"name": "To", "value": ",,diana.barry@demo.localhost,,,diana.barry@demo.localhost,gilbert.blythe@demo.localhost.org"},
@@ -161,7 +161,7 @@ BEGIN
         'Hello :--)',
         '{
         "mime_type": "application/json",
-        "body": {"data": "eyJyb290Ijp7ImNoaWxkcmVuIjpbeyJjaGlsZHJlbiI6W3siZGV0YWlsIjowLCJmb3JtYXQiOjAsIm1vZGUiOiJub3JtYWwiLCJzdHlsZSI6IiIsInRleHQiOiJIZWxsbyA6LS0pIiwidHlwZSI6InRleHQiLCJ2ZXJzaW9uIjoxfV0sImRpcmVjdGlvbiI6Imx0ciIsImZvcm1hdCI6IiIsImluZGVudCI6MCwidHlwZSI6InBhcmFncmFwaCIsInZlcnNpb24iOjF9XSwiZGlyZWN0aW9uIjoibHRyIiwiZm9ybWF0IjoiIiwiaW5kZW50IjowLCJ0eXBlIjoicm9vdCIsInZlcnNpb24iOjF9fQ==", "size": 10},
+        "body": {"data": {"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Hello :--)","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}, "size": 10},
         "headers": [
             {"name": "From", "value": "Diana Barry <diana.barry@demo.localhost>"},
             {"name": "To", "value": "matthew.cuthbert@demo.localhost"},
@@ -181,7 +181,7 @@ BEGIN
         'Hi Matt, I''ll come to visit you next week. Regards Anne',
         '{
         "mime_type": "application/json",
-        "body": {"data": "eyJyb290Ijp7ImNoaWxkcmVuIjpbeyJjaGlsZHJlbiI6W3siZGV0YWlsIjowLCJmb3JtYXQiOjAsIm1vZGUiOiJub3JtYWwiLCJzdHlsZSI6IiIsInRleHQiOiJIaSBNYXR0LCIsInR5cGUiOiJ0ZXh0IiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfSx7ImNoaWxkcmVuIjpbXSwiZGlyZWN0aW9uIjpudWxsLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfSx7ImNoaWxkcmVuIjpbeyJkZXRhaWwiOjAsImZvcm1hdCI6MCwibW9kZSI6Im5vcm1hbCIsInN0eWxlIjoiIiwidGV4dCI6IkknbGwgY29tZSB0byB2aXNpdCB5b3UgbmV4dCB3ZWVrLiIsInR5cGUiOiJ0ZXh0IiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfSx7ImNoaWxkcmVuIjpbXSwiZGlyZWN0aW9uIjoibHRyIiwiZm9ybWF0IjoiIiwiaW5kZW50IjowLCJ0eXBlIjoicGFyYWdyYXBoIiwidmVyc2lvbiI6MX0seyJjaGlsZHJlbiI6W3siZGV0YWlsIjowLCJmb3JtYXQiOjAsIm1vZGUiOiJub3JtYWwiLCJzdHlsZSI6IiIsInRleHQiOiJSZWdhcmRzIiwidHlwZSI6InRleHQiLCJ2ZXJzaW9uIjoxfV0sImRpcmVjdGlvbiI6Imx0ciIsImZvcm1hdCI6IiIsImluZGVudCI6MCwidHlwZSI6InBhcmFncmFwaCIsInZlcnNpb24iOjF9LHsiY2hpbGRyZW4iOlt7ImRldGFpbCI6MCwiZm9ybWF0IjowLCJtb2RlIjoibm9ybWFsIiwic3R5bGUiOiIiLCJ0ZXh0IjoiQW5uZSIsInR5cGUiOiJ0ZXh0IiwidmVyc2lvbiI6MX1dLCJkaXJlY3Rpb24iOiJsdHIiLCJmb3JtYXQiOiIiLCJpbmRlbnQiOjAsInR5cGUiOiJwYXJhZ3JhcGgiLCJ2ZXJzaW9uIjoxfV0sImRpcmVjdGlvbiI6Imx0ciIsImZvcm1hdCI6IiIsImluZGVudCI6MCwidHlwZSI6InJvb3QiLCJ2ZXJzaW9uIjoxfX0=", "size": 1096},
+        "body": {"data": {"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Hi Matt,","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1},{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"I''ll come to visit you next week.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1},{"children":[],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Regards","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Anne","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}, "size": 1096},
         "headers": [
             {"name": "From", "value": "Anne Shirley <anne.shirley@demo.localhost>"},
             {"name": "To", "value": "matthew.cuthbert@demo.localhost"},
