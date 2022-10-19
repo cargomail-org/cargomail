@@ -151,7 +151,8 @@ BEGIN
             {"name": "To", "value": ",,diana.barry@demo.localhost,,,diana.barry@demo.localhost,gilbert.blythe@demo.localhost.org"},
             {"name": "Subject", "value": "Hi there!"},
             {"name": "Message-ID", "value": "1001@demo.localhost"},
-            {"name": "Content-Type", "value": "application/json"}
+            {"name": "Content-Type", "value": "application/json"},
+            {"name": "Content-Transfer-Encoding", "value": "base64"}
         ]
         }',
         '["SENT"]',
@@ -169,7 +170,8 @@ BEGIN
             {"name": "Message-ID", "value": "1002@demo.localhost"},
             {"name": "In-Reply-To", "value": "1001@demo.localhost"},
             {"name": "References", "value": "1001@demo.localhost"},
-            {"name": "Content-Type", "value": "application/json"}
+            {"name": "Content-Type", "value": "application/json"},
+            {"name": "Content-Transfer-Encoding", "value": "base64"}
         ]
         }',
         '["CATEGORY_SOCIAL", "UNREAD", "INBOX"]',
@@ -187,7 +189,8 @@ BEGIN
             {"name": "To", "value": "matthew.cuthbert@demo.localhost"},
             {"name": "Subject", "value": "Meeting"},
             {"name": "Message-ID", "value": "1003@demo.localhost"},
-            {"name": "Content-Type", "value": "application/json"}
+            {"name": "Content-Type", "value": "application/json"},
+            {"name": "Content-Transfer-Encoding", "value": "base64"}
         ]
         }',
         '["CATEGORY_SOCIAL", "UNREAD", "INBOX"]');

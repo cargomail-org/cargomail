@@ -19,9 +19,9 @@ type ScanThread struct {
 type ScanMessage struct {
 	*fedemailv1.Message
 }
-
 type ScanDraft struct {
 	*fedemailv1.Draft
+	Message *ScanMessage `json:"message,omitempty"`
 }
 
 func (s ScanLabel) Value() (driver.Value, error) {
@@ -64,7 +64,11 @@ func (s *ScanMessage) Scan(value interface{}) error {
 }
 
 func (s ScanDraft) Value() (driver.Value, error) {
-	return json.Marshal(s)
+	s.Message = &ScanMessage{
+		Message: s.Draft.Message,
+	}
+
+	return json.Marshal(s.Message)
 }
 
 func (s *ScanDraft) Scan(value interface{}) error {
@@ -73,8 +77,16 @@ func (s *ScanDraft) Scan(value interface{}) error {
 		s.Draft = &fedemailv1.Draft{}
 		return nil
 	}
-	return json.Unmarshal(data, &s)
+
+	err := json.Unmarshal(data, &s)
+	if err != nil {
+		return err
+	}
+
+	s.Draft.Message = s.Message.Message
+	return nil
 }
+
 func (s ScanMessage) MarshalJSON() ([]byte, error) {
 	type ScanMessageAlias ScanMessage
 
@@ -83,7 +95,7 @@ func (s ScanMessage) MarshalJSON() ([]byte, error) {
 		Payload struct {
 			*fedemailv1.MessagePart
 			MimeType string `json:"mime_type,omitempty"`
-			Body struct {
+			Body     struct {
 				*fedemailv1.MessagePartBody
 				Data interface{} `json:"data,omitempty"`
 			} `json:"body,omitempty"`
@@ -118,7 +130,7 @@ func (s *ScanMessage) UnmarshalJSON(data []byte) error {
 		Payload struct {
 			*fedemailv1.MessagePart
 			MimeType string `json:"mime_type,omitempty"`
-			Body struct {
+			Body     struct {
 				*fedemailv1.MessagePartBody
 				Data interface{} `json:"data,omitempty"`
 			} `json:"body,omitempty"`

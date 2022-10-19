@@ -263,7 +263,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.drafts_create_v1(IN _owner character varying, IN _payload jsonb)
+    CREATE OR REPLACE FUNCTION fedemail.drafts_create_v1(IN _owner character varying, IN _message jsonb)
     RETURNS jsonb AS
     $BODY$
     DECLARE
@@ -278,7 +278,7 @@ BEGIN
         _labels = to_jsonb('["DRAFT"]'::json);
 
         INSERT INTO fedemail.message(owner, draft_id, payload, labels)
-            VALUES (_owner, nextval('fedemail.draft_id_seq'::regclass), _payload, _labels)
+            VALUES (_owner, nextval('fedemail.draft_id_seq'::regclass), _message->'payload', _labels)
             RETURNING jsonb_build_object('id', draft_id::varchar(255),
                                          'message', jsonb_build_object(
 	                                        'id', id::varchar(255),
@@ -293,7 +293,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.drafts_update_v1(IN _owner character varying, IN _id bigint, IN _payload jsonb)
+    CREATE OR REPLACE FUNCTION fedemail.drafts_update_v1(IN _owner character varying, IN _id bigint, IN _message jsonb)
     RETURNS jsonb AS
     $BODY$
     DECLARE
@@ -306,9 +306,9 @@ BEGIN
 
         UPDATE fedemail.message
             SET id = nextval('fedemail.message_id_seq'::regclass),
-                payload = _payload->'payload',
-                snippet = _payload->>'snippet',
-                raw = _payload->>'raw',
+                payload = _message->'payload',
+                snippet = _message->>'snippet',
+                raw = _message->>'raw',
                 internal_date = extract(epoch from now())
             WHERE owner = _owner AND draft_id = _id
             RETURNING jsonb_build_object('id', draft_id::varchar(255),
