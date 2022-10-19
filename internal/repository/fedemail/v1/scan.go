@@ -75,51 +75,39 @@ func (s *ScanDraft) Scan(value interface{}) error {
 	}
 	return json.Unmarshal(data, &s)
 }
+func (s ScanMessage) MarshalJSON() ([]byte, error) {
+	type ScanMessageAlias ScanMessage
 
-func (s *ScanMessage) MarshalJSON() ([]byte, error) {
-	j, err := json.Marshal(s)
+	aux := &struct {
+		*ScanMessageAlias
+		Payload struct {
+			*fedemailv1.MessagePart
+			MimeType string `json:"mime_type,omitempty"`
+			Body struct {
+				*fedemailv1.MessagePartBody
+				Data interface{} `json:"data,omitempty"`
+			} `json:"body,omitempty"`
+		} `json:"payload,omitempty"`
+	}{ScanMessageAlias: (*ScanMessageAlias)(&s)}
+
+	b, err := json.Marshal((*ScanMessageAlias)(&s))
 	if err != nil {
 		return nil, err
 	}
+	json.Unmarshal(b, aux)
 
-	var f interface{}
-	if err := json.Unmarshal(j, &f); err != nil {
-		return nil, err
-	}
-	m := f.(map[string]interface{})
-	for k, v := range m {
-		if k == "payload" {
-			m2 := v.(map[string]interface{})
-			for k2, v2 := range m2 {
-				if k2 == "mime_type" && v2 == "application/json" {
-					for k2, v2 := range m2 {
-						if k2 == "body" {
-							m3 := v2.(map[string]interface{})
-							for k3, v3 := range m3 {
-								if k3 == "data" {
-									b, err := base64.StdEncoding.WithPadding(base64.StdPadding).DecodeString(v3.(string))
-									if err != nil {
-										return nil, err
-									}
-									var ff interface{}
-									if err := json.Unmarshal(b, &ff); err != nil {
-										return nil, err
-									}
-									m3[k3] = ff
-								}
-							}
-						}
-					}
-				}
-			}
+	if s.Payload.MimeType == "application/json" && len(s.Payload.Body.Data) > 0 {
+		data, err := base64.StdEncoding.WithPadding(base64.StdPadding).DecodeString(s.Payload.Body.Data)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(data, &aux.Payload.Body.Data); err != nil {
+			return nil, err
 		}
 	}
 
-	if s.Payload.MimeType == "application/json" {
-		return json.Marshal(m)
-	}
-
-	return json.Marshal(s)
+	return json.Marshal(aux)
 }
 
 func (s *ScanMessage) UnmarshalJSON(data []byte) error {
@@ -129,6 +117,7 @@ func (s *ScanMessage) UnmarshalJSON(data []byte) error {
 		*ScanMessageAlias
 		Payload struct {
 			*fedemailv1.MessagePart
+			MimeType string `json:"mime_type,omitempty"`
 			Body struct {
 				*fedemailv1.MessagePartBody
 				Data interface{} `json:"data,omitempty"`
@@ -142,11 +131,14 @@ func (s *ScanMessage) UnmarshalJSON(data []byte) error {
 	}
 
 	if aux.Payload.MimeType == "application/json" {
-		b, _ := json.Marshal(aux.Payload.Body.Data)
+		b, err := json.Marshal(aux.Payload.Body.Data)
+		if err != nil {
+			return err
+		}
+
 		aux.Payload.Body.Data = base64.StdEncoding.WithPadding(base64.StdPadding).EncodeToString(b)
 	}
 
 	b, _ := json.Marshal(aux)
-	err = json.Unmarshal(b, (*ScanMessageAlias)(s))
-	return err
+	return json.Unmarshal(b, (*ScanMessageAlias)(s))
 }
