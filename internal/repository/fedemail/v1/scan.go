@@ -108,7 +108,7 @@ func (s ScanMessage) MarshalJSON() ([]byte, error) {
 	}
 	json.Unmarshal(b, aux)
 
-	if s.Payload.MimeType == "application/json" && len(s.Payload.Body.Data) > 0 {
+	if aux.Payload.MimeType == "application/json" && len(s.Payload.Body.Data) > 0 {
 		data, err := base64.StdEncoding.WithPadding(base64.StdPadding).DecodeString(s.Payload.Body.Data)
 		if err != nil {
 			return nil, err

@@ -4,6 +4,7 @@ import { ListItemNode, ListNode } from '@lexical/list'
 import { AutoLinkNode, LinkNode } from '@lexical/link'
 import { HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode'
 import { ImageNode } from './nodes/ImageNode'
+import { AttachmentNode } from './nodes/AttachmentNode'
 import { EmojiNode } from './nodes/EmojiNode'
 import { KeywordNode } from './nodes/KeywordNode'
 import { CodeHighlightNode, CodeNode } from '@lexical/code'
@@ -32,6 +33,7 @@ const ViewerConfig = {
     KeywordNode,
     EmojiNode,
     ImageNode,
+    AttachmentNode,
     HorizontalRuleNode,
     AutoLinkNode,
     LinkNode,

@@ -22,6 +22,7 @@ const EmailTheme = {
     listitemUnchecked: 'editor-listitem-unchecked',
   },
   image: 'editor-image',
+  attachment: 'editor-attachment',
   link: 'editor-link',
   text: {
     bold: 'editor-text-bold',

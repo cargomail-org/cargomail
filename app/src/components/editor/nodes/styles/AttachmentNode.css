@@ -1,0 +1,14 @@
+.AttachmentNode_tag {
+    margin: 1px 5px 1px;
+    display: inline-flex;
+    max-width: 220px;
+    cursor: pointer;
+    user-select: none;
+    min-width: 50px;
+  }
+  .AttachmentNode_tag p {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
