@@ -10,7 +10,6 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
 import EditorConfig from './EditorConfig'
 import EditorSetValue from './EditorSetValue'
-// import AttachmentsPlugin from './plugins/AttachmentsPlugin'
 import ToolbarPlugin from './plugins/ToolbarPlugin'
 import EditorOnChange from './EditorOnChange'
 import MentionsPlugin from './plugins/MentionsPlugin'
@@ -19,6 +18,7 @@ import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin'
 import HorizontalRulePlugin from './plugins/HorizontalRulePlugin'
 import ImagesPlugin from './plugins/ImagesPlugin'
+import AttachmentsPlugin from './plugins/AttachmentsPlugin'
 import EmojisPlugin from './plugins/EmojisPlugin'
 import KeywordsPlugin from './plugins/KeywordsPlugin'
 import Placeholder from './ui/Placeholder'
@@ -72,7 +72,7 @@ const Editor = ({ initialValue, mimeType, onChange }: EditorProps) => {
         <CodeHighlightPlugin />
         <HorizontalRulePlugin />
         <ImagesPlugin />
-        {/* <AttachmentsPlugin /> */}
+        <AttachmentsPlugin />
         <ToolbarPlugin />
         <EditorSetValue value={initialValue || ''} mimeType={mimeType || ''} />
         <OnChangePlugin

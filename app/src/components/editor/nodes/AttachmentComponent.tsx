@@ -58,7 +58,6 @@ function LazyAttachment({
   className,
   imageRef,
   src,
-  filename,
   width,
   height,
   maxWidth,
@@ -69,7 +68,6 @@ function LazyAttachment({
   imageRef: { current: null | HTMLImageElement }
   maxWidth: number
   src: string
-  filename: string
   width: 'inherit' | number
 }): JSX.Element {
   useSuspenseImage(src)
@@ -77,7 +75,6 @@ function LazyAttachment({
     <img
       className={className || undefined}
       src={src}
-      // filename={filename}
       alt={altText}
       ref={imageRef}
       style={{
@@ -263,7 +260,6 @@ export default function AttachmentComponent({
           <LazyAttachment
             className={isFocused ? `focused ${$isNodeSelection(selection) ? 'draggable' : ''}` : null}
             src={src}
-            filename={filename}
             altText={altText}
             imageRef={imageRef}
             width={width}
