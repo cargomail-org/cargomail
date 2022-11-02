@@ -22,15 +22,19 @@ import AttachmentsPlugin from './plugins/AttachmentsPlugin'
 import EmojisPlugin from './plugins/EmojisPlugin'
 import KeywordsPlugin from './plugins/KeywordsPlugin'
 import Placeholder from './ui/Placeholder'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { LexicalEditor } from 'lexical'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import ActionsPlugin from './plugins/ActionsPlugin'
 
 export interface EditorProps {
+  handleEditor: (editor: LexicalEditor) => void
   initialValue?: string
   mimeType?: string
   onChange: (content: string, plainText: string) => void
 }
 
-const Editor = ({ initialValue, mimeType, onChange }: EditorProps) => {
+const Editor = ({ handleEditor, initialValue, mimeType, onChange }: EditorProps) => {
   const text = 'Enter some text...'
   const placeholder = <Placeholder className="editor-placeholder">{text}</Placeholder>
   const scrollRef = useRef(null)
@@ -43,6 +47,16 @@ const Editor = ({ initialValue, mimeType, onChange }: EditorProps) => {
   }
 
   const richEditorRef = useRef(null)
+
+  function EditorInstancePlugin(props: any) {
+    const [editor] = useLexicalComposerContext()
+
+    useEffect(() => {
+      handleEditor(editor)
+    }, [editor])
+
+    return null
+  }
 
   return (
     <LexicalComposer initialConfig={EditorConfig}>
@@ -63,6 +77,7 @@ const Editor = ({ initialValue, mimeType, onChange }: EditorProps) => {
             }
             placeholder={placeholder}
           />
+          <EditorInstancePlugin />
         </div>
         <HistoryPlugin />
         <CheckListPlugin />
@@ -86,6 +101,7 @@ const Editor = ({ initialValue, mimeType, onChange }: EditorProps) => {
             <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
           </>
         )}
+        <ActionsPlugin isRichText={true} />
       </div>
     </LexicalComposer>
   )

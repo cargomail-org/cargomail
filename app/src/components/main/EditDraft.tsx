@@ -21,6 +21,8 @@ import { DraftsContext, IDraftEdit } from '../../context/DraftsContext'
 import useFedemailAPI from '../../api/FedemailAPI'
 import { RecipientsSelect } from './Recipients'
 import Editor from '../editor/Editor'
+import { SHOW_FILE_DIALOG_COMMAND } from '../editor/plugins/AttachmentsPlugin'
+import { LexicalEditor } from 'lexical'
 
 export type EditDraftProps = {
   draftEdit: IDraftEdit
@@ -75,6 +77,13 @@ const EditDraft: FC<EditDraftProps> = (props) => {
     props.draftEdit.snippet = getSnippet(plainText)
     props.draftEdit.content = content
     debouncedContentSave(props.draftEdit, content, plainText)
+  }
+
+  const [editor, setEditor] = useState<LexicalEditor>()
+
+  const selectAttachmentDialog = () => {
+    console.log(editor)
+    editor?.dispatchCommand(SHOW_FILE_DIALOG_COMMAND, 'Hello World!')
   }
 
   return (
@@ -165,6 +174,7 @@ const EditDraft: FC<EditDraftProps> = (props) => {
           <Box sx={{ flex: 1, minHeight: 0 }}>
             {!isMobileLandscape && (
               <Editor
+                handleEditor={(editor) => setEditor(editor)}
                 initialValue={props.draftEdit.content}
                 mimeType={props.draftEdit.mimeType}
                 onChange={handleContentChange}
@@ -172,6 +182,7 @@ const EditDraft: FC<EditDraftProps> = (props) => {
             )}
             {isMobileLandscape && (
               <Editor
+                handleEditor={(editor) => setEditor(editor)}
                 initialValue={props.draftEdit.content}
                 mimeType={props.draftEdit.mimeType}
                 onChange={handleContentChange}
@@ -194,6 +205,7 @@ const EditDraft: FC<EditDraftProps> = (props) => {
                     opacity: 1,
                   },
                 }}
+                onClick={() => selectAttachmentDialog()}
               />
             </Box>
             <DeleteIcon

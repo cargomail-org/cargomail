@@ -25,7 +25,10 @@ import { $createAttachmentNode, $isAttachmentNode, AttachmentNode, AttachmentPay
 
 export type InsertAttachmentPayload = Readonly<AttachmentPayload>
 
+export const SHOW_FILE_DIALOG_COMMAND: LexicalCommand<string> = createCommand()
+
 export const INSERT_ATTACHMENT_COMMAND: LexicalCommand<InsertAttachmentPayload> = createCommand()
+
 export default function AttachmentsPlugin({ captionsEnabled }: { captionsEnabled?: boolean }): JSX.Element | null {
   const [editor] = useLexicalComposerContext()
 
