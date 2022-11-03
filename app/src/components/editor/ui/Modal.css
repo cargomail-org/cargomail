@@ -41,6 +41,7 @@
   border-bottom: 1px solid #ccc;
 }
 .Modal__buttons_bar {
+  margin-top: 20px;
   display: flex;
   justify-content: space-between
 }
