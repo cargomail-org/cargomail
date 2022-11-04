@@ -4,11 +4,10 @@ import React, { useRef, useState, useEffect } from 'react'
 
 import './Dropzone.css'
 
-const Dropzone = () => {
+const Dropzone = ({ validFiles, setValidFiles }: any) => {
   const [dragActive, setDragActive] = useState<Boolean>(false)
   const fileInputRef = useRef<any>(null)
   const [selectedFiles, setSelectedFiles] = useState<any>([])
-  const [validFiles, setValidFiles] = useState<any>([])
   const [unsupportedFiles, setUnsupportedFiles] = useState<any>([])
 
   useEffect(() => {
@@ -21,6 +20,7 @@ const Dropzone = () => {
       }
     }, [])
     setValidFiles([...filteredArr])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFiles])
 
   const preventDefault = (e: any) => {

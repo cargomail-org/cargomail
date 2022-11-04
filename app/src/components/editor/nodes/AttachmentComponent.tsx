@@ -89,7 +89,7 @@ function LazyAttachment({
 
 export default function AttachmentComponent({
   src,
-  filename,
+  file,
   altText,
   nodeKey,
   width,
@@ -108,7 +108,7 @@ export default function AttachmentComponent({
   resizable: boolean
   showCaption: boolean
   src: string
-  filename: string
+  file: any
   width: 'inherit' | number
   captionsEnabled: boolean
 }): JSX.Element {

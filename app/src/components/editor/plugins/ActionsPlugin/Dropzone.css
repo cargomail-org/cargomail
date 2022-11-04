@@ -96,7 +96,7 @@
 .file-type-logo {
     width: 40px;
     height: 40px;
-    background: url(../../images/generic.png) no-repeat center center; 
+    background: url(../../images/file.svg) no-repeat center center; 
     background-size: 100%;
     position: absolute;
 }

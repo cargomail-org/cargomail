@@ -104,7 +104,7 @@ function onDragStart(event: DragEvent): boolean {
         maxWidth: node.__maxWidth,
         showCaption: node.__showCaption,
         src: node.__src,
-        filename: node.__filename,
+        file: node.__file,
         width: node.__width,
       },
       type: 'attachment',

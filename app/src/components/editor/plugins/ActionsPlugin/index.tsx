@@ -1,13 +1,19 @@
-import { COMMAND_PRIORITY_LOW, LexicalEditor } from 'lexical'
+import {
+  $createParagraphNode,
+  $createTextNode,
+  $getRoot,
+  COMMAND_PRIORITY_LOW,
+  createEditor,
+  LexicalEditor,
+} from 'lexical'
 
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { mergeRegister } from '@lexical/utils'
-import * as React from 'react'
 import { useEffect, useState } from 'react'
 
 import useModal from '../../hooks/useModal'
 import Button from '../../ui/Button'
-import { SHOW_FILE_DIALOG_COMMAND } from '../AttachmentsPlugin'
+import { InsertAttachmentPayload, INSERT_ATTACHMENT_COMMAND, SHOW_FILE_DIALOG_COMMAND } from '../AttachmentsPlugin'
 import Dropzone from './Dropzone'
 
 export default function ActionsPlugin({ isRichText }: { isRichText: boolean }): JSX.Element {
@@ -38,14 +44,35 @@ export default function ActionsPlugin({ isRichText }: { isRichText: boolean }): 
 }
 
 function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose: () => void }): JSX.Element {
+  const [validFiles, setValidFiles] = useState<any>([])
+
   return (
     <>
       <div className="Modal__content">
-        <Dropzone />
+        <Dropzone validFiles={validFiles} setValidFiles={setValidFiles} />
         <div className="Modal__buttons_bar">
           <Button
             onClick={() => {
-              // editor.dispatchCommand(INSERT_ATTACHMENT_COMMAND, data)
+              validFiles.map((file: any) => {
+                const captionEditor: LexicalEditor = createEditor()
+                captionEditor.update(() => {
+                  const root = $getRoot()
+                  const paragraph = $createParagraphNode()
+                  paragraph.append($createTextNode(file.name))
+                  root.append(paragraph)
+                })
+                const attachmentPayload: InsertAttachmentPayload = {
+                  src: '/images/folder.svg',
+                  width: 150,
+                  height: 150,
+                  file: file,
+                  altText: 'attachment',
+                  captionsEnabled: true,
+                  showCaption: true,
+                  caption: captionEditor,
+                }
+                return editor.dispatchCommand(INSERT_ATTACHMENT_COMMAND, attachmentPayload)
+              })
               editor.focus()
               onClose()
             }}>
