@@ -30,11 +30,13 @@ const Dropzone = () => {
 
   const dragOver = (e: any) => {
     preventDefault(e)
+    e.dataTransfer.dropEffect = 'move'
     setDragActive(true)
   }
 
   const dragEnter = (e: any) => {
     preventDefault(e)
+    e.dataTransfer.dropEffect = 'move'
     setDragActive(true)
   }
 
