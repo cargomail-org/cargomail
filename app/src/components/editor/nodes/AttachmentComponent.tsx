@@ -4,6 +4,7 @@ import './AttachmentNode.css'
 
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
@@ -280,6 +281,7 @@ export default function AttachmentComponent({
               <RichTextPlugin
                 contentEditable={<ContentEditable className="AttachmentNode__contentEditable" />}
                 placeholder={<Placeholder className="AttachmentNode__placeholder">Enter a caption...</Placeholder>}
+                ErrorBoundary={LexicalErrorBoundary}
               />
               {showNestedEditorTreeView === true ? <TreeViewPlugin /> : null}
             </LexicalNestedComposer>

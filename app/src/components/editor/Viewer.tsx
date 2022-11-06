@@ -7,6 +7,7 @@ import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
+import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import ViewerConfig from './ViewerConfig'
 import ViewerSetValue from './ViewerSetValue'
 import MentionsPlugin from './plugins/MentionsPlugin'
@@ -51,6 +52,7 @@ const Viewer = ({ initialValue, mimeType }: EditorProps) => {
             </div>
           }
           placeholder=""
+          ErrorBoundary={LexicalErrorBoundary}
         />
         <ViewerSetValue value={initialValue || ''} mimeType={mimeType || ''} />
         <HistoryPlugin />

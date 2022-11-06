@@ -12,6 +12,7 @@ import './ImageNode.css'
 
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
@@ -258,7 +259,6 @@ export default function ImageComponent({
 
   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected || isResizing
-
   return (
     <Suspense fallback={null}>
       <>
@@ -286,6 +286,7 @@ export default function ImageComponent({
               <RichTextPlugin
                 contentEditable={<ContentEditable className="ImageNode__contentEditable" />}
                 placeholder={<Placeholder className="ImageNode__placeholder">Enter a caption...</Placeholder>}
+                ErrorBoundary={LexicalErrorBoundary}
               />
               {showNestedEditorTreeView === true ? <TreeViewPlugin /> : null}
             </LexicalNestedComposer>

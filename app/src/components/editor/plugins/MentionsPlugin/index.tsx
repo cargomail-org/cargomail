@@ -650,27 +650,29 @@ export default function NewMentionsPlugin(): JSX.Element | null {
       onSelectOption={onSelectOption}
       triggerFn={checkForMentionMatch}
       options={options}
-      menuRenderFn={(anchorElement, { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex }) =>
-        anchorElement && results.length
+      menuRenderFn={(anchorElementRef, { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex }) =>
+        anchorElementRef.current && results.length
           ? ReactDOM.createPortal(
-              <ul>
-                {options.map((option, i: number) => (
-                  <MentionsTypeaheadMenuItem
-                    index={i}
-                    isSelected={selectedIndex === i}
-                    onClick={() => {
-                      setHighlightedIndex(i)
-                      selectOptionAndCleanUp(option)
-                    }}
-                    onMouseEnter={() => {
-                      setHighlightedIndex(i)
-                    }}
-                    key={option.key}
-                    option={option}
-                  />
-                ))}
-              </ul>,
-              anchorElement
+              <div className="typeahead-popover mentions-menu">
+                <ul>
+                  {options.map((option, i: number) => (
+                    <MentionsTypeaheadMenuItem
+                      index={i}
+                      isSelected={selectedIndex === i}
+                      onClick={() => {
+                        setHighlightedIndex(i)
+                        selectOptionAndCleanUp(option)
+                      }}
+                      onMouseEnter={() => {
+                        setHighlightedIndex(i)
+                      }}
+                      key={option.key}
+                      option={option}
+                    />
+                  ))}
+                </ul>
+              </div>,
+              anchorElementRef.current
             )
           : null
       }

@@ -8,6 +8,7 @@ import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
+import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import EditorConfig from './EditorConfig'
 import EditorSetValue from './EditorSetValue'
 import ToolbarPlugin from './plugins/ToolbarPlugin'
@@ -76,6 +77,7 @@ const Editor = ({ handleEditor, initialValue, mimeType, onChange }: EditorProps)
               </div>
             }
             placeholder={placeholder}
+            ErrorBoundary={LexicalErrorBoundary}
           />
           <EditorInstancePlugin />
         </div>
