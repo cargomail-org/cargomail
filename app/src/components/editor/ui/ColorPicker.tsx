@@ -15,6 +15,7 @@ import DropDown from './DropDown'
 import TextInput from './TextInput'
 
 interface ColorPickerProps {
+  disabled?: boolean
   buttonAriaLabel?: string
   buttonClassName: string
   buttonIconClassName?: string
@@ -46,7 +47,13 @@ const basicColors = [
 const WIDTH = 214
 const HEIGHT = 150
 
-export default function ColorPicker({ color, children, onChange, ...rest }: Readonly<ColorPickerProps>): JSX.Element {
+export default function ColorPicker({
+  color,
+  children,
+  onChange,
+  disabled = false,
+  ...rest
+}: Readonly<ColorPickerProps>): JSX.Element {
   const [selfColor, setSelfColor] = useState(transformColor('hex', color))
   const [inputColor, setInputColor] = useState(color)
   const innerDivRef = useRef(null)
@@ -109,7 +116,7 @@ export default function ColorPicker({ color, children, onChange, ...rest }: Read
   }, [color])
 
   return (
-    <DropDown {...rest} stopCloseOnClickSelf={true}>
+    <DropDown {...rest} disabled={disabled} stopCloseOnClickSelf={true}>
       <div className="color-picker-wrapper" style={{ width: WIDTH }} ref={innerDivRef}>
         <TextInput label="Hex" onChange={onSetHex} value={inputColor} />
         <div className="color-picker-basic-color">
