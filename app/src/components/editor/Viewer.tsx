@@ -10,13 +10,12 @@ import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import ViewerConfig from './ViewerConfig'
 import ViewerSetValue from './ViewerSetValue'
-import MentionsPlugin from './plugins/MentionsPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
+import ClickableLinkPlugin from './plugins/ClickableLinkPlugin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin'
 import HorizontalRulePlugin from './plugins/HorizontalRulePlugin'
 import ImagesPlugin from './plugins/ImagesPlugin'
-import EmojisPlugin from './plugins/EmojisPlugin'
 import KeywordsPlugin from './plugins/KeywordsPlugin'
 import { useRef, useState } from 'react'
 
@@ -38,10 +37,8 @@ const Viewer = ({ initialValue, mimeType }: EditorProps) => {
   return (
     <LexicalComposer initialConfig={ViewerConfig}>
       <div className="viewer-container" ref={scrollRef}>
-        <MentionsPlugin />
         <HashtagPlugin />
         <KeywordsPlugin />
-        <EmojisPlugin />
         <AutoScrollPlugin scrollRef={scrollRef} />
         <RichTextPlugin
           contentEditable={
@@ -60,6 +57,7 @@ const Viewer = ({ initialValue, mimeType }: EditorProps) => {
         <ListPlugin />
         <LinkPlugin />
         <AutoLinkPlugin />
+        <ClickableLinkPlugin />
         <CodeHighlightPlugin />
         <HorizontalRulePlugin />
         <ImagesPlugin />

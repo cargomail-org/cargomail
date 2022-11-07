@@ -22,13 +22,13 @@ const EmailTheme = {
     listitemUnchecked: 'editor-listitem-unchecked',
   },
   image: 'editor-image',
+  hashtag: 'editor-text-hashtag',
   attachment: 'editor-attachment',
   link: 'editor-link',
   text: {
     bold: 'editor-text-bold',
     italic: 'editor-text-italic',
     overflowed: 'editor-text-overflowed',
-    hashtag: 'editor-text-hashtag',
     underline: 'editor-text-underline',
     strikethrough: 'editor-text-strikethrough',
     underlineStrikethrough: 'editor-text-underlineStrikethrough',
@@ -67,7 +67,6 @@ const EmailTheme = {
     url: 'editor-tokenOperator',
     variable: 'editor-tokenVariable',
   },
-  hashtag: 'hashtag bg-blue-300/40',
 }
 
 export default EmailTheme

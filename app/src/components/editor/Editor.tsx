@@ -13,14 +13,15 @@ import EditorConfig from './EditorConfig'
 import EditorSetValue from './EditorSetValue'
 import ToolbarPlugin from './plugins/ToolbarPlugin'
 import EditorOnChange from './EditorOnChange'
-import MentionsPlugin from './plugins/MentionsPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
+import ClickableLinkPlugin from './plugins/ClickableLinkPlugin'
+import DragDropPaste from './plugins/DragDropPastePlugin'
+import DraggableBlockPlugin from './plugins/DraggableBlockPlugin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin'
 import HorizontalRulePlugin from './plugins/HorizontalRulePlugin'
 import ImagesPlugin from './plugins/ImagesPlugin'
 import AttachmentsPlugin from './plugins/AttachmentsPlugin'
-import EmojisPlugin from './plugins/EmojisPlugin'
 import KeywordsPlugin from './plugins/KeywordsPlugin'
 import Placeholder from './ui/Placeholder'
 import { useEffect, useRef, useState } from 'react'
@@ -62,10 +63,9 @@ const Editor = ({ handleEditor, initialValue, mimeType, onChange }: EditorProps)
   return (
     <LexicalComposer initialConfig={EditorConfig}>
       <div className="editor-container" ref={scrollRef}>
-        <MentionsPlugin />
+        <DragDropPaste />
         <HashtagPlugin />
         <KeywordsPlugin />
-        <EmojisPlugin />
         <AutoScrollPlugin scrollRef={scrollRef} />
         <div className="rich-editor-container" ref={richEditorRef}>
           <RichTextPlugin
@@ -86,6 +86,7 @@ const Editor = ({ handleEditor, initialValue, mimeType, onChange }: EditorProps)
         <ListPlugin />
         <LinkPlugin />
         <AutoLinkPlugin />
+        <ClickableLinkPlugin />
         <CodeHighlightPlugin />
         <HorizontalRulePlugin />
         <ImagesPlugin />
@@ -100,6 +101,7 @@ const Editor = ({ handleEditor, initialValue, mimeType, onChange }: EditorProps)
         />
         {floatingAnchorElem && (
           <>
+            <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
             <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
           </>
         )}

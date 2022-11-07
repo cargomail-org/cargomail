@@ -55,7 +55,7 @@
   position: absolute;
   text-overflow: ellipsis;
   top: 10px;
-  left: 10px;
+  left: 22px;
   font-size: 15px;
   user-select: none;
   display: inline-block;
@@ -163,6 +163,11 @@ pre::-webkit-scrollbar-thumb {
 
 .editor-text-underlineStrikethrough {
   text-decoration: underline line-through;
+}
+
+.editor-text-hashtag {
+  background-color: rgba(88, 144, 255, 0.15);
+  border-bottom: 1px solid rgba(88, 144, 255, 0.3);
 }
 
 .editor-code {

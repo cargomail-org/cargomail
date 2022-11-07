@@ -46,6 +46,7 @@ import {
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
+  DEPRECATED_$isGridSelection,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
   INDENT_CONTENT_COMMAND,
@@ -54,20 +55,16 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from 'lexical'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import * as React from 'react'
 import { IS_APPLE } from '../../shared/environment'
 
-import landscapeImage from '../../images/landscape.jpg'
-import yellowFlowerImage from '../../images/yellow-flower.jpg'
+import useModal from '../../hooks/useModal'
 import ColorPicker from '../../ui/ColorPicker'
 import DropDown, { DropDownItem } from '../../ui/DropDown'
 import { getSelectedNode } from '../../utils/getSelectedNode'
 import { sanitizeUrl } from '../../utils/sanitizeUrl'
-import { InsertImagePayload, INSERT_IMAGE_COMMAND } from '../ImagesPlugin'
-import TextInput from '../../ui/TextInput'
-import Button from '../../ui/Button'
-import FileInput from '../../ui/FileInput'
-import useModal from '../../hooks/useModal'
+import { InsertImageDialog } from '../ImagesPlugin'
 
 const blockTypeToBlockName = {
   bullet: 'Bulleted List',
@@ -82,139 +79,6 @@ const blockTypeToBlockName = {
   number: 'Numbered List',
   paragraph: 'Normal',
   quote: 'Quote',
-}
-
-export function InsertImageUriDialogBody({ onClick }: { onClick: (payload: InsertImagePayload) => void }) {
-  const [src, setSrc] = useState('')
-  const [altText, setAltText] = useState('')
-
-  const isDisabled = src === ''
-
-  return (
-    <>
-      <TextInput
-        label="Image URL"
-        placeholder="i.e. https://source.unsplash.com/random"
-        onChange={setSrc}
-        value={src}
-        data-test-id="image-modal-url-input"
-      />
-      <TextInput
-        label="Alt Text"
-        placeholder="Random unsplash image"
-        onChange={setAltText}
-        value={altText}
-        data-test-id="image-modal-alt-text-input"
-      />
-      <div className="ToolbarPlugin__dialogActions">
-        <Button data-test-id="image-modal-confirm-btn" disabled={isDisabled} onClick={() => onClick({ altText, src })}>
-          Confirm
-        </Button>
-      </div>
-    </>
-  )
-}
-
-export function InsertImageUploadedDialogBody({ onClick }: { onClick: (payload: InsertImagePayload) => void }) {
-  const [src, setSrc] = useState('')
-  const [altText, setAltText] = useState('')
-
-  const isDisabled = src === ''
-
-  const loadImage = (files: FileList | null) => {
-    const reader = new FileReader()
-    reader.onload = function () {
-      if (typeof reader.result === 'string') {
-        setSrc(reader.result)
-      }
-      return ''
-    }
-    if (files !== null) {
-      reader.readAsDataURL(files[0])
-    }
-  }
-
-  return (
-    <>
-      <FileInput label="Image Upload" onChange={loadImage} accept="image/*" data-test-id="image-modal-file-upload" />
-      <TextInput
-        label="Alt Text"
-        placeholder="Descriptive alternative text"
-        onChange={setAltText}
-        value={altText}
-        data-test-id="image-modal-alt-text-input"
-      />
-      <div className="ToolbarPlugin__dialogActions">
-        <Button
-          data-test-id="image-modal-file-upload-btn"
-          disabled={isDisabled}
-          onClick={() => onClick({ altText, src })}>
-          Confirm
-        </Button>
-      </div>
-    </>
-  )
-}
-
-export function InsertImageDialog({
-  activeEditor,
-  onClose,
-}: {
-  activeEditor: LexicalEditor
-  onClose: () => void
-}): JSX.Element {
-  const [mode, setMode] = useState<null | 'url' | 'file'>(null)
-  const hasModifier = useRef(false)
-
-  useEffect(() => {
-    hasModifier.current = false
-    const handler = (e: KeyboardEvent) => {
-      hasModifier.current = e.altKey
-    }
-    document.addEventListener('keydown', handler)
-    return () => {
-      document.removeEventListener('keydown', handler)
-    }
-  }, [activeEditor])
-
-  const onClick = (payload: InsertImagePayload) => {
-    activeEditor.dispatchCommand(INSERT_IMAGE_COMMAND, payload)
-    onClose()
-  }
-
-  return (
-    <>
-      {!mode && (
-        <div className="ToolbarPlugin__dialogButtonsList">
-          <Button
-            data-test-id="image-modal-option-sample"
-            onClick={() =>
-              onClick(
-                hasModifier.current
-                  ? {
-                      altText: 'Daylight fir trees forest glacier green high ice landscape',
-                      src: landscapeImage,
-                    }
-                  : {
-                      altText: 'Yellow flower in tilt shift lens',
-                      src: yellowFlowerImage,
-                    }
-              )
-            }>
-            Sample
-          </Button>
-          <Button data-test-id="image-modal-option-url" onClick={() => setMode('url')}>
-            URL
-          </Button>
-          <Button data-test-id="image-modal-option-file" onClick={() => setMode('file')}>
-            File
-          </Button>
-        </div>
-      )}
-      {mode === 'url' && <InsertImageUriDialogBody onClick={onClick} />}
-      {mode === 'file' && <InsertImageUploadedDialogBody onClick={onClick} />}
-    </>
-  )
 }
 
 function getCodeLanguageOptions(): [string, string][] {
@@ -260,16 +124,18 @@ function dropDownActiveClass(active: boolean) {
 function BlockFormatDropDown({
   editor,
   blockType,
+  disabled = false,
 }: {
   blockType: keyof typeof blockTypeToBlockName
   editor: LexicalEditor
+  disabled?: boolean
 }): JSX.Element {
   const formatParagraph = () => {
     if (blockType !== 'paragraph') {
       editor.update(() => {
         const selection = $getSelection()
 
-        if ($isRangeSelection(selection)) {
+        if ($isRangeSelection(selection) || DEPRECATED_$isGridSelection(selection)) {
           $wrapNodes(selection, () => $createParagraphNode())
         }
       })
@@ -281,7 +147,7 @@ function BlockFormatDropDown({
       editor.update(() => {
         const selection = $getSelection()
 
-        if ($isRangeSelection(selection)) {
+        if ($isRangeSelection(selection) || DEPRECATED_$isGridSelection(selection)) {
           $wrapNodes(selection, () => $createHeadingNode(headingSize))
         }
       })
@@ -317,7 +183,7 @@ function BlockFormatDropDown({
       editor.update(() => {
         const selection = $getSelection()
 
-        if ($isRangeSelection(selection)) {
+        if ($isRangeSelection(selection) || DEPRECATED_$isGridSelection(selection)) {
           $wrapNodes(selection, () => $createQuoteNode())
         }
       })
@@ -329,7 +195,7 @@ function BlockFormatDropDown({
       editor.update(() => {
         const selection = $getSelection()
 
-        if ($isRangeSelection(selection)) {
+        if ($isRangeSelection(selection) || DEPRECATED_$isGridSelection(selection)) {
           if (selection.isCollapsed()) {
             $wrapNodes(selection, () => $createCodeNode())
           } else {
@@ -345,6 +211,7 @@ function BlockFormatDropDown({
 
   return (
     <DropDown
+      disabled={disabled}
       buttonClassName="toolbar-item block-controls"
       buttonIconClassName={'icon block-type ' + blockType}
       buttonLabel={blockTypeToBlockName[blockType]}
@@ -353,7 +220,6 @@ function BlockFormatDropDown({
         <i className="icon paragraph" />
         <span className="text">Normal</span>
       </DropDownItem>
-      <Divider />
       <DropDownItem className={'item ' + dropDownActiveClass(blockType === 'h1')} onClick={() => formatHeading('h1')}>
         <i className="icon h1" />
         <span className="text">Heading 1</span>
@@ -382,7 +248,6 @@ function BlockFormatDropDown({
         <i className="icon quote" />
         <span className="text">Quote</span>
       </DropDownItem>
-      <Divider />
       <DropDownItem className={'item ' + dropDownActiveClass(blockType === 'code')} onClick={formatCode}>
         <i className="icon code" />
         <span className="text">Code Block</span>
@@ -395,7 +260,17 @@ function Divider(): JSX.Element {
   return <div className="divider" />
 }
 
-function FontDropDown({ editor, value, style }: { editor: LexicalEditor; value: string; style: string }): JSX.Element {
+function FontDropDown({
+  editor,
+  value,
+  style,
+  disabled = false,
+}: {
+  editor: LexicalEditor
+  value: string
+  style: string
+  disabled?: boolean
+}): JSX.Element {
   const handleClick = useCallback(
     (option: string) => {
       editor.update(() => {
@@ -415,6 +290,7 @@ function FontDropDown({ editor, value, style }: { editor: LexicalEditor; value: 
 
   return (
     <DropDown
+      disabled={disabled}
       buttonClassName={'toolbar-item ' + style}
       buttonLabel={value}
       buttonIconClassName={style === 'font-family' ? 'icon block-type font-family' : ''}
@@ -453,6 +329,7 @@ export default function ToolbarPlugin(): JSX.Element {
   const [modal, showModal] = useModal()
   const [isRTL, setIsRTL] = useState(false)
   const [codeLanguage, setCodeLanguage] = useState<string>('')
+  const [isEditable, setIsEditable] = useState(() => editor.isEditable())
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
@@ -532,6 +409,9 @@ export default function ToolbarPlugin(): JSX.Element {
 
   useEffect(() => {
     return mergeRegister(
+      editor.registerEditableListener((editable) => {
+        setIsEditable(editable)
+      }),
       activeEditor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           updateToolbar()
@@ -554,7 +434,7 @@ export default function ToolbarPlugin(): JSX.Element {
         COMMAND_PRIORITY_CRITICAL
       )
     )
-  }, [activeEditor, updateToolbar])
+  }, [activeEditor, editor, updateToolbar])
 
   const applyStyleText = useCallback(
     (styles: Record<string, string>) => {
@@ -626,7 +506,7 @@ export default function ToolbarPlugin(): JSX.Element {
   return (
     <div className="toolbar">
       <button
-        disabled={!canUndo}
+        disabled={!canUndo || !isEditable}
         onClick={() => {
           activeEditor.dispatchCommand(UNDO_COMMAND, undefined)
         }}
@@ -636,7 +516,7 @@ export default function ToolbarPlugin(): JSX.Element {
         <i className="format undo" />
       </button>
       <button
-        disabled={!canRedo}
+        disabled={!canRedo || !isEditable}
         onClick={() => {
           activeEditor.dispatchCommand(REDO_COMMAND, undefined)
         }}
@@ -648,13 +528,14 @@ export default function ToolbarPlugin(): JSX.Element {
       <Divider />
       {blockType in blockTypeToBlockName && activeEditor === editor && (
         <>
-          <BlockFormatDropDown blockType={blockType} editor={editor} />
+          <BlockFormatDropDown disabled={!isEditable} blockType={blockType} editor={editor} />
           <Divider />
         </>
       )}
       {blockType === 'code' ? (
         <>
           <DropDown
+            disabled={!isEditable}
             buttonClassName="toolbar-item code-language"
             buttonLabel={getLanguageFriendlyName(codeLanguage)}
             buttonAriaLabel="Select language">
@@ -672,10 +553,11 @@ export default function ToolbarPlugin(): JSX.Element {
         </>
       ) : (
         <>
-          <FontDropDown style={'font-family'} value={fontFamily} editor={editor} />
-          <FontDropDown style={'font-size'} value={fontSize} editor={editor} />
+          <FontDropDown disabled={!isEditable} style={'font-family'} value={fontFamily} editor={editor} />
+          <FontDropDown disabled={!isEditable} style={'font-size'} value={fontSize} editor={editor} />
           <Divider />
           <button
+            disabled={!isEditable}
             onClick={() => {
               activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')
             }}
@@ -685,6 +567,7 @@ export default function ToolbarPlugin(): JSX.Element {
             <i className="format bold" />
           </button>
           <button
+            disabled={!isEditable}
             onClick={() => {
               activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')
             }}
@@ -694,6 +577,7 @@ export default function ToolbarPlugin(): JSX.Element {
             <i className="format italic" />
           </button>
           <button
+            disabled={!isEditable}
             onClick={() => {
               activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')
             }}
@@ -703,6 +587,7 @@ export default function ToolbarPlugin(): JSX.Element {
             <i className="format underline" />
           </button>
           <button
+            disabled={!isEditable}
             onClick={() => {
               activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code')
             }}
@@ -712,6 +597,7 @@ export default function ToolbarPlugin(): JSX.Element {
             <i className="format code" />
           </button>
           <button
+            disabled={!isEditable}
             onClick={insertLink}
             className={'toolbar-item spaced ' + (isLink ? 'active' : '')}
             aria-label="Insert link"
@@ -719,6 +605,7 @@ export default function ToolbarPlugin(): JSX.Element {
             <i className="format link" />
           </button>
           <ColorPicker
+            disabled={!isEditable}
             buttonClassName="toolbar-item color-picker"
             buttonAriaLabel="Formatting text color"
             buttonIconClassName="icon font-color"
@@ -727,6 +614,7 @@ export default function ToolbarPlugin(): JSX.Element {
             title="text color"
           />
           <ColorPicker
+            disabled={!isEditable}
             buttonClassName="toolbar-item color-picker"
             buttonAriaLabel="Formatting background color"
             buttonIconClassName="icon bg-color"
@@ -735,6 +623,7 @@ export default function ToolbarPlugin(): JSX.Element {
             title="bg color"
           />
           <DropDown
+            disabled={!isEditable}
             buttonClassName="toolbar-item spaced"
             buttonLabel=""
             buttonAriaLabel="Formatting options for additional text styles"
@@ -780,6 +669,7 @@ export default function ToolbarPlugin(): JSX.Element {
           </DropDown>
           <Divider />
           <DropDown
+            disabled={!isEditable}
             buttonClassName="toolbar-item spaced"
             buttonLabel="Insert"
             buttonAriaLabel="Insert specialized editor node"
@@ -807,6 +697,7 @@ export default function ToolbarPlugin(): JSX.Element {
       )}
       <Divider />
       <DropDown
+        disabled={!isEditable}
         buttonLabel="Align"
         buttonIconClassName="icon left-align"
         buttonClassName="toolbar-item spaced alignment"
@@ -861,6 +752,7 @@ export default function ToolbarPlugin(): JSX.Element {
           <span className="text">Indent</span>
         </DropDownItem>
       </DropDown>
+
       {modal}
     </div>
   )

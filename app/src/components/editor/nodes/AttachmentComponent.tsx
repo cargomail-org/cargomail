@@ -2,7 +2,6 @@ import type { GridSelection, LexicalEditor, NodeKey, NodeSelection, RangeSelecti
 
 import './AttachmentNode.css'
 
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
@@ -30,9 +29,7 @@ import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 
 import { useSettings } from '../context/SettingsContext'
 import { useSharedHistoryContext } from '../context/SharedHistoryContext'
-import EmojisPlugin from '../plugins/EmojisPlugin'
 import KeywordsPlugin from '../plugins/KeywordsPlugin'
-import MentionsPlugin from '../plugins/MentionsPlugin'
 import TreeViewPlugin from '../plugins/TreeViewPlugin'
 import ContentEditable from '../ui/ContentEditable'
 import ImageResizer from '../ui/ImageResizer'
@@ -271,10 +268,7 @@ export default function AttachmentComponent({
         {showCaption && (
           <div className="attachment-caption-container">
             <LexicalNestedComposer initialEditor={caption}>
-              <AutoFocusPlugin />
-              <MentionsPlugin />
               <LinkPlugin />
-              <EmojisPlugin />
               <HashtagPlugin />
               <KeywordsPlugin />
               <HistoryPlugin externalHistoryState={historyState} />
