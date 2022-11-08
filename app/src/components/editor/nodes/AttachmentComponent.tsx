@@ -175,6 +175,8 @@ export default function AttachmentComponent({
   )
 
   useEffect(() => {
+    caption.setEditable(editor.isEditable())
+
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         setSelection(editorState.read(() => $getSelection()))
@@ -214,7 +216,7 @@ export default function AttachmentComponent({
       editor.registerCommand(KEY_ENTER_COMMAND, onEnter, COMMAND_PRIORITY_LOW),
       editor.registerCommand(KEY_ESCAPE_COMMAND, onEscape, COMMAND_PRIORITY_LOW)
     )
-  }, [clearSelection, editor, isResizing, isSelected, nodeKey, onDelete, onEnter, onEscape, setSelected])
+  }, [clearSelection, editor, caption, isResizing, isSelected, nodeKey, onDelete, onEnter, onEscape, setSelected])
 
   const setShowCaption = () => {
     editor.update(() => {
