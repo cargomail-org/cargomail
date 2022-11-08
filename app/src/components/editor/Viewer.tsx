@@ -34,24 +34,28 @@ const Viewer = ({ initialValue, mimeType }: EditorProps) => {
     }
   }
 
+  const richEditorRef = useRef(null)
+
   return (
     <LexicalComposer initialConfig={ViewerConfig}>
-      <div className="viewer-container" ref={scrollRef}>
+      <div className="editor-container" ref={scrollRef}>
         <HashtagPlugin />
         <KeywordsPlugin />
         <AutoScrollPlugin scrollRef={scrollRef} />
-        <RichTextPlugin
-          contentEditable={
-            <div className="viewer-scroller">
-              <div className="viewer" ref={onRef}>
-                <ContentEditable />
+        <div className="rich-editor-container" ref={richEditorRef}>
+          <RichTextPlugin
+            contentEditable={
+              <div className="editor-scroller">
+                <div className="editor-shell" ref={onRef}>
+                  <ContentEditable />
+                </div>
               </div>
-            </div>
-          }
-          placeholder=""
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <ViewerSetValue value={initialValue || ''} mimeType={mimeType || ''} />
+            }
+            placeholder=""
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+          {/* <EditorInstancePlugin /> */}
+        </div>
         <HistoryPlugin />
         <CheckListPlugin />
         <ListPlugin />
@@ -61,6 +65,7 @@ const Viewer = ({ initialValue, mimeType }: EditorProps) => {
         <CodeHighlightPlugin />
         <HorizontalRulePlugin />
         <ImagesPlugin />
+        <ViewerSetValue value={initialValue || ''} mimeType={mimeType || ''} />
         {floatingAnchorElem && (
           <>
             <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
