@@ -14,6 +14,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
 import { LexicalNestedComposer } from '@lexical/react/LexicalNestedComposer'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
@@ -279,6 +280,12 @@ export default function ImageComponent({
               <HashtagPlugin />
               <KeywordsPlugin />
               <HistoryPlugin externalHistoryState={historyState} />
+              <OnChangePlugin
+                ignoreSelectionChange={true}
+                onChange={() => {
+                  editor.setEditorState(editor.getEditorState())
+                }}
+              />
               <RichTextPlugin
                 contentEditable={<ContentEditable className="ImageNode__contentEditable" />}
                 placeholder={<Placeholder className="ImageNode__placeholder">Enter a caption...</Placeholder>}
