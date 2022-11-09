@@ -7,7 +7,7 @@ import { theme } from './components/theme'
 
 export const ServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
   const configRef = useRef<Config>({
-    productName: 'Fedemail',
+    productName: 'Cargomail',
   })
   return (
     <MuiThemeProvider theme={theme}>
