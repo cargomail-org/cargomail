@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "../fedemail-zitadel-oidc/example/server/",
+            "program": "../cargomail-zitadel-oidc/example/server/",
             "env": {
                 "PORT": "9998"
             }

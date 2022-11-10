@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 
-	"github.com/federizer/fedemail/generated/proto/people/v1"
-	"github.com/federizer/fedemail/internal/repository/people/v1"
+	peoplev1 "github.com/federizer/cargomail/generated/proto/people/v1"
+	repository "github.com/federizer/cargomail/internal/repository/people/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	// "google.golang.org/protobuf/types/known/emptypb"
@@ -33,5 +33,5 @@ func (h *handler) ContactsCreate(ctx context.Context, req *peoplev1.ContactsCrea
 	if err != nil {
 		return nil, status.Error(codes.Aborted, err.Error())
 	}
-  	return person, nil
+	return person, nil
 }

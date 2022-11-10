@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/federizer/fedemail/generated/proto/people/v1"
+	peoplev1 "github.com/federizer/cargomail/generated/proto/people/v1"
 	"google.golang.org/grpc/metadata"
 )
 
@@ -57,7 +57,7 @@ func (r *Repository) ContactsList(ctx context.Context, req *peoplev1.ContactsLis
 
 func (r *Repository) ContactsCreate(ctx context.Context, req *peoplev1.ContactsCreateRequest) (*peoplev1.Person, error) {
 	var scanPerson ScanPerson
-	scanPerson.Person =  req.Person
+	scanPerson.Person = req.Person
 
 	sqlStatement := `SELECT people.contacts_create_v1($1, $2);`
 	err := r.db.QueryRow(sqlStatement, getUsername(ctx), scanPerson).Scan(&scanPerson)
@@ -65,5 +65,5 @@ func (r *Repository) ContactsCreate(ctx context.Context, req *peoplev1.ContactsC
 		return nil, err
 	}
 
-	return  scanPerson.Person, err
+	return scanPerson.Person, err
 }

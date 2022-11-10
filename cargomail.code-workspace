@@ -10,7 +10,7 @@
 		},
 		{
 			"name": "oidc",
-			"path": "../fedemail-zitadel-oidc"
+			"path": "../cargomail-zitadel-oidc"
 		}
 	],
 	"settings": {

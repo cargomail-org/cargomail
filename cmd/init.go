@@ -7,8 +7,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	cfg "github.com/federizer/fedemail/internal/config"
-	"github.com/federizer/fedemail/internal/database"
+	cfg "github.com/federizer/cargomail/internal/config"
+	"github.com/federizer/cargomail/internal/database"
 )
 
 var (

@@ -3,7 +3,7 @@ package cmd
 import (
 	"sync"
 
-	webmail "github.com/federizer/fedemail/webmail"
+	webmail "github.com/federizer/cargomail/webmail"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

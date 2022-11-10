@@ -1,4 +1,4 @@
-module github.com/federizer/fedemail
+module github.com/federizer/cargomail
 
 go 1.19
 
@@ -56,6 +56,6 @@ require (
 	google.golang.org/genproto v0.0.0-20220805133916-01dd62135a58 // indirect
 )
 
-replace github.com/zitadel/zitadel-go/v2 => ../fedemail-zitadel-go
+replace github.com/zitadel/zitadel-go/v2 => ../cargomail-zitadel-go
 
-replace github.com/zitadel/oidc => ../fedemail-zitadel-oidc
+replace github.com/zitadel/oidc => ../cargomail-zitadel-oidc

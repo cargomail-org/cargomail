@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"strconv"
 
-	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
-	"github.com/federizer/fedemail/internal/mail"
+	fedemailv1 "github.com/federizer/cargomail/generated/proto/fedemail/v1"
+	"github.com/federizer/cargomail/internal/mail"
 	"google.golang.org/grpc/metadata"
 )
 
@@ -67,7 +67,7 @@ func (r *Repository) LabelsList(ctx context.Context) ([]*fedemailv1.Label, error
 func (r *Repository) ThreadsList(ctx context.Context) ([]*fedemailv1.Thread, error) {
 	var threads []*fedemailv1.Thread
 
-	sqlStatement := `SELECT * FROM fedemail.threads_list_v1($1);` 
+	sqlStatement := `SELECT * FROM fedemail.threads_list_v1($1);`
 	rows, err := r.db.Query(sqlStatement, getUsername(ctx))
 	if err != nil {
 		return nil, err

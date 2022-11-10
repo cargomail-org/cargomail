@@ -5,7 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 
-	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
+	fedemailv1 "github.com/federizer/cargomail/generated/proto/fedemail/v1"
 )
 
 type ScanLabel struct {

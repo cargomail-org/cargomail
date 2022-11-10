@@ -12,9 +12,9 @@ import (
 	"syscall"
 	"time"
 
-	cfg "github.com/federizer/fedemail/internal/config"
-	"github.com/federizer/fedemail/internal/database"
-	mta "github.com/federizer/fedemail/mta"
+	cfg "github.com/federizer/cargomail/internal/config"
+	"github.com/federizer/cargomail/internal/database"
+	mta "github.com/federizer/cargomail/mta"
 	"github.com/rs/cors"
 	"github.com/sirupsen/logrus"
 	"github.com/zitadel/oidc/pkg/client/rs"
@@ -28,12 +28,12 @@ import (
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 
-	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
-	"github.com/federizer/fedemail/generated/proto/people/v1"
-	fedemailRepository "github.com/federizer/fedemail/internal/repository/fedemail/v1"
-	peopleRepository "github.com/federizer/fedemail/internal/repository/people/v1"
-	fedemailHandler "github.com/federizer/fedemail/pkg/api/fedemail/v1"
-	peopleHandler "github.com/federizer/fedemail/pkg/api/people/v1"
+	fedemailv1 "github.com/federizer/cargomail/generated/proto/fedemail/v1"
+	peoplev1 "github.com/federizer/cargomail/generated/proto/people/v1"
+	fedemailRepository "github.com/federizer/cargomail/internal/repository/fedemail/v1"
+	peopleRepository "github.com/federizer/cargomail/internal/repository/people/v1"
+	fedemailHandler "github.com/federizer/cargomail/pkg/api/fedemail/v1"
+	peopleHandler "github.com/federizer/cargomail/pkg/api/people/v1"
 )
 
 type AuthIterceptor struct {

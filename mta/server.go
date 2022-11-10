@@ -9,7 +9,7 @@ import (
 	"sync"
 	"syscall"
 
-	cfg "github.com/federizer/fedemail/internal/config"
+	cfg "github.com/federizer/cargomail/internal/config"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -25,7 +25,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		
+
 		lis, err := net.Listen("tcp", ":"+httpPort)
 		if err != nil {
 			logrus.Fatalf("tcp listener on %s failed: %w", httpPort, err)
@@ -44,7 +44,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		
+
 		<-stop
 		grpcServer.GracefulStop()
 		logrus.Info("mta server shutdown gracefully")

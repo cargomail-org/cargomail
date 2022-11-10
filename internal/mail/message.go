@@ -7,7 +7,7 @@ import (
 	"io"
 
 	"github.com/emersion/go-message/textproto"
-	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
+	fedemailv1 "github.com/federizer/cargomail/generated/proto/fedemail/v1"
 )
 
 type MailMessage struct {

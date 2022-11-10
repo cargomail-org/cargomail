@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/federizer/fedemail/generated/proto/fedemail/v1"
-	"github.com/federizer/fedemail/internal/repository/fedemail/v1"
+	fedemailv1 "github.com/federizer/cargomail/generated/proto/fedemail/v1"
+	repository "github.com/federizer/cargomail/internal/repository/fedemail/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
