@@ -1,1 +1,1 @@
-# Fedemail App
+# Cargomail App
