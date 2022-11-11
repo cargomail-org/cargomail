@@ -19,7 +19,7 @@ const Header = ({ snippet, expanded, actions, name, onClick, handlers }: any) =>
         height: 30,
         width: 30,
         margin: '4px 12px',
-        backgroundColor: 'info.light',
+        backgroundColor: 'info.dark',
       }}>
       {name[0]}
     </Avatar>

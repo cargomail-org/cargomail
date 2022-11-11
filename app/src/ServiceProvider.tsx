@@ -4,10 +4,13 @@ import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider as MuiThemeProvider } from '@mui/material'
 import { ThemeProvider as ScThemeProvider } from 'styled-components'
 import { theme } from './components/theme'
+import Logo from './logo'
+// import { ReactComponent as Logo } from './cargomail.svg'
 
 export const ServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
   const configRef = useRef<Config>({
-    productName: 'Cargomail',
+    productName: 'cargomail',
+    ProductLogo: Logo,
   })
   return (
     <MuiThemeProvider theme={theme}>

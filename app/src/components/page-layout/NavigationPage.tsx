@@ -9,7 +9,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import { useConfig } from '../../packages/core/config'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
-import { colors, CssBaseline, Typography, useMediaQuery } from '@mui/material'
+import { colors, CssBaseline, SvgIcon, Typography, useMediaQuery } from '@mui/material'
 import AvatarMenu from '../main/AvatarMenu'
 import NewMailButton from '../main/NewMailButton'
 import DraftsContainer from '../main/DraftsContainer'
@@ -73,7 +73,7 @@ export function Navigation({ children }: any) {
     })
   })
 
-  const { productName } = useConfig()
+  const { productName, ProductLogo } = useConfig()
 
   const { draftsAll } = useContext(DraftsContext)
 
@@ -93,6 +93,9 @@ export function Navigation({ children }: any) {
                 <MenuIcon />
               </IconButton>
             )}
+            <SvgIcon fontSize="large" sx={{ marginRight: '12px' }}>
+              <ProductLogo />
+            </SvgIcon>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               {productName}
             </Typography>

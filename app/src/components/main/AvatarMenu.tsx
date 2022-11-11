@@ -28,11 +28,10 @@ function AvatarMenuContent() {
               sx={{
                 width: 30,
                 height: 30,
-                bgcolor: 'common.white',
-                color: 'primary.main',
+                bgcolor: '#013d6e',
                 fontSize: 14,
                 '&:hover': {
-                  bgcolor: '#eeeeee',
+                  bgcolor: '#002b4f',
                 },
               }}>
               {nameFirstLetter}

@@ -152,7 +152,7 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
                 sx={{
                   height: 30,
                   width: 30,
-                  backgroundColor: 'info.light',
+                  backgroundColor: 'info.dark',
                 }}>
                 {firstSenderName[0]}
               </Avatar>

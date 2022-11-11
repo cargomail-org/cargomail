@@ -97,7 +97,7 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
                 sx={{
                   height: 30,
                   width: 30,
-                  backgroundColor: 'info.light',
+                  backgroundColor: 'info.dark',
                 }}>
                 {nameFirstLetter && nameFirstLetter.length > 0 ? nameFirstLetter : surnameFirstLetter}
               </Avatar>

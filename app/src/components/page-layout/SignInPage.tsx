@@ -40,7 +40,7 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
           onClick={() => {
             signInUser()
           }}>
-          Sign in to Cargomail
+          Sign in to cargomail
         </Button>
       </Grid>
     </Grid>
