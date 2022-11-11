@@ -10,7 +10,7 @@ oidc:
   issuer: http://localhost:9998/
   client_id: webmail
   client_secret: secret
-  key_path: ../fedemail-zitadel-oidc/example/server/client-key1.json    
+  key_path: ../cargomail-zitadel-oidc/example/server/client-key1.json    
 
 # gRPC Webmail
 webmail:
