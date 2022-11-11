@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"strconv"
 
-	fedemailv1 "github.com/federizer/cargomail/generated/proto/fedemail/v1"
-	repository "github.com/federizer/cargomail/internal/repository/fedemail/v1"
+	emailv1 "github.com/federizer/cargomail/generated/proto/email/v1"
+	repository "github.com/federizer/cargomail/internal/repository/email/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type handler struct {
-	fedemailv1.UnimplementedFedemailServer
+	emailv1.UnimplementedEmailServer
 	repo repository.Repo
 }
 
@@ -21,25 +21,25 @@ func NewHandler(repo repository.Repo) *handler {
 	return &handler{repo: repo}
 }
 
-func (h *handler) LabelsList(ctx context.Context, req *emptypb.Empty) (*fedemailv1.ListLabelsResponse, error) {
+func (h *handler) LabelsList(ctx context.Context, req *emptypb.Empty) (*emailv1.ListLabelsResponse, error) {
 	labels, err := h.repo.LabelsList(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Aborted, err.Error())
 	}
-	labelList := &fedemailv1.ListLabelsResponse{Labels: labels}
+	labelList := &emailv1.ListLabelsResponse{Labels: labels}
 	return labelList, nil
 }
 
-func (h *handler) ThreadsList(ctx context.Context, req *fedemailv1.ThreadsListRequest) (*fedemailv1.ListThreadsResponse, error) {
+func (h *handler) ThreadsList(ctx context.Context, req *emailv1.ThreadsListRequest) (*emailv1.ListThreadsResponse, error) {
 	threads, err := h.repo.ThreadsList(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Aborted, err.Error())
 	}
-	threadList := &fedemailv1.ListThreadsResponse{Threads: threads}
+	threadList := &emailv1.ListThreadsResponse{Threads: threads}
 	return threadList, nil
 }
 
-func (h *handler) ThreadsGet(ctx context.Context, req *fedemailv1.ThreadsGetRequest) (*fedemailv1.Thread, error) {
+func (h *handler) ThreadsGet(ctx context.Context, req *emailv1.ThreadsGetRequest) (*emailv1.Thread, error) {
 	id, err := strconv.ParseInt(req.GetId(), 10, 64)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (h *handler) ThreadsGet(ctx context.Context, req *fedemailv1.ThreadsGetRequ
 	return thread, nil
 }
 
-func (h *handler) MessagesModify(ctx context.Context, req *fedemailv1.MessagesModifyRequest) (*fedemailv1.Message, error) {
+func (h *handler) MessagesModify(ctx context.Context, req *emailv1.MessagesModifyRequest) (*emailv1.Message, error) {
 	id, err := strconv.ParseInt(req.GetId(), 10, 64)
 	if err != nil {
 		return nil, err
@@ -63,16 +63,16 @@ func (h *handler) MessagesModify(ctx context.Context, req *fedemailv1.MessagesMo
 	return message, nil
 }
 
-func (h *handler) DraftsList(ctx context.Context, req *fedemailv1.DraftsListRequest) (*fedemailv1.ListDraftsResponse, error) {
+func (h *handler) DraftsList(ctx context.Context, req *emailv1.DraftsListRequest) (*emailv1.ListDraftsResponse, error) {
 	drafts, err := h.repo.DraftsList(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Aborted, err.Error())
 	}
-	draftList := &fedemailv1.ListDraftsResponse{Drafts: drafts}
+	draftList := &emailv1.ListDraftsResponse{Drafts: drafts}
 	return draftList, nil
 }
 
-func (h *handler) DraftsGet(ctx context.Context, req *fedemailv1.DraftsGetRequest) (*fedemailv1.Draft, error) {
+func (h *handler) DraftsGet(ctx context.Context, req *emailv1.DraftsGetRequest) (*emailv1.Draft, error) {
 	id, err := strconv.ParseInt(req.GetId(), 10, 64)
 	if err != nil {
 		return nil, err
@@ -84,7 +84,7 @@ func (h *handler) DraftsGet(ctx context.Context, req *fedemailv1.DraftsGetReques
 	return draft, nil
 }
 
-func (h *handler) DraftsCreate(ctx context.Context, req *fedemailv1.DraftsCreateRequest) (*fedemailv1.Draft, error) {
+func (h *handler) DraftsCreate(ctx context.Context, req *emailv1.DraftsCreateRequest) (*emailv1.Draft, error) {
 	draft, err := h.repo.DraftsCreate(ctx, req.MessageRaw)
 	if err != nil {
 		return nil, status.Error(codes.Aborted, err.Error())
@@ -92,7 +92,7 @@ func (h *handler) DraftsCreate(ctx context.Context, req *fedemailv1.DraftsCreate
 	return draft, nil
 }
 
-func (h *handler) DraftsUpdate(ctx context.Context, req *fedemailv1.DraftsUpdateRequest) (*fedemailv1.Draft, error) {
+func (h *handler) DraftsUpdate(ctx context.Context, req *emailv1.DraftsUpdateRequest) (*emailv1.Draft, error) {
 	id, err := strconv.ParseInt(req.GetId(), 10, 64)
 	if err != nil {
 		return nil, err
@@ -104,7 +104,7 @@ func (h *handler) DraftsUpdate(ctx context.Context, req *fedemailv1.DraftsUpdate
 	return draft, nil
 }
 
-func (h *handler) DraftsDelete(ctx context.Context, req *fedemailv1.DraftsDeleteRequest) (*emptypb.Empty, error) {
+func (h *handler) DraftsDelete(ctx context.Context, req *emailv1.DraftsDeleteRequest) (*emptypb.Empty, error) {
 	id, err := strconv.ParseInt(req.GetId(), 10, 64)
 	if err != nil {
 		return &emptypb.Empty{}, err

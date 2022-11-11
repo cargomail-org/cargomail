@@ -3,11 +3,11 @@ import { Navigation } from '../components/page-layout'
 import useProcessedThreads from '../utils/hooks/processedThreads'
 import Thread from '../components/mail/Thread'
 import { Box } from '@mui/material'
-// import useFedemailAPI from '../api/FedemailAPI'
+// import useEmailAPI from '../api/EmailAPI'
 
 export const Trash: FC = () => {
   const processed = useProcessedThreads({ includes: ['TRASH'], aggregate: false })
-  // const { threadsList } = useFedemailAPI()
+  // const { threadsList } = useEmailAPI()
 
   return (
     <Navigation>

@@ -8,7 +8,7 @@ import { Account } from './pages/user/Account'
 import { NotFound } from './pages/NotFound'
 import { AuthProvider, AuthContext } from './packages/react-oauth2-code-pkce/index'
 import { authConfig } from './auth'
-import useFedemailAPI from './api/FedemailAPI'
+import useEmailAPI from './api/EmailAPI'
 import * as ROUTES from './routes'
 import { useContext, useEffect } from 'react'
 import AllContextProviders from './context'
@@ -23,7 +23,7 @@ const AUTH_DISABLED = process.env.REACT_APP_AUTH !== '1'
 function AppRoutes() {
   const location = useLocation()
   const { token } = useContext(AuthContext)
-  const { labelsList, threadsList } = useFedemailAPI()
+  const { labelsList, threadsList } = useEmailAPI()
 
   useEffect(() => {
     if (token) {

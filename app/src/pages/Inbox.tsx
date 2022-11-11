@@ -2,11 +2,11 @@ import { FC } from 'react'
 import { Navigation } from '../components/page-layout'
 import useProcessedThreads from '../utils/hooks/processedThreads'
 import Preview from '../components/mail/Preview'
-// import useFedemailAPI from '../api/FedemailAPI'
+// import useEmailAPI from '../api/EmailAPI'
 
 export const Index: FC = () => {
   const processed = useProcessedThreads({ includes: ['INBOX', 'SENT'] })
-  // const { threadsList } = useFedemailAPI()
+  // const { threadsList } = useEmailAPI()
 
   return (
     <Navigation>

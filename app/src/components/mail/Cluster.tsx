@@ -11,9 +11,9 @@ import FlagIcon from '@mui/icons-material/Flag'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import Thread from './Thread'
-import useFedemailAPI from '../../api/FedemailAPI'
+import useEmailAPI from '../../api/EmailAPI'
 import { ThreadsContext } from '../../context/ThreadsContext'
-import { Label_Type } from '../../api/generated/proto/fedemail/v1/fedemail'
+import { Label_Type } from '../../api/generated/proto/email/v1/email'
 
 import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
 import { decodeCurrentUser } from '../../auth'
@@ -60,7 +60,7 @@ export type ClusterProps = {
 
 const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
   const { idToken } = useContext(AuthContext)
-  const { batchModifyMessages, batchDeleteMessages } = useFedemailAPI()
+  const { batchModifyMessages, batchDeleteMessages } = useEmailAPI()
   const { removeThreadLabel, addThreadLabel } = useContext(ThreadsContext)
   const [expanded, setExpanded] = useState(false)
   const { t } = useTranslation(['labels', 'date'])

@@ -4,13 +4,13 @@ import { Box, Card, CardContent, colors } from '@mui/material'
 import { v1 as uuid } from 'uuid'
 
 import { ThreadsContext } from '../../../context/ThreadsContext'
-import useFedemailAPI from '../../../api/FedemailAPI'
+import useEmailAPI from '../../../api/EmailAPI'
 import Header from './Header'
 import Viewer from '../../editor/Viewer'
 
 const Message = ({ threadId, id, from, snippet, content, mimeType, initialExpand, unread, actions }: any) => {
   const { addMessageLabel, removeMessageLabel } = useContext(ThreadsContext)
-  const { modifyMessage, trashMessage, deleteMessage } = useFedemailAPI()
+  const { modifyMessage, trashMessage, deleteMessage } = useEmailAPI()
   const [expanded, setExpanded] = useState(initialExpand)
   const scope = useRef(uuid())
   const backToInbox = useCallback(

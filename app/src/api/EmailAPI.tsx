@@ -1,14 +1,14 @@
 import { GrpcWebFetchTransport, GrpcWebOptions } from '@protobuf-ts/grpcweb-transport'
 import { UnaryCall } from '@protobuf-ts/runtime-rpc'
 import { useContext } from 'react'
-import { FedemailClient } from './generated/proto/fedemail/v1/fedemail.client'
+import { EmailClient } from './generated/proto/email/v1/email.client'
 import { AuthContext } from '../packages/react-oauth2-code-pkce/index'
 import { LabelsContext } from '../context/LabelsContext'
 import { ThreadsContext } from '../context/ThreadsContext'
 import { DraftsContext, IDraftEdit } from '../context/DraftsContext'
 import encode from '../utils/mails/encode'
 import { decodeCurrentUser } from '../auth'
-import { Draft, Label_Type, Message, Thread } from './generated/proto/fedemail/v1/fedemail'
+import { Draft, Label_Type, Message, Thread } from './generated/proto/email/v1/email'
 import { buildDraftRecipients, b64EncodeUnicode } from '../utils/rfc5322'
 
 const baseUrl: string = process.env.REACT_APP_SERVER_BASE_URL || ''
@@ -17,9 +17,9 @@ const transport = new GrpcWebFetchTransport({
   baseUrl,
 })
 
-const fedemailClient = new FedemailClient(transport)
+const emailClient = new EmailClient(transport)
 
-const useFedemailAPI = () => {
+const useEmailAPI = () => {
   const { token, idToken } = useContext(AuthContext)
   const { updateLabels } = useContext(LabelsContext)
   const { listThreads } = useContext(ThreadsContext)
@@ -50,7 +50,7 @@ const useFedemailAPI = () => {
   }
 
   const labelsList = () => {
-    const unaryCall = fedemailClient.labelsList({}, options)
+    const unaryCall = emailClient.labelsList({}, options)
 
     unaryCall.then((response) => {
       if (response.status.code !== 'OK') {
@@ -77,7 +77,7 @@ const useFedemailAPI = () => {
   }
 
   const threadsList = async () => {
-    const unaryCall = fedemailClient.threadsList(
+    const unaryCall = emailClient.threadsList(
       {
         labelIds: [],
         maxResults: 0n,
@@ -106,7 +106,7 @@ const useFedemailAPI = () => {
   }
 
   const threadsGet = async (id: any): Promise<Thread> => {
-    const unaryCall = fedemailClient.threadsGet(
+    const unaryCall = emailClient.threadsGet(
       {
         id,
       },
@@ -157,7 +157,7 @@ const useFedemailAPI = () => {
   }
 
   const draftsList = async () => {
-    const unaryCall = fedemailClient.draftsList(
+    const unaryCall = emailClient.draftsList(
       {
         maxResults: 0n,
       },
@@ -185,7 +185,7 @@ const useFedemailAPI = () => {
   }
 
   const draftsGet = async (id: any): Promise<Draft> => {
-    const unaryCall = fedemailClient.draftsGet(
+    const unaryCall = emailClient.draftsGet(
       {
         id,
       },
@@ -205,7 +205,7 @@ const useFedemailAPI = () => {
   }
 
   const draftsCreate = (draft: IDraftEdit) => {
-    const unaryCall = fedemailClient.draftsCreate(
+    const unaryCall = emailClient.draftsCreate(
       {
         messageRaw: draft,
       },
@@ -218,7 +218,7 @@ const useFedemailAPI = () => {
         return null
       }
 
-      console.log('FedemailAPI', response.response)
+      console.log('EmailAPI', response.response)
 
       newDraftEdit({
         ...draft,
@@ -232,8 +232,8 @@ const useFedemailAPI = () => {
   const draftsUpdate = (draft: IDraftEdit) => {
     updateDraftEdit(draft)
     const message = { raw: encode(draft) }
-    console.log('FedemailAPI', message)
-    const unaryCall = fedemailClient.draftsUpdate(
+    console.log('EmailAPI', message)
+    const unaryCall = emailClient.draftsUpdate(
       {
         id: draft.id,
         messageRaw: {
@@ -273,14 +273,14 @@ const useFedemailAPI = () => {
         body: { attachmentId: '', data: b64EncodeUnicode(draft.content), size: draft.content.length },
       }
       response.response.message!.snippet = draft.snippet
-      console.log('FedemailAPI', response.response)
+      console.log('EmailAPI', response.response)
       updateDraft(response.response)
     })
   }
 
   const draftsDelete = (id: any) => {
-    console.log('FedemailAPI', id)
-    const unaryCall = fedemailClient.draftsDelete(
+    console.log('EmailAPI', id)
+    const unaryCall = emailClient.draftsDelete(
       {
         id,
       },
@@ -299,7 +299,7 @@ const useFedemailAPI = () => {
   }
 
   const draftsSend = (id: any) => {
-    console.log('FedemailAPI', id)
+    console.log('EmailAPI', id)
   }
 
   return {
@@ -320,4 +320,4 @@ const useFedemailAPI = () => {
   }
 }
 
-export default useFedemailAPI
+export default useEmailAPI

@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
 
-import useFedemailAPI from '../../api/FedemailAPI'
+import useEmailAPI from '../../api/EmailAPI'
 
 const fabStyle = {
   position: 'fixed',
@@ -11,7 +11,7 @@ const fabStyle = {
 }
 
 const NewMailButton = () => {
-  const { draftsCreate } = useFedemailAPI()
+  const { draftsCreate } = useEmailAPI()
 
   const createNewDraftEdit = useCallback(
     () =>

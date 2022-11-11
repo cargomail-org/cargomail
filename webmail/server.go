@@ -28,11 +28,11 @@ import (
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 
-	fedemailv1 "github.com/federizer/cargomail/generated/proto/fedemail/v1"
+	emailv1 "github.com/federizer/cargomail/generated/proto/email/v1"
 	peoplev1 "github.com/federizer/cargomail/generated/proto/people/v1"
-	fedemailRepository "github.com/federizer/cargomail/internal/repository/fedemail/v1"
+	emailRepository "github.com/federizer/cargomail/internal/repository/email/v1"
 	peopleRepository "github.com/federizer/cargomail/internal/repository/people/v1"
-	fedemailHandler "github.com/federizer/cargomail/pkg/api/fedemail/v1"
+	emailHandler "github.com/federizer/cargomail/pkg/api/email/v1"
 	peopleHandler "github.com/federizer/cargomail/pkg/api/people/v1"
 )
 
@@ -64,7 +64,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 
 	grpc_health_v1.RegisterHealthServer(grpcServer, &GrpcHealthService{})
 	peoplev1.RegisterPeopleServer(grpcServer, peopleHandler.NewHandler(peopleRepository.NewRepository(db)))
-	fedemailv1.RegisterFedemailServer(grpcServer, fedemailHandler.NewHandler(fedemailRepository.NewRepository(db)))
+	emailv1.RegisterEmailServer(grpcServer, emailHandler.NewHandler(emailRepository.NewRepository(db)))
 
 	httpMux := http.NewServeMux()
 

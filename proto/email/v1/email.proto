@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package fedemail.v1;
+package email.v1;
 
 import "google/protobuf/descriptor.proto";
 
@@ -246,7 +246,7 @@ message ThreadsUntrashRequest {
   string id = 1;
 }
 
-service Fedemail {
+service Email {
   rpc DraftsList ( DraftsListRequest ) returns ( ListDraftsResponse ) {
   }
 

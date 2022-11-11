@@ -5,22 +5,22 @@ import (
 	"encoding/base64"
 	"encoding/json"
 
-	fedemailv1 "github.com/federizer/cargomail/generated/proto/fedemail/v1"
+	emailv1 "github.com/federizer/cargomail/generated/proto/email/v1"
 )
 
 type ScanLabel struct {
-	*fedemailv1.Label
+	*emailv1.Label
 }
 
 type ScanThread struct {
-	*fedemailv1.Thread
+	*emailv1.Thread
 }
 
 type ScanMessage struct {
-	*fedemailv1.Message
+	*emailv1.Message
 }
 type ScanDraft struct {
-	*fedemailv1.Draft
+	*emailv1.Draft
 	Message *ScanMessage `json:"message,omitempty"`
 }
 
@@ -31,7 +31,7 @@ func (s ScanLabel) Value() (driver.Value, error) {
 func (s *ScanLabel) Scan(value interface{}) error {
 	data, ok := value.([]byte)
 	if !ok {
-		s.Label = &fedemailv1.Label{}
+		s.Label = &emailv1.Label{}
 		return nil
 	}
 	return json.Unmarshal(data, &s)
@@ -44,7 +44,7 @@ func (s ScanThread) Value() (driver.Value, error) {
 func (s *ScanThread) Scan(value interface{}) error {
 	data, ok := value.([]byte)
 	if !ok {
-		s.Thread = &fedemailv1.Thread{}
+		s.Thread = &emailv1.Thread{}
 		return nil
 	}
 	return json.Unmarshal(data, &s)
@@ -57,7 +57,7 @@ func (s ScanMessage) Value() (driver.Value, error) {
 func (s *ScanMessage) Scan(value interface{}) error {
 	data, ok := value.([]byte)
 	if !ok {
-		s.Message = &fedemailv1.Message{}
+		s.Message = &emailv1.Message{}
 		return nil
 	}
 	return json.Unmarshal(data, &s)
@@ -74,7 +74,7 @@ func (s ScanDraft) Value() (driver.Value, error) {
 func (s *ScanDraft) Scan(value interface{}) error {
 	data, ok := value.([]byte)
 	if !ok {
-		s.Draft = &fedemailv1.Draft{}
+		s.Draft = &emailv1.Draft{}
 		return nil
 	}
 
@@ -93,10 +93,10 @@ func (s ScanMessage) MarshalJSON() ([]byte, error) {
 	aux := &struct {
 		*ScanMessageAlias
 		Payload struct {
-			*fedemailv1.MessagePart
+			*emailv1.MessagePart
 			MimeType string `json:"mime_type,omitempty"`
 			Body     struct {
-				*fedemailv1.MessagePartBody
+				*emailv1.MessagePartBody
 				Data interface{} `json:"data,omitempty"`
 			} `json:"body,omitempty"`
 		} `json:"payload,omitempty"`
@@ -128,10 +128,10 @@ func (s *ScanMessage) UnmarshalJSON(data []byte) error {
 	aux := &struct {
 		*ScanMessageAlias
 		Payload struct {
-			*fedemailv1.MessagePart
+			*emailv1.MessagePart
 			MimeType string `json:"mime_type,omitempty"`
 			Body     struct {
-				*fedemailv1.MessagePartBody
+				*emailv1.MessagePartBody
 				Data interface{} `json:"data,omitempty"`
 			} `json:"body,omitempty"`
 		} `json:"payload,omitempty"`

@@ -1,5 +1,5 @@
 import { useState, createContext, ReactNode } from 'react'
-import type { Label } from '../api/generated/proto/fedemail/v1/fedemail'
+import type { Label } from '../api/generated/proto/email/v1/email'
 
 export interface ILabelsProvider {
   children: ReactNode

@@ -7,14 +7,14 @@ import (
 	"io"
 
 	"github.com/emersion/go-message/textproto"
-	fedemailv1 "github.com/federizer/cargomail/generated/proto/fedemail/v1"
+	emailv1 "github.com/federizer/cargomail/generated/proto/email/v1"
 )
 
 type MailMessage struct {
-	Message *fedemailv1.Message
+	Message *emailv1.Message
 }
 
-func (m *MailMessage) GetParsedMessage() (*fedemailv1.Message, error) {
+func (m *MailMessage) GetParsedMessage() (*emailv1.Message, error) {
 	data, err := base64.URLEncoding.WithPadding(base64.NoPadding).DecodeString(m.Message.Raw)
 	if err != nil {
 		return nil, err
@@ -25,12 +25,12 @@ func (m *MailMessage) GetParsedMessage() (*fedemailv1.Message, error) {
 		return nil, err
 	}
 
-	var messageHeaders []*fedemailv1.MessagePartHeader
+	var messageHeaders []*emailv1.MessagePartHeader
 	var mimeType string
 
 	for k, v := range headers.Map() {
 		// fmt.Printf("%s -> %s\n", k, v)
-		var messagePartHeader fedemailv1.MessagePartHeader
+		var messagePartHeader emailv1.MessagePartHeader
 		messagePartHeader.Name = k
 		messagePartHeader.Value = v[0]
 		messageHeaders = append(messageHeaders, &messagePartHeader)
@@ -50,10 +50,10 @@ func (m *MailMessage) GetParsedMessage() (*fedemailv1.Message, error) {
 		return nil, err
 	}
 
-	m.Message.Payload = &fedemailv1.MessagePart{
+	m.Message.Payload = &emailv1.MessagePart{
 		MimeType: mimeType,
 		Headers:  messageHeaders,
-		Body: &fedemailv1.MessagePartBody{
+		Body: &emailv1.MessagePartBody{
 			Data: string(body),
 			Size: int32(len(decodedBody)),
 		}}

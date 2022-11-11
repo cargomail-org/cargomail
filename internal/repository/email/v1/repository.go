@@ -5,20 +5,20 @@ import (
 	"database/sql"
 	"strconv"
 
-	fedemailv1 "github.com/federizer/cargomail/generated/proto/fedemail/v1"
+	emailv1 "github.com/federizer/cargomail/generated/proto/email/v1"
 	"github.com/federizer/cargomail/internal/mail"
 	"google.golang.org/grpc/metadata"
 )
 
 type Repo interface {
-	LabelsList(context.Context) ([]*fedemailv1.Label, error)
-	ThreadsList(context.Context) ([]*fedemailv1.Thread, error)
-	ThreadsGet(context.Context, int64) (*fedemailv1.Thread, error)
-	MessagesModify(context.Context, int64, []string, []string) (*fedemailv1.Message, error)
-	DraftsList(context.Context) ([]*fedemailv1.Draft, error)
-	DraftsGet(context.Context, int64) (*fedemailv1.Draft, error)
-	DraftsCreate(context.Context, *fedemailv1.Draft) (*fedemailv1.Draft, error)
-	DraftsUpdate(context.Context, int64, *fedemailv1.Message) (*fedemailv1.Draft, error)
+	LabelsList(context.Context) ([]*emailv1.Label, error)
+	ThreadsList(context.Context) ([]*emailv1.Thread, error)
+	ThreadsGet(context.Context, int64) (*emailv1.Thread, error)
+	MessagesModify(context.Context, int64, []string, []string) (*emailv1.Message, error)
+	DraftsList(context.Context) ([]*emailv1.Draft, error)
+	DraftsGet(context.Context, int64) (*emailv1.Draft, error)
+	DraftsCreate(context.Context, *emailv1.Draft) (*emailv1.Draft, error)
+	DraftsUpdate(context.Context, int64, *emailv1.Message) (*emailv1.Draft, error)
 	DraftsDelete(context.Context, int64) int64
 }
 
@@ -38,8 +38,8 @@ func getUsername(ctx context.Context) string {
 	return ""
 }
 
-func (r *Repository) LabelsList(ctx context.Context) ([]*fedemailv1.Label, error) {
-	var labels []*fedemailv1.Label
+func (r *Repository) LabelsList(ctx context.Context) ([]*emailv1.Label, error) {
+	var labels []*emailv1.Label
 
 	sqlStatement := `SELECT fedemail.labels_list_v1($1);`
 	rows, err := r.db.Query(sqlStatement, getUsername(ctx))
@@ -64,8 +64,8 @@ func (r *Repository) LabelsList(ctx context.Context) ([]*fedemailv1.Label, error
 	return labels, nil
 }
 
-func (r *Repository) ThreadsList(ctx context.Context) ([]*fedemailv1.Thread, error) {
-	var threads []*fedemailv1.Thread
+func (r *Repository) ThreadsList(ctx context.Context) ([]*emailv1.Thread, error) {
+	var threads []*emailv1.Thread
 
 	sqlStatement := `SELECT * FROM fedemail.threads_list_v1($1);`
 	rows, err := r.db.Query(sqlStatement, getUsername(ctx))
@@ -90,8 +90,8 @@ func (r *Repository) ThreadsList(ctx context.Context) ([]*fedemailv1.Thread, err
 	return threads, nil
 }
 
-func (r *Repository) ThreadsGet(ctx context.Context, threadId int64) (*fedemailv1.Thread, error) {
-	var thread fedemailv1.Thread
+func (r *Repository) ThreadsGet(ctx context.Context, threadId int64) (*emailv1.Thread, error) {
+	var thread emailv1.Thread
 
 	sqlStatement := `SELECT fedemail.threads_get_v1($1, $2);`
 	rows, err := r.db.Query(sqlStatement, getUsername(ctx), threadId)
@@ -122,8 +122,8 @@ func (r *Repository) ThreadsGet(ctx context.Context, threadId int64) (*fedemailv
 	return &thread, nil
 }
 
-func (r *Repository) MessagesModify(ctx context.Context, messageId int64, addLabelIds, removeLabelIds []string) (*fedemailv1.Message, error) {
-	var message fedemailv1.Message
+func (r *Repository) MessagesModify(ctx context.Context, messageId int64, addLabelIds, removeLabelIds []string) (*emailv1.Message, error) {
+	var message emailv1.Message
 	message.Id = strconv.FormatInt(messageId, 10)
 	message.ThreadId = "24"
 	message.LabelIds = append(message.LabelIds, "CATEGORY_SOCIAL")
@@ -132,8 +132,8 @@ func (r *Repository) MessagesModify(ctx context.Context, messageId int64, addLab
 	return &message, nil
 }
 
-func (r *Repository) DraftsList(ctx context.Context) ([]*fedemailv1.Draft, error) {
-	var drafts []*fedemailv1.Draft
+func (r *Repository) DraftsList(ctx context.Context) ([]*emailv1.Draft, error) {
+	var drafts []*emailv1.Draft
 
 	sqlStatement := `SELECT fedemail.drafts_list_v1($1);`
 	rows, err := r.db.Query(sqlStatement, getUsername(ctx))
@@ -158,7 +158,7 @@ func (r *Repository) DraftsList(ctx context.Context) ([]*fedemailv1.Draft, error
 	return drafts, nil
 }
 
-func (r *Repository) DraftsGet(ctx context.Context, id int64) (*fedemailv1.Draft, error) {
+func (r *Repository) DraftsGet(ctx context.Context, id int64) (*emailv1.Draft, error) {
 	var scanDraft ScanDraft
 
 	sqlStatement := `SELECT fedemail.drafts_get_v1($1, $2);`
@@ -170,7 +170,7 @@ func (r *Repository) DraftsGet(ctx context.Context, id int64) (*fedemailv1.Draft
 	return scanDraft.Draft, err
 }
 
-func (r *Repository) DraftsCreate(ctx context.Context, draft *fedemailv1.Draft) (*fedemailv1.Draft, error) {
+func (r *Repository) DraftsCreate(ctx context.Context, draft *emailv1.Draft) (*emailv1.Draft, error) {
 	var scanDraft ScanDraft
 	scanDraft.Draft = draft
 
@@ -183,7 +183,7 @@ func (r *Repository) DraftsCreate(ctx context.Context, draft *fedemailv1.Draft) 
 	return scanDraft.Draft, err
 }
 
-func (r *Repository) DraftsUpdate(ctx context.Context, id int64, message *fedemailv1.Message) (*fedemailv1.Draft, error) {
+func (r *Repository) DraftsUpdate(ctx context.Context, id int64, message *emailv1.Message) (*emailv1.Draft, error) {
 	var scanDraft ScanDraft
 	var scanMessage ScanMessage
 	var mailMessage mail.MailMessage

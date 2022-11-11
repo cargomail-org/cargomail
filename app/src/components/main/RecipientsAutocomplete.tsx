@@ -3,7 +3,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 import { Dispatch, FC, Fragment, SetStateAction, useContext, useEffect, useState } from 'react'
 import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
-import useFedemailAPI from '../../api/FedemailAPI'
+import useEmailAPI from '../../api/EmailAPI'
 import { ContactsContext, IContact } from '../../context/ContactsContext'
 import { IDraftEdit, RecipientType } from '../../context/DraftsContext'
 import usePeopleAPI from '../../api/PeopleAPI'
@@ -27,7 +27,7 @@ export const RecipientsAutocomplete: FC<RecipientsAutocompleteProps> = (props) =
   const [open, setOpen] = useState(false) // if dropdown open?
   const { contacts } = useContext(ContactsContext)
 
-  const { draftsUpdate } = useFedemailAPI()
+  const { draftsUpdate } = useEmailAPI()
 
   const { contactsList } = usePeopleAPI()
 

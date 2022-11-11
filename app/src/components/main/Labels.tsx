@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EmailIcon from '@mui/icons-material/Email'
 import * as ROUTES from '../../routes'
 import { LabelsContext } from '../../context/LabelsContext'
-import { Label_Type } from '../../api/generated/proto/fedemail/v1/fedemail'
+import { Label_Type } from '../../api/generated/proto/email/v1/email'
 
 export const Labels = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)

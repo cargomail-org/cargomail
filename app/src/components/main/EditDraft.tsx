@@ -18,7 +18,7 @@ import ClearIcon from '@mui/icons-material/Clear'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { DraftsContext, IDraftEdit } from '../../context/DraftsContext'
-import useFedemailAPI from '../../api/FedemailAPI'
+import useEmailAPI from '../../api/EmailAPI'
 import { RecipientsSelect } from './Recipients'
 import Editor from '../editor/Editor'
 import { SHOW_FILE_DIALOG_COMMAND } from '../editor/plugins/AttachmentsPlugin'
@@ -32,7 +32,7 @@ const EditDraft: FC<EditDraftProps> = (props) => {
   const isMobileLandscape = useMediaQuery('(max-height: 520px)')
 
   const { closeDraftEdit } = useContext(DraftsContext)
-  const { draftsUpdate, draftsSend, draftsDelete } = useFedemailAPI()
+  const { draftsUpdate, draftsSend, draftsDelete } = useEmailAPI()
 
   const snippet_max_length = 240
 

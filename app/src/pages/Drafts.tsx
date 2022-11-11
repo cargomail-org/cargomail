@@ -1,12 +1,12 @@
 import { Box } from '@mui/material'
 import { FC, useContext, useEffect } from 'react'
-import useFedemailAPI from '../api/FedemailAPI'
+import useEmailAPI from '../api/EmailAPI'
 import { Draft } from '../components/mail/Draft'
 import { Navigation } from '../components/page-layout'
 import { DraftsContext } from '../context/DraftsContext'
 
 export const Drafts: FC = () => {
-  const { draftsList } = useFedemailAPI()
+  const { draftsList } = useEmailAPI()
   const { draftsAll } = useContext(DraftsContext)
 
   useEffect(() => {

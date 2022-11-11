@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useReducer } from 'react'
-import type { Draft } from '../api/generated/proto/fedemail/v1/fedemail'
+import type { Draft } from '../api/generated/proto/email/v1/email'
 import useActionCreator from '../utils/hooks/actionCreator'
 import { IContact } from './ContactsContext'
 

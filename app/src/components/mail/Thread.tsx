@@ -10,7 +10,7 @@ import { decodeCurrentUser } from '../../auth'
 
 import Message from './Message'
 
-import useFedemailAPI from '../../api/FedemailAPI'
+import useEmailAPI from '../../api/EmailAPI'
 
 import { ThreadsContext } from '../../context/ThreadsContext'
 
@@ -19,7 +19,7 @@ import ActionsBox from './ActionsBox'
 const theme = createTheme()
 
 const Thread = ({ id, messages, hasUnread, actions }: any) => {
-  const { trashThread, deleteThread, batchModifyMessages } = useFedemailAPI()
+  const { trashThread, deleteThread, batchModifyMessages } = useEmailAPI()
   const { idToken } = useContext(AuthContext)
   const { removeThreadLabel, addThreadLabel } = useContext(ThreadsContext)
   const [expanded, setExpanded] = useState(false)

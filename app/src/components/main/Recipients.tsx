@@ -9,7 +9,7 @@ import { RecipientsAutocomplete } from './RecipientsAutocomplete'
 import { IContact } from '../../context/ContactsContext'
 import usePeopleAPI from '../../api/PeopleAPI'
 import { IDraftEdit, RecipientType } from '../../context/DraftsContext'
-import useFedemailAPI from '../../api/FedemailAPI'
+import useEmailAPI from '../../api/EmailAPI'
 import { Box, colors, FormControl } from '@mui/material'
 
 export type RecipientsSelectProps = {
@@ -27,7 +27,7 @@ export const RecipientsSelect: FC<RecipientsSelectProps> = (props) => {
   const [isVisibleCc, showCc] = useState(false)
   const [isVisibleBcc, showBcc] = useState(false)
 
-  const { draftsUpdate } = useFedemailAPI()
+  const { draftsUpdate } = useEmailAPI()
   const { contactsCreate } = usePeopleAPI()
 
   const initialDialogState: IDialogState = { opened: false }

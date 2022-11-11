@@ -3,11 +3,11 @@ import AccordionSummary, { accordionSummaryClasses } from '@mui/material/Accordi
 import { FC, useContext, useState } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-import { MessagePart } from '../../api/generated/proto/fedemail/v1/fedemail'
+import { MessagePart } from '../../api/generated/proto/email/v1/email'
 import parsePayload, { IRecipient } from '../../utils/mails/parsePayload'
 import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
 import { decodeCurrentUser } from '../../auth'
-import useFedemailAPI from '../../api/FedemailAPI'
+import useEmailAPI from '../../api/EmailAPI'
 import { DraftsContext } from '../../context/DraftsContext'
 import { IContact } from '../../context/ContactsContext'
 
@@ -35,7 +35,7 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
   const surnameFirstLetter = currentUser?.surname?.charAt(0).toUpperCase()
 
   const { newDraftEdit } = useContext(DraftsContext)
-  const { draftsDelete } = useFedemailAPI()
+  const { draftsDelete } = useEmailAPI()
 
   const actions = {
     editDraft: true,
