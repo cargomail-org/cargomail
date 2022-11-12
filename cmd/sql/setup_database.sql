@@ -3,49 +3,49 @@ DECLARE
 BEGIN
     CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
-    IF EXISTS (SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema = 'fedemail') THEN
-        RAISE WARNING 'database schema "fedemail" already exists -> drop & create';
-        DROP SCHEMA fedemail CASCADE;
+    IF EXISTS (SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema = 'email') THEN
+        RAISE WARNING 'database schema "email" already exists -> drop & create';
+        DROP SCHEMA email CASCADE;
     END IF;
 
-    CREATE SCHEMA fedemail;
+    CREATE SCHEMA email;
 
-    CREATE SEQUENCE fedemail.history_id_seq
+    CREATE SEQUENCE email.history_id_seq
         START WITH 1
         INCREMENT BY 1
         NO MINVALUE
         NO MAXVALUE
         CACHE 1;      
 
-    CREATE SEQUENCE fedemail.thread_id_seq
+    CREATE SEQUENCE email.thread_id_seq
         START WITH 1
         INCREMENT BY 1
         NO MINVALUE
         NO MAXVALUE
         CACHE 1;
 
-    CREATE SEQUENCE fedemail.draft_id_seq
+    CREATE SEQUENCE email.draft_id_seq
         START WITH 1
         INCREMENT BY 1
         NO MINVALUE
         NO MAXVALUE
         CACHE 1;
 
-    CREATE SEQUENCE fedemail.message_id_seq
+    CREATE SEQUENCE email.message_id_seq
         START WITH 1
         INCREMENT BY 1
         NO MINVALUE
         NO MAXVALUE
         CACHE 1;
 
-    CREATE SEQUENCE fedemail.attachment_id_seq
+    CREATE SEQUENCE email.attachment_id_seq
         START WITH 1
         INCREMENT BY 1
         NO MINVALUE
         NO MAXVALUE
         CACHE 1;       
 
-    CREATE TABLE fedemail.label (
+    CREATE TABLE email.label (
         id BIGSERIAL PRIMARY KEY,
         owner character varying(255) NOT NULL,
         name character varying(255) NOT NULL,
@@ -53,50 +53,50 @@ BEGIN
         payload JSONB
     );	
 
-    CREATE TABLE fedemail.message (
-        id bigint DEFAULT nextval('fedemail.message_id_seq'::regclass) PRIMARY KEY,
+    CREATE TABLE email.message (
+        id bigint DEFAULT nextval('email.message_id_seq'::regclass) PRIMARY KEY,
         owner character varying(255) NOT NULL,
-        thread_id bigint DEFAULT nextval('fedemail.thread_id_seq'::regclass) NOT NULL,
+        thread_id bigint DEFAULT nextval('email.thread_id_seq'::regclass) NOT NULL,
         draft_id bigint,
         snippet character varying(255),
         raw TEXT,
         payload JSONB,
         labels JSONB,
-        history_id bigint DEFAULT nextval('fedemail.history_id_seq'::regclass) NOT NULL,
+        history_id bigint DEFAULT nextval('email.history_id_seq'::regclass) NOT NULL,
         internal_date bigint DEFAULT extract(epoch from now()) NOT NULL,
         search_subject tsvector,
         search_from tsvector,
         search_recipients tsvector
     );
 
-    CREATE TABLE fedemail.attachment (
-        id bigint DEFAULT nextval('fedemail.attachment_id_seq'::regclass) PRIMARY KEY,
+    CREATE TABLE email.attachment (
+        id bigint DEFAULT nextval('email.attachment_id_seq'::regclass) PRIMARY KEY,
         owner character varying(255) NOT NULL,
         filename character varying(255) NOT NULL,
         content_type character varying(255) NOT NULL,
         content_uri character varying(255) NOT NULL,
         payload JSONB,
-        history_id bigint DEFAULT nextval('fedemail.history_id_seq'::regclass) NOT NULL,
+        history_id bigint DEFAULT nextval('email.history_id_seq'::regclass) NOT NULL,
         internal_date bigint DEFAULT extract(epoch from now()) NOT NULL,
         search_content_type tsvector,
         search_filename tsvector,
         search_content tsvector
     );
 
-    CREATE UNIQUE INDEX idx_message_draft_id ON fedemail.message(draft_id);
+    CREATE UNIQUE INDEX idx_message_draft_id ON email.message(draft_id);
 
-    -- CREATE INDEX idx_message_payload_message_id ON fedemail.message USING gin ((payload->'Message-ID'));
-    -- CREATE INDEX idx_message_payload_in_reply_to ON fedemail.message USING gin ((payload->'In-Reply-To'));
-    -- CREATE INDEX idx_message_payload_references ON fedemail.message USING gin ((payload->'References'));
-    -- CREATE INDEX idx_message_payload_subject ON fedemail.message USING gin ((payload->'Subject'));
-    -- CREATE INDEX idx_message_payload_from ON fedemail.message USING gin ((payload->'From'));
-    -- CREATE INDEX idx_message_payload_recipients_to ON fedemail.message USING gin ((payload->'Recipients'->'To'));
-    -- CREATE INDEX idx_message_payload_recipients_cc ON fedemail.message USING gin ((payload->'Recipients'->'Cc'));
-    -- CREATE INDEX idx_message_payload_recipients_bcc ON fedemail.message USING gin ((payload->'Recipients'->'Bcc'));
+    -- CREATE INDEX idx_message_payload_message_id ON email.message USING gin ((payload->'Message-ID'));
+    -- CREATE INDEX idx_message_payload_in_reply_to ON email.message USING gin ((payload->'In-Reply-To'));
+    -- CREATE INDEX idx_message_payload_references ON email.message USING gin ((payload->'References'));
+    -- CREATE INDEX idx_message_payload_subject ON email.message USING gin ((payload->'Subject'));
+    -- CREATE INDEX idx_message_payload_from ON email.message USING gin ((payload->'From'));
+    -- CREATE INDEX idx_message_payload_recipients_to ON email.message USING gin ((payload->'Recipients'->'To'));
+    -- CREATE INDEX idx_message_payload_recipients_cc ON email.message USING gin ((payload->'Recipients'->'Cc'));
+    -- CREATE INDEX idx_message_payload_recipients_bcc ON email.message USING gin ((payload->'Recipients'->'Bcc'));
 
-    -- CREATE INDEX idx_message_labels ON fedemail.message USING gin (labels);
+    -- CREATE INDEX idx_message_labels ON email.message USING gin (labels);
 
-    CREATE OR REPLACE FUNCTION fedemail.message_table_inserted() RETURNS trigger
+    CREATE OR REPLACE FUNCTION email.message_table_inserted() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$
     begin
@@ -107,20 +107,20 @@ BEGIN
         RETURN NEW;	
     END; $$;
 
-    CREATE OR REPLACE FUNCTION fedemail.message_table_updated() RETURNS trigger
+    CREATE OR REPLACE FUNCTION email.message_table_updated() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$ 
     begin
         if (NEW.payload <> OLD.payload) then
-            NEW.history_id := nextval('fedemail.history_id_seq'::regclass);
+            NEW.history_id := nextval('email.history_id_seq'::regclass);
         end if;
         RETURN NEW; 
     END; $$;
 
-    CREATE TRIGGER message_inserted BEFORE INSERT ON fedemail.message FOR EACH ROW EXECUTE PROCEDURE fedemail.message_table_inserted();
-    CREATE TRIGGER message_updated BEFORE UPDATE ON fedemail.message FOR EACH ROW EXECUTE PROCEDURE fedemail.message_table_updated();
+    CREATE TRIGGER message_inserted BEFORE INSERT ON email.message FOR EACH ROW EXECUTE PROCEDURE email.message_table_inserted();
+    CREATE TRIGGER message_updated BEFORE UPDATE ON email.message FOR EACH ROW EXECUTE PROCEDURE email.message_table_updated();
 
-    CREATE OR REPLACE FUNCTION fedemail.attachment_table_inserted() RETURNS trigger
+    CREATE OR REPLACE FUNCTION email.attachment_table_inserted() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$
     begin
@@ -131,21 +131,21 @@ BEGIN
         RETURN NEW;	
     END; $$;
 
-    CREATE OR REPLACE FUNCTION fedemail.attachment_table_updated() RETURNS trigger
+    CREATE OR REPLACE FUNCTION email.attachment_table_updated() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$ 
     begin
         if (NEW.payload <> OLD.payload) then
-            NEW.history_id := nextval('fedemail.history_id_seq'::regclass);
+            NEW.history_id := nextval('email.history_id_seq'::regclass);
         end if;
         RETURN NEW; 
     END; $$;
 
-    CREATE TRIGGER attachment_inserted BEFORE INSERT ON fedemail.attachment FOR EACH ROW EXECUTE PROCEDURE fedemail.attachment_table_inserted();
-    CREATE TRIGGER attachment_updated BEFORE UPDATE ON fedemail.attachment FOR EACH ROW EXECUTE PROCEDURE fedemail.attachment_table_updated();
+    CREATE TRIGGER attachment_inserted BEFORE INSERT ON email.attachment FOR EACH ROW EXECUTE PROCEDURE email.attachment_table_inserted();
+    CREATE TRIGGER attachment_updated BEFORE UPDATE ON email.attachment FOR EACH ROW EXECUTE PROCEDURE email.attachment_table_updated();
 
 
-    CREATE OR REPLACE FUNCTION fedemail.labels_list_v1(IN _owner character varying)
+    CREATE OR REPLACE FUNCTION email.labels_list_v1(IN _owner character varying)
     RETURNS TABLE(label jsonb) AS
     $BODY$
     BEGIN
@@ -159,13 +159,13 @@ BEGIN
                                     'name', name,
                                     'message_list_visibility', payload['messageListVisibility'],
                                     'label_list_visibility', payload['labelListVisibility'],
-                                    'type', type) FROM fedemail.label
+                                    'type', type) FROM email.label
                 WHERE owner = _owner;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.threads_list_v1(IN _owner character varying)
+    CREATE OR REPLACE FUNCTION email.threads_list_v1(IN _owner character varying)
     RETURNS TABLE(thread jsonb) AS
     $BODY$
     BEGIN
@@ -180,10 +180,10 @@ BEGIN
 	                (SELECT jsonb_build_object('id', detail.thread_id::varchar(255),
 	                                        'snippet', detail.snippet,
 	                                        'history_id', detail.history_id::varchar(255),
-	                                        'internal_date', detail.internal_date::varchar(255) || '000') FROM fedemail.message detail
+	                                        'internal_date', detail.internal_date::varchar(255) || '000') FROM email.message detail
 	                WHERE thread_id = master.thread_id 
 	                ORDER BY internal_date DESC LIMIT 1) AS thread
-	            FROM fedemail.message AS master
+	            FROM email.message AS master
 	            WHERE owner = _owner
 	        ) SELECT results.thread FROM results
 	          ORDER BY results.thread->>'internal_date' DESC;
@@ -191,7 +191,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.threads_get_v1(IN _owner character varying, IN _thread_id bigint)
+    CREATE OR REPLACE FUNCTION email.threads_get_v1(IN _owner character varying, IN _thread_id bigint)
     RETURNS TABLE(thread jsonb) AS
     $BODY$
     BEGIN
@@ -207,14 +207,14 @@ BEGIN
                                         'payload', payload,
                                         'label_ids', labels,
                                         'history_id', history_id::varchar(255),
-                                        'internal_date', internal_date::varchar(255) || '000') FROM fedemail.message
+                                        'internal_date', internal_date::varchar(255) || '000') FROM email.message
                 WHERE owner = _owner AND thread_id = _thread_id 
                 ORDER BY internal_date ASC;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.drafts_list_v1(IN _owner character varying)
+    CREATE OR REPLACE FUNCTION email.drafts_list_v1(IN _owner character varying)
     RETURNS TABLE(draft jsonb) AS
     $BODY$
     BEGIN
@@ -228,14 +228,14 @@ BEGIN
                                     'message', jsonb_build_object(
                                         'id', id::varchar(255),
                                         'thread_id', thread_id::varchar(255))
-                                    ) FROM fedemail.message                                   
+                                    ) FROM email.message                                   
                 WHERE owner = _owner AND draft_id IS NOT NULL
                 ORDER BY history_id DESC;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.drafts_get_v1(IN _owner character varying, IN _id bigint)
+    CREATE OR REPLACE FUNCTION email.drafts_get_v1(IN _owner character varying, IN _id bigint)
     RETURNS jsonb AS
     $BODY$
     DECLARE
@@ -255,7 +255,7 @@ BEGIN
                                         'label_ids', labels,
                                         'history_id', history_id::varchar(255),
                                         'internal_date', internal_date::varchar(255) || '000')
-                                    ) FROM fedemail.message
+                                    ) FROM email.message
                 WHERE owner = _owner AND draft_id = _id
                 INTO _draft;
 		RETURN _draft;                   
@@ -263,7 +263,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.drafts_create_v1(IN _owner character varying, IN _message jsonb)
+    CREATE OR REPLACE FUNCTION email.drafts_create_v1(IN _owner character varying, IN _message jsonb)
     RETURNS jsonb AS
     $BODY$
     DECLARE
@@ -277,8 +277,8 @@ BEGIN
 
         _labels = to_jsonb('["DRAFT"]'::json);
 
-        INSERT INTO fedemail.message(owner, draft_id, payload, labels)
-            VALUES (_owner, nextval('fedemail.draft_id_seq'::regclass), _message->'payload', _labels)
+        INSERT INTO email.message(owner, draft_id, payload, labels)
+            VALUES (_owner, nextval('email.draft_id_seq'::regclass), _message->'payload', _labels)
             RETURNING jsonb_build_object('id', draft_id::varchar(255),
                                          'message', jsonb_build_object(
 	                                        'id', id::varchar(255),
@@ -293,7 +293,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.drafts_update_v1(IN _owner character varying, IN _id bigint, IN _message jsonb)
+    CREATE OR REPLACE FUNCTION email.drafts_update_v1(IN _owner character varying, IN _id bigint, IN _message jsonb)
     RETURNS jsonb AS
     $BODY$
     DECLARE
@@ -304,8 +304,8 @@ BEGIN
             RAISE EXCEPTION '_owner is required.';
         END IF;
 
-        UPDATE fedemail.message
-            SET id = nextval('fedemail.message_id_seq'::regclass),
+        UPDATE email.message
+            SET id = nextval('email.message_id_seq'::regclass),
                 payload = _message->'payload',
                 snippet = _message->>'snippet',
                 raw = _message->>'raw',
@@ -325,7 +325,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION fedemail.drafts_delete_v1(IN _owner character varying, IN _id bigint)
+    CREATE OR REPLACE FUNCTION email.drafts_delete_v1(IN _owner character varying, IN _id bigint)
     RETURNS bigint AS
     $BODY$
     DECLARE
@@ -337,7 +337,7 @@ BEGIN
         END IF;
 
         WITH affected_rows AS (
-            DELETE FROM fedemail.message
+            DELETE FROM email.message
                 WHERE owner = _owner AND draft_id = _id RETURNING 1
         ) SELECT COUNT(*) INTO _removed_cnt
             FROM affected_rows;		
@@ -346,7 +346,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    RAISE INFO 'database schema "fedemail" created';
+    RAISE INFO 'database schema "email" created';
 
 ----------------------------------------------------------------------------------------------------------------------
 

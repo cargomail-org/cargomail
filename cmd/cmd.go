@@ -19,7 +19,7 @@ var defaultConfig []byte
 var config *cfg.Config
 
 var rootCmd = &cobra.Command{
-	Use: "fedemail",
+	Use: "cargomail",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return errors.New("no command provided")
 	},

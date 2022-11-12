@@ -4,7 +4,7 @@ BEGIN
     -- Labels
     do $$
     BEGIN
-        INSERT INTO fedemail.label (owner, name, type, payload) VALUES 
+        INSERT INTO email.label (owner, name, type, payload) VALUES 
         ('matthew.cuthbert@demo.localhost',
         'CHAT',
         0,
@@ -116,14 +116,14 @@ BEGIN
     -- Attachments
     do $$
     BEGIN
-        INSERT INTO fedemail.attachment (owner, filename, content_type, content_uri, payload) VALUES 
+        INSERT INTO email.attachment (owner, filename, content_type, content_uri, payload) VALUES 
         ('matthew.cuthbert@demo.localhost',
         'Test_text.txt',
         'text/plain',
         'file:/50811c73-4bf6-47a0-94ce-3f07f9583786',
         NULL),
         ('matthew.cuthbert@demo.localhost',
-        'Fedemail concept.pdf',
+        'Cargomail concept.pdf',
         'application/pdf',
         'file:/867cc2b4-ba54-4d19-bae4-e608e57114f2',
         NULL);
@@ -136,10 +136,10 @@ BEGIN
         thread_1 bigint;
         thread_2 bigint;
     BEGIN   
-        thread_1 = nextval('fedemail.thread_id_seq'); 
-        thread_2 = nextval('fedemail.thread_id_seq'); 
+        thread_1 = nextval('email.thread_id_seq'); 
+        thread_2 = nextval('email.thread_id_seq'); 
 
-        INSERT INTO fedemail.message (owner, thread_id, snippet, payload, labels, internal_date) VALUES 
+        INSERT INTO email.message (owner, thread_id, snippet, payload, labels, internal_date) VALUES 
         ('matthew.cuthbert@demo.localhost',
         thread_1,
         'Hi, please see the attachments!',
@@ -177,7 +177,7 @@ BEGIN
         '["CATEGORY_SOCIAL", "UNREAD", "INBOX"]',
         extract(epoch from now() at time zone 'utc')-1800);
         
-        INSERT INTO fedemail.message (owner, thread_id, snippet, payload, labels) VALUES 
+        INSERT INTO email.message (owner, thread_id, snippet, payload, labels) VALUES 
         ('matthew.cuthbert@demo.localhost',
         thread_2,
         'Hi Matt, I''ll come to visit you next week. Regards Anne',
@@ -197,7 +197,7 @@ BEGIN
     END
     $$;
 
-    RAISE INFO 'data inserted into federizer/fedemail';
+    RAISE INFO 'data inserted into federizer/email';
 
     -- Contacts
     do $$
