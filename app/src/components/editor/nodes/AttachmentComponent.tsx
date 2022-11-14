@@ -88,7 +88,7 @@ function LazyAttachment({
 
 export default function AttachmentComponent({
   src,
-  file,
+  uploadInst,
   altText,
   nodeKey,
   width,
@@ -107,7 +107,7 @@ export default function AttachmentComponent({
   resizable: boolean
   showCaption: boolean
   src: string
-  file: any
+  uploadInst: any
   width: 'inherit' | number
   captionsEnabled: boolean
 }): JSX.Element {
@@ -303,6 +303,7 @@ export default function AttachmentComponent({
             captionsEnabled={captionsEnabled}
           />
         )}
+        {uploadInst && <div>TUS</div>}
       </>
     </Suspense>
   )

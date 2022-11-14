@@ -83,7 +83,7 @@ const EditDraft: FC<EditDraftProps> = (props) => {
 
   const selectAttachmentDialog = () => {
     console.log(editor)
-    editor?.dispatchCommand(SHOW_FILE_DIALOG_COMMAND, 'Hello World!')
+    editor?.dispatchCommand(SHOW_FILE_DIALOG_COMMAND, '')
   }
 
   return (

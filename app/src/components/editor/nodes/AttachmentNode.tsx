@@ -14,6 +14,7 @@ import type {
 import { createEditor, DecoratorNode } from 'lexical'
 import * as React from 'react'
 import { Suspense } from 'react'
+import { createTusUploadInstance } from '../../../api/fileAPI'
 
 const AttachmentComponent = React.lazy(
   // @ts-ignore
@@ -50,7 +51,6 @@ export type SerializedAttachmentNode = Spread<
     maxWidth: number
     showCaption: boolean
     src: string
-    file: any
     width?: number
     type: 'attachment'
     version: 1
@@ -60,11 +60,11 @@ export type SerializedAttachmentNode = Spread<
 
 export class AttachmentNode extends DecoratorNode<JSX.Element> {
   __src: string
-  __file: any
   __altText: string
   __width: 'inherit' | number
   __height: 'inherit' | number
   __maxWidth: number
+  __uploadInst: any
   __showCaption: boolean
   __caption: LexicalEditor
   // Captions cannot yet be used within editor cells
@@ -78,8 +78,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     return new AttachmentNode(
       node.__src,
       node.__altText,
-      node.__file,
       node.__maxWidth,
+      node.__uploadInst,
       node.__width,
       node.__height,
       node.__showCaption,
@@ -90,14 +90,13 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   }
 
   static importJSON(serializedNode: SerializedAttachmentNode): AttachmentNode {
-    const { altText, height, width, maxWidth, caption, src, file, showCaption } = serializedNode
+    const { altText, height, width, maxWidth, caption, src, showCaption } = serializedNode
     const node = $createAttachmentNode({
       altText,
       height,
       maxWidth,
       showCaption,
       src,
-      file,
       width,
     })
     const nestedEditor = node.__caption
@@ -128,7 +127,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     src: string,
     altText: string,
     maxWidth: number,
-    file?: any,
+    uploadInst?: any,
     width?: 'inherit' | number,
     height?: 'inherit' | number,
     showCaption?: boolean,
@@ -138,9 +137,9 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   ) {
     super(key)
     this.__src = src
-    this.__file = file
     this.__altText = altText
     this.__maxWidth = maxWidth
+    this.__uploadInst = uploadInst
     this.__width = width || 'inherit'
     this.__height = height || 'inherit'
     this.__showCaption = showCaption || false
@@ -156,7 +155,6 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       maxWidth: this.__maxWidth,
       showCaption: this.__showCaption,
       src: this.getSrc(),
-      file: this.getFile(),
       type: 'attachment',
       version: 1,
       width: this.__width === 'inherit' ? 0 : this.__width,
@@ -194,8 +192,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     return this.__src
   }
 
-  getFile(): string {
-    return this.__file
+  getUploadInst(): string {
+    return this.__uploadInst
   }
 
   getAltText(): string {
@@ -207,11 +205,11 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       <Suspense fallback={null}>
         <AttachmentComponent
           src={this.__src}
-          file={this.__file}
           altText={this.__altText}
           width={this.__width}
           height={this.__height}
           maxWidth={this.__maxWidth}
+          uploadInst={this.__uploadInst}
           nodeKey={this.getKey()}
           showCaption={this.__showCaption}
           caption={this.__caption}
@@ -235,7 +233,19 @@ export function $createAttachmentNode({
   caption,
   key,
 }: AttachmentPayload): AttachmentNode {
-  return new AttachmentNode(src, altText, file, maxWidth, width, height, showCaption, caption, captionsEnabled, key)
+  const uploadInst = file ? createTusUploadInstance(file) : null
+  return new AttachmentNode(
+    src,
+    altText,
+    maxWidth,
+    uploadInst,
+    width,
+    height,
+    showCaption,
+    caption,
+    captionsEnabled,
+    key
+  )
 }
 
 export function $isAttachmentNode(node: LexicalNode | null | undefined): node is AttachmentNode {

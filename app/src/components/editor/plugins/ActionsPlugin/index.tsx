@@ -62,8 +62,8 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                   root.append(paragraph)
                 })
                 const attachmentPayload: InsertAttachmentPayload = {
-                  src: '/images/folder.svg',
-                  width: 150,
+                  src: '/images/cargo-container-blue.png',
+                  width: 180,
                   height: 150,
                   file: file,
                   altText: 'attachment',

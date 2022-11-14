@@ -3,6 +3,7 @@ import { $wrapNodeInElement, mergeRegister } from '@lexical/utils'
 import {
   $createParagraphNode,
   $createRangeSelection,
+  $createTextNode,
   $getSelection,
   $insertNodes,
   $isNodeSelection,
@@ -42,7 +43,8 @@ export default function AttachmentsPlugin({ captionsEnabled }: { captionsEnabled
         INSERT_ATTACHMENT_COMMAND,
         (payload) => {
           const attachmentNode = $createAttachmentNode(payload)
-          $insertNodes([attachmentNode])
+          const textNode = $createTextNode(' ')
+          $insertNodes([attachmentNode, textNode])
           if ($isRootOrShadowRoot(attachmentNode.getParentOrThrow())) {
             $wrapNodeInElement(attachmentNode, $createParagraphNode).selectEnd()
           }
