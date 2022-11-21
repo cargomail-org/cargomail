@@ -1,10 +1,10 @@
 # Email
 
-Email is the most pervasive form of business information exchange. Email is often used not only as an interpersonal communication tool but also as the default choice to send files. Over time, your inbox becomes a personal knowledge repository of what was sent by whom and when. Such an email repository has one fundamental flaw. Due to the design principle of the email system, the email cannot contain large messages. Thus, users often send links to external files instead of attachments or inline images. Links may expire with time, and external files can change. Consequently, your personal knowledge repository gradually deteriorates.
+Email is the most pervasive form of business information exchange. Email is often used not only as an interpersonal communication tool, but also as the default choice to send files. Over time, your inbox becomes a personal knowledge repository of what was sent by whom and when. Such an email repository has one fundamental flaw. Due to the design principle of the email system, the email cannot contain large messages. Thus, users often send links to external files instead of attachments or inline images. Links may expire with time, and external files can change. Consequently, your knowledge repository gradually deteriorates.
 
 # Cargomail
 
-Cargomail uses an advanced web editor, which allows users to embed documents, images, and videos in the message body while keeping the respective resource data in the mailbox file storage. The newly designed [intermodal Message Transfer Agent (iMTA)](https://github.com/federizer/cargomail-concept) enables the transfer of email messages and their resources in two modes -- push and pull. The sender's iMTA sends email messages to the recipient's iMTA, which pulls the respective email resources from the sender's iMTA. This concept allows transferring of a massive amount of data without the risk of receiving spam.
+Cargomail uses an advanced web editor, which allows users to embed documents, images, and videos in the message body while keeping the respective resource data in the mailbox file storage. The newly designed [intermodal Message Transfer Agent (iMTA)](https://github.com/federizer/cargomail-concept) enables the transfer of email messages and their resources in two modes — push and pull. The sender's iMTA sends email messages to the recipient's iMTA, which pulls the respective email resources from the sender's iMTA. This concept allows transferring of a massive amount of data without the risk of receiving spam.
 
 In addition, the Cargomail client has two valuable features:
 
@@ -21,7 +21,7 @@ Fig.&nbsp;1.&emsp;Cargomail Architecture
 
 # Acknowledgments
 
-As of November 2022, the following resources have been used to develop the gRPC iMTA proof of concept:
+As of November 2022, the following resources have been used to develop the Cargomail project:
 
 * Gmail API [documentation](https://developers.google.com/gmail/api/reference/rest), licensed under the Creative Commons Attribution 4.0 License, has been used to design a gRPC interface between the webmail application and the backend service.
 
