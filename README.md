@@ -4,7 +4,7 @@ Email is the most pervasive form of business information exchange. Email is ofte
 
 # Cargomail
 
-Cargomail uses an advanced web editor, which allows users to embed documents, images, and videos in the message body while keeping the respective resource data in the mailbox file storage. The newly designed [intermodal Message Transfer Agent (iMTA)](https://github.com/federizer/cargomail-concept) enables the transfer of email messages and their resources in two modes — push and pull. The sender's iMTA sends email messages to the recipient's iMTA, which pulls the respective email resources from the sender's iMTA. This concept allows transferring of a massive amount of data without the risk of receiving spam.
+Cargomail uses an advanced web editor, which allows users to embed documents, images, and videos in the message body while keeping the respective resource data in the mailbox file storage. The newly designed [intermodal Message Transfer Agent (iMTA)](https://github.com/federizer/cargomail-concept) enables the transfer of email messages and their resources in two modes — push and pull. The sender's iMTA sends email messages to the recipient's iMTA, which pulls the respective email resources via the sender's iMTA. This concept allows transferring of a massive amount of data without the risk of receiving spam.
 
 In addition, the Cargomail client has two valuable features:
 
