@@ -12,9 +12,9 @@ import (
 	"syscall"
 	"time"
 
-	cfg "github.com/federizer/cargomail/internal/config"
-	"github.com/federizer/cargomail/internal/database"
-	mta "github.com/federizer/cargomail/mta"
+	cfg "github.com/cargomail-org/cargomail/internal/config"
+	"github.com/cargomail-org/cargomail/internal/database"
+	mta "github.com/cargomail-org/cargomail/mta"
 	"github.com/rs/cors"
 	"github.com/sirupsen/logrus"
 	"github.com/zitadel/oidc/pkg/client/rs"
@@ -28,12 +28,12 @@ import (
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 
-	emailv1 "github.com/federizer/cargomail/generated/proto/email/v1"
-	peoplev1 "github.com/federizer/cargomail/generated/proto/people/v1"
-	emailRepository "github.com/federizer/cargomail/internal/repository/email/v1"
-	peopleRepository "github.com/federizer/cargomail/internal/repository/people/v1"
-	emailHandler "github.com/federizer/cargomail/pkg/api/email/v1"
-	peopleHandler "github.com/federizer/cargomail/pkg/api/people/v1"
+	emailv1 "github.com/cargomail-org/cargomail/generated/proto/email/v1"
+	peoplev1 "github.com/cargomail-org/cargomail/generated/proto/people/v1"
+	emailRepository "github.com/cargomail-org/cargomail/internal/repository/email/v1"
+	peopleRepository "github.com/cargomail-org/cargomail/internal/repository/people/v1"
+	emailHandler "github.com/cargomail-org/cargomail/pkg/api/email/v1"
+	peopleHandler "github.com/cargomail-org/cargomail/pkg/api/people/v1"
 )
 
 type AuthIterceptor struct {

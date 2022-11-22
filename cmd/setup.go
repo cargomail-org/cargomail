@@ -3,8 +3,8 @@ package cmd
 import (
 	_ "embed"
 
-	cfg "github.com/federizer/cargomail/internal/config"
-	"github.com/federizer/cargomail/internal/database"
+	cfg "github.com/cargomail-org/cargomail/internal/config"
+	"github.com/cargomail-org/cargomail/internal/database"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

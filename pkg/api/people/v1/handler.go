@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 
-	peoplev1 "github.com/federizer/cargomail/generated/proto/people/v1"
-	repository "github.com/federizer/cargomail/internal/repository/people/v1"
+	peoplev1 "github.com/cargomail-org/cargomail/generated/proto/people/v1"
+	repository "github.com/cargomail-org/cargomail/internal/repository/people/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	// "google.golang.org/protobuf/types/known/emptypb"

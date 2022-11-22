@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"strconv"
 
-	emailv1 "github.com/federizer/cargomail/generated/proto/email/v1"
-	"github.com/federizer/cargomail/internal/mail"
+	emailv1 "github.com/cargomail-org/cargomail/generated/proto/email/v1"
+	"github.com/cargomail-org/cargomail/internal/mail"
 	"google.golang.org/grpc/metadata"
 )
 

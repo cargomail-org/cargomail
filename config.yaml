@@ -51,6 +51,6 @@ database:
     username: postgres
     password: password
   user:
-    database_name: federizer
+    database_name: cargomail
     username: fuser
     password: fpassword

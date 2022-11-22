@@ -16,7 +16,7 @@ BEGIN
 
         GRANT ALL ON DATABASE "%[3]s" TO "%[1]s";
 
-        RAISE INFO 'database "federizer" created';
+        RAISE INFO 'database "cargomail" created';
     ELSE
         RAISE WARNING 'user already exists, database not created';
     END IF;

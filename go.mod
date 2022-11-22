@@ -1,4 +1,4 @@
-module github.com/federizer/cargomail
+module github.com/cargomail-org/cargomail
 
 go 1.19
 

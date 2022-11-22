@@ -2,7 +2,7 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: github.com/federizer/email/gen
+    default: github.com/cargomail-org/email/gen
 plugins:
   - remote: buf.build/timostamm/plugins/protobuf-ts:v2.7.0-1
     out: ./app/src/api/generated

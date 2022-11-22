@@ -6,8 +6,8 @@ import (
 	"encoding/base64"
 	"io"
 
+	emailv1 "github.com/cargomail-org/cargomail/generated/proto/email/v1"
 	"github.com/emersion/go-message/textproto"
-	emailv1 "github.com/federizer/cargomail/generated/proto/email/v1"
 )
 
 type MailMessage struct {

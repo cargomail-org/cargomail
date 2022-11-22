@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/federizer/cargomail/cmd"
+	"github.com/cargomail-org/cargomail/cmd"
 	_ "github.com/spf13/cobra"
 	_ "github.com/spf13/viper"
 )

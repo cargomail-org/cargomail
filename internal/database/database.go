@@ -8,7 +8,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 
-	cfg "github.com/federizer/cargomail/internal/config"
+	cfg "github.com/cargomail-org/cargomail/internal/config"
 )
 
 const (

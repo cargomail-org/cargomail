@@ -4,7 +4,7 @@ Email is the most pervasive form of business information exchange. Email is ofte
 
 # Cargomail
 
-Cargomail uses an advanced web editor, which allows users to embed documents, images, and videos in the message body while keeping the respective resource data in the mailbox file storage. The newly designed [intermodal Message Transfer Agent (iMTA)](https://github.com/federizer/intermodal-message-transfer-agent) enables the transfer of email messages and their resources in two modes — push and pull. The sender's iMTA sends email messages to the recipient's iMTA, which pulls the respective email resources via the sender's iMTA. This concept allows transferring of a massive amount of data without the risk of receiving spam.
+Cargomail uses an advanced web editor, which allows users to embed documents, images, and videos in the message body while keeping the respective resource data in the mailbox file storage. The newly designed [intermodal Message Transfer Agent (iMTA)](https://github.com/cargomail-org/intermodal-message-transfer-agent) enables the transfer of email messages and their resources in two modes — push and pull. The sender's iMTA sends email messages to the recipient's iMTA, which pulls the respective email resources via the sender's iMTA. This concept allows transferring of a massive amount of data without the risk of receiving spam.
 
 In addition, the Cargomail client has two valuable features:
 
@@ -25,7 +25,7 @@ As of November 2022, the following resources have been used to develop the Cargo
 
 * Gmail API [documentation](https://developers.google.com/gmail/api/reference/rest), licensed under the Creative Commons Attribution 4.0 License, has been used to design a gRPC interface between the webmail application and the backend service.
 
-* Zitadel [OpenID Connect SDK](https://github.com/zitadel/oidc), licensed under the Apache-2.0 License, has been adapted to meet the [Identity Propagation and Assertions](https://github.com/federizer/identity-propagation-and-assertions) concept.
+* Zitadel [OpenID Connect SDK](https://github.com/zitadel/oidc), licensed under the Apache-2.0 License, has been adapted to meet the [Identity Propagation and Assertions](https://github.com/cargomail-org/identity-propagation-and-assertions) concept.
 
 * Linbox, a Google Inbox-inspired [webmail client](https://github.com/yanglin5689446/linbox) licensed under the DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE, was cloned to speed up the webmail application development. The source code has been heavily customized to be aligned with the gRPC MTA proof of concept.
 

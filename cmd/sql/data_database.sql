@@ -197,7 +197,7 @@ BEGIN
     END
     $$;
 
-    RAISE INFO 'data inserted into federizer/email';
+    RAISE INFO 'data inserted into cargomail/email';
 
     -- Contacts
     do $$
@@ -242,6 +242,6 @@ BEGIN
     END
     $$;
 
-    RAISE INFO 'data inserted into federizer/people';
+    RAISE INFO 'data inserted into cargomail/people';
 END
 $main$;

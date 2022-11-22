@@ -9,7 +9,7 @@ import (
 	"sync"
 	"syscall"
 
-	cfg "github.com/federizer/cargomail/internal/config"
+	cfg "github.com/cargomail-org/cargomail/internal/config"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

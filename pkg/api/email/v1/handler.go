@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strconv"
 
-	emailv1 "github.com/federizer/cargomail/generated/proto/email/v1"
-	repository "github.com/federizer/cargomail/internal/repository/email/v1"
+	emailv1 "github.com/cargomail-org/cargomail/generated/proto/email/v1"
+	repository "github.com/cargomail-org/cargomail/internal/repository/email/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
