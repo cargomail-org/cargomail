@@ -52,5 +52,5 @@ database:
     password: password
   user:
     database_name: cargomail
-    username: fuser
-    password: fpassword
+    username: cargouser
+    password: cupassword
