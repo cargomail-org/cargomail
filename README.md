@@ -13,7 +13,7 @@ Second, it uses Meta's Lexical web editor with extensible functionality, e.g., h
 
 # Architecture
 
-![Architecture](./images/cargomail_architecture.svg)
+![Architecture](./images/cargomail_architecture.png)
 
 <p class="figure">
 Fig.&nbsp;1.&emsp;Cargomail Architecture
