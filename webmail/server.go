@@ -53,7 +53,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 
 	httpPort := fmt.Sprintf("%d", config.Webmail.Port)
 
-	provider, err := rs.NewResourceServerClientCredentials(config.Issuer, config.ClientId, config.ClientSecret)
+	provider, err := rs.NewResourceServerFromKeyFile(config.Issuer, config.KeyPath)
 	if err != nil {
 		logrus.Fatalf("error creating provider %s", err.Error())
 	}

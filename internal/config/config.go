@@ -58,8 +58,6 @@ type User struct {
 
 type Oidc struct {
 	Issuer  string
-	ClientId  string `mapstructure:"client_id"`
-	ClientSecret  string `mapstructure:"client_secret"`
 	KeyPath string `mapstructure:"key_path"`
 }
 
