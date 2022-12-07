@@ -2,12 +2,11 @@ import { GrpcWebFetchTransport, GrpcWebOptions } from '@protobuf-ts/grpcweb-tran
 import { UnaryCall } from '@protobuf-ts/runtime-rpc'
 import { useContext } from 'react'
 import { EmailClient } from './generated/proto/email/v1/email.client'
-import { AuthContext } from '../packages/react-oauth2-code-pkce/index'
 import { LabelsContext } from '../context/LabelsContext'
 import { ThreadsContext } from '../context/ThreadsContext'
 import { DraftsContext, IDraftEdit } from '../context/DraftsContext'
 import encode from '../utils/mails/encode'
-import { decodeCurrentUser } from '../auth'
+import { useOidcUser } from '@axa-fr/react-oidc'
 import { Draft, Label_Type, Message, Thread } from './generated/proto/email/v1/email'
 import { buildDraftRecipients, b64EncodeUnicode } from '../utils/rfc5322'
 
@@ -20,7 +19,7 @@ const transport = new GrpcWebFetchTransport({
 const emailClient = new EmailClient(transport)
 
 const useEmailAPI = () => {
-  const { token, idToken } = useContext(AuthContext)
+  const { oidcUser } = useOidcUser()
   const { updateLabels } = useContext(LabelsContext)
   const { listThreads } = useContext(ThreadsContext)
   const { listDrafts, createDraft, updateDraft, deleteDraft, newDraftEdit, updateDraftEdit, closeDraftEdit } =
@@ -37,9 +36,9 @@ const useEmailAPI = () => {
           if (!options.meta) {
             options.meta = {}
           }
-          if (token) {
-            options.meta.Authorization = `Bearer ${token}`
-          }
+          // if (token) {
+          //   options.meta.Authorization = `Bearer ${token}`
+          // }
           return next(method, input, options)
         },
       },
@@ -223,7 +222,7 @@ const useEmailAPI = () => {
       newDraftEdit({
         ...draft,
         id: response.response.id,
-        sender: decodeCurrentUser(idToken)?.username || '',
+        sender: oidcUser?.preferred_username || '',
       })
       createDraft(response.response)
     })

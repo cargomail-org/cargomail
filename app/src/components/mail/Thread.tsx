@@ -4,9 +4,7 @@ import AccordionSummary, { accordionSummaryClasses } from '@mui/material/Accordi
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-
-import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
-import { decodeCurrentUser } from '../../auth'
+import { useOidcUser } from '@axa-fr/react-oidc'
 
 import Message from './Message'
 
@@ -20,7 +18,7 @@ const theme = createTheme()
 
 const Thread = ({ id, messages, hasUnread, actions }: any) => {
   const { trashThread, deleteThread, batchModifyMessages } = useEmailAPI()
-  const { idToken } = useContext(AuthContext)
+  const { oidcUser } = useOidcUser()
   const { removeThreadLabel, addThreadLabel } = useContext(ThreadsContext)
   const [expanded, setExpanded] = useState(false)
 
@@ -93,7 +91,7 @@ const Thread = ({ id, messages, hasUnread, actions }: any) => {
   )
 
   const senderUnreadMap = messages.reduce((accum: any, current: any) => {
-    const username = decodeCurrentUser(idToken)?.username
+    const username = oidcUser?.preferred_username
     const n = current.from.mail === username ? 'me' : current.from.name
     accum[n] = accum[n] || current.unread //eslint-disable-line
     return accum

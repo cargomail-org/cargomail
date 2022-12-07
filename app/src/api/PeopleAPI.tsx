@@ -2,7 +2,6 @@ import { GrpcWebFetchTransport, GrpcWebOptions } from '@protobuf-ts/grpcweb-tran
 import { UnaryCall } from '@protobuf-ts/runtime-rpc'
 import { useContext } from 'react'
 import { PeopleClient } from './generated/proto/people/v1/people.client'
-import { AuthContext } from '../packages/react-oauth2-code-pkce/index'
 import { ContactsContext, IContact } from '../context/ContactsContext'
 import { Person } from './generated/proto/people/v1/people'
 
@@ -15,7 +14,6 @@ const transport = new GrpcWebFetchTransport({
 const peopleClient = new PeopleClient(transport)
 
 const usePeopleAPI = () => {
-  const { token } = useContext(AuthContext)
   const { updateContacts, addContact } = useContext(ContactsContext)
 
   const options: GrpcWebOptions = {
@@ -29,9 +27,9 @@ const usePeopleAPI = () => {
           if (!options.meta) {
             options.meta = {}
           }
-          if (token) {
-            options.meta.Authorization = `Bearer ${token}`
-          }
+          // if (token) {
+          //   options.meta.Authorization = `Bearer ${token}`
+          // }
           return next(method, input, options)
         },
       },

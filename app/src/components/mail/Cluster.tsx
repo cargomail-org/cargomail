@@ -15,8 +15,7 @@ import useEmailAPI from '../../api/EmailAPI'
 import { ThreadsContext } from '../../context/ThreadsContext'
 import { Label_Type } from '../../api/generated/proto/email/v1/email'
 
-import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
-import { decodeCurrentUser } from '../../auth'
+import { useOidcUser } from '@axa-fr/react-oidc'
 
 import ActionsBox from './ActionsBox'
 
@@ -59,7 +58,7 @@ export type ClusterProps = {
 }
 
 const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
-  const { idToken } = useContext(AuthContext)
+  const { oidcUser } = useOidcUser()
   const { batchModifyMessages, batchDeleteMessages } = useEmailAPI()
   const { removeThreadLabel, addThreadLabel } = useContext(ThreadsContext)
   const [expanded, setExpanded] = useState(false)
@@ -120,7 +119,7 @@ const Cluster: FC<ClusterProps> = ({ primaryLabel, threads, actions }) => {
       return { from: message.from, unread: message.unread }
     })
     .reduce((accum: any, current: any) => {
-      const username = decodeCurrentUser(idToken)?.username
+      const username = oidcUser?.preferred_username
       const n = current.from.mail === username ? 'me' : current.from.name
       accum[n] = accum[n] || current.unread // eslint-disable-line
       return accum

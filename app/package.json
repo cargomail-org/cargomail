@@ -4,6 +4,7 @@
     "license": "Apache-2.0",
     "private": true,
     "dependencies": {
+        "@axa-fr/react-oidc": "^6.10.21",
         "@emotion/react": "^11.10.5",
         "@emotion/styled": "^11.10.5",
         "@lexical/react": "^0.6.0",

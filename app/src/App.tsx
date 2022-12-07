@@ -6,11 +6,11 @@ import { Drafts } from './pages/Drafts'
 import { Trash } from './pages/Trash'
 import { Account } from './pages/user/Account'
 import { NotFound } from './pages/NotFound'
-import { AuthProvider, AuthContext } from './packages/react-oauth2-code-pkce/index'
-import { authConfig } from './auth'
+import { OidcProvider, useOidc } from '@axa-fr/react-oidc'
+import { oidcConfig } from './oidcConfig'
 import useEmailAPI from './api/EmailAPI'
 import * as ROUTES from './routes'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import AllContextProviders from './context'
 
 import './components/editor/styles.css'
@@ -19,46 +19,41 @@ import './i18n'
 import debug from './utils/debug'
 ;(window as any).debug = debug
 
-const AUTH_DISABLED = process.env.REACT_APP_AUTH !== '1'
 function AppRoutes() {
   const location = useLocation()
-  const { token } = useContext(AuthContext)
+  const { isAuthenticated } = useOidc()
   const { labelsList, threadsList } = useEmailAPI()
 
   useEffect(() => {
-    if (token) {
+    if (isAuthenticated) {
       labelsList()
       threadsList()
     }
   }, []) // eslint-disable-line
 
   if (!(location.pathname === ROUTES.AUTH_CALLBACK || location.pathname === ROUTES.SIGNIN)) {
-    localStorage.setItem('preLoginPath', location.pathname)
+    sessionStorage.setItem('preLoginPath', location.pathname)
   }
 
   return (
     <Routes>
-      <Route path={ROUTES.INBOX} element={token ? <Index /> : <Login />} />
-      <Route path={ROUTES.DONE} element={token ? <Done /> : <Login />} />
-      <Route path={ROUTES.DRAFTS} element={token ? <Drafts /> : <Login />} />
-      <Route path={ROUTES.TRASH} element={token ? <Trash /> : <Login />} />
-      <Route path={ROUTES.ACCOUNT} element={token ? <Account /> : <Login />} />
+      <Route path={ROUTES.INBOX} element={isAuthenticated ? <Index /> : <Login />} />
+      <Route path={ROUTES.DONE} element={isAuthenticated ? <Done /> : <Login />} />
+      <Route path={ROUTES.DRAFTS} element={isAuthenticated ? <Drafts /> : <Login />} />
+      <Route path={ROUTES.TRASH} element={isAuthenticated ? <Trash /> : <Login />} />
+      <Route path={ROUTES.ACCOUNT} element={isAuthenticated ? <Account /> : <Login />} />
       <Route path={ROUTES.SIGNIN} element={<Login />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
 
-function App() {
-  return AUTH_DISABLED ? (
-    <AppRoutes />
-  ) : (
-    <AuthProvider authConfig={authConfig}>
-      <AllContextProviders>
-        <AppRoutes />
-      </AllContextProviders>
-    </AuthProvider>
-  )
-}
+const App = () => (
+  <OidcProvider configuration={oidcConfig}>
+    <AllContextProviders>
+      <AppRoutes />
+    </AllContextProviders>
+  </OidcProvider>
+)
 
 export default App

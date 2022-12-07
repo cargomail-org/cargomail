@@ -5,8 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import { MessagePart } from '../../api/generated/proto/email/v1/email'
 import parsePayload, { IRecipient } from '../../utils/mails/parsePayload'
-import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
-import { decodeCurrentUser } from '../../auth'
+import { useOidcUser } from '@axa-fr/react-oidc'
 import useEmailAPI from '../../api/EmailAPI'
 import { DraftsContext } from '../../context/DraftsContext'
 import { IContact } from '../../context/ContactsContext'
@@ -29,10 +28,9 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
   const [expanded, setExpanded] = useState(false)
   const parsed = parsePayload({ id, payload })
 
-  const { idToken } = useContext(AuthContext)
-  const currentUser = decodeCurrentUser(idToken)
-  const nameFirstLetter = currentUser?.name?.charAt(0).toUpperCase()
-  const surnameFirstLetter = currentUser?.surname?.charAt(0).toUpperCase()
+  const { oidcUser } = useOidcUser()
+  const nameFirstLetter = oidcUser?.given_name?.charAt(0).toUpperCase()
+  const surnameFirstLetter = oidcUser?.family_name?.charAt(0).toUpperCase()
 
   const { newDraftEdit } = useContext(DraftsContext)
   const { draftsDelete } = useEmailAPI()
@@ -46,7 +44,7 @@ export const Draft: FC<DraftMessageProps> = ({ draftId, id, snippet, payload, th
     newDraftEdit({
       id: draftId,
       mimeType: payload?.mimeType || '',
-      sender: currentUser?.username || '',
+      sender: oidcUser?.preferred_username || '',
       to: recipientsToContacts(parsed.to) || [],
       cc: recipientsToContacts(parsed.cc) || [],
       bcc: recipientsToContacts(parsed.bcc) || [],

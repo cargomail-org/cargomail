@@ -1,7 +1,7 @@
 import { Button, Grid } from '@mui/material'
-import { FC, ReactNode, useContext } from 'react'
+import { FC, ReactNode } from 'react'
 import { useConfig } from '../../packages/core/config'
-import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
+import { useOidc } from '@axa-fr/react-oidc'
 
 export type LoginPageProps = {
   title: string
@@ -9,7 +9,7 @@ export type LoginPageProps = {
 }
 
 export const LoginPage: FC<LoginPageProps> = (props) => {
-  const { signIn } = useContext(AuthContext)
+  const { login } = useOidc()
   const { productName } = useConfig()
   const titleParts: string[] = []
   if (props.title) {
@@ -20,7 +20,12 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
   }
 
   function signInUser() {
-    signIn()
+    const callbackpath = sessionStorage.getItem('preLoginPath')
+    if (callbackpath) {
+      login(callbackpath)
+    } else {
+      login()
+    }
   }
 
   return (

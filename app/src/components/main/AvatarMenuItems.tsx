@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { MenuItem } from '@mui/material'
-import { AuthContext } from '../../packages/react-oauth2-code-pkce/index'
+import { useOidc } from '@axa-fr/react-oidc'
 import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../../routes'
 
 export const AvatarMenuItems = (props: any) => {
-  const { logOut } = useContext(AuthContext)
+  const { logout } = useOidc()
   const navigate = useNavigate()
 
   const handleClose = () => {
@@ -23,7 +23,7 @@ export const AvatarMenuItems = (props: any) => {
       </MenuItem>
       <MenuItem
         onClick={() => {
-          logOut()
+          logout()
           navigate(ROUTES.SIGNIN)
         }}>
         Sign out
