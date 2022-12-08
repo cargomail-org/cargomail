@@ -56,6 +56,4 @@ require (
 	google.golang.org/genproto v0.0.0-20220805133916-01dd62135a58 // indirect
 )
 
-replace github.com/zitadel/zitadel-go/v2 => ../cargomail-zitadel-go
-
 replace github.com/zitadel/oidc => ../cargomail-zitadel-oidc

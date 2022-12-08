@@ -9,10 +9,10 @@ import (
 )
 
 type Config struct {
-	Webmail Server
-	Mta     Server
+	Mailbox Server
+	IMTA    Server // should be iMTA
 	Database
-	Oidc
+	OIDC
 }
 
 type Server struct {
@@ -56,7 +56,7 @@ type User struct {
 	Password     string
 }
 
-type Oidc struct {
+type OIDC struct {
 	Issuer  string
 	KeyPath string `mapstructure:"key_path"`
 }

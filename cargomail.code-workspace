@@ -1,11 +1,11 @@
 {
 	"folders": [
 		{
-			"name": "app",
-			"path": "app"
+			"name": "client",
+			"path": "client"
 		},
 		{
-			"name": "server",
+			"name": "mailbox",
 			"path": "."
 		},
 		{
@@ -15,8 +15,8 @@
 	],
 	"settings": {
 		"files.exclude": {
-			"app": true
+			"client": true
 		},
-		"liveServer.settings.multiRootWorkspaceName": "app"
+		"liveServer.settings.multiRootWorkspaceName": "client"
 	},
 }

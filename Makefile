@@ -6,7 +6,7 @@ generate:
 # bundle js
 .PHONY: bundle
 bundle:
-	esbuild ./app/src/index.tsx --bundle --minify --sourcemap --outfile=./app/dist/js/bundle.js
+	esbuild ./client/src/index.tsx --bundle --minify --sourcemap --outfile=./client/dist/js/bundle.js
 
 # install tools
 .PHONY: install

@@ -1,4 +1,4 @@
-package webmail
+package mailbox
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 
 	cfg "github.com/cargomail-org/cargomail/internal/config"
 	"github.com/cargomail-org/cargomail/internal/database"
-	mta "github.com/cargomail-org/cargomail/mta"
+	imta "github.com/cargomail-org/cargomail/imta"
 	"github.com/rs/cors"
 	"github.com/sirupsen/logrus"
 	"github.com/zitadel/oidc/pkg/client/rs"
@@ -51,7 +51,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 	}
 	defer db.Close()
 
-	httpPort := fmt.Sprintf("%d", config.Webmail.Port)
+	httpPort := fmt.Sprintf("%d", config.Mailbox.Port)
 
 	provider, err := rs.NewResourceServerFromKeyFile(config.Issuer, config.KeyPath)
 	if err != nil {
@@ -79,7 +79,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 		logrus.Fatalf("tcp listener on %s failed: %w", httpPort, err)
 	}
 
-	mta.Start(wg, config)
+	imta.Start(wg, config)
 
 	errCh := make(chan error, 1)
 
@@ -87,7 +87,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 	go func() {
 		defer wg.Done()
 
-		logrus.Infof("webmail server is listening on %s", lis.Addr().String())
+		logrus.Infof("mailbox server is listening on %s", lis.Addr().String())
 		errCh <- http1Server.Serve(lis)
 	}()
 
@@ -139,15 +139,15 @@ func newHTTPandGRPCMux(httpHand http.Handler, grpcHandler http.Handler, grpcWebH
 }
 
 func newCorsHandler(config *cfg.Config, srv http.Handler) http.Handler {
-	if len(config.Webmail.Cors.AllowedOrigins) == 0 {
+	if len(config.Mailbox.Cors.AllowedOrigins) == 0 {
 		return srv
 	}
 	c := cors.New(cors.Options{
-		AllowedOrigins:   config.Webmail.Cors.AllowedOrigins,
-		AllowedMethods:   config.Webmail.Cors.AllowedMethods,
-		MaxAge:           config.Webmail.Cors.MaxAge,
-		AllowedHeaders:   config.Webmail.Cors.AllowedHeaders,
-		AllowCredentials: config.Webmail.Cors.AllowCredentials,
+		AllowedOrigins:   config.Mailbox.Cors.AllowedOrigins,
+		AllowedMethods:   config.Mailbox.Cors.AllowedMethods,
+		MaxAge:           config.Mailbox.Cors.MaxAge,
+		AllowedHeaders:   config.Mailbox.Cors.AllowedHeaders,
+		AllowCredentials: config.Mailbox.Cors.AllowCredentials,
 	})
 	return c.Handler(srv)
 }
@@ -155,9 +155,9 @@ func newCorsHandler(config *cfg.Config, srv http.Handler) http.Handler {
 func shutdownServer(ctx context.Context, server *http.Server) error {
 	err := server.Shutdown(ctx)
 	if err != nil {
-		return fmt.Errorf("webmail could not shutdown gracefully: %w", err)
+		return fmt.Errorf("mailbox could not shutdown gracefully: %w", err)
 	}
-	logrus.Info("webmail server shutdown gracefully")
+	logrus.Info("mailbox server shutdown gracefully")
 	return nil
 }
 

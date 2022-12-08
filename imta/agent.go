@@ -1,4 +1,4 @@
-package mta
+package imta
 
 import (
 	"context"
@@ -20,7 +20,7 @@ import (
 func Start(wg *sync.WaitGroup, config *cfg.Config) {
 	grpcServer := grpc.NewServer()
 
-	httpPort := fmt.Sprintf("%d", config.Mta.Port)
+	httpPort := fmt.Sprintf("%d", config.IMTA.Port)
 
 	wg.Add(1)
 	go func() {
@@ -30,7 +30,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) {
 		if err != nil {
 			logrus.Fatalf("tcp listener on %s failed: %w", httpPort, err)
 		}
-		logrus.Infof("mta server is listening on %s", lis.Addr().String())
+		logrus.Infof("iMTA agent is listening on %s", lis.Addr().String())
 		if err := grpcServer.Serve(lis); err != nil {
 			logrus.Fatalf("error starting server: %w", err)
 		}
@@ -47,7 +47,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) {
 
 		<-stop
 		grpcServer.GracefulStop()
-		logrus.Info("mta server shutdown gracefully")
+		logrus.Info("iMTA server shutdown gracefully")
 	}()
 }
 
