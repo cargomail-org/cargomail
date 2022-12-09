@@ -112,6 +112,10 @@ export default function ImageResizer({
   }
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>, direction: number) => {
+    if (!editor.isEditable()) {
+      return
+    }
+
     const image = imageRef.current
     const controlWrapper = controlWrapperRef.current
 

@@ -11,7 +11,7 @@ import type {
   Spread,
 } from 'lexical'
 
-import { createEditor, DecoratorNode } from 'lexical'
+import { $applyNodeReplacement, createEditor, DecoratorNode } from 'lexical'
 import * as React from 'react'
 import { Suspense } from 'react'
 import { createTusUploadInstance } from '../../../api/fileAPI'
@@ -234,17 +234,8 @@ export function $createAttachmentNode({
   key,
 }: AttachmentPayload): AttachmentNode {
   const uploadInst = file ? createTusUploadInstance(file) : null
-  return new AttachmentNode(
-    src,
-    altText,
-    maxWidth,
-    uploadInst,
-    width,
-    height,
-    showCaption,
-    caption,
-    captionsEnabled,
-    key
+  return $applyNodeReplacement(
+    new AttachmentNode(src, altText, maxWidth, uploadInst, width, height, showCaption, caption, captionsEnabled, key)
   )
 }
 

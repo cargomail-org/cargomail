@@ -8,6 +8,7 @@
 
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $createHorizontalRuleNode, INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontalRuleNode'
+import { $insertNodeToNearestRoot } from '@lexical/utils'
 import { $getSelection, $isRangeSelection, COMMAND_PRIORITY_EDITOR } from 'lexical'
 import { useEffect } from 'react'
 
@@ -28,8 +29,7 @@ export default function HorizontalRulePlugin(): null {
 
         if (focusNode !== null) {
           const horizontalRuleNode = $createHorizontalRuleNode()
-          selection.insertParagraph()
-          selection.focus.getNode().getTopLevelElementOrThrow().insertBefore(horizontalRuleNode)
+          $insertNodeToNearestRoot(horizontalRuleNode)
         }
 
         return true

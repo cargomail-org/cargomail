@@ -1,5 +1,4 @@
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
-import { AutoScrollPlugin } from '@lexical/react/LexicalAutoScrollPlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import ContentEditable from './ui/ContentEditable'
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
@@ -39,7 +38,6 @@ export interface EditorProps {
 const Editor = ({ handleEditor, initialValue, mimeType, onChange }: EditorProps) => {
   const text = 'Enter some text...'
   const placeholder = <Placeholder className="editor-placeholder">{text}</Placeholder>
-  const scrollRef = useRef(null)
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null)
 
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
@@ -62,11 +60,10 @@ const Editor = ({ handleEditor, initialValue, mimeType, onChange }: EditorProps)
 
   return (
     <LexicalComposer initialConfig={EditorConfig}>
-      <div className="editor-container" ref={scrollRef}>
+      <div className="editor-container">
         <DragDropPaste />
         <HashtagPlugin />
         <KeywordsPlugin />
-        <AutoScrollPlugin scrollRef={scrollRef} />
         <div className="rich-editor-container" ref={richEditorRef}>
           <RichTextPlugin
             contentEditable={

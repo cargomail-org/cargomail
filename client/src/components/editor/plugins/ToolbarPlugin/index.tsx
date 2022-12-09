@@ -1,4 +1,12 @@
 /* eslint-disable react/style-prop-object */
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
 import type { LexicalEditor, NodeKey } from 'lexical'
 
 import './index.css'
@@ -63,7 +71,7 @@ import useModal from '../../hooks/useModal'
 import ColorPicker from '../../ui/ColorPicker'
 import DropDown, { DropDownItem } from '../../ui/DropDown'
 import { getSelectedNode } from '../../utils/getSelectedNode'
-import { sanitizeUrl } from '../../utils/sanitizeUrl'
+import { sanitizeUrl } from '../../utils/url'
 import { InsertImageDialog } from '../ImagesPlugin'
 
 const blockTypeToBlockName = {
@@ -511,6 +519,7 @@ export default function ToolbarPlugin(): JSX.Element {
           activeEditor.dispatchCommand(UNDO_COMMAND, undefined)
         }}
         title={IS_APPLE ? 'Undo (⌘Z)' : 'Undo (Ctrl+Z)'}
+        type="button"
         className="toolbar-item spaced"
         aria-label="Undo">
         <i className="format undo" />
@@ -521,6 +530,7 @@ export default function ToolbarPlugin(): JSX.Element {
           activeEditor.dispatchCommand(REDO_COMMAND, undefined)
         }}
         title={IS_APPLE ? 'Redo (⌘Y)' : 'Redo (Ctrl+Y)'}
+        type="button"
         className="toolbar-item"
         aria-label="Redo">
         <i className="format redo" />
@@ -563,6 +573,7 @@ export default function ToolbarPlugin(): JSX.Element {
             }}
             className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
             title={IS_APPLE ? 'Bold (⌘B)' : 'Bold (Ctrl+B)'}
+            type="button"
             aria-label={`Format text as bold. Shortcut: ${IS_APPLE ? '⌘B' : 'Ctrl+B'}`}>
             <i className="format bold" />
           </button>
@@ -573,6 +584,7 @@ export default function ToolbarPlugin(): JSX.Element {
             }}
             className={'toolbar-item spaced ' + (isItalic ? 'active' : '')}
             title={IS_APPLE ? 'Italic (⌘I)' : 'Italic (Ctrl+I)'}
+            type="button"
             aria-label={`Format text as italics. Shortcut: ${IS_APPLE ? '⌘I' : 'Ctrl+I'}`}>
             <i className="format italic" />
           </button>
@@ -583,6 +595,7 @@ export default function ToolbarPlugin(): JSX.Element {
             }}
             className={'toolbar-item spaced ' + (isUnderline ? 'active' : '')}
             title={IS_APPLE ? 'Underline (⌘U)' : 'Underline (Ctrl+U)'}
+            type="button"
             aria-label={`Format text to underlined. Shortcut: ${IS_APPLE ? '⌘U' : 'Ctrl+U'}`}>
             <i className="format underline" />
           </button>
@@ -593,6 +606,7 @@ export default function ToolbarPlugin(): JSX.Element {
             }}
             className={'toolbar-item spaced ' + (isCode ? 'active' : '')}
             title="Insert code block"
+            type="button"
             aria-label="Insert code block">
             <i className="format code" />
           </button>
@@ -601,7 +615,8 @@ export default function ToolbarPlugin(): JSX.Element {
             onClick={insertLink}
             className={'toolbar-item spaced ' + (isLink ? 'active' : '')}
             aria-label="Insert link"
-            title="Insert link">
+            title="Insert link"
+            type="button">
             <i className="format link" />
           </button>
           <ColorPicker

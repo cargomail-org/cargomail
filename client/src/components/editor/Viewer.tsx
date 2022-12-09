@@ -1,5 +1,4 @@
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
-import { AutoScrollPlugin } from '@lexical/react/LexicalAutoScrollPlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import ContentEditable from './ui/ContentEditable'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
@@ -25,7 +24,6 @@ export interface EditorProps {
 }
 
 const Viewer = ({ initialValue, mimeType }: EditorProps) => {
-  const scrollRef = useRef(null)
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null)
 
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
@@ -38,10 +36,9 @@ const Viewer = ({ initialValue, mimeType }: EditorProps) => {
 
   return (
     <LexicalComposer initialConfig={ViewerConfig}>
-      <div className="editor-container" ref={scrollRef}>
+      <div className="editor-container">
         <HashtagPlugin />
         <KeywordsPlugin />
-        <AutoScrollPlugin scrollRef={scrollRef} />
         <div className="rich-editor-container" ref={richEditorRef}>
           <RichTextPlugin
             contentEditable={

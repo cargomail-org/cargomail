@@ -61,6 +61,7 @@ export default function ClickableLinkPlugin({
       try {
         if (href !== null) {
           window.open(href, newTab || event.metaKey || event.ctrlKey ? '_blank' : '_self')
+          event.preventDefault()
         }
       } catch {
         // It didn't work, which is better than throwing an exception!
