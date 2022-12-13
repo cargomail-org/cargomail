@@ -12,9 +12,10 @@ import (
 	"syscall"
 	"time"
 
+	imta "github.com/cargomail-org/cargomail/imta"
 	cfg "github.com/cargomail-org/cargomail/internal/config"
 	"github.com/cargomail-org/cargomail/internal/database"
-	imta "github.com/cargomail-org/cargomail/imta"
+	"github.com/cargomail-org/cargomail/mailbox/filestore"
 	"github.com/rs/cors"
 	"github.com/sirupsen/logrus"
 	"github.com/zitadel/oidc/pkg/client/rs"
@@ -70,7 +71,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 
 	grpcWebServer := grpcweb.WrapServer(grpcServer)
 
-	mixedHandler := newCorsHandler(config, newHTTPandGRPCMux(httpMux, grpcServer, grpcWebServer))
+	mixedHandler := newCorsHandler(config, auth.newHTTPandGRPCMux(httpMux, grpcServer, grpcWebServer))
 	http2Server := &http2.Server{}
 
 	http1Server := &http.Server{Handler: h2c.NewHandler(mixedHandler, http2Server)}
@@ -79,11 +80,12 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 		logrus.Fatalf("tcp listener on %s failed: %w", httpPort, err)
 	}
 
+	filestore.Run(httpMux, config)
+
 	imta.Start(wg, config)
-
 	errCh := make(chan error, 1)
-
 	wg.Add(1)
+
 	go func() {
 		defer wg.Done()
 
@@ -125,7 +127,7 @@ func (m *GrpcHealthService) Watch(req *grpc_health_v1.HealthCheckRequest, stream
 	return nil
 }
 
-func newHTTPandGRPCMux(httpHand http.Handler, grpcHandler http.Handler, grpcWebHandler http.Handler) http.Handler {
+func (s *AuthIterceptor) newHTTPandGRPCMux(httpHand http.Handler, grpcHandler http.Handler, grpcWebHandler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.ProtoMajor == 1 && strings.HasPrefix(r.Header.Get("content-type"), "application/grpc-web-text") {
 			grpcWebHandler.ServeHTTP(w, r)
@@ -134,6 +136,7 @@ func newHTTPandGRPCMux(httpHand http.Handler, grpcHandler http.Handler, grpcWebH
 			grpcHandler.ServeHTTP(w, r)
 			return
 		}
+		// s.Authenticate(httpHand).ServeHTTP(w, r)
 		httpHand.ServeHTTP(w, r)
 	})
 }
@@ -161,6 +164,47 @@ func shutdownServer(ctx context.Context, server *http.Server) error {
 	return nil
 }
 
+func (s *AuthIterceptor) Authenticate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Vary", "Authorization")
+
+		authorizationHeader := r.Header.Get("Authorization")
+		if authorizationHeader == "" {
+			logrus.Errorf("%v: missing authorization token", codes.Unauthenticated)
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		parts := strings.Split(authorizationHeader, "Bearer ")
+		if len(parts) != 2 {
+			logrus.Errorf("%v: invalid token", codes.Unauthenticated)
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		token := parts[1]
+
+		resp, err := rs.Introspect(context.TODO(), s.AuthService, token)
+		if err != nil {
+			logrus.Errorf("%v: unauthenticated", codes.Unauthenticated)
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+	
+		username, ok := resp.GetClaim("username").(string)
+		if !ok {
+			logrus.Errorf("%v: claim 'username' does't not exists", codes.Unauthenticated)
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		logrus.Info(username)
+
+		// r.Header.Del("Username")
+		// r.Header.Add("Username", username)
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func (s *AuthIterceptor) UnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
@@ -185,12 +229,12 @@ func (s *AuthIterceptor) UnaryInterceptor(ctx context.Context, req interface{}, 
 		return nil, status.Errorf(codes.Unauthenticated, "unauthenticated: %v", err)
 	}
 
-	value, ok := resp.GetClaim("username").(string)
+	username, ok := resp.GetClaim("username").(string)
 	if !ok {
 		return nil, status.Error(codes.Unauthenticated, "claim 'username' does't not exists")
 	}
 
-	md.Append("username", value)
+	md.Append("username", username)
 	ctx = metadata.NewIncomingContext(ctx, md)
 
 	return handler(ctx, req)

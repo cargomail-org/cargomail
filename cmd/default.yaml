@@ -1,5 +1,5 @@
 logging:
-  level: info 
+  level: info
   formatter:
     name: text
     options:
@@ -8,14 +8,15 @@ logging:
 # OIDC
 oidc:
   issuer: http://localhost:9998
-  key_path: ../cargomail-zitadel-oidc/example/server/service-key1.json    
+  key_path: ../cargomail-zitadel-oidc/example/server/service-key1.json
 
 # gRPC Mailbox
 mailbox:
   port: 8080
   cors:
     allowed_origins: ["*"]
-    allowed_methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
+    allowed_methods:
+      ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
     allowed_headers:
       [
         "origin",
@@ -27,15 +28,24 @@ mailbox:
         "x-user-agent",
         "client-sent-security-token",
         "x-requested-with",
+        "x-request-id",
+        "x-http-method-override",
+        "content-type",
+        "upload-length",
+        "upload-offset",
+        "tus-resumable",
+        "upload-metadata",
+        "upload-defer-length",
+        "upload-concat",
       ]
     max_age: 600
     allow_credentials: true
-      
+
 # gRPC iMTA
 imta:
   port: 8025
 
-# Database config
+# Database
 database:
   host: localhost
   port: 1234
@@ -52,3 +62,8 @@ database:
     database_name: cargomail
     username: cargouser
     password: cupassword
+
+# Filestore
+filestore:
+  path: ./uploads
+  base_path: /files/

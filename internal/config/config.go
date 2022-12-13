@@ -13,6 +13,7 @@ type Config struct {
 	IMTA    Server // should be iMTA
 	Database
 	OIDC
+	Filestore
 }
 
 type Server struct {
@@ -59,6 +60,11 @@ type User struct {
 type OIDC struct {
 	Issuer  string
 	KeyPath string `mapstructure:"key_path"`
+}
+
+type Filestore struct {
+	Path     string
+	BasePath string `mapstructure:"base_path"`
 }
 
 func NewConfig(v *viper.Viper) *Config {
