@@ -9,12 +9,15 @@ import {
 
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { mergeRegister } from '@lexical/utils'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import useModal from '../../hooks/useModal'
 import Button from '../../ui/Button'
 import { InsertAttachmentPayload, INSERT_ATTACHMENT_COMMAND, SHOW_FILE_DIALOG_COMMAND } from '../AttachmentsPlugin'
 import Dropzone from './Dropzone'
+import { createTusUploadInstance } from '../../../../api/fileAPI'
+import { AttachmentsContext } from '../../../../context'
+import { IAttachment } from '../../../../context/AttachmentsContext'
 
 export default function ActionsPlugin({ isRichText }: { isRichText: boolean }): JSX.Element {
   const [editor] = useLexicalComposerContext()
@@ -43,8 +46,15 @@ export default function ActionsPlugin({ isRichText }: { isRichText: boolean }): 
   return <div className="actions">{modal}</div>
 }
 
+function uuidv4() {
+  return `${1e7}-${1e3}-${4e3}-${8e3}-${1e11}`.replace(/[018]/g, (c: any) =>
+    (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
+  )
+}
+
 function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose: () => void }): JSX.Element {
   const [validFiles, setValidFiles] = useState<any>([])
+  const { addAttachment } = useContext(AttachmentsContext)
 
   return (
     <>
@@ -54,6 +64,13 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
           <Button
             onClick={() => {
               validFiles.map((file: any) => {
+                const upload = createTusUploadInstance(file)
+                upload.start()
+
+                const id = uuidv4()
+                const attachment: IAttachment = { id, upload }
+                addAttachment(attachment)
+
                 const captionEditor: LexicalEditor = createEditor()
                 captionEditor.update(() => {
                   const root = $getRoot()
@@ -65,7 +82,8 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                   src: '/images/cargo-container-blue.png',
                   width: 180,
                   height: 150,
-                  file: file,
+                  id: id,
+                  url: '',
                   altText: 'attachment',
                   captionsEnabled: true,
                   showCaption: true,

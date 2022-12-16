@@ -136,8 +136,8 @@ func (s *AuthIterceptor) newHTTPandGRPCMux(httpHand http.Handler, grpcHandler ht
 			grpcHandler.ServeHTTP(w, r)
 			return
 		}
-		// s.Authenticate(httpHand).ServeHTTP(w, r)
-		httpHand.ServeHTTP(w, r)
+		s.Authenticate(httpHand).ServeHTTP(w, r)
+		// httpHand.ServeHTTP(w, r)
 	})
 }
 

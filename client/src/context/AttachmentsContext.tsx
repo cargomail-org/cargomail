@@ -23,9 +23,8 @@ export interface IAttachmentProvider {
 }
 
 export interface IAttachment {
-  uploadURL: string
-  fileName: string
-  fileType: string
+  id: string
+  upload: any
 }
 
 export interface IAttachmentContext {
