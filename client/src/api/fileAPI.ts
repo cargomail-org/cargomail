@@ -18,10 +18,6 @@ export const createTusUploadInstance = (file: File) => {
       filetype: file.type,
     },
     onError: (error: any) => console.log('Failed because: ' + error),
-    onProgress: (bytesUploaded: any, bytesTotal: any) => {
-      const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
-      console.log(bytesUploaded, bytesTotal, percentage + '%')
-    },
     onSuccess: () => console.log('Download %s from %s', upload.file.name, upload.url),
   })
   return upload

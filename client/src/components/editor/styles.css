@@ -1255,6 +1255,13 @@ i.prettier-error {
   cursor: grabbing;
 }
 
+.editor-shell .editor-attachment .attachment-progress-container {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .editor-shell .editor-attachment .attachment-caption-container .tree-view-output {
   margin: 0;
   border-radius: 0;

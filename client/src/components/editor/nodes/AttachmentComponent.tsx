@@ -26,7 +26,7 @@ import {
   SELECTION_CHANGE_COMMAND,
 } from 'lexical'
 import * as React from 'react'
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 import { useSettings } from '../context/SettingsContext'
 import { useSharedHistoryContext } from '../context/SharedHistoryContext'
@@ -37,6 +37,7 @@ import ContentEditable from '../ui/ContentEditable'
 import ImageResizer from '../ui/ImageResizer'
 import Placeholder from '../ui/Placeholder'
 import { $isAttachmentNode } from './AttachmentNode'
+import { AttachmentsContext } from '../../../context/AttachmentsContext'
 
 const imageCache = new Set()
 
@@ -121,6 +122,7 @@ export default function AttachmentComponent({
   const [editor] = useLexicalComposerContext()
   const [selection, setSelection] = useState<RangeSelection | NodeSelection | GridSelection | null>(null)
   const activeEditorRef = useRef<LexicalEditor | null>(null)
+  const { attachments } = useContext(AttachmentsContext)
 
   const onDelete = useCallback(
     (payload: KeyboardEvent) => {
@@ -273,7 +275,7 @@ export default function AttachmentComponent({
   return (
     <Suspense fallback={null}>
       <>
-        <div draggable={draggable}>
+        <div className="attachment-body-container" draggable={draggable}>
           <LazyAttachment
             className={isFocused ? `focused ${$isNodeSelection(selection) ? 'draggable' : ''}` : null}
             src={src}
@@ -283,6 +285,12 @@ export default function AttachmentComponent({
             height={height}
             maxWidth={maxWidth}
           />
+          <div className="attachment-progress-container">
+            {attachments
+              .find((f) => f.id === id)
+              ?.progress.toString()
+              .concat('%')}
+          </div>
         </div>
         {showCaption && (
           <div className="attachment-caption-container">
@@ -319,8 +327,6 @@ export default function AttachmentComponent({
             captionsEnabled={captionsEnabled}
           />
         )}
-        {<div>{id}</div>}
-        {/* {attachments.length} */}
       </>
     </Suspense>
   )
