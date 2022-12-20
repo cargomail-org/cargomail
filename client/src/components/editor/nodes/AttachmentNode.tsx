@@ -52,6 +52,7 @@ export type SerializedAttachmentNode = Spread<
     showCaption: boolean
     src: string
     id: string
+    url: string
     width?: number
     type: 'attachment'
     version: 1
@@ -93,7 +94,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   }
 
   static importJSON(serializedNode: SerializedAttachmentNode): AttachmentNode {
-    const { altText, height, width, maxWidth, caption, src, id, showCaption } = serializedNode
+    const { altText, height, width, maxWidth, caption, src, id, url, showCaption } = serializedNode
     const node = $createAttachmentNode({
       altText,
       height,
@@ -101,6 +102,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       showCaption,
       src,
       id,
+      url,
       width,
     })
     const nestedEditor = node.__caption
@@ -162,6 +164,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       showCaption: this.__showCaption,
       src: this.getSrc(),
       id: this.getId(),
+      url: this.getUrl(),
       type: 'attachment',
       version: 1,
       width: this.__width === 'inherit' ? 0 : this.__width,
