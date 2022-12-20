@@ -71,7 +71,7 @@ BEGIN
 
     CREATE TABLE email.file (
         id bigint DEFAULT nextval('email.file_id_seq'::regclass) PRIMARY KEY,
-        sender character varying(255) NOT NULL, -- using sender instead of owner
+        owner character varying(255) NOT NULL, -- the sender is always the file owner
         filename character varying(255) NOT NULL,
         content_type character varying(255) NOT NULL,
         content_uri character varying(255) NOT NULL,

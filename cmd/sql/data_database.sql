@@ -116,7 +116,7 @@ BEGIN
     -- Files
     do $$
     BEGIN
-        INSERT INTO email.file (sender, filename, content_type, content_uri, payload) VALUES 
+        INSERT INTO email.file (owner, filename, content_type, content_uri, payload) VALUES 
         ('matthew.cuthbert@demo.localhost',
         'Big_Buck_Bunny_360_10s_1MB.mp4',
         'video/mp4',
