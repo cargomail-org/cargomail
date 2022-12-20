@@ -196,10 +196,8 @@ func (s *AuthIterceptor) Authenticate(next http.Handler) http.Handler {
 			return
 		}
 
-		logrus.Info(username)
-
-		// r.Header.Del("Username")
-		// r.Header.Add("Username", username)
+		r.Header.Del("Username")
+		r.Header.Add("Username", username)
 
 		next.ServeHTTP(w, r)
 	})

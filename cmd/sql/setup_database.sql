@@ -38,7 +38,7 @@ BEGIN
         NO MAXVALUE
         CACHE 1;
 
-    CREATE SEQUENCE email.attachment_id_seq
+    CREATE SEQUENCE email.file_id_seq
         START WITH 1
         INCREMENT BY 1
         NO MINVALUE
@@ -69,9 +69,9 @@ BEGIN
         search_recipients tsvector
     );
 
-    CREATE TABLE email.attachment (
-        id bigint DEFAULT nextval('email.attachment_id_seq'::regclass) PRIMARY KEY,
-        owner character varying(255) NOT NULL,
+    CREATE TABLE email.file (
+        id bigint DEFAULT nextval('email.file_id_seq'::regclass) PRIMARY KEY,
+        sender character varying(255) NOT NULL, -- using sender instead of owner
         filename character varying(255) NOT NULL,
         content_type character varying(255) NOT NULL,
         content_uri character varying(255) NOT NULL,
@@ -120,7 +120,7 @@ BEGIN
     CREATE TRIGGER message_inserted BEFORE INSERT ON email.message FOR EACH ROW EXECUTE PROCEDURE email.message_table_inserted();
     CREATE TRIGGER message_updated BEFORE UPDATE ON email.message FOR EACH ROW EXECUTE PROCEDURE email.message_table_updated();
 
-    CREATE OR REPLACE FUNCTION email.attachment_table_inserted() RETURNS trigger
+    CREATE OR REPLACE FUNCTION email.file_table_inserted() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$
     begin
@@ -131,7 +131,7 @@ BEGIN
         RETURN NEW;	
     END; $$;
 
-    CREATE OR REPLACE FUNCTION email.attachment_table_updated() RETURNS trigger
+    CREATE OR REPLACE FUNCTION email.file_table_updated() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$ 
     begin
@@ -141,8 +141,8 @@ BEGIN
         RETURN NEW; 
     END; $$;
 
-    CREATE TRIGGER attachment_inserted BEFORE INSERT ON email.attachment FOR EACH ROW EXECUTE PROCEDURE email.attachment_table_inserted();
-    CREATE TRIGGER attachment_updated BEFORE UPDATE ON email.attachment FOR EACH ROW EXECUTE PROCEDURE email.attachment_table_updated();
+    CREATE TRIGGER file_inserted BEFORE INSERT ON email.file FOR EACH ROW EXECUTE PROCEDURE email.file_table_inserted();
+    CREATE TRIGGER file_updated BEFORE UPDATE ON email.file FOR EACH ROW EXECUTE PROCEDURE email.file_table_updated();
 
 
     CREATE OR REPLACE FUNCTION email.labels_list_v1(IN _owner character varying)

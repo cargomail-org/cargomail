@@ -33,7 +33,9 @@ func Run(mux *http.ServeMux, config *cfg.Config) {
 	go func() {
 		for {
 			event := <-handler.CompleteUploads
-			logrus.Printf("Upload %s finished\n", event.Upload.ID)
+			username := event.HTTPRequest.Header.Get("Username")
+			id := event.Upload.ID
+			logrus.Printf("User %s uploaded %s file \n", username, id)
 		}
 	}()
 

@@ -113,19 +113,19 @@ BEGIN
     END
     $$;
 
-    -- Attachments
+    -- Files
     do $$
     BEGIN
-        INSERT INTO email.attachment (owner, filename, content_type, content_uri, payload) VALUES 
+        INSERT INTO email.file (sender, filename, content_type, content_uri, payload) VALUES 
         ('matthew.cuthbert@demo.localhost',
-        'Test_text.txt',
-        'text/plain',
-        'file:/50811c73-4bf6-47a0-94ce-3f07f9583786',
+        'Big_Buck_Bunny_360_10s_1MB.mp4',
+        'video/mp4',
+        'file:/727940dc3cf0fd3119ea523775ca8c98',
         NULL),
         ('matthew.cuthbert@demo.localhost',
-        'Cargomail concept.pdf',
+        'dummy.pdf',
         'application/pdf',
-        'file:/867cc2b4-ba54-4d19-bae4-e608e57114f2',
+        'file:/c3deb09eaa257b5480c66145ac869bc3',
         NULL);
     END
     $$;
