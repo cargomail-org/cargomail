@@ -30,6 +30,7 @@ import { Suspense, useCallback, useContext, useEffect, useRef, useState } from '
 
 import { useSettings } from '../context/SettingsContext'
 import { useSharedHistoryContext } from '../context/SharedHistoryContext'
+import { MaxLengthPlugin } from '../plugins/MaxLengthPlugin'
 import KeywordsPlugin from '../plugins/KeywordsPlugin'
 import LinkPlugin from '../plugins/LinkPlugin'
 import TreeViewPlugin from '../plugins/TreeViewPlugin'
@@ -295,6 +296,7 @@ export default function AttachmentComponent({
         {showCaption && (
           <div className="attachment-caption-container">
             <LexicalNestedComposer initialEditor={caption}>
+              <MaxLengthPlugin maxLength={500} />
               <LinkPlugin />
               <HashtagPlugin />
               <KeywordsPlugin />
@@ -306,7 +308,11 @@ export default function AttachmentComponent({
                 }}
               />
               <RichTextPlugin
-                contentEditable={<ContentEditable className="AttachmentNode__contentEditable" />}
+                contentEditable={
+                  <div className="attachment-caption-scroller">
+                    <ContentEditable className="AttachmentNode__contentEditable" />
+                  </div>
+                }
                 placeholder={<Placeholder className="AttachmentNode__placeholder">Enter a caption...</Placeholder>}
                 ErrorBoundary={LexicalErrorBoundary}
               />

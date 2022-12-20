@@ -1267,10 +1267,21 @@ i.prettier-error {
   border-radius: 0;
 }
 
+.editor-shell .editor-attachment .attachment-caption-scroller {
+  border: 0;
+  resize: none;
+  cursor: text;
+  position: relative;
+  outline: 0;
+  overflow: auto;
+}
+
 .editor-shell .editor-attachment .attachment-caption-container {
   display: block;
   position: absolute;
-  bottom: 4px;
+  max-height: 70%;
+  height: auto;
+  bottom: 8px;
   left: 0;
   right: 0;
   padding: 0;
@@ -1279,7 +1290,6 @@ i.prettier-error {
   background-color: rgba(255, 255, 255, 0.9);
   min-width: 100px;
   color: #000;
-  overflow: hidden;
 }
 
 .editor-shell .editor-attachment .attachment-caption-button {
