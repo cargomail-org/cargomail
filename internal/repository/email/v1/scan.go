@@ -12,6 +12,10 @@ type ScanLabel struct {
 	*emailv1.Label
 }
 
+type ScanFile struct {
+	*emailv1.File
+}
+
 type ScanThread struct {
 	*emailv1.Thread
 }
@@ -32,6 +36,19 @@ func (s *ScanLabel) Scan(value interface{}) error {
 	data, ok := value.([]byte)
 	if !ok {
 		s.Label = &emailv1.Label{}
+		return nil
+	}
+	return json.Unmarshal(data, &s)
+}
+
+func (s ScanFile) Value() (driver.Value, error) {
+	return json.Marshal(s)
+}
+
+func (s *ScanFile) Scan(value interface{}) error {
+	data, ok := value.([]byte)
+	if !ok {
+		s.File = &emailv1.File{}
 		return nil
 	}
 	return json.Unmarshal(data, &s)

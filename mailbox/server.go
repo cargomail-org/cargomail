@@ -65,7 +65,8 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 
 	grpc_health_v1.RegisterHealthServer(grpcServer, &GrpcHealthService{})
 	peoplev1.RegisterPeopleServer(grpcServer, peopleHandler.NewHandler(peopleRepository.NewRepository(db)))
-	emailv1.RegisterEmailServer(grpcServer, emailHandler.NewHandler(emailRepository.NewRepository(db)))
+	repo := emailRepository.NewRepository(db)
+	emailv1.RegisterEmailServer(grpcServer, emailHandler.NewHandler(repo))
 
 	httpMux := http.NewServeMux()
 
@@ -80,7 +81,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 		logrus.Fatalf("tcp listener on %s failed: %w", httpPort, err)
 	}
 
-	filestore.Run(httpMux, config)
+	filestore.Run(httpMux, repo, config)
 
 	imta.Start(wg, config)
 	errCh := make(chan error, 1)
@@ -166,6 +167,8 @@ func shutdownServer(ctx context.Context, server *http.Server) error {
 
 func (s *AuthIterceptor) Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		r.Header.Del("Username")
+
 		w.Header().Add("Vary", "Authorization")
 
 		authorizationHeader := r.Header.Get("Authorization")
@@ -196,7 +199,6 @@ func (s *AuthIterceptor) Authenticate(next http.Handler) http.Handler {
 			return
 		}
 
-		r.Header.Del("Username")
 		r.Header.Add("Username", username)
 
 		next.ServeHTTP(w, r)

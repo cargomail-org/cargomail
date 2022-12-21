@@ -72,9 +72,9 @@ BEGIN
     CREATE TABLE email.file (
         id bigint DEFAULT nextval('email.file_id_seq'::regclass) PRIMARY KEY,
         owner character varying(255) NOT NULL, -- the sender is always the file owner
+        uri character varying(255) NOT NULL,
         filename character varying(255) NOT NULL,
-        content_type character varying(255) NOT NULL,
-        content_uri character varying(255) NOT NULL,
+        filetype character varying(255) NOT NULL,
         payload JSONB,
         history_id bigint DEFAULT nextval('email.history_id_seq'::regclass) NOT NULL,
         internal_date bigint DEFAULT extract(epoch from now()) NOT NULL,
@@ -347,6 +347,29 @@ BEGIN
     LANGUAGE plpgsql VOLATILE;
 
     RAISE INFO 'database schema "email" created';
+
+    CREATE OR REPLACE FUNCTION email.files_create_v1(IN _owner character varying, IN _file jsonb)
+    RETURNS jsonb AS
+    $BODY$
+    DECLARE
+     _new_file jsonb;
+    BEGIN
+        -- _owner is required
+        IF coalesce(TRIM(_owner), '') = '' THEN
+            RAISE EXCEPTION '_owner is required.';
+        END IF;
+
+        INSERT INTO email.file(owner, uri, filename, filetype)
+            VALUES (_owner, _file->>'uri', _file->>'filename', _file->>'filetype')
+            RETURNING jsonb_build_object('uri', uri::varchar(255),
+                                         'filename', filename::varchar(255),
+                                         'filetype', filetype::varchar(255)
+                                        )
+            INTO _new_file;
+        RETURN _new_file;
+    END;			
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
 
 ----------------------------------------------------------------------------------------------------------------------
 

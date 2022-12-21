@@ -7,10 +7,12 @@ import (
 	"github.com/tus/tusd/pkg/filestore"
 	tusd "github.com/tus/tusd/pkg/handler"
 
+	emailv1 "github.com/cargomail-org/cargomail/generated/proto/email/v1"
 	cfg "github.com/cargomail-org/cargomail/internal/config"
+	emailRepository "github.com/cargomail-org/cargomail/internal/repository/email/v1"
 )
 
-func Run(mux *http.ServeMux, config *cfg.Config) {
+func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 	basePath := config.Filestore.BasePath
 	path := config.Filestore.Path
 
@@ -35,7 +37,18 @@ func Run(mux *http.ServeMux, config *cfg.Config) {
 			event := <-handler.CompleteUploads
 			username := event.HTTPRequest.Header.Get("Username")
 			id := event.Upload.ID
+			uri := "file:/" + id
+			filename := event.Upload.MetaData["filename"]
+			filetype := event.Upload.MetaData["filetype"]
+
+			file := emailv1.File{Uri: uri, Filename: filename, Filetype: filetype}
+
 			logrus.Printf("User %s uploaded %s file \n", username, id)
+
+			_, err := emailRepository.Repo.FilesCreate(repo, username, &file)
+			if err != nil {
+				logrus.Errorf("Upload error %s\n", err.Error())
+			}
 		}
 	}()
 

@@ -20,6 +20,7 @@ type Repo interface {
 	DraftsCreate(context.Context, *emailv1.Draft) (*emailv1.Draft, error)
 	DraftsUpdate(context.Context, int64, *emailv1.Message) (*emailv1.Draft, error)
 	DraftsDelete(context.Context, int64) int64
+	FilesCreate(string, *emailv1.File) (*emailv1.File, error)
 }
 
 type Repository struct {
@@ -215,4 +216,17 @@ func (r *Repository) DraftsDelete(ctx context.Context, id int64) int64 {
 	}
 
 	return cnt
+}
+
+func (r *Repository) FilesCreate(username string, file *emailv1.File) (*emailv1.File, error) {
+	var scanFile ScanFile
+	scanFile.File = file
+
+	sqlStatement := `SELECT email.files_create_v1($1, $2);`
+	err := r.db.QueryRow(sqlStatement, username, scanFile).Scan(&scanFile)
+	if err != nil {
+		return nil, err
+	}
+
+	return scanFile.File, err
 }
