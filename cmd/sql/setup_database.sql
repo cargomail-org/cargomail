@@ -376,6 +376,33 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
+    CREATE OR REPLACE FUNCTION email.files_update_v1(IN _owner character varying, IN _id bigint, IN _file jsonb)
+    RETURNS jsonb AS
+    $BODY$
+    DECLARE
+     _updated_file jsonb;
+    BEGIN
+        -- _owner is required
+        IF coalesce(TRIM(_owner), '') = '' THEN
+            RAISE EXCEPTION '_owner is required.';
+        END IF;
+
+        UPDATE email.file
+            SET sha256sum = _file->>'sha256sum'
+            WHERE owner = _owner AND id = _id
+            RETURNING jsonb_build_object('id', id::varchar(255),
+                                         'uri_at_sender', uri_at_sender::varchar(255),
+                                         'uri_at_recipient', uri_at_recipient::varchar(255),
+                                         'sha256sum', sha256sum::varchar(255),
+                                         'filename', filename::varchar(255),
+                                         'filetype', filetype::varchar(255)
+                                        )
+            INTO _updated_file;
+        RETURN _updated_file;
+    END;			
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
 ----------------------------------------------------------------------------------------------------------------------
 
     IF EXISTS (SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema = 'people') THEN

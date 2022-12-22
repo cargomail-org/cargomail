@@ -1,7 +1,12 @@
 package filestore
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
+	"io"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/sirupsen/logrus"
 	"github.com/tus/tusd/pkg/filestore"
@@ -40,19 +45,68 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 			uri := config.Mailbox.Uri + config.Filestore.BasePath + id
 			filename := event.Upload.MetaData["filename"]
 			filetype := event.Upload.MetaData["filetype"]
+			path := event.Upload.Storage["Path"]
 
 			file := emailv1.File{UriAtSender: uri, UriAtRecipient: uri, Filename: filename, Filetype: filetype}
 
 			logrus.Printf("User %s uploaded %s file \n", username, id)
 
-			fileDb, err := emailRepository.Repo.FilesCreate(repo, username, &file)
+			dbFile, err := emailRepository.Repo.FilesCreate(repo, username, &file)
 			if err != nil {
-				logrus.Errorf("Upload error %s\n", err.Error())
+				logrus.Errorf("Files database create error %s\n", err.Error())
 			}
 
-			logrus.Printf("File database id %s\n", fileDb.Id)
+			sha256sum, err := checksum(path)
+			if err != nil {
+				logrus.Errorf("Checksum error %s\n", err.Error())
+			}
+
+			logrus.Printf("Checksum: %s\n", sha256sum)
+
+			dbFile.Sha256Sum = sha256sum
+
+			dbId, err := strconv.ParseInt(dbFile.Id, 10, 64)
+			if err != nil {
+				logrus.Errorf("Files database id error %s\n", err.Error())
+			}
+
+			_, err = emailRepository.Repo.FilesUpdate(repo, username, dbId, dbFile)
+			if err != nil {
+				logrus.Errorf("Files database update error %s\n", err.Error())
+			}
 		}
 	}()
 
 	mux.Handle(basePath, http.StripPrefix(basePath, handler))
+}
+
+func checksum(file string) (string, error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return "", err
+	}
+
+	defer func() {
+		_ = f.Close()
+	}()
+
+	buf := make([]byte, 1024*1024)
+	h := sha256.New()
+
+	for {
+		bytesRead, err := f.Read(buf)
+		if err != nil {
+			if err != io.EOF {
+				return "", err
+			}
+
+			logrus.Println("EOF")
+			break
+		}
+
+		logrus.Printf("bytes read: %d\n", bytesRead)
+		h.Write(buf[:bytesRead])
+	}
+
+	return hex.EncodeToString(h.Sum(nil)), nil
 }
