@@ -17,6 +17,7 @@ type Config struct {
 }
 
 type Server struct {
+	Uri  string
 	Port int
 	Cors
 }

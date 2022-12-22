@@ -116,14 +116,18 @@ BEGIN
     -- Files
     do $$
     BEGIN
-        INSERT INTO email.file (owner, uri, filename, filetype, payload) VALUES 
+        INSERT INTO email.file (owner, uri_at_sender, uri_at_recipient, sha256sum, filename, filetype, payload) VALUES 
         ('matthew.cuthbert@demo.localhost',
-        'file:/727940dc3cf0fd3119ea523775ca8c98',
+        'http://localhost:8180/files/727940dc3cf0fd3119ea523775ca8c98',
+        'http://localhost:8180/files/727940dc3cf0fd3119ea523775ca8c98',
+        '1234',
         'Big_Buck_Bunny_360_10s_1MB.mp4',
         'video/mp4',
         NULL),
         ('matthew.cuthbert@demo.localhost',
-        'file:/c3deb09eaa257b5480c66145ac869bc3',
+        'http://localhost:8180/files/c3deb09eaa257b5480c66145ac869bc3',
+        'http://localhost:8180/files/c3deb09eaa257b5480c66145ac869bc3',
+        '5678',
         'dummy.pdf',
         'application/pdf',
         NULL);

@@ -37,11 +37,11 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 			event := <-handler.CompleteUploads
 			username := event.HTTPRequest.Header.Get("Username")
 			id := event.Upload.ID
-			uri := "file:/" + id
+			uri := config.Mailbox.Uri + config.Filestore.BasePath + id
 			filename := event.Upload.MetaData["filename"]
 			filetype := event.Upload.MetaData["filetype"]
 
-			file := emailv1.File{Uri: uri, Filename: filename, Filetype: filetype}
+			file := emailv1.File{UriAtSender: uri, UriAtRecipient: uri, Filename: filename, Filetype: filetype}
 
 			logrus.Printf("User %s uploaded %s file \n", username, id)
 

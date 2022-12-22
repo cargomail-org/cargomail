@@ -71,8 +71,10 @@ BEGIN
 
     CREATE TABLE email.file (
         id bigint DEFAULT nextval('email.file_id_seq'::regclass) PRIMARY KEY,
-        owner character varying(255) NOT NULL, -- the sender is always the file owner
-        uri character varying(255) NOT NULL,
+        owner character varying(255) NOT NULL,
+        uri_at_sender character varying(255) NOT NULL,
+        uri_at_recipient character varying(255) NOT NULL,
+        sha256sum character varying(255),
         filename character varying(255) NOT NULL,
         filetype character varying(255) NOT NULL,
         payload JSONB,
@@ -359,9 +361,11 @@ BEGIN
             RAISE EXCEPTION '_owner is required.';
         END IF;
 
-        INSERT INTO email.file(owner, uri, filename, filetype)
-            VALUES (_owner, _file->>'uri', _file->>'filename', _file->>'filetype')
-            RETURNING jsonb_build_object('uri', uri::varchar(255),
+        INSERT INTO email.file(owner, uri_at_sender, uri_at_recipient, sha256sum, filename, filetype)
+            VALUES (_owner, _file->>'uri_at_sender', _file->>'uri_at_recipient', _file->>'sha256sum', _file->>'filename', _file->>'filetype')
+            RETURNING jsonb_build_object('uri_at_sender', uri_at_sender::varchar(255),
+                                         'uri_at_recipient', uri_at_recipient::varchar(255),
+                                         'sha256sum', sha256sum::varchar(255),
                                          'filename', filename::varchar(255),
                                          'filetype', filetype::varchar(255)
                                         )

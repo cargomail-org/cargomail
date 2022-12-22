@@ -91,15 +91,23 @@ export interface File {
      */
     id: string;
     /**
-     * @generated from protobuf field: string uri = 2;
+     * @generated from protobuf field: string uri_at_sender = 2;
      */
-    uri: string;
+    uriAtSender: string;
     /**
-     * @generated from protobuf field: string filename = 3;
+     * @generated from protobuf field: string uri_at_recipient = 3;
+     */
+    uriAtRecipient: string;
+    /**
+     * @generated from protobuf field: string sha256sum = 4 [json_name = "sha256sum"];
+     */
+    sha256Sum: string;
+    /**
+     * @generated from protobuf field: string filename = 5;
      */
     filename: string;
     /**
-     * @generated from protobuf field: string filetype = 4;
+     * @generated from protobuf field: string filetype = 6;
      */
     filetype: string;
 }
@@ -785,13 +793,15 @@ class File$Type extends MessageType<File> {
     constructor() {
         super("email.v1.File", [
             { no: 1, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "uri", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "filename", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "filetype", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "uri_at_sender", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "uri_at_recipient", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "sha256sum", kind: "scalar", jsonName: "sha256sum", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "filename", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 6, name: "filetype", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<File>): File {
-        const message = { id: "", uri: "", filename: "", filetype: "" };
+        const message = { id: "", uriAtSender: "", uriAtRecipient: "", sha256Sum: "", filename: "", filetype: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<File>(this, message, value);
@@ -805,13 +815,19 @@ class File$Type extends MessageType<File> {
                 case /* string id */ 1:
                     message.id = reader.string();
                     break;
-                case /* string uri */ 2:
-                    message.uri = reader.string();
+                case /* string uri_at_sender */ 2:
+                    message.uriAtSender = reader.string();
                     break;
-                case /* string filename */ 3:
+                case /* string uri_at_recipient */ 3:
+                    message.uriAtRecipient = reader.string();
+                    break;
+                case /* string sha256sum = 4 [json_name = "sha256sum"];*/ 4:
+                    message.sha256Sum = reader.string();
+                    break;
+                case /* string filename */ 5:
                     message.filename = reader.string();
                     break;
-                case /* string filetype */ 4:
+                case /* string filetype */ 6:
                     message.filetype = reader.string();
                     break;
                 default:
@@ -829,15 +845,21 @@ class File$Type extends MessageType<File> {
         /* string id = 1; */
         if (message.id !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.id);
-        /* string uri = 2; */
-        if (message.uri !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.uri);
-        /* string filename = 3; */
+        /* string uri_at_sender = 2; */
+        if (message.uriAtSender !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.uriAtSender);
+        /* string uri_at_recipient = 3; */
+        if (message.uriAtRecipient !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.uriAtRecipient);
+        /* string sha256sum = 4 [json_name = "sha256sum"]; */
+        if (message.sha256Sum !== "")
+            writer.tag(4, WireType.LengthDelimited).string(message.sha256Sum);
+        /* string filename = 5; */
         if (message.filename !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.filename);
-        /* string filetype = 4; */
+            writer.tag(5, WireType.LengthDelimited).string(message.filename);
+        /* string filetype = 6; */
         if (message.filetype !== "")
-            writer.tag(4, WireType.LengthDelimited).string(message.filetype);
+            writer.tag(6, WireType.LengthDelimited).string(message.filetype);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
