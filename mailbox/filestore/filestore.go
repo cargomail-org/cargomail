@@ -49,30 +49,30 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 
 			file := emailv1.File{UriAtSender: uri, UriAtRecipient: uri, Filename: filename, Filetype: filetype}
 
-			logrus.Printf("User %s uploaded %s file \n", username, id)
+			logrus.Printf("User %s uploaded %s file", username, id)
 
 			dbFile, err := emailRepository.Repo.FilesCreate(repo, username, &file)
 			if err != nil {
-				logrus.Errorf("Files database create error %s\n", err.Error())
+				logrus.Errorf("Files database create error %s", err.Error())
 			}
 
 			sha256sum, err := checksum(path)
 			if err != nil {
-				logrus.Errorf("Checksum error %s\n", err.Error())
+				logrus.Errorf("Checksum error %s", err.Error())
 			}
 
-			logrus.Printf("Checksum: %s\n", sha256sum)
+			logrus.Printf("Checksum: %s", sha256sum)
 
 			dbFile.Sha256Sum = sha256sum
 
 			dbId, err := strconv.ParseInt(dbFile.Id, 10, 64)
 			if err != nil {
-				logrus.Errorf("Files database id error %s\n", err.Error())
+				logrus.Errorf("Files database id error %s", err.Error())
 			}
 
 			_, err = emailRepository.Repo.FilesUpdate(repo, username, dbId, dbFile)
 			if err != nil {
-				logrus.Errorf("Files database update error %s\n", err.Error())
+				logrus.Errorf("Files database update error %s", err.Error())
 			}
 		}
 	}()
@@ -100,11 +100,9 @@ func checksum(file string) (string, error) {
 				return "", err
 			}
 
-			logrus.Println("EOF")
 			break
 		}
 
-		logrus.Printf("bytes read: %d\n", bytesRead)
 		h.Write(buf[:bytesRead])
 	}
 
