@@ -45,10 +45,12 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 
 			logrus.Printf("User %s uploaded %s file \n", username, id)
 
-			_, err := emailRepository.Repo.FilesCreate(repo, username, &file)
+			fileDb, err := emailRepository.Repo.FilesCreate(repo, username, &file)
 			if err != nil {
 				logrus.Errorf("Upload error %s\n", err.Error())
 			}
+
+			logrus.Printf("File database id %s\n", fileDb.Id)
 		}
 	}()
 

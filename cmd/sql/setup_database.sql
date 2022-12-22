@@ -363,7 +363,8 @@ BEGIN
 
         INSERT INTO email.file(owner, uri_at_sender, uri_at_recipient, sha256sum, filename, filetype)
             VALUES (_owner, _file->>'uri_at_sender', _file->>'uri_at_recipient', _file->>'sha256sum', _file->>'filename', _file->>'filetype')
-            RETURNING jsonb_build_object('uri_at_sender', uri_at_sender::varchar(255),
+            RETURNING jsonb_build_object('id', id::varchar(255),
+                                         'uri_at_sender', uri_at_sender::varchar(255),
                                          'uri_at_recipient', uri_at_recipient::varchar(255),
                                          'sha256sum', sha256sum::varchar(255),
                                          'filename', filename::varchar(255),
