@@ -110,6 +110,10 @@ export interface File {
      * @generated from protobuf field: string filetype = 6;
      */
     filetype: string;
+    /**
+     * @generated from protobuf field: int64 size = 7;
+     */
+    size: bigint;
 }
 /**
  * @generated from protobuf message email.v1.ListDraftsResponse
@@ -797,11 +801,12 @@ class File$Type extends MessageType<File> {
             { no: 3, name: "uri_at_recipient", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "sha256sum", kind: "scalar", jsonName: "sha256sum", T: 9 /*ScalarType.STRING*/ },
             { no: 5, name: "filename", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 6, name: "filetype", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 6, name: "filetype", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 7, name: "size", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
         ]);
     }
     create(value?: PartialMessage<File>): File {
-        const message = { id: "", uriAtSender: "", uriAtRecipient: "", sha256Sum: "", filename: "", filetype: "" };
+        const message = { id: "", uriAtSender: "", uriAtRecipient: "", sha256Sum: "", filename: "", filetype: "", size: 0n };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<File>(this, message, value);
@@ -829,6 +834,9 @@ class File$Type extends MessageType<File> {
                     break;
                 case /* string filetype */ 6:
                     message.filetype = reader.string();
+                    break;
+                case /* int64 size */ 7:
+                    message.size = reader.int64().toBigInt();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -860,6 +868,9 @@ class File$Type extends MessageType<File> {
         /* string filetype = 6; */
         if (message.filetype !== "")
             writer.tag(6, WireType.LengthDelimited).string(message.filetype);
+        /* int64 size = 7; */
+        if (message.size !== 0n)
+            writer.tag(7, WireType.Varint).int64(message.size);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

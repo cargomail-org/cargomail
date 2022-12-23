@@ -50,6 +50,8 @@ message File {
   string filename = 5;
 
   string filetype = 6;
+
+  int64 size = 7;
 }
 
 message ListDraftsResponse {
