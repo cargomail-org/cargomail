@@ -92,7 +92,8 @@ function LazyAttachment({
 export default function AttachmentComponent({
   src,
   id,
-  url,
+  transientUri,
+  sha256sum,
   altText,
   nodeKey,
   width,
@@ -112,7 +113,8 @@ export default function AttachmentComponent({
   showCaption: boolean
   src: string
   id: string
-  url: string
+  transientUri: string
+  sha256sum: string
   width: 'inherit' | number
   captionsEnabled: boolean
 }): JSX.Element {

@@ -41,17 +41,15 @@ message Label {
 message File {
   string id = 1;
 
-  string uri_at_sender = 2;
+  string transient_uri = 2;
 
-  string uri_at_recipient = 3;
+  string sha256sum = 3;
 
-  string sha256sum = 4;
+  string filename = 4;
 
-  string filename = 5;
+  string filetype = 5;
 
-  string filetype = 6;
-
-  int64 size = 7;
+  int64 size = 6;
 }
 
 message ListDraftsResponse {

@@ -29,15 +29,16 @@ export interface AttachmentPayload {
   showCaption?: boolean
   src: string
   id?: string
-  url?: string
+  transientUri?: string
+  sha256sum?: string
   width?: number
   captionsEnabled?: boolean
 }
 
 // function convertAttachmentElement(domNode: Node): null | DOMConversionOutput {
 //   if (domNode instanceof HTMLAttachmentElement) {
-//     const { alt: altText, src, id, url } = domNode
-//     const node = $createAttachmentNode({ altText, src, id, url })
+//     const { alt: altText, src, id, transientUri, sha256sum } = domNode
+//     const node = $createAttachmentNode({ altText, src, id, transientUri, sha256sum })
 //     return { node }
 //   }
 //   return null
@@ -52,8 +53,9 @@ export type SerializedAttachmentNode = Spread<
     showCaption: boolean
     src: string
     id: string
-    url: string
-    width?: number
+    transientUri: string
+    sha256sum: string
+    width: number
     type: 'attachment'
     version: 1
   },
@@ -67,7 +69,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   __height: 'inherit' | number
   __maxWidth: number
   __id: string
-  __url: string
+  __transientUri: string
+  __sha256sum: string
   __showCaption: boolean
   __caption: LexicalEditor
   // Captions cannot yet be used within editor cells
@@ -83,7 +86,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       node.__altText,
       node.__maxWidth,
       node.__id,
-      node.__url,
+      node.__transientUri,
+      node.__sha256sum,
       node.__width,
       node.__height,
       node.__showCaption,
@@ -94,7 +98,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   }
 
   static importJSON(serializedNode: SerializedAttachmentNode): AttachmentNode {
-    const { altText, height, width, maxWidth, caption, src, id, url, showCaption } = serializedNode
+    const { altText, height, width, maxWidth, caption, src, id, transientUri, sha256sum, showCaption } = serializedNode
     const node = $createAttachmentNode({
       altText,
       height,
@@ -102,7 +106,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       showCaption,
       src,
       id,
-      url,
+      transientUri,
+      sha256sum,
       width,
     })
     const nestedEditor = node.__caption
@@ -134,7 +139,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     altText: string,
     maxWidth: number,
     id?: string,
-    url?: string,
+    transientUri?: string,
+    sha256sum?: string,
     width?: 'inherit' | number,
     height?: 'inherit' | number,
     showCaption?: boolean,
@@ -147,7 +153,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     this.__altText = altText
     this.__maxWidth = maxWidth
     this.__id = id || ''
-    this.__url = url || ''
+    this.__transientUri = transientUri || ''
+    this.__sha256sum = sha256sum || ''
     this.__width = width || 'inherit'
     this.__height = height || 'inherit'
     this.__showCaption = showCaption || false
@@ -164,7 +171,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       showCaption: this.__showCaption,
       src: this.getSrc(),
       id: this.getId(),
-      url: this.getUrl(),
+      transientUri: this.getTransientUri(),
+      sha256sum: this.getSha256sum(),
       type: 'attachment',
       version: 1,
       width: this.__width === 'inherit' ? 0 : this.__width,
@@ -206,8 +214,12 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     return this.__id
   }
 
-  getUrl(): string {
-    return this.__url
+  getTransientUri(): string {
+    return this.__transientUri
+  }
+
+  getSha256sum(): string {
+    return this.__sha256sum
   }
 
   getAltText(): string {
@@ -224,7 +236,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
           height={this.__height}
           maxWidth={this.__maxWidth}
           id={this.__id}
-          url={this.__url}
+          transientUri={this.__transientUri}
+          sha256sum={this.__sha256sum}
           nodeKey={this.getKey()}
           showCaption={this.__showCaption}
           caption={this.__caption}
@@ -243,14 +256,28 @@ export function $createAttachmentNode({
   captionsEnabled,
   src,
   id,
-  url,
+  transientUri,
+  sha256sum,
   width,
   showCaption,
   caption,
   key,
 }: AttachmentPayload): AttachmentNode {
   return $applyNodeReplacement(
-    new AttachmentNode(src, altText, maxWidth, id, url, width, height, showCaption, caption, captionsEnabled, key)
+    new AttachmentNode(
+      src,
+      altText,
+      maxWidth,
+      id,
+      transientUri,
+      sha256sum,
+      width,
+      height,
+      showCaption,
+      caption,
+      captionsEnabled,
+      key
+    )
   )
 }
 

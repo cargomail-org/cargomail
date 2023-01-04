@@ -72,8 +72,7 @@ BEGIN
     CREATE TABLE email.file (
         id bigint DEFAULT nextval('email.file_id_seq'::regclass) PRIMARY KEY,
         owner character varying(255) NOT NULL,
-        uri_at_sender character varying(255) NOT NULL,
-        uri_at_recipient character varying(255) NOT NULL,
+        transient_uri character varying(255) NOT NULL,
         sha256sum character varying(255),
         filename character varying(255) NOT NULL,
         filetype character varying(255) NOT NULL,
@@ -362,11 +361,10 @@ BEGIN
             RAISE EXCEPTION '_owner is required.';
         END IF;
 
-        INSERT INTO email.file(owner, uri_at_sender, uri_at_recipient, sha256sum, filename, filetype, size)
-            VALUES (_owner, _file->>'uri_at_sender', _file->>'uri_at_recipient', _file->>'sha256sum', _file->>'filename', _file->>'filetype', NULLIF(_file->>'size', '')::bigint)
+        INSERT INTO email.file(owner, transient_uri, sha256sum, filename, filetype, size)
+            VALUES (_owner, _file->>'transient_uri', _file->>'sha256sum', _file->>'filename', _file->>'filetype', NULLIF(_file->>'size', '')::bigint)
             RETURNING jsonb_build_object('id', id::varchar(255),
-                                         'uri_at_sender', uri_at_sender::varchar(255),
-                                         'uri_at_recipient', uri_at_recipient::varchar(255),
+                                         'transient_uri', transient_uri::varchar(255),
                                          'sha256sum', sha256sum::varchar(255),
                                          'filename', filename::varchar(255),
                                          'filetype', filetype::varchar(255),
@@ -393,8 +391,7 @@ BEGIN
             SET sha256sum = _file->>'sha256sum'
             WHERE owner = _owner AND id = _id
             RETURNING jsonb_build_object('id', id::varchar(255),
-                                         'uri_at_sender', uri_at_sender::varchar(255),
-                                         'uri_at_recipient', uri_at_recipient::varchar(255),
+                                         'transient_uri', transient_uri::varchar(255),
                                          'sha256sum', sha256sum::varchar(255),
                                          'filename', filename::varchar(255),
                                          'filetype', filetype::varchar(255),

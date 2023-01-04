@@ -91,27 +91,23 @@ export interface File {
      */
     id: string;
     /**
-     * @generated from protobuf field: string uri_at_sender = 2;
+     * @generated from protobuf field: string transient_uri = 2;
      */
-    uriAtSender: string;
+    transientUri: string;
     /**
-     * @generated from protobuf field: string uri_at_recipient = 3;
-     */
-    uriAtRecipient: string;
-    /**
-     * @generated from protobuf field: string sha256sum = 4 [json_name = "sha256sum"];
+     * @generated from protobuf field: string sha256sum = 3 [json_name = "sha256sum"];
      */
     sha256Sum: string;
     /**
-     * @generated from protobuf field: string filename = 5;
+     * @generated from protobuf field: string filename = 4;
      */
     filename: string;
     /**
-     * @generated from protobuf field: string filetype = 6;
+     * @generated from protobuf field: string filetype = 5;
      */
     filetype: string;
     /**
-     * @generated from protobuf field: int64 size = 7;
+     * @generated from protobuf field: int64 size = 6;
      */
     size: bigint;
 }
@@ -797,16 +793,15 @@ class File$Type extends MessageType<File> {
     constructor() {
         super("email.v1.File", [
             { no: 1, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "uri_at_sender", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "uri_at_recipient", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "sha256sum", kind: "scalar", jsonName: "sha256sum", T: 9 /*ScalarType.STRING*/ },
-            { no: 5, name: "filename", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 6, name: "filetype", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 7, name: "size", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+            { no: 2, name: "transient_uri", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "sha256sum", kind: "scalar", jsonName: "sha256sum", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "filename", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "filetype", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 6, name: "size", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
         ]);
     }
     create(value?: PartialMessage<File>): File {
-        const message = { id: "", uriAtSender: "", uriAtRecipient: "", sha256Sum: "", filename: "", filetype: "", size: 0n };
+        const message = { id: "", transientUri: "", sha256Sum: "", filename: "", filetype: "", size: 0n };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<File>(this, message, value);
@@ -820,22 +815,19 @@ class File$Type extends MessageType<File> {
                 case /* string id */ 1:
                     message.id = reader.string();
                     break;
-                case /* string uri_at_sender */ 2:
-                    message.uriAtSender = reader.string();
+                case /* string transient_uri */ 2:
+                    message.transientUri = reader.string();
                     break;
-                case /* string uri_at_recipient */ 3:
-                    message.uriAtRecipient = reader.string();
-                    break;
-                case /* string sha256sum = 4 [json_name = "sha256sum"];*/ 4:
+                case /* string sha256sum = 3 [json_name = "sha256sum"];*/ 3:
                     message.sha256Sum = reader.string();
                     break;
-                case /* string filename */ 5:
+                case /* string filename */ 4:
                     message.filename = reader.string();
                     break;
-                case /* string filetype */ 6:
+                case /* string filetype */ 5:
                     message.filetype = reader.string();
                     break;
-                case /* int64 size */ 7:
+                case /* int64 size */ 6:
                     message.size = reader.int64().toBigInt();
                     break;
                 default:
@@ -853,24 +845,21 @@ class File$Type extends MessageType<File> {
         /* string id = 1; */
         if (message.id !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.id);
-        /* string uri_at_sender = 2; */
-        if (message.uriAtSender !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.uriAtSender);
-        /* string uri_at_recipient = 3; */
-        if (message.uriAtRecipient !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.uriAtRecipient);
-        /* string sha256sum = 4 [json_name = "sha256sum"]; */
+        /* string transient_uri = 2; */
+        if (message.transientUri !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.transientUri);
+        /* string sha256sum = 3 [json_name = "sha256sum"]; */
         if (message.sha256Sum !== "")
-            writer.tag(4, WireType.LengthDelimited).string(message.sha256Sum);
-        /* string filename = 5; */
+            writer.tag(3, WireType.LengthDelimited).string(message.sha256Sum);
+        /* string filename = 4; */
         if (message.filename !== "")
-            writer.tag(5, WireType.LengthDelimited).string(message.filename);
-        /* string filetype = 6; */
+            writer.tag(4, WireType.LengthDelimited).string(message.filename);
+        /* string filetype = 5; */
         if (message.filetype !== "")
-            writer.tag(6, WireType.LengthDelimited).string(message.filetype);
-        /* int64 size = 7; */
+            writer.tag(5, WireType.LengthDelimited).string(message.filetype);
+        /* int64 size = 6; */
         if (message.size !== 0n)
-            writer.tag(7, WireType.Varint).int64(message.size);
+            writer.tag(6, WireType.Varint).int64(message.size);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

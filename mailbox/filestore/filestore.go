@@ -48,7 +48,7 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 			size := event.Upload.Size
 			path := event.Upload.Storage["Path"]
 
-			file := emailv1.File{UriAtSender: uri, UriAtRecipient: uri, Filename: filename, Filetype: filetype, Size: size}
+			file := emailv1.File{TransientUri: uri, Filename: filename, Filetype: filetype, Size: size}
 
 			logrus.Printf("User %s uploaded %s file", username, id)
 
