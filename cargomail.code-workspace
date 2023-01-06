@@ -11,6 +11,10 @@
 		{
 			"name": "oidc",
 			"path": "../cargomail-zitadel-oidc"
+		},
+		{
+			"name": "tus",
+			"path": "../cargomail-tusd"
 		}
 	],
 	"settings": {

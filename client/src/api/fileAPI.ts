@@ -18,7 +18,9 @@ export const createTusUploadInstance = (file: File) => {
       filetype: file.type,
     },
     onError: (error: any) => console.log('Failed because: ' + error),
-    onSuccess: () => console.log('Download %s from %s', upload.file.name, upload.url),
+    onSuccess: () => {
+      console.log('Download %s from %s', upload.file.name, upload.url)
+    },
   })
   return upload
 }
