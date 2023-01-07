@@ -36,7 +36,7 @@
         "react-router-dom": "^6.4.5",
         "react-scripts": "5.0.1",
         "styled-components": "^5.3.6",
-        "tus-js-client": "^3.0.1",
+        "tus-js-client": "file:../cargomail-tus-js-client",
         "typescript": "^4.9.4",
         "urlsafe-base64": "^1.0.0",
         "uuid": "^9.0.0"

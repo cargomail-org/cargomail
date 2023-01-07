@@ -15,6 +15,10 @@
 		{
 			"name": "tus",
 			"path": "../cargomail-tusd"
+		},
+		{
+			"name": "tus-js-client",
+			"path": "../cargomail-tus-js-client"
 		}
 	],
 	"settings": {
