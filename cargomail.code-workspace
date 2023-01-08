@@ -13,7 +13,7 @@
 			"path": "../cargomail-zitadel-oidc"
 		},
 		{
-			"name": "tus",
+			"name": "tusd",
 			"path": "../cargomail-tusd"
 		},
 		{
