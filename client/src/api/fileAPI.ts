@@ -13,6 +13,7 @@ export const createTusUploadInstance = (file: File) => {
   const upload: any = new tus.Upload(file, {
     endpoint: process.env.REACT_APP_TUS_ENDPOINT,
     retryDelays: [0, 3000, 5000],
+    chunkSize: 1024, // Upload slowdown
     enableChecksum: true,
     metadata: {
       filename: file.name,
