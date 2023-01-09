@@ -21,7 +21,7 @@ export const createTusUploadInstance = (file: File) => {
     },
     onError: (error: any) => console.log('Failed because: ' + error),
     onSuccess: () => {
-      console.log('Download %s from %s', upload.file.name, upload.url)
+      console.log('Download %s checksum:%s from %s', upload.file.name, upload.sha256sum, upload.url)
     },
   })
   return upload
