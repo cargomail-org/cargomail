@@ -289,10 +289,35 @@ export default function AttachmentComponent({
             maxWidth={maxWidth}
           />
           <div className="attachment-progress-container">
-            {attachments
-              .find((f) => f.id === id)
-              ?.progress.toString()
-              .concat('%')}
+            {(() => {
+              const attachment = attachments.find((a) => a.id === id)
+              const downloadUrl = attachment?.downloadUrl || ''
+
+              const streamToDisk = async (url: any) => {
+                // readable stream
+                const rs_src = fetch(url).then((response) => response.body)
+
+                // writable stream
+                // @ts-ignore
+                const ws_dest = window.showSaveFilePicker().then((handle: any) => handle.createWritable())
+
+                // @ts-ignore
+                return (await rs_src).pipeTo(await ws_dest)
+              }
+
+              return downloadUrl.length > 0 ? (
+                // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                <a
+                  href="#"
+                  onClick={() => {
+                    streamToDisk(downloadUrl)
+                  }}>
+                  Download
+                </a>
+              ) : (
+                attachment?.progress.toString().concat('%')
+              )
+            })()}
           </div>
         </div>
         {showCaption && (

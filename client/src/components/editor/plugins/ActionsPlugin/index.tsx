@@ -54,7 +54,7 @@ function uuidv4() {
 
 function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose: () => void }): JSX.Element {
   const [validFiles, setValidFiles] = useState<any>([])
-  const { addAttachment, updateProgress } = useContext(AttachmentsContext)
+  const { addAttachment, updateAttachment, updateProgress } = useContext(AttachmentsContext)
 
   return (
     <>
@@ -67,12 +67,18 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                 const upload = createTusUploadInstance(file)
 
                 const id = uuidv4()
-                const attachment: IAttachment = { id, upload, progress: 0 }
+                const attachment: IAttachment = { id, upload, progress: 0, downloadUrl: null, sha256sum: null }
 
                 attachment.upload.options.onProgress = (bytesUploaded: any, bytesTotal: any) => {
                   const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
                   attachment.progress = parseFloat(percentage)
                   updateProgress(attachment)
+                }
+
+                attachment.upload.options.onSuccess = () => {
+                  attachment.downloadUrl = attachment.upload.url
+                  attachment.sha256sum = attachment.upload.sha256sum
+                  updateAttachment(attachment)
                 }
 
                 addAttachment(attachment)
