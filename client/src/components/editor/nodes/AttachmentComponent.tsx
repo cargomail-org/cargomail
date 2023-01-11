@@ -40,6 +40,8 @@ import Placeholder from '../ui/Placeholder'
 import { $isAttachmentNode } from './AttachmentNode'
 import { AttachmentsContext } from '../../../context/AttachmentsContext'
 
+import jsSHA from 'jssha'
+
 const imageCache = new Set()
 
 function useSuspenseImage(src: string) {
@@ -293,7 +295,9 @@ export default function AttachmentComponent({
               const attachment = attachments.find((a) => a.id === id)
               const downloadUrl = attachment?.downloadUrl || ''
 
-              const streamToDisk = async (url: any) => {
+              const streamToFile = async (url: any) => {
+                let shaObj: any
+
                 // readable stream
                 const rs_src = fetch(url).then((response) => response.body)
 
@@ -301,8 +305,25 @@ export default function AttachmentComponent({
                 // @ts-ignore
                 const ws_dest = window.showSaveFilePicker().then((handle: any) => handle.createWritable())
 
-                // @ts-ignore
-                return (await rs_src).pipeTo(await ws_dest)
+                // dummy transform stream to compute checksum
+                const ts_dec = new TransformStream({
+                  start() {
+                    shaObj = new jsSHA('SHA-256', 'ARRAYBUFFER')
+                  },
+                  async transform(chunk, controller) {
+                    shaObj.update(chunk)
+                    controller.enqueue(await chunk)
+                  },
+                  flush(controller) {
+                    console.log('Download:', shaObj.getHash('HEX'))
+                    // controller.error(new Error('what?'))
+                  },
+                })
+
+                // stream to tmp
+                const rs_tmp = rs_src.then((s: any) => s.pipeThrough(ts_dec))
+                // stream to file
+                return (await rs_tmp).pipeTo(await ws_dest).catch((err: any) => console.log(err))
               }
 
               return downloadUrl.length > 0 ? (
@@ -310,7 +331,7 @@ export default function AttachmentComponent({
                 <a
                   href="#"
                   onClick={() => {
-                    streamToDisk(downloadUrl)
+                    streamToFile(downloadUrl)
                   }}>
                   Download
                 </a>
