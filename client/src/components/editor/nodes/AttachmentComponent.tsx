@@ -304,7 +304,12 @@ export default function AttachmentComponent({
     // stream to tmp
     const rs_tmp = rs_src.then((s: any) => s.pipeThrough(ts_dec))
     // stream to file
-    return (await rs_tmp).pipeTo(await ws_dest).catch((err: any) => console.log(err))
+    return (await rs_tmp).pipeTo(await ws_dest).catch((err: any) => {
+      console.error(err)
+      setTimeout(() => {
+        alert(err)
+      }, 200)
+    })
   }
 
   const draggable = isSelected && $isNodeSelection(selection)
