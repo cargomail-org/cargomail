@@ -274,6 +274,39 @@ export default function AttachmentComponent({
     settings: { showNestedEditorTreeView },
   } = useSettings()
 
+  const streamToFile = async (url: any) => {
+    let shaObj: any
+
+    // readable stream
+    const rs_src = fetch(url).then((response) => response.body)
+
+    // writable stream
+    // @ts-ignore
+    const ws_dest = window.showSaveFilePicker().then((handle: any) => handle.createWritable())
+
+    // dummy transform stream to compute checksum
+    const ts_dec = new TransformStream({
+      start() {
+        shaObj = new jsSHA('SHA-256', 'ARRAYBUFFER')
+      },
+      async transform(chunk, controller) {
+        shaObj.update(chunk)
+        controller.enqueue(await chunk)
+      },
+      flush(controller) {
+        console.log('Download:', shaObj.getHash('HEX'))
+        if (transientUri.length > 0 && shaObj.getHash('HEX') !== sha256sum) {
+          controller.error(new Error('checksum mismatch'))
+        }
+      },
+    })
+
+    // stream to tmp
+    const rs_tmp = rs_src.then((s: any) => s.pipeThrough(ts_dec))
+    // stream to file
+    return (await rs_tmp).pipeTo(await ws_dest).catch((err: any) => console.log(err))
+  }
+
   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected || isResizing
 
@@ -292,39 +325,8 @@ export default function AttachmentComponent({
           />
           <div className="attachment-progress-container">
             {(() => {
-              const attachment = attachments.find((a) => a.id === id)
-              const downloadUrl = attachment?.downloadUrl || ''
-
-              const streamToFile = async (url: any) => {
-                let shaObj: any
-
-                // readable stream
-                const rs_src = fetch(url).then((response) => response.body)
-
-                // writable stream
-                // @ts-ignore
-                const ws_dest = window.showSaveFilePicker().then((handle: any) => handle.createWritable())
-
-                // dummy transform stream to compute checksum
-                const ts_dec = new TransformStream({
-                  start() {
-                    shaObj = new jsSHA('SHA-256', 'ARRAYBUFFER')
-                  },
-                  async transform(chunk, controller) {
-                    shaObj.update(chunk)
-                    controller.enqueue(await chunk)
-                  },
-                  flush(controller) {
-                    console.log('Download:', shaObj.getHash('HEX'))
-                    // controller.error(new Error('what?'))
-                  },
-                })
-
-                // stream to tmp
-                const rs_tmp = rs_src.then((s: any) => s.pipeThrough(ts_dec))
-                // stream to file
-                return (await rs_tmp).pipeTo(await ws_dest).catch((err: any) => console.log(err))
-              }
+              const attachment = transientUri.length > 0 ? null : attachments.find((a) => a.id === id)
+              const downloadUrl = attachment?.downloadUrl || transientUri
 
               return downloadUrl.length > 0 ? (
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
