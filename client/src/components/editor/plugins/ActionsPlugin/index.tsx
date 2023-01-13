@@ -64,9 +64,10 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
           <Button
             onClick={() => {
               validFiles.map((file: any) => {
-                const upload = createTusUploadInstance(file)
-
                 const uploadId = uuidv4()
+
+                const upload = createTusUploadInstance(file, uploadId)
+
                 const attachment: IAttachment = { uploadId, upload, progress: 0, downloadUrl: null, sha256sum: null }
 
                 attachment.upload.options.onProgress = (bytesUploaded: any, bytesTotal: any) => {

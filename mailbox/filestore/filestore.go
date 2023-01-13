@@ -39,18 +39,20 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 
 	go func() {
 		for {
+			// TODO return errors to the client 
 			event := <-handler.CompleteUploads
 			username := event.HTTPRequest.Header.Get("Username")
 			id := event.Upload.ID
 			uri := config.Mailbox.Uri + config.Filestore.BasePath + id
 			filename := event.Upload.MetaData["filename"]
 			filetype := event.Upload.MetaData["filetype"]
+			uploadId := event.Upload.MetaData["uploadId"]
 			size := event.Upload.Size
 			path := event.Upload.Storage["Path"]
 
 			file := emailv1.File{TransientUri: uri, Filename: filename, Filetype: filetype, Size: size}
 
-			logrus.Printf("User %s uploaded %s file", username, id)
+			logrus.Printf("User %s uploaded %s file using uploadId: %s", username, id, uploadId)
 
 			dbFile, err := emailRepository.Repo.FilesCreate(repo, username, &file)
 			if err != nil {
@@ -71,7 +73,7 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 				logrus.Errorf("Files database id error %s", err.Error())
 			}
 
-			_, err = emailRepository.Repo.FilesUpdate(repo, username, dbId, dbFile)
+			_, err = emailRepository.Repo.FilesUpdate(repo, username, dbId, uploadId, dbFile)
 			if err != nil {
 				logrus.Errorf("Files database update error %s", err.Error())
 			}

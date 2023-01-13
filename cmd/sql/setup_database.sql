@@ -153,7 +153,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         RETURN QUERY
@@ -173,7 +173,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         RETURN QUERY
@@ -199,7 +199,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         RETURN QUERY
@@ -222,7 +222,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         RETURN QUERY
@@ -245,7 +245,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         SELECT jsonb_build_object('id', draft_id::varchar(255),
@@ -274,7 +274,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         _labels = to_jsonb('["DRAFT"]'::json);
@@ -303,7 +303,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         UPDATE email.message
@@ -335,7 +335,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         WITH affected_rows AS (
@@ -358,7 +358,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         INSERT INTO email.file(owner, transient_uri, sha256sum, filename, filetype, size)
@@ -376,7 +376,7 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    CREATE OR REPLACE FUNCTION email.files_update_v1(IN _owner character varying, IN _id bigint, IN _file jsonb)
+    CREATE OR REPLACE FUNCTION email.files_update_v1(IN _owner character varying, IN _id bigint, IN _uploadId character varying, IN _file jsonb)
     RETURNS jsonb AS
     $BODY$
     DECLARE
@@ -384,8 +384,10 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
+
+        RAISE INFO 'uploadId: %', _uploadId;
 
         UPDATE email.file
             SET sha256sum = _file->>'sha256sum'
@@ -461,7 +463,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         RETURN QUERY
@@ -485,7 +487,7 @@ BEGIN
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required.';
+            RAISE EXCEPTION '_owner is required';
         END IF;
 
         INSERT INTO people.connection(owner, name, email_addresses)

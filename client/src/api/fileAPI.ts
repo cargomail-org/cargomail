@@ -9,7 +9,7 @@ export const startOrResumeUpload = (upload: any) => {
   })
 }
 
-export const createTusUploadInstance = (file: File) => {
+export const createTusUploadInstance = (file: File, uploadId: string) => {
   const upload: any = new tus.Upload(file, {
     endpoint: process.env.REACT_APP_TUS_ENDPOINT,
     retryDelays: [0, 3000, 5000],
@@ -18,6 +18,7 @@ export const createTusUploadInstance = (file: File) => {
     metadata: {
       filename: file.name,
       filetype: file.type,
+      uploadId: uploadId,
     },
     onError: (error: any) => console.log('Failed because: ' + error),
   })
