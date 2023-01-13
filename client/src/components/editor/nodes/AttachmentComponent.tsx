@@ -93,7 +93,7 @@ function LazyAttachment({
 
 export default function AttachmentComponent({
   src,
-  id,
+  uploadId,
   transientUri,
   sha256sum,
   altText,
@@ -114,7 +114,7 @@ export default function AttachmentComponent({
   resizable: boolean
   showCaption: boolean
   src: string
-  id: string
+  uploadId: string
   transientUri: string
   sha256sum: string
   width: 'inherit' | number
@@ -330,7 +330,7 @@ export default function AttachmentComponent({
           />
           <div className="attachment-progress-container">
             {(() => {
-              const attachment = transientUri.length > 0 ? null : attachments.find((a) => a.id === id)
+              const attachment = transientUri.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
               const downloadUrl = attachment?.downloadUrl || transientUri
 
               return downloadUrl.length > 0 ? (
@@ -388,7 +388,7 @@ export default function AttachmentComponent({
             captionsEnabled={captionsEnabled}
           />
         )}
-        {/* <div>{id}</div> */}
+        {/* <div>{uploadId}</div> */}
       </>
     </Suspense>
   )

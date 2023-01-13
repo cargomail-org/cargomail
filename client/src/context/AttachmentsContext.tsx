@@ -11,11 +11,11 @@ const reducer = (state: IAttachment[], action: any) => {
   const { payload } = action
   switch (action.type) {
     case actions.updateAttachment: {
-      const index = state.findIndex((attachment: IAttachment) => attachment.id === payload.id)
+      const index = state.findIndex((attachment: IAttachment) => attachment.uploadId === payload.uploadId)
       return [...state.slice(0, index), payload, ...state.slice(index + 1)]
     }
     case actions.updateProgress: {
-      const index = state.findIndex((attachment: IAttachment) => attachment.id === payload.id)
+      const index = state.findIndex((attachment: IAttachment) => attachment.uploadId === payload.uploadId)
       return [...state.slice(0, index), payload, ...state.slice(index + 1)]
     }
     case actions.addAttachment:
@@ -30,7 +30,7 @@ export interface IAttachmentProvider {
 }
 
 export interface IAttachment {
-  id: string
+  uploadId: string
   upload: any
   progress: number
   downloadUrl: string | null

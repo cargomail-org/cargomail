@@ -66,8 +66,8 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
               validFiles.map((file: any) => {
                 const upload = createTusUploadInstance(file)
 
-                const id = uuidv4()
-                const attachment: IAttachment = { id, upload, progress: 0, downloadUrl: null, sha256sum: null }
+                const uploadId = uuidv4()
+                const attachment: IAttachment = { uploadId, upload, progress: 0, downloadUrl: null, sha256sum: null }
 
                 attachment.upload.options.onProgress = (bytesUploaded: any, bytesTotal: any) => {
                   const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
@@ -79,6 +79,7 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                   attachment.downloadUrl = attachment.upload.url
                   attachment.sha256sum = attachment.upload.sha256sum
                   updateAttachment(attachment)
+                  // TODO update via API
                 }
 
                 addAttachment(attachment)
@@ -96,7 +97,7 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                   src: '/images/cargo-container-blue.png',
                   width: 180,
                   height: 150,
-                  id: id,
+                  uploadId: uploadId,
                   transientUri: '',
                   sha256sum: '',
                   altText: 'attachment',

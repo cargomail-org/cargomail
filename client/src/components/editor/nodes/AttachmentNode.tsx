@@ -28,7 +28,7 @@ export interface AttachmentPayload {
   maxWidth?: number
   showCaption?: boolean
   src: string
-  id?: string
+  uploadId?: string
   transientUri?: string
   sha256sum?: string
   width?: number
@@ -37,8 +37,8 @@ export interface AttachmentPayload {
 
 // function convertAttachmentElement(domNode: Node): null | DOMConversionOutput {
 //   if (domNode instanceof HTMLAttachmentElement) {
-//     const { alt: altText, src, id, transientUri, sha256sum } = domNode
-//     const node = $createAttachmentNode({ altText, src, id, transientUri, sha256sum })
+//     const { alt: altText, src, uploadId, transientUri, sha256sum } = domNode
+//     const node = $createAttachmentNode({ altText, src, uploadId, transientUri, sha256sum })
 //     return { node }
 //   }
 //   return null
@@ -52,7 +52,7 @@ export type SerializedAttachmentNode = Spread<
     maxWidth: number
     showCaption: boolean
     src: string
-    id: string
+    uploadId: string
     transientUri: string
     sha256sum: string
     width: number
@@ -68,7 +68,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   __width: 'inherit' | number
   __height: 'inherit' | number
   __maxWidth: number
-  __id: string
+  __uploadId: string
   __transientUri: string
   __sha256sum: string
   __showCaption: boolean
@@ -85,7 +85,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       node.__src,
       node.__altText,
       node.__maxWidth,
-      node.__id,
+      node.__uploadId,
       node.__transientUri,
       node.__sha256sum,
       node.__width,
@@ -98,14 +98,15 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   }
 
   static importJSON(serializedNode: SerializedAttachmentNode): AttachmentNode {
-    const { altText, height, width, maxWidth, caption, src, id, transientUri, sha256sum, showCaption } = serializedNode
+    const { altText, height, width, maxWidth, caption, src, uploadId, transientUri, sha256sum, showCaption } =
+      serializedNode
     const node = $createAttachmentNode({
       altText,
       height,
       maxWidth,
       showCaption,
       src,
-      id,
+      uploadId,
       transientUri,
       sha256sum,
       width,
@@ -138,7 +139,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     src: string,
     altText: string,
     maxWidth: number,
-    id?: string,
+    uploadId?: string,
     transientUri?: string,
     sha256sum?: string,
     width?: 'inherit' | number,
@@ -152,7 +153,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     this.__src = src
     this.__altText = altText
     this.__maxWidth = maxWidth
-    this.__id = id || ''
+    this.__uploadId = uploadId || ''
     this.__transientUri = transientUri || ''
     this.__sha256sum = sha256sum || ''
     this.__width = width || 'inherit'
@@ -170,7 +171,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       maxWidth: this.__maxWidth,
       showCaption: this.__showCaption,
       src: this.getSrc(),
-      id: this.getId(),
+      uploadId: this.getUploadId(),
       transientUri: this.getTransientUri(),
       sha256sum: this.getSha256sum(),
       type: 'attachment',
@@ -210,8 +211,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     return this.__src
   }
 
-  getId(): string {
-    return this.__id
+  getUploadId(): string {
+    return this.__uploadId
   }
 
   getTransientUri(): string {
@@ -235,7 +236,7 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
           width={this.__width}
           height={this.__height}
           maxWidth={this.__maxWidth}
-          id={this.__id}
+          uploadId={this.__uploadId}
           transientUri={this.__transientUri}
           sha256sum={this.__sha256sum}
           nodeKey={this.getKey()}
@@ -255,7 +256,7 @@ export function $createAttachmentNode({
   maxWidth = 444,
   captionsEnabled,
   src,
-  id,
+  uploadId,
   transientUri,
   sha256sum,
   width,
@@ -268,7 +269,7 @@ export function $createAttachmentNode({
       src,
       altText,
       maxWidth,
-      id,
+      uploadId,
       transientUri,
       sha256sum,
       width,
