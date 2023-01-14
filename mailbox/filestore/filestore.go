@@ -39,7 +39,7 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 
 	go func() {
 		for {
-			// TODO return errors to the client 
+			// TODO send errors to the client
 			event := <-handler.CompleteUploads
 			username := event.HTTPRequest.Header.Get("Username")
 			id := event.Upload.ID
@@ -64,18 +64,24 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 				logrus.Errorf("Checksum error %s", err.Error())
 			}
 
-			logrus.Printf("Checksum: %s", sha256sum)
-
-			dbFile.Sha256Sum = sha256sum
-
-			dbId, err := strconv.ParseInt(dbFile.Id, 10, 64)
-			if err != nil {
-				logrus.Errorf("Files database id error %s", err.Error())
+			if sha256sum != event.Upload.MetaData["sha256sum"] {
+				logrus.Errorf("Checksum mismatch on filename %s", filename)
 			}
 
-			_, err = emailRepository.Repo.FilesUpdate(repo, username, dbId, uploadId, dbFile)
-			if err != nil {
-				logrus.Errorf("Files database update error %s", err.Error())
+			logrus.Printf("Checksum: %s", sha256sum)
+
+			if dbFile != nil {
+				dbFile.Sha256Sum = sha256sum
+
+				dbId, err := strconv.ParseInt(dbFile.Id, 10, 64)
+				if err != nil {
+					logrus.Errorf("Files database id error %s", err.Error())
+				}
+
+				_, err = emailRepository.Repo.FilesUpdate(repo, username, dbId, uploadId, dbFile)
+				if err != nil {
+					logrus.Errorf("Files database update error %s", err.Error())
+				}
 			}
 		}
 	}()

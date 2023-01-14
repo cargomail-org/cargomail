@@ -368,7 +368,7 @@ BEGIN
                                          'sha256sum', sha256sum::varchar(255),
                                          'filename', filename::varchar(255),
                                          'filetype', filetype::varchar(255),
-                                         'size', size
+                                         'size', COALESCE(size, 0)
                                         )
             INTO _new_file;
         RETURN _new_file;
@@ -397,7 +397,7 @@ BEGIN
                                          'sha256sum', sha256sum::varchar(255),
                                          'filename', filename::varchar(255),
                                          'filetype', filetype::varchar(255),
-                                         'size', size
+                                         'size', COALESCE(size, 0)
                                         )
             INTO _updated_file;
         RETURN _updated_file;

@@ -34,6 +34,7 @@ mailbox:
         "content-type",
         "upload-length",
         "upload-offset",
+        "sha256sum",
         "tus-resumable",
         "upload-metadata",
         "upload-defer-length",

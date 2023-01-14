@@ -33,7 +33,8 @@ mailbox:
         "x-http-method-override",
         "content-type",
         "upload-length",
-        "upload-offset",
+        "upload-offset"
+        "sha256sum",
         "tus-resumable",
         "upload-metadata",
         "upload-defer-length",
