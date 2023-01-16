@@ -401,15 +401,40 @@ BEGIN
                                         )
             INTO _updated_file;
 
-            -- UPDATE email.message
-            -- SET transient_uri = _updated_file.transient_uri,
-            --     sha256sum = _updated_file.sha256sum
-            -- WHERE owner = _owner AND uploadId = _uploadId
+            UPDATE email.MESSAGE
+			SET payload = email.jsonb_deep_set(email.jsonb_deep_set(
+				    payload,
+				    (SELECT * FROM email.jsonb_paths(payload, '{}') path WHERE path @> '{"sha256sum"}'),
+				    _file->'sha256sum'),
+				(SELECT * FROM email.jsonb_paths(payload, '{}') path WHERE path @> '{"transient_uri"}'),
+				    _file->'transient_uri')    
+			WHERE owner = _owner AND
+			payload @@ '$.**.type == "attachment"' AND
+			payload @@ format('$.**.uploadId == "%s"', _uploadId)::jsonpath;
 
         RETURN _updated_file;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
+
+    --https://stackoverflow.com/questions/46797443/how-to-use-postgresql-jsonb-set-to-create-new-deep-object-element
+    CREATE OR REPLACE FUNCTION email.jsonb_deep_set(curjson jsonb, globalpath text[], newval jsonb)
+    RETURNS jsonb AS
+    $BODY$
+    BEGIN
+        IF curjson is null THEN
+        curjson := '{}'::jsonb;
+        END IF;
+        FOR index IN 1..ARRAY_LENGTH(globalpath, 1) LOOP
+        IF curjson #> globalpath[1:index] is null THEN
+            curjson := jsonb_set(curjson, globalpath[1:index], '{}');
+        END IF;
+        END LOOP;
+        curjson := jsonb_set(curjson, globalpath, newval);
+        RETURN curjson;
+    END;
+    $BODY$
+    LANGUAGE 'plpgsql';
 
     --https://dba.stackexchange.com/questions/303985/how-to-obtain-the-path-to-the-match-of-a-jsonpath-query-in-postgresql-14
     CREATE OR REPLACE FUNCTION email.jsonb_paths(data jsonb, prefix text[])
