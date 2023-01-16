@@ -354,7 +354,7 @@ BEGIN
     RETURNS jsonb AS
     $BODY$
     DECLARE
-     _new_file jsonb;
+        _new_file jsonb;
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
@@ -380,7 +380,7 @@ BEGIN
     RETURNS jsonb AS
     $BODY$
     DECLARE
-     _updated_file jsonb;
+        _updated_file jsonb;
     BEGIN
         -- _owner is required
         IF coalesce(TRIM(_owner), '') = '' THEN
@@ -400,10 +400,51 @@ BEGIN
                                          'size', COALESCE(size, 0)
                                         )
             INTO _updated_file;
+
+            -- UPDATE email.message
+            -- SET transient_uri = _updated_file.transient_uri,
+            --     sha256sum = _updated_file.sha256sum
+            -- WHERE owner = _owner AND uploadId = _uploadId
+
         RETURN _updated_file;
     END;			
     $BODY$
     LANGUAGE plpgsql VOLATILE;
+
+    --https://dba.stackexchange.com/questions/303985/how-to-obtain-the-path-to-the-match-of-a-jsonpath-query-in-postgresql-14
+    CREATE OR REPLACE FUNCTION email.jsonb_paths(data jsonb, prefix text[])
+    RETURNS SETOF text[] LANGUAGE plpgsql AS
+    $BODY$
+    DECLARE
+        key text;
+        value jsonb;
+        path text[];
+        counter integer := 0;
+    BEGIN
+        IF jsonb_typeof(data) = 'object' THEN
+            FOR key, value IN
+                SELECT * FROM jsonb_each(data)
+            LOOP
+                IF jsonb_typeof(value) IN ('array', 'object') THEN
+                    RETURN QUERY SELECT * FROM email.jsonb_paths(value, array_append(prefix, key));
+                ELSE
+                    RETURN NEXT array_append(prefix, key);
+                END IF;
+            END LOOP;
+        ELSIF jsonb_typeof(data) = 'array' THEN
+            FOR value IN
+                SELECT * FROM jsonb_array_elements(data)
+            LOOP
+                IF jsonb_typeof(value) IN ('array', 'object') THEN
+                    RETURN QUERY SELECT * FROM email.jsonb_paths(value, array_append(prefix, counter::text));
+                ELSE
+                    RETURN NEXT array_append(prefix, counter::text);
+                END IF;
+                counter := counter + 1;
+            END LOOP;
+        END IF;
+    END
+    $BODY$
 
 ----------------------------------------------------------------------------------------------------------------------
 
