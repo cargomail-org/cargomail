@@ -387,6 +387,11 @@ BEGIN
             RAISE EXCEPTION '_owner is required';
         END IF;
 
+        -- _uploadId is required
+        IF coalesce(TRIM(_uploadId), '') = '' THEN
+            RAISE EXCEPTION '_uploadId is required';
+        END IF;
+
         RAISE INFO 'uploadId: %', _uploadId;
 
         UPDATE email.file
@@ -402,12 +407,7 @@ BEGIN
             INTO _updated_file;
 
             UPDATE email.MESSAGE
-			SET payload = email.jsonb_deep_set(email.jsonb_deep_set(
-				    payload,
-				    (SELECT * FROM email.jsonb_paths(payload, '{}') path WHERE path @> '{"sha256sum"}'),
-				    _file->'sha256sum'),
-				(SELECT * FROM email.jsonb_paths(payload, '{}') path WHERE path @> '{"transient_uri"}'),
-				    _file->'transient_uri')    
+			SET payload = email.attachments_set(payload, _uploadId, _file)   
 			WHERE owner = _owner AND
 			payload @@ '$.**.type == "attachment"' AND
 			payload @@ format('$.**.uploadId == "%s"', _uploadId)::jsonpath;
@@ -417,7 +417,43 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-    --https://stackoverflow.com/questions/46797443/how-to-use-postgresql-jsonb-set-to-create-new-deep-object-element
+    CREATE OR REPLACE FUNCTION email.attachments_set(_payload jsonb, IN _uploadId character varying, IN _file jsonb)
+    RETURNS jsonb AS
+    $BODY$
+    DECLARE
+	    _rec RECORD;
+	    _sha256sum_path TEXT[];
+	    _transient_uri_path TEXT[];
+    BEGIN
+        FOR _rec IN SELECT * FROM email.jsonb_paths(_payload, '{}') path WHERE path @> '{"uploadId"}'
+        LOOP
+            IF ((_payload #>> _rec.path)::text = _uploadId) THEN
+                _sha256sum_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'sha256sum');
+                _transient_uri_path = email.array_set(_rec.path, array_length(_rec.path, 1), '_transient_uri_path');
+                _payload := jsonb_set(_payload, _sha256sum_path, _file->'sha256sum');
+                _payload := jsonb_set(_payload, _transient_uri_path, _file->'transient_uri');
+            END IF;
+        END LOOP;
+
+        RETURN _payload;
+    END;
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
+    -- https://dba.stackexchange.com/questions/268102/postgres-update-a-value-in-a-array-on-particular-index
+    CREATE OR REPLACE FUNCTION email.array_set(_input ANYARRAY, _index INT, _new_value ANYELEMENT)
+    RETURNS anyarray AS
+    $BODY$
+    BEGIN
+        IF _input IS NOT NULL THEN
+            _input[_index] := _new_value;
+        END IF;
+        RETURN _input;
+    END;
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
+    -- https://stackoverflow.com/questions/46797443/how-to-use-postgresql-jsonb-set-to-create-new-deep-object-element
     CREATE OR REPLACE FUNCTION email.jsonb_deep_set(curjson jsonb, globalpath text[], newval jsonb)
     RETURNS jsonb AS
     $BODY$
@@ -434,16 +470,15 @@ BEGIN
         RETURN curjson;
     END;
     $BODY$
-    LANGUAGE 'plpgsql';
+    LANGUAGE plpgsql VOLATILE;
 
-    --https://dba.stackexchange.com/questions/303985/how-to-obtain-the-path-to-the-match-of-a-jsonpath-query-in-postgresql-14
+    -- https://dba.stackexchange.com/questions/303985/how-to-obtain-the-path-to-the-match-of-a-jsonpath-query-in-postgresql-14
     CREATE OR REPLACE FUNCTION email.jsonb_paths(data jsonb, prefix text[])
-    RETURNS SETOF text[] LANGUAGE plpgsql AS
+    RETURNS SETOF text[] AS
     $BODY$
     DECLARE
         key text;
         value jsonb;
-        path text[];
         counter integer := 0;
     BEGIN
         IF jsonb_typeof(data) = 'object' THEN
@@ -470,6 +505,7 @@ BEGIN
         END IF;
     END
     $BODY$
+    LANGUAGE plpgsql VOLATILE;
 
 ----------------------------------------------------------------------------------------------------------------------
 
