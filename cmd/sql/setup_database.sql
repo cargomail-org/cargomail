@@ -430,6 +430,7 @@ BEGIN
             IF ((_payload #>> _rec.path)::text = _uploadId) THEN
                 _sha256sum_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'sha256sum');
                 _transient_uri_path = email.array_set(_rec.path, array_length(_rec.path, 1), '_transient_uri_path');
+                _payload := jsonb_set(_payload, _rec.path, '""');
                 _payload := jsonb_set(_payload, _sha256sum_path, _file->'sha256sum');
                 _payload := jsonb_set(_payload, _transient_uri_path, _file->'transient_uri');
             END IF;
