@@ -49,6 +49,7 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 			uploadId := event.Upload.MetaData["uploadId"]
 			size := event.Upload.Size
 			path := event.Upload.Storage["Path"]
+			uploadSha256sum := event.HTTPRequest.Header.Get("sha256sum")
 
 			file := emailv1.File{TransientUri: uri, Filename: filename, Filetype: filetype, Size: size}
 
@@ -64,8 +65,12 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 				logrus.Errorf("Checksum error %s", err.Error())
 			}
 
-			if sha256sum != event.Upload.MetaData["sha256sum"] {
-				logrus.Errorf("Checksum mismatch on filename %s", filename)
+			if len(uploadSha256sum) != 64 {
+				logrus.Errorf("Checksum %s is not valid on filename %s", uploadSha256sum, filename)
+			}
+
+			if sha256sum != uploadSha256sum {
+				logrus.Errorf("Checksum mismatch on filename %s: %s vs %s", filename, sha256sum, uploadSha256sum)
 			}
 
 			logrus.Printf("Checksum: %s", sha256sum)
