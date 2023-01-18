@@ -5,6 +5,7 @@ import {
   COMMAND_PRIORITY_LOW,
   createEditor,
   LexicalEditor,
+  LexicalNode,
 } from 'lexical'
 
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
@@ -18,6 +19,7 @@ import Dropzone from './Dropzone'
 import { createTusUploadInstance } from '../../../../api/fileAPI'
 import { AttachmentsContext } from '../../../../context'
 import { IAttachment } from '../../../../context/AttachmentsContext'
+import { $isAttachmentNode, AttachmentNode } from '../../nodes/AttachmentNode'
 
 export default function ActionsPlugin({ isRichText }: { isRichText: boolean }): JSX.Element {
   const [editor] = useLexicalComposerContext()
@@ -52,6 +54,24 @@ function uuidv4() {
   )
 }
 
+function getAllAttachmentNodes(node: LexicalNode): Array<AttachmentNode> {
+  let attachmentNodes: Array<AttachmentNode> = []
+  let children: Array<LexicalNode> = []
+
+  if ($isAttachmentNode(node)) {
+    attachmentNodes.push(node)
+  }
+
+  if (node.getChildren) {
+    children = node.getChildren()
+    for (const child of children) {
+      attachmentNodes = attachmentNodes.concat(getAllAttachmentNodes(child))
+    }
+  }
+
+  return attachmentNodes
+}
+
 function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose: () => void }): JSX.Element {
   const [validFiles, setValidFiles] = useState<any>([])
   const { addAttachment, updateAttachment, updateProgress } = useContext(AttachmentsContext)
@@ -79,8 +99,24 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                 attachment.upload.options.onSuccess = () => {
                   attachment.downloadUrl = attachment.upload.url
                   attachment.sha256sum = attachment.upload.sha256sum
+
+                  // TODO Do not update via API, tus do
+
+                  // editor.getEditorState().read(() => {
+                  editor.update(() => {
+                    // https://github.com/facebook/lexical/issues/3419
+                    const attachmentChildren: Array<AttachmentNode> = getAllAttachmentNodes($getRoot())
+
+                    for (const attachmentChild of attachmentChildren) {
+                      if (attachmentChild.getUploadId() === uploadId) {
+                        attachmentChild.setUploadId('')
+                        attachmentChild.setSha256sum(attachment.sha256sum || '')
+                        attachmentChild.setTransientUri(attachment.downloadUrl || '')
+                      }
+                    }
+                  })
+
                   updateAttachment(attachment)
-                  // TODO update via API
                 }
 
                 addAttachment(attachment)
@@ -94,6 +130,7 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                   paragraph.append($createTextNode(file.name))
                   root.append(paragraph)
                 })
+
                 const attachmentPayload: InsertAttachmentPayload = {
                   src: '/images/cargo-container-blue.png',
                   width: 180,
@@ -106,6 +143,7 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                   showCaption: true,
                   caption: captionEditor,
                 }
+
                 return editor.dispatchCommand(INSERT_ATTACHMENT_COMMAND, attachmentPayload)
               })
               editor.focus()
