@@ -191,21 +191,6 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     writable.__showCaption = showCaption
   }
 
-  setUploadId(uploadId: string): void {
-    const writable = this.getWritable()
-    writable.__uploadId = uploadId
-  }
-
-  setTransientUri(transientUri: string): void {
-    const writable = this.getWritable()
-    writable.__transientUri = transientUri
-  }
-
-  setSha256sum(sha256sum: string): void {
-    const writable = this.getWritable()
-    writable.__sha256sum = sha256sum
-  }
-
   // View
 
   createDOM(config: EditorConfig): HTMLElement {
