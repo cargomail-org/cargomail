@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useReducer } from 'react'
+import { AttachmentNode } from '../components/editor/nodes/AttachmentNode'
 import useActionCreator from '../utils/hooks/actionCreator'
 
 const actions = {
@@ -12,7 +13,10 @@ const reducer = (state: IAttachment[], action: any) => {
   switch (action.type) {
     case actions.updateAttachment: {
       const index = state.findIndex((attachment: IAttachment) => attachment.uploadId === payload.uploadId)
-      return [...state.slice(0, index), payload, ...state.slice(index + 1)]
+      const result = [...state.slice(0, index), payload, ...state.slice(index + 1)]
+      // a hackish way to enable access to the state in the AttachmentNode class
+      AttachmentNode.setAttachments(result)
+      return result
     }
     case actions.updateProgress: {
       const index = state.findIndex((attachment: IAttachment) => attachment.uploadId === payload.uploadId)

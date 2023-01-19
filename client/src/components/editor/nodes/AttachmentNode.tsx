@@ -76,6 +76,13 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   // Captions cannot yet be used within editor cells
   __captionsEnabled: boolean
 
+  // attachments state from the AttachmentContext provider
+  static attachments: any
+
+  static setAttachments(attachments: any) {
+    this.attachments = attachments
+  }
+
   static getType(): string {
     return 'attachment'
   }
@@ -212,15 +219,33 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   }
 
   getUploadId(): string {
-    return this.__uploadId
+    if (this.getTransientUri().length > 0) {
+      return ''
+    } else {
+      const attachment =
+        this.__uploadId.length > 0 ? AttachmentNode.attachments?.find((a: any) => a.uploadId === this.__uploadId) : null
+      return attachment?.uploadId || this.__uploadId
+    }
   }
 
   getTransientUri(): string {
-    return this.__transientUri
+    if (this.__transientUri.length > 0) {
+      return this.__transientUri
+    } else {
+      const attachment =
+        this.__uploadId.length > 0 ? AttachmentNode.attachments?.find((a: any) => a.uploadId === this.__uploadId) : null
+      return attachment?.downloadUrl || this.__transientUri
+    }
   }
 
   getSha256sum(): string {
-    return this.__sha256sum
+    if (this.__sha256sum.length > 0) {
+      return this.__sha256sum
+    } else {
+      const attachment =
+        this.__uploadId.length > 0 ? AttachmentNode.attachments?.find((a: any) => a.uploadId === this.__uploadId) : null
+      return attachment?.sha256sum || this.__sha256sum
+    }
   }
 
   getAltText(): string {
