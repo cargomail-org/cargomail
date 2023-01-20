@@ -15,22 +15,25 @@ export default function EditorSetValue({ value, mimeType }: { value: string; mim
   }, [])
 
   const setEditorState = (editor: LexicalEditor) => {
-    editor.update(() => {
-      switch (mimeType) {
-        case 'application/json': {
-          const editorState = editor.parseEditorState(value)
-          editor.setEditorState(editorState)
-          break
-        }
-        default: {
-          const parser = new DOMParser()
-          const dom = parser.parseFromString(value, 'text/html')
-          const nodes = $generateNodesFromDOM(editor, dom)
+    editor.update(
+      () => {
+        switch (mimeType) {
+          case 'application/json': {
+            const editorState = editor.parseEditorState(value)
+            editor.setEditorState(editorState, { tag: 'history-merge' })
+            break
+          }
+          default: {
+            const parser = new DOMParser()
+            const dom = parser.parseFromString(value, 'text/html')
+            const nodes = $generateNodesFromDOM(editor, dom)
 
-          $insertNodes(nodes)
+            $insertNodes(nodes)
+          }
         }
-      }
-    })
+      },
+      { tag: 'history-merge' }
+    )
   }
 
   return null
