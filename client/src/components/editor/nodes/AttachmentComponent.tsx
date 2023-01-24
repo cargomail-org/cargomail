@@ -40,6 +40,8 @@ import Placeholder from '../ui/Placeholder'
 import { $isAttachmentNode } from './AttachmentNode'
 import { AttachmentsContext } from '../../../context/AttachmentsContext'
 
+import { mimeTypes } from 'mime-wrapper'
+
 import jsSHA from 'jssha'
 
 const imageCache = new Set()
@@ -278,23 +280,28 @@ export default function AttachmentComponent({
     settings: { showNestedEditorTreeView },
   } = useSettings()
 
-  const streamToFile = async (url: any) => {
+  const streamToFile = async (url: string, fname: string, mtype: string) => {
     let shaObj: any
 
     // readable stream
     const rs_src = fetch(url).then((response) => response.body)
 
+    const extension = mimeTypes.getExtension(mtype)
+    const acceptExtensions = [extension.length > 0 ? `.${extension}` : '']
+
     const opts = {
-      suggestedName: 'Test-01.mp4',
+      suggestedName: fname,
       types: [
         {
-          description: 'Video file',
+          description: `${extension} files`,
           accept: {
-            'video/mp4': [],
+            [mtype]: acceptExtensions,
           },
         },
       ],
     }
+
+    console.log(opts)
 
     // writable stream
     // @ts-ignore
@@ -348,13 +355,15 @@ export default function AttachmentComponent({
             {(() => {
               const attachment = transientUri.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
               const downloadUrl = attachment?.downloadUrl || transientUri
+              const downloadFilename = attachment?.filename || filename
+              const downloadMimetype = attachment?.mimetype || mimetype
 
               return downloadUrl.length > 0 ? (
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
                 <a
                   href="#"
                   onClick={() => {
-                    streamToFile(downloadUrl)
+                    streamToFile(downloadUrl, downloadFilename, downloadMimetype)
                   }}>
                   Download
                 </a>
