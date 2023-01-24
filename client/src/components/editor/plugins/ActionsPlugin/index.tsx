@@ -122,8 +122,8 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                           attachmentChild.setUploadId('')
                           attachmentChild.setFilename(attachment.filename || '')
                           attachmentChild.setMimetype(attachment.mimetype || '')
-                          attachmentChild.setSha256sum(attachment.downloadUrl || '')
-                          attachmentChild.setTransientUri(attachment.sha256sum || '')
+                          attachmentChild.setTransientUri(attachment.downloadUrl || '')
+                          attachmentChild.setSha256sum(attachment.sha256sum || '')
                         }
                       }
                     },

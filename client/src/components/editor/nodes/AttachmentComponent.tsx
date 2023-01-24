@@ -317,7 +317,6 @@ export default function AttachmentComponent({
         controller.enqueue(await chunk)
       },
       flush(controller) {
-        console.log('Download:', shaObj.getHash('HEX'))
         if (transientUri.length > 0 && shaObj.getHash('HEX') !== sha256sum) {
           controller.error(new Error('checksum mismatch'))
         }

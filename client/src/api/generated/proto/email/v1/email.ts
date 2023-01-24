@@ -91,21 +91,21 @@ export interface File {
      */
     id: string;
     /**
-     * @generated from protobuf field: string transient_uri = 2;
-     */
-    transientUri: string;
-    /**
-     * @generated from protobuf field: string sha256sum = 3 [json_name = "sha256sum"];
-     */
-    sha256Sum: string;
-    /**
-     * @generated from protobuf field: string filename = 4;
+     * @generated from protobuf field: string filename = 2;
      */
     filename: string;
     /**
-     * @generated from protobuf field: string mimetype = 5;
+     * @generated from protobuf field: string mimetype = 3;
      */
     mimetype: string;
+    /**
+     * @generated from protobuf field: string transient_uri = 4;
+     */
+    transientUri: string;
+    /**
+     * @generated from protobuf field: string sha256sum = 5 [json_name = "sha256sum"];
+     */
+    sha256Sum: string;
     /**
      * @generated from protobuf field: int64 size = 6;
      */
@@ -793,15 +793,15 @@ class File$Type extends MessageType<File> {
     constructor() {
         super("email.v1.File", [
             { no: 1, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "transient_uri", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "sha256sum", kind: "scalar", jsonName: "sha256sum", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "filename", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 5, name: "mimetype", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "filename", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "mimetype", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "transient_uri", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "sha256sum", kind: "scalar", jsonName: "sha256sum", T: 9 /*ScalarType.STRING*/ },
             { no: 6, name: "size", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
         ]);
     }
     create(value?: PartialMessage<File>): File {
-        const message = { id: "", transientUri: "", sha256Sum: "", filename: "", mimetype: "", size: 0n };
+        const message = { id: "", filename: "", mimetype: "", transientUri: "", sha256Sum: "", size: 0n };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<File>(this, message, value);
@@ -815,17 +815,17 @@ class File$Type extends MessageType<File> {
                 case /* string id */ 1:
                     message.id = reader.string();
                     break;
-                case /* string transient_uri */ 2:
-                    message.transientUri = reader.string();
-                    break;
-                case /* string sha256sum = 3 [json_name = "sha256sum"];*/ 3:
-                    message.sha256Sum = reader.string();
-                    break;
-                case /* string filename */ 4:
+                case /* string filename */ 2:
                     message.filename = reader.string();
                     break;
-                case /* string mimetype */ 5:
+                case /* string mimetype */ 3:
                     message.mimetype = reader.string();
+                    break;
+                case /* string transient_uri */ 4:
+                    message.transientUri = reader.string();
+                    break;
+                case /* string sha256sum = 5 [json_name = "sha256sum"];*/ 5:
+                    message.sha256Sum = reader.string();
                     break;
                 case /* int64 size */ 6:
                     message.size = reader.int64().toBigInt();
@@ -845,18 +845,18 @@ class File$Type extends MessageType<File> {
         /* string id = 1; */
         if (message.id !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.id);
-        /* string transient_uri = 2; */
-        if (message.transientUri !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.transientUri);
-        /* string sha256sum = 3 [json_name = "sha256sum"]; */
-        if (message.sha256Sum !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.sha256Sum);
-        /* string filename = 4; */
+        /* string filename = 2; */
         if (message.filename !== "")
-            writer.tag(4, WireType.LengthDelimited).string(message.filename);
-        /* string mimetype = 5; */
+            writer.tag(2, WireType.LengthDelimited).string(message.filename);
+        /* string mimetype = 3; */
         if (message.mimetype !== "")
-            writer.tag(5, WireType.LengthDelimited).string(message.mimetype);
+            writer.tag(3, WireType.LengthDelimited).string(message.mimetype);
+        /* string transient_uri = 4; */
+        if (message.transientUri !== "")
+            writer.tag(4, WireType.LengthDelimited).string(message.transientUri);
+        /* string sha256sum = 5 [json_name = "sha256sum"]; */
+        if (message.sha256Sum !== "")
+            writer.tag(5, WireType.LengthDelimited).string(message.sha256Sum);
         /* int64 size = 6; */
         if (message.size !== 0n)
             writer.tag(6, WireType.Varint).int64(message.size);
