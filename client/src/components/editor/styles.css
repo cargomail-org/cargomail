@@ -1257,9 +1257,10 @@ i.prettier-error {
 
 .editor-shell .editor-attachment .attachment-progress-container {
   position: absolute;
-  top: 15%;
+  top: 22%;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 .editor-shell .editor-attachment .attachment-caption-container .tree-view-output {
@@ -1279,7 +1280,7 @@ i.prettier-error {
 .editor-shell .editor-attachment .attachment-caption-container {
   display: block;
   position: absolute;
-  max-height: 70%;
+  max-height: 55%;
   height: auto;
   bottom: 8px;
   left: 0;

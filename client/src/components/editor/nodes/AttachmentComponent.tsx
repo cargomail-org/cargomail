@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import type { GridSelection, LexicalEditor, NodeKey, NodeSelection, RangeSelection } from 'lexical'
 
 import './AttachmentNode.css'
@@ -358,16 +359,21 @@ export default function AttachmentComponent({
               const downloadMimetype = attachment?.mimetype || mimetype
 
               return downloadUrl.length > 0 ? (
-                // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <a
-                  href="#"
-                  onClick={() => {
-                    streamToFile(downloadUrl, downloadFilename, downloadMimetype)
-                  }}>
-                  Download
-                </a>
+                <>
+                  <a
+                    href="#"
+                    onClick={() => {
+                      streamToFile(downloadUrl, downloadFilename, downloadMimetype)
+                    }}>
+                    Download
+                  </a>
+                  <div>&nbsp;</div>
+                </>
               ) : (
-                attachment?.progress.toString().concat('%')
+                <>
+                  <div>Uploading</div>
+                  <div>{attachment ? attachment?.progress.toString().concat('%') : '\u00A0'}</div>
+                </>
               )
             })()}
           </div>
