@@ -88,7 +88,15 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
 
                 const upload = createTusUploadInstance(file, uploadId)
 
-                const attachment: IAttachment = { uploadId, upload, progress: 0, downloadUrl: null, sha256sum: null }
+                const attachment: IAttachment = {
+                  uploadId,
+                  upload,
+                  progress: 0,
+                  filename: null,
+                  mimetype: null,
+                  downloadUrl: null,
+                  sha256sum: null,
+                }
 
                 attachment.upload.options.onProgress = (bytesUploaded: any, bytesTotal: any) => {
                   const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
@@ -97,6 +105,8 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                 }
 
                 attachment.upload.options.onSuccess = () => {
+                  attachment.filename = attachment.upload.file.name
+                  attachment.mimetype = attachment.upload.file.type
                   attachment.downloadUrl = attachment.upload.url
                   attachment.sha256sum = attachment.upload.sha256sum
 
@@ -110,8 +120,10 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                       for (const attachmentChild of attachmentChildren) {
                         if (attachmentChild.getUploadId() === uploadId) {
                           attachmentChild.setUploadId('')
-                          attachmentChild.setSha256sum(attachment.sha256sum || '')
-                          attachmentChild.setTransientUri(attachment.downloadUrl || '')
+                          attachmentChild.setFilename(attachment.filename || '')
+                          attachmentChild.setMimetype(attachment.mimetype || '')
+                          attachmentChild.setSha256sum(attachment.downloadUrl || '')
+                          attachmentChild.setTransientUri(attachment.sha256sum || '')
                         }
                       }
                     },

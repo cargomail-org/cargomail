@@ -29,6 +29,8 @@ export interface AttachmentPayload {
   showCaption?: boolean
   src: string
   uploadId?: string
+  filename?: string
+  mimetype?: string
   transientUri?: string
   sha256sum?: string
   width?: number
@@ -37,8 +39,8 @@ export interface AttachmentPayload {
 
 // function convertAttachmentElement(domNode: Node): null | DOMConversionOutput {
 //   if (domNode instanceof HTMLAttachmentElement) {
-//     const { alt: altText, src, uploadId, transientUri, sha256sum } = domNode
-//     const node = $createAttachmentNode({ altText, src, uploadId, transientUri, sha256sum })
+//     const { alt: altText, src, uploadId, filename, mimetype, transientUri, sha256sum } = domNode
+//     const node = $createAttachmentNode({ altText, src, uploadId, filename, mimetype, transientUri, sha256sum })
 //     return { node }
 //   }
 //   return null
@@ -53,6 +55,8 @@ export type SerializedAttachmentNode = Spread<
     showCaption: boolean
     src: string
     uploadId: string
+    filename: string
+    mimetype: string
     transientUri: string
     sha256sum: string
     width: number
@@ -69,6 +73,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   __height: 'inherit' | number
   __maxWidth: number
   __uploadId: string
+  __filename: string
+  __mimetype: string
   __transientUri: string
   __sha256sum: string
   __showCaption: boolean
@@ -93,6 +99,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       node.__altText,
       node.__maxWidth,
       node.__uploadId,
+      node.__filename,
+      node.__mimetype,
       node.__transientUri,
       node.__sha256sum,
       node.__width,
@@ -105,8 +113,20 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   }
 
   static importJSON(serializedNode: SerializedAttachmentNode): AttachmentNode {
-    const { altText, height, width, maxWidth, caption, src, uploadId, transientUri, sha256sum, showCaption } =
-      serializedNode
+    const {
+      altText,
+      height,
+      width,
+      maxWidth,
+      caption,
+      src,
+      uploadId,
+      filename,
+      mimetype,
+      transientUri,
+      sha256sum,
+      showCaption,
+    } = serializedNode
     const node = $createAttachmentNode({
       altText,
       height,
@@ -114,6 +134,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       showCaption,
       src,
       uploadId,
+      filename,
+      mimetype,
       transientUri,
       sha256sum,
       width,
@@ -147,6 +169,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     altText: string,
     maxWidth: number,
     uploadId?: string,
+    filename?: string,
+    mimetype?: string,
     transientUri?: string,
     sha256sum?: string,
     width?: 'inherit' | number,
@@ -161,6 +185,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     this.__altText = altText
     this.__maxWidth = maxWidth
     this.__uploadId = uploadId || ''
+    this.__filename = filename || ''
+    this.__mimetype = mimetype || ''
     this.__transientUri = transientUri || ''
     this.__sha256sum = sha256sum || ''
     this.__width = width || 'inherit'
@@ -179,6 +205,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
       showCaption: this.__showCaption,
       src: this.getSrc(),
       uploadId: this.getUploadId(),
+      filename: this.getFilename(),
+      mimetype: this.getMimetype(),
       transientUri: this.getTransientUri(),
       sha256sum: this.getSha256sum(),
       type: 'attachment',
@@ -201,6 +229,16 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
   setUploadId(uploadId: string): void {
     const writable = this.getWritable()
     writable.__uploadId = uploadId
+  }
+
+  setFilename(filename: string): void {
+    const writable = this.getWritable()
+    writable.__filename = filename
+  }
+
+  setMimetype(mimetype: string): void {
+    const writable = this.getWritable()
+    writable.__mimetype = mimetype
   }
 
   setTransientUri(transientUri: string): void {
@@ -243,6 +281,26 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
     }
   }
 
+  getFilename(): string {
+    if (this.__filename.length > 0) {
+      return this.__filename
+    } else {
+      const attachment =
+        this.__uploadId.length > 0 ? AttachmentNode.attachments?.find((a: any) => a.uploadId === this.__uploadId) : null
+      return attachment?.filename || this.__filename
+    }
+  }
+
+  getMimetype(): string {
+    if (this.__mimetype.length > 0) {
+      return this.__mimetype
+    } else {
+      const attachment =
+        this.__uploadId.length > 0 ? AttachmentNode.attachments?.find((a: any) => a.uploadId === this.__uploadId) : null
+      return attachment?.mimetype || this.__mimetype
+    }
+  }
+
   getTransientUri(): string {
     if (this.__transientUri.length > 0) {
       return this.__transientUri
@@ -277,6 +335,8 @@ export class AttachmentNode extends DecoratorNode<JSX.Element> {
           height={this.__height}
           maxWidth={this.__maxWidth}
           uploadId={this.__uploadId}
+          filename={this.__filename}
+          mimetype={this.__mimetype}
           transientUri={this.__transientUri}
           sha256sum={this.__sha256sum}
           nodeKey={this.getKey()}
@@ -297,6 +357,8 @@ export function $createAttachmentNode({
   captionsEnabled,
   src,
   uploadId,
+  filename,
+  mimetype,
   transientUri,
   sha256sum,
   width,
@@ -310,6 +372,8 @@ export function $createAttachmentNode({
       altText,
       maxWidth,
       uploadId,
+      filename,
+      mimetype,
       transientUri,
       sha256sum,
       width,

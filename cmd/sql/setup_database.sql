@@ -75,7 +75,7 @@ BEGIN
         transient_uri character varying(255) NOT NULL,
         sha256sum character varying(255),
         filename character varying(255) NOT NULL,
-        filetype character varying(255) NOT NULL,
+        mimetype character varying(255) NOT NULL,
         size bigint NOT NULL,
         payload JSONB,
         history_id bigint DEFAULT nextval('email.history_id_seq'::regclass) NOT NULL,
@@ -361,13 +361,13 @@ BEGIN
             RAISE EXCEPTION '_owner is required';
         END IF;
 
-        INSERT INTO email.file(owner, transient_uri, sha256sum, filename, filetype, size)
-            VALUES (_owner, _file->>'transient_uri', _file->>'sha256sum', _file->>'filename', _file->>'filetype', NULLIF(_file->>'size', '')::bigint)
+        INSERT INTO email.file(owner, transient_uri, sha256sum, filename, mimetype, size)
+            VALUES (_owner, _file->>'transient_uri', _file->>'sha256sum', _file->>'filename', _file->>'mimetype', NULLIF(_file->>'size', '')::bigint)
             RETURNING jsonb_build_object('id', id::varchar(255),
                                          'transient_uri', transient_uri::varchar(255),
                                          'sha256sum', sha256sum::varchar(255),
                                          'filename', filename::varchar(255),
-                                         'filetype', filetype::varchar(255),
+                                         'mimetype', mimetype::varchar(255),
                                          'size', COALESCE(size, 0)
                                         )
             INTO _new_file;
@@ -401,7 +401,7 @@ BEGIN
                                          'transient_uri', transient_uri::varchar(255),
                                          'sha256sum', sha256sum::varchar(255),
                                          'filename', filename::varchar(255),
-                                         'filetype', filetype::varchar(255),
+                                         'mimetype', mimetype::varchar(255),
                                          'size', COALESCE(size, 0)
                                         )
             INTO _updated_file;
@@ -422,15 +422,21 @@ BEGIN
     $BODY$
     DECLARE
 	    _rec RECORD;
+	    _filename_path TEXT[];
+	    _mimetype_path TEXT[];
 	    _sha256sum_path TEXT[];
 	    _transient_uri_path TEXT[];
     BEGIN
         FOR _rec IN SELECT * FROM email.jsonb_paths(_payload, '{}') path WHERE path @> '{"uploadId"}'
         LOOP
             IF ((_payload #>> _rec.path)::text = _uploadId) THEN
+                _filename_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'filename');
+                _mimetype_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'mimetype');
                 _sha256sum_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'sha256sum');
                 _transient_uri_path = email.array_set(_rec.path, array_length(_rec.path, 1), '_transient_uri_path');
                 _payload := jsonb_set(_payload, _rec.path, '""');
+                _payload := jsonb_set(_payload, _filename_path, _file->'filename');
+                _payload := jsonb_set(_payload, _mimetype_path, _file->'mimetype');
                 _payload := jsonb_set(_payload, _sha256sum_path, _file->'sha256sum');
                 _payload := jsonb_set(_payload, _transient_uri_path, _file->'transient_uri');
             END IF;

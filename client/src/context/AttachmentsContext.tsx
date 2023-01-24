@@ -37,6 +37,8 @@ export interface IAttachment {
   uploadId: string
   upload: any
   progress: number
+  filename: string | null
+  mimetype: string | null
   downloadUrl: string | null
   sha256sum: string | null
 }

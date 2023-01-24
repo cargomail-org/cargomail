@@ -94,6 +94,8 @@ function LazyAttachment({
 export default function AttachmentComponent({
   src,
   uploadId,
+  filename,
+  mimetype,
   transientUri,
   sha256sum,
   altText,
@@ -115,6 +117,8 @@ export default function AttachmentComponent({
   showCaption: boolean
   src: string
   uploadId: string
+  filename: string
+  mimetype: string
   transientUri: string
   sha256sum: string
   width: 'inherit' | number
@@ -280,9 +284,21 @@ export default function AttachmentComponent({
     // readable stream
     const rs_src = fetch(url).then((response) => response.body)
 
+    const opts = {
+      suggestedName: 'Test-01.mp4',
+      types: [
+        {
+          description: 'Video file',
+          accept: {
+            'video/mp4': [],
+          },
+        },
+      ],
+    }
+
     // writable stream
     // @ts-ignore
-    const ws_dest = window.showSaveFilePicker().then((handle: any) => handle.createWritable())
+    const ws_dest = window.showSaveFilePicker(opts).then((handle: any) => handle.createWritable())
 
     // dummy transform stream to compute checksum
     const ts_dec = new TransformStream({

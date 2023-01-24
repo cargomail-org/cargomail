@@ -47,7 +47,7 @@ message File {
 
   string filename = 4;
 
-  string filetype = 5;
+  string mimetype = 5;
 
   int64 size = 6;
 }

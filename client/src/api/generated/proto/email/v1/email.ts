@@ -103,9 +103,9 @@ export interface File {
      */
     filename: string;
     /**
-     * @generated from protobuf field: string filetype = 5;
+     * @generated from protobuf field: string mimetype = 5;
      */
-    filetype: string;
+    mimetype: string;
     /**
      * @generated from protobuf field: int64 size = 6;
      */
@@ -796,12 +796,12 @@ class File$Type extends MessageType<File> {
             { no: 2, name: "transient_uri", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "sha256sum", kind: "scalar", jsonName: "sha256sum", T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "filename", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 5, name: "filetype", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "mimetype", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 6, name: "size", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
         ]);
     }
     create(value?: PartialMessage<File>): File {
-        const message = { id: "", transientUri: "", sha256Sum: "", filename: "", filetype: "", size: 0n };
+        const message = { id: "", transientUri: "", sha256Sum: "", filename: "", mimetype: "", size: 0n };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<File>(this, message, value);
@@ -824,8 +824,8 @@ class File$Type extends MessageType<File> {
                 case /* string filename */ 4:
                     message.filename = reader.string();
                     break;
-                case /* string filetype */ 5:
-                    message.filetype = reader.string();
+                case /* string mimetype */ 5:
+                    message.mimetype = reader.string();
                     break;
                 case /* int64 size */ 6:
                     message.size = reader.int64().toBigInt();
@@ -854,9 +854,9 @@ class File$Type extends MessageType<File> {
         /* string filename = 4; */
         if (message.filename !== "")
             writer.tag(4, WireType.LengthDelimited).string(message.filename);
-        /* string filetype = 5; */
-        if (message.filetype !== "")
-            writer.tag(5, WireType.LengthDelimited).string(message.filetype);
+        /* string mimetype = 5; */
+        if (message.mimetype !== "")
+            writer.tag(5, WireType.LengthDelimited).string(message.mimetype);
         /* int64 size = 6; */
         if (message.size !== 0n)
             writer.tag(6, WireType.Varint).int64(message.size);

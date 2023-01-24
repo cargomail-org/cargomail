@@ -45,15 +45,15 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 			id := event.Upload.ID
 			uri := config.Mailbox.Uri + config.Filestore.BasePath + id
 			filename := event.Upload.MetaData["filename"]
-			filetype := event.Upload.MetaData["filetype"]
+			mimetype := event.Upload.MetaData["filetype"]
 			uploadId := event.Upload.MetaData["uploadId"]
 			size := event.Upload.Size
 			path := event.Upload.Storage["Path"]
 			uploadSha256sum := event.HTTPRequest.Header.Get("sha256sum")
 
-			file := emailv1.File{TransientUri: uri, Filename: filename, Filetype: filetype, Size: size}
+			file := emailv1.File{TransientUri: uri, Filename: filename, Mimetype: mimetype, Size: size}
 
-			logrus.Printf("User %s uploaded %s file using uploadId: %s", username, id, uploadId)
+			logrus.Printf("User %s uploaded %s file %s using uploadId: %s", username, id, mimetype, uploadId)
 
 			dbFile, err := emailRepository.Repo.FilesCreate(repo, username, &file)
 			if err != nil {
