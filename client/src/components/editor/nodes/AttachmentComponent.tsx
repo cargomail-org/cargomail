@@ -134,7 +134,7 @@ export default function AttachmentComponent({
   const [editor] = useLexicalComposerContext()
   const [selection, setSelection] = useState<RangeSelection | NodeSelection | GridSelection | null>(null)
   const activeEditorRef = useRef<LexicalEditor | null>(null)
-  const { attachments } = useContext(AttachmentsContext)
+  const { attachments, addAttachment, updateProgress } = useContext(AttachmentsContext)
 
   const onDelete = useCallback(
     (payload: KeyboardEvent) => {
@@ -283,8 +283,6 @@ export default function AttachmentComponent({
 
   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected || isResizing
-
-  const { addAttachment, updateProgress } = useContext(AttachmentsContext)
 
   let attachment = transientUri.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
   if (!attachment) {
