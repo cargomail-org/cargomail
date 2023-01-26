@@ -36,10 +36,13 @@ export interface IAttachmentProvider {
 export interface IAttachment {
   uploadId: string
   upload: any
-  progress: number
-  filename: string | null
-  mimetype: string | null
+  uploadProgress: number
+  download: any
+  downloadProgress: number
   downloadUrl: string | null
+  filename: string | null
+  mimeType: string | null
+  fileSize: number | null
   sha256sum: string | null
 }
 

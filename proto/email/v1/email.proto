@@ -41,11 +41,11 @@ message Label {
 message File {
   string id = 1;
 
-  string filename = 2;
+  string transient_uri = 2;
 
-  string mimetype = 3;
+  string filename = 3;
 
-  string transient_uri = 4;
+  string mime_type = 4;
 
   string sha256sum = 5;
 

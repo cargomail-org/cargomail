@@ -1257,6 +1257,7 @@ i.prettier-error {
 
 .editor-shell .editor-attachment .attachment-progress-container {
   position: absolute;
+  width: 100%;
   top: 22%;
   left: 50%;
   transform: translate(-50%, -50%);

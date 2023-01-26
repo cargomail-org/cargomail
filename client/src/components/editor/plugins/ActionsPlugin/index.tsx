@@ -91,23 +91,27 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                 const attachment: IAttachment = {
                   uploadId,
                   upload,
-                  progress: 0,
-                  filename: null,
-                  mimetype: null,
+                  uploadProgress: 0,
+                  download: null,
+                  downloadProgress: -1,
                   downloadUrl: null,
+                  filename: null,
+                  mimeType: null,
+                  fileSize: null,
                   sha256sum: null,
                 }
 
                 attachment.upload.options.onProgress = (bytesUploaded: any, bytesTotal: any) => {
                   const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
-                  attachment.progress = parseFloat(percentage)
+                  attachment.uploadProgress = parseFloat(percentage)
                   updateProgress(attachment)
                 }
 
                 attachment.upload.options.onSuccess = () => {
-                  attachment.filename = attachment.upload.file.name
-                  attachment.mimetype = attachment.upload.file.type
                   attachment.downloadUrl = attachment.upload.url
+                  attachment.filename = attachment.upload.file.name
+                  attachment.mimeType = attachment.upload.file.type
+                  attachment.fileSize = attachment.upload.file.size
                   attachment.sha256sum = attachment.upload.sha256sum
 
                   updateAttachment(attachment)
@@ -120,9 +124,10 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                       for (const attachmentChild of attachmentChildren) {
                         if (attachmentChild.getUploadId() === uploadId) {
                           attachmentChild.setUploadId('')
-                          attachmentChild.setFilename(attachment.filename || '')
-                          attachmentChild.setMimetype(attachment.mimetype || '')
                           attachmentChild.setTransientUri(attachment.downloadUrl || '')
+                          attachmentChild.setFilename(attachment.filename || '')
+                          attachmentChild.setMimeType(attachment.mimeType || '')
+                          attachmentChild.setFileSize(attachment.fileSize || -1)
                           attachmentChild.setSha256sum(attachment.sha256sum || '')
                         }
                       }
@@ -149,6 +154,8 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                   height: 150,
                   uploadId: uploadId,
                   transientUri: '',
+                  mimeType: '',
+                  fileSize: -1,
                   sha256sum: '',
                   altText: 'attachment',
                   captionsEnabled: true,

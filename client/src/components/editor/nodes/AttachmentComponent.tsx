@@ -39,11 +39,9 @@ import ContentEditable from '../ui/ContentEditable'
 import ImageResizer from '../ui/ImageResizer'
 import Placeholder from '../ui/Placeholder'
 import { $isAttachmentNode } from './AttachmentNode'
-import { AttachmentsContext } from '../../../context/AttachmentsContext'
+import { AttachmentsContext } from '../../../context'
 
-import { mimeTypes } from 'mime-wrapper'
-
-import jsSHA from 'jssha'
+import { DownloadService } from '../../../services/download'
 
 const imageCache = new Set()
 
@@ -97,9 +95,10 @@ function LazyAttachment({
 export default function AttachmentComponent({
   src,
   uploadId,
-  filename,
-  mimetype,
   transientUri,
+  filename,
+  mimeType,
+  fileSize,
   sha256sum,
   altText,
   nodeKey,
@@ -120,9 +119,10 @@ export default function AttachmentComponent({
   showCaption: boolean
   src: string
   uploadId: string
-  filename: string
-  mimetype: string
   transientUri: string
+  filename: string
+  mimeType: string
+  fileSize: number
   sha256sum: string
   width: 'inherit' | number
   captionsEnabled: boolean
@@ -281,62 +281,69 @@ export default function AttachmentComponent({
     settings: { showNestedEditorTreeView },
   } = useSettings()
 
-  const streamToFile = async (url: string, fname: string, mtype: string) => {
-    let shaObj: any
-
-    // readable stream
-    const rs_src = fetch(url).then((response) => response.body)
-
-    const extension = mimeTypes.getExtension(mtype)
-    const acceptExtensions = [extension.length > 0 ? `.${extension}` : '']
-
-    const opts = {
-      suggestedName: fname,
-      types: [
-        {
-          description: `${extension} files`,
-          accept: {
-            [mtype]: acceptExtensions,
-          },
-        },
-      ],
-    }
-
-    console.log(opts)
-
-    // writable stream
-    // @ts-ignore
-    const ws_dest = window.showSaveFilePicker(opts).then((handle: any) => handle.createWritable())
-
-    // dummy transform stream to compute checksum
-    const ts_dec = new TransformStream({
-      start() {
-        shaObj = new jsSHA('SHA-256', 'ARRAYBUFFER')
-      },
-      async transform(chunk, controller) {
-        shaObj.update(chunk)
-        controller.enqueue(await chunk)
-      },
-      flush(controller) {
-        if (transientUri.length > 0 && shaObj.getHash('HEX') !== sha256sum) {
-          controller.error(new Error('checksum mismatch'))
-        }
-      },
-    })
-
-    // stream to tmp
-    const rs_tmp = rs_src.then((s: any) => s.pipeThrough(ts_dec))
-    // stream to file
-    return (await rs_tmp).pipeTo(await ws_dest).catch((err: any) => {
-      console.error(err)
-      setTimeout(() => {
-        alert(err)
-      }, 200)
-    })
-  }
-
   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected || isResizing
+
+  const { addAttachment, updateProgress } = useContext(AttachmentsContext)
+
+  let attachment = transientUri.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
+  if (!attachment) {
+    attachment = transientUri.length === 0 ? null : attachments.find((a) => a.downloadUrl === transientUri)
+  }
+
+  const DownloadLink = () => {
+    const downloadUrl = attachment?.downloadUrl || transientUri
+    const downloadFilename = attachment?.filename || filename
+    const downloadMimeType = attachment?.mimeType || mimeType
+    const downloadFileSize = attachment?.fileSize || fileSize
+    const downloadSha256sum = attachment?.sha256sum || sha256sum
+
+    return (
+      <a
+        href="#"
+        onClick={() => {
+          if (!attachment) {
+            attachment = {
+              uploadId: '',
+              upload: null,
+              uploadProgress: 0,
+              download: null,
+              downloadProgress: -1,
+              downloadUrl: downloadUrl,
+              filename: downloadFilename,
+              mimeType: downloadMimeType,
+              fileSize: downloadFileSize,
+              sha256sum: downloadSha256sum,
+            }
+            addAttachment(attachment)
+          }
+
+          const onProgress = (bytesUploaded: number, bytesTotal: number) => {
+            const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
+            if (bytesUploaded === bytesTotal) {
+              setTimeout(() => {
+                attachment!.downloadProgress = -1
+                updateProgress(attachment!)
+              }, 1000)
+            }
+            attachment!.downloadProgress = parseFloat(percentage)
+            updateProgress(attachment!)
+          }
+
+          attachment.download = new DownloadService(
+            downloadUrl,
+            downloadFilename,
+            downloadMimeType,
+            downloadFileSize,
+            downloadSha256sum,
+            onProgress
+          )
+          attachment.download.streamToFile()
+        }}>
+        Download
+      </a>
+    )
+  }
 
   return (
     <Suspense fallback={null}>
@@ -353,26 +360,28 @@ export default function AttachmentComponent({
           />
           <div className="attachment-progress-container">
             {(() => {
-              const attachment = transientUri.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
               const downloadUrl = attachment?.downloadUrl || transientUri
-              const downloadFilename = attachment?.filename || filename
-              const downloadMimetype = attachment?.mimetype || mimetype
-
               return downloadUrl.length > 0 ? (
                 <>
-                  <a
-                    href="#"
-                    onClick={() => {
-                      streamToFile(downloadUrl, downloadFilename, downloadMimetype)
-                    }}>
-                    Download
-                  </a>
-                  <div>&nbsp;</div>
+                  {attachment ? (
+                    attachment.downloadProgress === -1 ? (
+                      <DownloadLink />
+                    ) : (
+                      'Downloading...'
+                    )
+                  ) : (
+                    <DownloadLink />
+                  )}
+                  <div>
+                    {attachment && attachment.downloadProgress >= 0
+                      ? attachment?.downloadProgress.toString().concat('%')
+                      : '\u00A0'}
+                  </div>
                 </>
               ) : (
                 <>
-                  <div>Uploading</div>
-                  <div>{attachment ? attachment?.progress.toString().concat('%') : '\u00A0'}</div>
+                  <div>Uploading...</div>
+                  <div>{attachment ? attachment?.uploadProgress.toString().concat('%') : '\u00A0'}</div>
                 </>
               )
             })()}
