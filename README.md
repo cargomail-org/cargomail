@@ -4,12 +4,11 @@ Email is the most pervasive form of business information exchange. Email is ofte
 
 # Cargomail
 
-Cargomail is a revised OAuth2-based email system. It uses an advanced web editor, which allows users to link documents, images, and videos in the message body while keeping the respective resource data in the Cargo Mailbox file storage. To ensure the integrity of email message and their resources, Cargomail relies on resource hashes. The newly designed [intermodal Message Transfer Agent (iMTA)](https://github.com/cargomail-org/imta) enables the transfer of email messages and their resources in two modes — push and pull. The sender's iMTA sends a notification to the recipient's iMTA that a message resources are available, then the recipient's iMTA pulls the respective email resources via the sender's iMTA. This concept allows transferring of a massive amount of data without the risk of receiving spam.
+Cargomail is a revised OAuth2-based email system. It uses an advanced web editor, which allows users to link documents, images, and videos in the message body while keeping the respective resource data at the Cargo resource server. To ensure the integrity of email message and their resources, Cargomail relies on resource hashes. The newly designed [intermodal Message Transfer Agent (iMTA)](https://github.com/cargomail-org/imta) enables the transfer of email messages and their resources in two modes — push and pull. The sender's iMTA sends a notification email to the recipient's iMTA that message resources are available, then the recipient's iMTA pulls the respective email resources via the sender's iMTA. This concept allows transferring of a massive amount of data without the risk of receiving spam.
 
-In addition, the Cargomail Client has two valuable features:
+# Internet Mail 2000 Legacy
 
-First, it uses Google's Inbox concept, when emails act as a task queue to get things done.
-Second, it uses Meta's Lexical web editor with extensible functionality, e.g., hashtags and mentions.
+This effort enhances the [Internet Mail 2000](https://en.wikipedia.org/wiki/Internet_Mail_2000) pull-based concept proposed by Daniel J. Bernstein; and uses an OAuth-delegated architecture, designed on the principle that the storage of email message resources should be the responsibility of the sender and the respective recipients, and not of the email provider.
 
 # Architecture
 
