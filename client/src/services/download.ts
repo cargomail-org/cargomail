@@ -53,15 +53,15 @@ export class DownloadService {
       }) {
         const fileSize = parseFloat(props.fileSize.toString())
         let transferred: number = 0
-        let progressTime: any = 0
+        let progressDate: any = new Date()
+        const progressInterval: number = 1000 // 1 sec
         super({
           start() {
-            progressTime = new Date()
             shaObj = new jsSHA('SHA-256', 'ARRAYBUFFER')
           },
           transform: async (chunk, controller) => {
-            if (((new Date() as any) - progressTime) / 1000 >= 1) {
-              progressTime = new Date()
+            if (((new Date() as any) - progressDate) / progressInterval >= 1) {
+              progressDate = new Date()
               props.onProgress(transferred, fileSize)
             }
             transferred += parseFloat(chunk.length.toString())

@@ -281,15 +281,21 @@ export default function AttachmentComponent({
     settings: { showNestedEditorTreeView },
   } = useSettings()
 
+  const findAttachment = () => {
+    const a = transientUri.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
+    if (a) {
+      return a
+    }
+    return transientUri.length === 0 ? null : attachments.find((a) => a.downloadUrl === transientUri)
+  }
+
+  const attachment = findAttachment()
+
   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected || isResizing
 
-  let attachment = transientUri.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
-  if (!attachment) {
-    attachment = transientUri.length === 0 ? null : attachments.find((a) => a.downloadUrl === transientUri)
-  }
-
   const DownloadLink = () => {
+    let attachment = findAttachment()
     const downloadUrl = attachment?.downloadUrl || transientUri
     const downloadFilename = attachment?.filename || filename
     const downloadMimeType = attachment?.mimeType || mimeType
