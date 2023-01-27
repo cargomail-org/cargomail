@@ -10,7 +10,7 @@ oidc:
   issuer: http://localhost:9998
   key_path: ../cargomail-zitadel-oidc/example/server/service-key1.json
 
-# gRPC Mailbox
+# Mailbox
 mailbox:
   uri: http://localhost:8080
   port: 8080
@@ -43,7 +43,7 @@ mailbox:
     max_age: 600
     allow_credentials: true
 
-# gRPC iMTA
+# iMTA
 imta:
   port: 8025
 
