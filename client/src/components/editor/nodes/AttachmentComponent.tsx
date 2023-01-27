@@ -283,19 +283,15 @@ export default function AttachmentComponent({
 
   const findAttachment = () => {
     const a = transientUri.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
-    if (a) {
-      return a
-    }
-    return transientUri.length === 0 ? null : attachments.find((a) => a.downloadUrl === transientUri)
+    return a ? a : transientUri.length === 0 ? null : attachments.find((a) => a.downloadUrl === transientUri)
   }
 
-  const attachment = findAttachment()
+  let attachment = findAttachment()
 
   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected || isResizing
 
   const DownloadLink = () => {
-    let attachment = findAttachment()
     const downloadUrl = attachment?.downloadUrl || transientUri
     const downloadFilename = attachment?.filename || filename
     const downloadMimeType = attachment?.mimeType || mimeType
@@ -328,7 +324,7 @@ export default function AttachmentComponent({
               setTimeout(() => {
                 attachment!.downloadProgress = -1
                 updateProgress(attachment!)
-              }, 1000)
+              }, 2000)
             }
             attachment!.downloadProgress = parseFloat(percentage)
             updateProgress(attachment!)

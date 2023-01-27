@@ -12,14 +12,18 @@ const reducer = (state: IAttachment[], action: any) => {
   const { payload } = action
   switch (action.type) {
     case actions.updateAttachment: {
-      const index = state.findIndex((attachment: IAttachment) => attachment.uploadId === payload.uploadId)
+      const index = state.findIndex((attachment: IAttachment) =>
+        payload.uploadId ? attachment.uploadId === payload.uploadId : attachment.downloadUrl === payload.downloadUrl
+      )
       const result = [...state.slice(0, index), payload, ...state.slice(index + 1)]
       // a hackish way to enable access to the state in the AttachmentNode class
       AttachmentNode.setAttachments(result)
       return result
     }
     case actions.updateProgress: {
-      const index = state.findIndex((attachment: IAttachment) => attachment.uploadId === payload.uploadId)
+      const index = state.findIndex((attachment: IAttachment) =>
+        payload.uploadId ? attachment.uploadId === payload.uploadId : attachment.downloadUrl === payload.downloadUrl
+      )
       return [...state.slice(0, index), payload, ...state.slice(index + 1)]
     }
     case actions.addAttachment:
