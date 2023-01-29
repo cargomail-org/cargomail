@@ -8,7 +8,7 @@ Cargomail is a revised OAuth2-based email system. It uses an advanced web editor
 
 # Internet Mail 2000 Legacy
 
-This effort enhances the [Internet Mail 2000](https://en.wikipedia.org/wiki/Internet_Mail_2000) pull-based concept proposed by Daniel J. Bernstein; and uses an OAuth-delegated architecture, designed on the principle that the storage of email message resources should be the responsibility of the sender and the respective recipients, and not of the email provider.
+This effort enhances the [Internet Mail 2000](https://en.wikipedia.org/wiki/Internet_Mail_2000) pull-based concept proposed by Daniel J. Bernstein; and uses an [OAuth delegation](https://github.com/cargomail-org/identity-propagation-and-assertions) mechanism, designed on the principle that the storage of email messages should be the responsibility of the sender and the respective recipients, and not of the email provider.
 
 # Architecture
 
