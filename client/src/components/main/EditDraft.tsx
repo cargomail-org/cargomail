@@ -23,6 +23,8 @@ import { RecipientsSelect } from './Recipients'
 import Editor from '../editor/Editor'
 import { SHOW_FILE_DIALOG_COMMAND } from '../editor/plugins/AttachmentsPlugin'
 import { LexicalEditor } from 'lexical'
+import { AttachmentTransferType, attachmentTransferActive } from '../editor/plugins/ActionsPlugin'
+import { AttachmentsContext } from '../../context'
 
 export type EditDraftProps = {
   draftEdit: IDraftEdit
@@ -84,6 +86,12 @@ const EditDraft: FC<EditDraftProps> = (props) => {
   const selectAttachmentDialog = () => {
     console.log(editor)
     editor?.dispatchCommand(SHOW_FILE_DIALOG_COMMAND, '')
+  }
+
+  const { attachments } = useContext(AttachmentsContext)
+
+  const recipientsEmpty = (draftEdit: IDraftEdit): boolean => {
+    return draftEdit.to.length === 0
   }
 
   return (
@@ -191,7 +199,14 @@ const EditDraft: FC<EditDraftProps> = (props) => {
           </Box>
           <CardActions sx={{ flex: 0, justifyContent: 'space-between', padding: '8px 12px 4px' }} disableSpacing>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-              <Button variant="contained" color="primary" onClick={() => draftsSend(props.draftEdit.id)}>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={
+                  recipientsEmpty(props.draftEdit) ||
+                  attachmentTransferActive(editor, attachments, AttachmentTransferType.Upload)
+                }
+                onClick={() => draftsSend(props.draftEdit.id)}>
                 {'Send'}
               </Button>
               <Box sx={{ paddingLeft: '8px' }}></Box>

@@ -48,6 +48,41 @@ export default function ActionsPlugin({ isRichText }: { isRichText: boolean }): 
   return <div className="actions">{modal}</div>
 }
 
+export enum AttachmentTransferType {
+  Upload,
+  Download,
+  Any,
+}
+
+export const attachmentTransferActive = (
+  editor: LexicalEditor | any,
+  attachments: IAttachment[], // do not remove!
+  transferType: AttachmentTransferType
+): boolean => {
+  const editorState = editor?.getEditorState()
+  if (!editorState) return true
+  return editorState.read(
+    () => {
+      const attachmentChildren: Array<AttachmentNode> = getAllAttachmentNodes($getRoot())
+      switch (transferType) {
+        case AttachmentTransferType.Upload:
+          for (const attachmentChild of attachmentChildren) {
+            if (attachmentChild.getUploadId().length > 0) {
+              return true
+            }
+          }
+          return false
+        case AttachmentTransferType.Download:
+          return true
+
+        default:
+          return true
+      }
+    },
+    { tag: 'history-merge' }
+  )
+}
+
 function uuidv4() {
   return `${1e7}-${1e3}-${4e3}-${8e3}-${1e11}`.replace(/[018]/g, (c: any) =>
     (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
