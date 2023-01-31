@@ -37,7 +37,15 @@ export interface IAttachmentProvider {
   children: ReactNode
 }
 
+export enum ResumableState {
+  None,
+  Aborted,
+  Resumed,
+}
+
 export interface IAttachment {
+  nodesCount: number
+  resumableState: ResumableState
   uploadId: string
   upload: any
   uploadProgress: number

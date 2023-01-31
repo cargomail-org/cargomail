@@ -42,6 +42,7 @@ import { $isAttachmentNode } from './AttachmentNode'
 import { AttachmentsContext } from '../../../context'
 
 import { DownloadService } from '../../../services/download'
+import { IAttachment, ResumableState } from '../../../context/AttachmentsContext'
 
 const imageCache = new Set()
 
@@ -192,6 +193,52 @@ export default function AttachmentComponent({
     [caption, editor, setSelected]
   )
 
+  const resumeUpload = async (upload: any): Promise<boolean> => {
+    return await upload.findPreviousUploads().then(function (previousUploads: any) {
+      const previousUpload = previousUploads.find((u: any) => {
+        return u.uploadUrl === upload.url
+      })
+      if (previousUpload) {
+        upload.resumeFromPreviousUpload(previousUpload)
+        upload.start()
+        return true
+      }
+      return false
+    })
+  }
+
+  // mount
+  useEffect(() => {
+    const checkResumable = async () => {
+      if (attachment) {
+        attachment.nodesCount++
+        if (attachment.resumableState === ResumableState.Aborted) {
+          if (await resumeUpload(attachment.upload)) {
+            attachment.resumableState = ResumableState.Resumed
+          }
+        }
+      }
+    }
+
+    checkResumable()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // unmount
+  useEffect(
+    () => () => {
+      if (attachment) {
+        attachment.nodesCount--
+        if (attachment.nodesCount === 0) {
+          attachment.upload.abort()
+          attachment.resumableState = ResumableState.Aborted
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
+
   useEffect(() => {
     caption.setEditable(editor.isEditable())
 
@@ -281,7 +328,7 @@ export default function AttachmentComponent({
     settings: { showNestedEditorTreeView },
   } = useSettings()
 
-  const findAttachment = () => {
+  const findAttachment = (): IAttachment | null | undefined => {
     const a = transientUri.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
     return a ? a : transientUri.length === 0 ? null : attachments.find((a) => a.downloadUrl === transientUri)
   }
@@ -304,6 +351,8 @@ export default function AttachmentComponent({
         onClick={() => {
           if (!attachment) {
             attachment = {
+              nodesCount: 0,
+              resumableState: ResumableState.None,
               uploadId: '',
               upload: null,
               uploadProgress: 0,

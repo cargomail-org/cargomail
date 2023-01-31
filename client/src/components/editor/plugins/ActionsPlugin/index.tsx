@@ -18,7 +18,7 @@ import { InsertAttachmentPayload, INSERT_ATTACHMENT_COMMAND, SHOW_FILE_DIALOG_CO
 import Dropzone from './Dropzone'
 import { createTusUploadInstance } from '../../../../api/fileAPI'
 import { AttachmentsContext } from '../../../../context'
-import { IAttachment } from '../../../../context/AttachmentsContext'
+import { IAttachment, ResumableState } from '../../../../context/AttachmentsContext'
 import { $isAttachmentNode, AttachmentNode } from '../../nodes/AttachmentNode'
 
 export default function ActionsPlugin({ isRichText }: { isRichText: boolean }): JSX.Element {
@@ -124,6 +124,8 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                 const upload = createTusUploadInstance(file, uploadId)
 
                 const attachment: IAttachment = {
+                  nodesCount: 0,
+                  resumableState: ResumableState.None,
                   uploadId,
                   upload,
                   uploadProgress: 0,
