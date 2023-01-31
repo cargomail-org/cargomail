@@ -14,6 +14,7 @@ import AvatarMenu from '../main/AvatarMenu'
 import NewMailButton from '../main/NewMailButton'
 import DraftsContainer from '../main/DraftsContainer'
 import { DraftsContext } from '../../context/DraftsContext'
+import ReloadButton from '../main/ReloadButton'
 
 const drawerWidth = 240
 const hideDrawerWidth = 828
@@ -99,6 +100,7 @@ export function Navigation({ children }: any) {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               {productName}
             </Typography>
+            <ReloadButton />
             <AvatarMenu />
           </Toolbar>
         </AppBar>

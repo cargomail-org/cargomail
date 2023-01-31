@@ -28,6 +28,7 @@ function AvatarMenuContent() {
                 height: 30,
                 bgcolor: '#013d6e',
                 fontSize: 14,
+                fontWeight: 500,
                 '&:hover': {
                   bgcolor: '#002b4f',
                 },
