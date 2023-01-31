@@ -367,9 +367,9 @@ export default function AttachmentComponent({
             addAttachment(attachment)
           }
 
-          const onProgress = (bytesUploaded: number, bytesTotal: number) => {
-            const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
-            if (bytesUploaded === bytesTotal) {
+          const onProgress = (bytesDownloaded: number, bytesTotal: number) => {
+            const percentage = ((bytesDownloaded / bytesTotal) * 100).toFixed(2)
+            if (bytesDownloaded === bytesTotal) {
               setTimeout(() => {
                 attachment!.downloadProgress = -1
                 updateProgress(attachment!)

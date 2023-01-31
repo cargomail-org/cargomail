@@ -49,7 +49,7 @@ export class DownloadService {
         url: string
         fileSize: number
         sha256sum: string
-        onProgress(bytesUploaded: number, bytesTotal: number): void
+        onProgress(bytesDownloaded: number, bytesTotal: number): void
       }) {
         const fileSize = parseFloat(props.fileSize.toString())
         let transferred: number = 0
