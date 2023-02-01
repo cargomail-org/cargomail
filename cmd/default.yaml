@@ -45,6 +45,7 @@ mailbox:
 
 # iMTA
 imta:
+  domain: localhost:8025
   port: 8025
 
 # Database

@@ -3,7 +3,7 @@ module github.com/cargomail-org/cargomail
 go 1.19
 
 require (
-	github.com/rs/cors v1.7.0
+	github.com/rs/cors v1.8.3
 	github.com/tus/tusd v1.10.0
 	github.com/zitadel/oidc v1.7.0
 	google.golang.org/grpc v1.51.0

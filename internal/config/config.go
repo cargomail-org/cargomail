@@ -10,7 +10,7 @@ import (
 
 type Config struct {
 	Mailbox Server
-	IMTA    Server // should be iMTA
+	IMTA IMTA
 	Database
 	OIDC
 	Filestore
@@ -20,6 +20,11 @@ type Server struct {
 	Uri  string
 	Port int
 	Cors
+}
+
+type IMTA struct {
+	Domain string
+	Port int
 }
 
 type Cors struct {
