@@ -168,8 +168,8 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                           attachmentChild.setSha256sum(attachment.sha256sum || '')
                         }
                       }
-                    }
-                    // { tag: 'history-merge' } // https://github.com/facebook/lexical/discussions/3520
+                    },
+                    { tag: 'history-merge' } // https://github.com/facebook/lexical/discussions/3520
                   )
                 }
 
