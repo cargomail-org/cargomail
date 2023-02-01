@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 
 	emailv1 "github.com/cargomail-org/cargomail/generated/proto/email/v1"
+	resourcev1 "github.com/cargomail-org/cargomail/internal/models/resource/v1"
 )
 
 type ScanLabel struct {
@@ -13,7 +14,7 @@ type ScanLabel struct {
 }
 
 type ScanFile struct {
-	*emailv1.File
+	*resourcev1.File
 }
 
 type ScanThread struct {
@@ -48,7 +49,7 @@ func (s ScanFile) Value() (driver.Value, error) {
 func (s *ScanFile) Scan(value interface{}) error {
 	data, ok := value.([]byte)
 	if !ok {
-		s.File = &emailv1.File{}
+		s.File = &resourcev1.File{}
 		return nil
 	}
 	return json.Unmarshal(data, &s)

@@ -1,4 +1,4 @@
-package filestore
+package resource
 
 import (
 	"crypto/sha256"
@@ -12,7 +12,7 @@ import (
 	"github.com/tus/tusd/pkg/filestore"
 	tusd "github.com/tus/tusd/pkg/handler"
 
-	emailv1 "github.com/cargomail-org/cargomail/generated/proto/email/v1"
+	resourcev1 "github.com/cargomail-org/cargomail/internal/models/resource/v1"
 	cfg "github.com/cargomail-org/cargomail/internal/config"
 	emailRepository "github.com/cargomail-org/cargomail/internal/repository/email/v1"
 )
@@ -51,7 +51,7 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 			path := event.Upload.Storage["Path"]
 			uploadSha256sum := event.HTTPRequest.Header.Get("sha256sum")
 
-			file := emailv1.File{TransientUri: transientUri, Filename: filename, MimeType: mimeType, Size: fileSize}
+			file := resourcev1.File{TransientUri: transientUri, Filename: filename, MimeType: mimeType, Size: fileSize}
 
 			logrus.Printf("User %s uploaded %s file %s using uploadId: %s", username, id, mimeType, uploadId)
 

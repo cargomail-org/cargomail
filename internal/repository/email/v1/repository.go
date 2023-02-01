@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	emailv1 "github.com/cargomail-org/cargomail/generated/proto/email/v1"
+	resourcev1 "github.com/cargomail-org/cargomail/internal/models/resource/v1"
 	"github.com/cargomail-org/cargomail/internal/mail"
 	"google.golang.org/grpc/metadata"
 )
@@ -20,8 +21,8 @@ type Repo interface {
 	DraftsCreate(context.Context, *emailv1.Draft) (*emailv1.Draft, error)
 	DraftsUpdate(context.Context, int64, *emailv1.Message) (*emailv1.Draft, error)
 	DraftsDelete(context.Context, int64) int64
-	FilesCreate(string, *emailv1.File) (*emailv1.File, error)
-	FilesUpdate(string, int64, string, *emailv1.File) (*emailv1.File, error)
+	FilesCreate(string, *resourcev1.File) (*resourcev1.File, error)
+	FilesUpdate(string, int64, string, *resourcev1.File) (*resourcev1.File, error)
 }
 
 type Repository struct {
@@ -219,11 +220,11 @@ func (r *Repository) DraftsDelete(ctx context.Context, id int64) int64 {
 	return cnt
 }
 
-func (r *Repository) FilesCreate(username string, file *emailv1.File) (*emailv1.File, error) {
+func (r *Repository) FilesCreate(username string, file *resourcev1.File) (*resourcev1.File, error) {
 	var scanFile ScanFile
 	scanFile.File = file
 
-	sqlStatement := `SELECT email.files_create_v1($1, $2);`
+	sqlStatement := `SELECT resources.files_create_v1($1, $2);`
 	err := r.db.QueryRow(sqlStatement, username, scanFile).Scan(&scanFile)
 	if err != nil {
 		return nil, err
@@ -232,11 +233,11 @@ func (r *Repository) FilesCreate(username string, file *emailv1.File) (*emailv1.
 	return scanFile.File, err
 }
 
-func (r *Repository) FilesUpdate(username string, id int64, uploadId string, file *emailv1.File) (*emailv1.File, error) {
+func (r *Repository) FilesUpdate(username string, id int64, uploadId string, file *resourcev1.File) (*resourcev1.File, error) {
 	var scanFile ScanFile
 	scanFile.File = file
 
-	sqlStatement := `SELECT email.files_update_v1($1, $2, $3, $4);`
+	sqlStatement := `SELECT resources.files_update_v1($1, $2, $3, $4);`
 	err := r.db.QueryRow(sqlStatement, username, id, uploadId, scanFile).Scan(&scanFile)
 	if err != nil {
 		return nil, err

@@ -83,35 +83,6 @@ export enum Label_Type {
     USER = 1
 }
 /**
- * @generated from protobuf message email.v1.File
- */
-export interface File {
-    /**
-     * @generated from protobuf field: string id = 1;
-     */
-    id: string;
-    /**
-     * @generated from protobuf field: string transient_uri = 2;
-     */
-    transientUri: string;
-    /**
-     * @generated from protobuf field: string filename = 3;
-     */
-    filename: string;
-    /**
-     * @generated from protobuf field: string mime_type = 4;
-     */
-    mimeType: string;
-    /**
-     * @generated from protobuf field: string sha256sum = 5 [json_name = "sha256sum"];
-     */
-    sha256Sum: string;
-    /**
-     * @generated from protobuf field: int64 size = 6;
-     */
-    size: bigint;
-}
-/**
  * @generated from protobuf message email.v1.ListDraftsResponse
  */
 export interface ListDraftsResponse {
@@ -788,88 +759,6 @@ class Label$Type extends MessageType<Label> {
  * @generated MessageType for protobuf message email.v1.Label
  */
 export const Label = new Label$Type();
-// @generated message type with reflection information, may provide speed optimized methods
-class File$Type extends MessageType<File> {
-    constructor() {
-        super("email.v1.File", [
-            { no: 1, name: "id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "transient_uri", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "filename", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "mime_type", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 5, name: "sha256sum", kind: "scalar", jsonName: "sha256sum", T: 9 /*ScalarType.STRING*/ },
-            { no: 6, name: "size", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
-        ]);
-    }
-    create(value?: PartialMessage<File>): File {
-        const message = { id: "", transientUri: "", filename: "", mimeType: "", sha256Sum: "", size: 0n };
-        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
-        if (value !== undefined)
-            reflectionMergePartial<File>(this, message, value);
-        return message;
-    }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: File): File {
-        let message = target ?? this.create(), end = reader.pos + length;
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag();
-            switch (fieldNo) {
-                case /* string id */ 1:
-                    message.id = reader.string();
-                    break;
-                case /* string transient_uri */ 2:
-                    message.transientUri = reader.string();
-                    break;
-                case /* string filename */ 3:
-                    message.filename = reader.string();
-                    break;
-                case /* string mime_type */ 4:
-                    message.mimeType = reader.string();
-                    break;
-                case /* string sha256sum = 5 [json_name = "sha256sum"];*/ 5:
-                    message.sha256Sum = reader.string();
-                    break;
-                case /* int64 size */ 6:
-                    message.size = reader.int64().toBigInt();
-                    break;
-                default:
-                    let u = options.readUnknownField;
-                    if (u === "throw")
-                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
-                    let d = reader.skip(wireType);
-                    if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
-            }
-        }
-        return message;
-    }
-    internalBinaryWrite(message: File, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string id = 1; */
-        if (message.id !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.id);
-        /* string transient_uri = 2; */
-        if (message.transientUri !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.transientUri);
-        /* string filename = 3; */
-        if (message.filename !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.filename);
-        /* string mime_type = 4; */
-        if (message.mimeType !== "")
-            writer.tag(4, WireType.LengthDelimited).string(message.mimeType);
-        /* string sha256sum = 5 [json_name = "sha256sum"]; */
-        if (message.sha256Sum !== "")
-            writer.tag(5, WireType.LengthDelimited).string(message.sha256Sum);
-        /* int64 size = 6; */
-        if (message.size !== 0n)
-            writer.tag(6, WireType.Varint).int64(message.size);
-        let u = options.writeUnknownFields;
-        if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
-        return writer;
-    }
-}
-/**
- * @generated MessageType for protobuf message email.v1.File
- */
-export const File = new File$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class ListDraftsResponse$Type extends MessageType<ListDraftsResponse> {
     constructor() {

@@ -38,20 +38,6 @@ message Label {
   }
 }
 
-message File {
-  string id = 1;
-
-  string transient_uri = 2;
-
-  string filename = 3;
-
-  string mime_type = 4;
-
-  string sha256sum = 5;
-
-  int64 size = 6;
-}
-
 message ListDraftsResponse {
   repeated Draft drafts = 1;
 }

@@ -3,6 +3,8 @@ DECLARE
 BEGIN
     CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
+----------------------------------------------------email---------------------------------------------------------------
+
     IF EXISTS (SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema = 'email') THEN
         RAISE WARNING 'database schema "email" already exists -> drop & create';
         DROP SCHEMA email CASCADE;
@@ -36,14 +38,7 @@ BEGIN
         INCREMENT BY 1
         NO MINVALUE
         NO MAXVALUE
-        CACHE 1;
-
-    CREATE SEQUENCE email.file_id_seq
-        START WITH 1
-        INCREMENT BY 1
-        NO MINVALUE
-        NO MAXVALUE
-        CACHE 1;       
+        CACHE 1; 
 
     CREATE TABLE email.label (
         id BIGSERIAL PRIMARY KEY,
@@ -67,22 +62,6 @@ BEGIN
         search_subject tsvector,
         search_from tsvector,
         search_recipients tsvector
-    );
-
-    CREATE TABLE email.file (
-        id bigint DEFAULT nextval('email.file_id_seq'::regclass) PRIMARY KEY,
-        owner character varying(255) NOT NULL,
-        transient_uri character varying(255) NOT NULL,
-        filename character varying(255) NOT NULL,
-        mime_type character varying(255) NOT NULL,
-        size bigint NOT NULL DEFAULT -1,
-        sha256sum character varying(255),
-        payload JSONB,
-        history_id bigint DEFAULT nextval('email.history_id_seq'::regclass) NOT NULL,
-        internal_date bigint DEFAULT extract(epoch from now()) NOT NULL,
-        search_content_type tsvector,
-        search_filename tsvector,
-        search_content tsvector
     );
 
     CREATE UNIQUE INDEX idx_message_draft_id ON email.message(draft_id);
@@ -121,31 +100,6 @@ BEGIN
 
     CREATE TRIGGER message_inserted BEFORE INSERT ON email.message FOR EACH ROW EXECUTE PROCEDURE email.message_table_inserted();
     CREATE TRIGGER message_updated BEFORE UPDATE ON email.message FOR EACH ROW EXECUTE PROCEDURE email.message_table_updated();
-
-    CREATE OR REPLACE FUNCTION email.file_table_inserted() RETURNS trigger
-    LANGUAGE plpgsql SECURITY DEFINER
-    AS $$
-    begin
-        -- -- NEW.payload['Message_ID'] = to_jsonb(public.gen_random_uuid()::text);
-        -- NEW.search_subject = to_tsvector(NEW.payload['Subject']);
-        -- NEW.search_from = to_tsvector(NEW.payload['From']);
-        -- NEW.search_recipients = to_tsvector(NEW.payload['Recipients']);
-        RETURN NEW;	
-    END; $$;
-
-    CREATE OR REPLACE FUNCTION email.file_table_updated() RETURNS trigger
-    LANGUAGE plpgsql SECURITY DEFINER
-    AS $$ 
-    begin
-        if (NEW.payload <> OLD.payload) then
-            NEW.history_id := nextval('email.history_id_seq'::regclass);
-        end if;
-        RETURN NEW; 
-    END; $$;
-
-    CREATE TRIGGER file_inserted BEFORE INSERT ON email.file FOR EACH ROW EXECUTE PROCEDURE email.file_table_inserted();
-    CREATE TRIGGER file_updated BEFORE UPDATE ON email.file FOR EACH ROW EXECUTE PROCEDURE email.file_table_updated();
-
 
     CREATE OR REPLACE FUNCTION email.labels_list_v1(IN _owner character varying)
     RETURNS TABLE(label jsonb) AS
@@ -350,77 +304,6 @@ BEGIN
 
     RAISE INFO 'database schema "email" created';
 
-    CREATE OR REPLACE FUNCTION email.files_create_v1(IN _owner character varying, IN _file jsonb)
-    RETURNS jsonb AS
-    $BODY$
-    DECLARE
-        _new_file jsonb;
-    BEGIN
-        -- _owner is required
-        IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required';
-        END IF;
-
-        INSERT INTO email.file(owner, transient_uri, filename, mime_type, size, sha256sum)
-            VALUES (_owner, _file->>'transient_uri', _file->>'filename', _file->>'mime_type', NULLIF(_file->>'size', '')::bigint, _file->>'sha256sum')
-            RETURNING jsonb_build_object('id', id::varchar(255),
-                                         'transient_uri', transient_uri::varchar(255),
-                                         'filename', filename::varchar(255),
-                                         'mime_type', mime_type::varchar(255),
-                                         'size', COALESCE(size, -1),
-                                         'sha256sum', sha256sum::varchar(255)
-                                        )
-            INTO _new_file;
-        RETURN _new_file;
-    END;			
-    $BODY$
-    LANGUAGE plpgsql VOLATILE;
-
-    CREATE OR REPLACE FUNCTION email.files_update_v1(IN _owner character varying, IN _id bigint, IN _uploadId character varying, IN _file jsonb)
-    RETURNS jsonb AS
-    $BODY$
-    DECLARE
-        _updated_file jsonb;
-    BEGIN
-        -- _owner is required
-        IF coalesce(TRIM(_owner), '') = '' THEN
-            RAISE EXCEPTION '_owner is required';
-        END IF;
-
-        -- _uploadId is required
-        IF coalesce(TRIM(_uploadId), '') = '' THEN
-            RAISE EXCEPTION '_uploadId is required';
-        END IF;
-
-        -- RAISE INFO 'uploadId: %', _uploadId;
-        -- RAISE INFO '_file: %', _file;
-
-        UPDATE email.file
-            SET sha256sum = _file->>'sha256sum'
-            WHERE owner = _owner AND id = _id
-            RETURNING jsonb_build_object('id', id::varchar(255),
-                                         'transient_uri', transient_uri::varchar(255),
-                                         'filename', filename::varchar(255),
-                                         'mime_type', mime_type::varchar(255),
-                                         'size', COALESCE(size::bigint, -1),
-                                         'sha256sum', sha256sum::varchar(255)
-
-                                        )
-            INTO _updated_file;
-
-            -- RAISE INFO '_updated_file: %', _updated_file;
-
-            UPDATE email.MESSAGE
-			SET payload = email.attachments_set(payload, _uploadId, _file)   
-			WHERE owner = _owner AND
-			payload @@ '$.**.type == "attachment"' AND
-			payload @@ format('$.**.uploadId == "%s"', _uploadId)::jsonpath;
-
-        RETURN _updated_file;
-    END;			
-    $BODY$
-    LANGUAGE plpgsql VOLATILE;
-
     CREATE OR REPLACE FUNCTION email.attachments_set(_payload jsonb, IN _uploadId character varying, IN _file jsonb)
     RETURNS jsonb AS
     $BODY$
@@ -523,7 +406,141 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
-----------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------resources------------------------------------------------------------
+
+    IF EXISTS (SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema = 'resources') THEN
+        RAISE WARNING 'database schema "resources" already exists -> drop & create';
+        DROP SCHEMA resources CASCADE;
+    END IF;
+
+    CREATE SCHEMA resources;
+
+    CREATE SEQUENCE resources.file_id_seq
+        START WITH 1
+        INCREMENT BY 1
+        NO MINVALUE
+        NO MAXVALUE
+        CACHE 1;
+
+    CREATE SEQUENCE resources.history_id_seq
+        START WITH 1
+        INCREMENT BY 1
+        NO MINVALUE
+        NO MAXVALUE
+        CACHE 1;     
+
+    CREATE TABLE resources.file (
+        id bigint DEFAULT nextval('resources.file_id_seq'::regclass) PRIMARY KEY,
+        owner character varying(255) NOT NULL,
+        transient_uri character varying(255) NOT NULL,
+        filename character varying(255) NOT NULL,
+        mime_type character varying(255) NOT NULL,
+        size bigint NOT NULL DEFAULT -1,
+        sha256sum character varying(255),
+        payload JSONB,
+        history_id bigint DEFAULT nextval('resources.history_id_seq'::regclass) NOT NULL,
+        internal_date bigint DEFAULT extract(epoch from now()) NOT NULL,
+        search_content_type tsvector,
+        search_filename tsvector,
+        search_content tsvector
+    );
+
+    CREATE OR REPLACE FUNCTION resources.file_table_inserted() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+    begin
+        -- -- NEW.payload['Message_ID'] = to_jsonb(public.gen_random_uuid()::text);
+        -- NEW.search_subject = to_tsvector(NEW.payload['Subject']);
+        -- NEW.search_from = to_tsvector(NEW.payload['From']);
+        -- NEW.search_recipients = to_tsvector(NEW.payload['Recipients']);
+        RETURN NEW;	
+    END; $$;
+
+    CREATE OR REPLACE FUNCTION resources.file_table_updated() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$ 
+    begin
+        if (NEW.payload <> OLD.payload) then
+            NEW.history_id := nextval('resources.history_id_seq'::regclass);
+        end if;
+        RETURN NEW; 
+    END; $$;
+
+    CREATE TRIGGER file_inserted BEFORE INSERT ON resources.file FOR EACH ROW EXECUTE PROCEDURE resources.file_table_inserted();
+    CREATE TRIGGER file_updated BEFORE UPDATE ON resources.file FOR EACH ROW EXECUTE PROCEDURE resources.file_table_updated();
+
+    CREATE OR REPLACE FUNCTION resources.files_create_v1(IN _owner character varying, IN _file jsonb)
+    RETURNS jsonb AS
+    $BODY$
+    DECLARE
+        _new_file jsonb;
+    BEGIN
+        -- _owner is required
+        IF coalesce(TRIM(_owner), '') = '' THEN
+            RAISE EXCEPTION '_owner is required';
+        END IF;
+
+        INSERT INTO resources.file(owner, transient_uri, filename, mime_type, size, sha256sum)
+            VALUES (_owner, _file->>'transient_uri', _file->>'filename', _file->>'mime_type', NULLIF(_file->>'size', '')::bigint, _file->>'sha256sum')
+            RETURNING jsonb_build_object('id', id::varchar(255),
+                                         'transient_uri', transient_uri::varchar(255),
+                                         'filename', filename::varchar(255),
+                                         'mime_type', mime_type::varchar(255),
+                                         'size', COALESCE(size, -1),
+                                         'sha256sum', sha256sum::varchar(255)
+                                        )
+            INTO _new_file;
+        RETURN _new_file;
+    END;			
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
+    CREATE OR REPLACE FUNCTION resources.files_update_v1(IN _owner character varying, IN _id bigint, IN _uploadId character varying, IN _file jsonb)
+    RETURNS jsonb AS
+    $BODY$
+    DECLARE
+        _updated_file jsonb;
+    BEGIN
+        -- _owner is required
+        IF coalesce(TRIM(_owner), '') = '' THEN
+            RAISE EXCEPTION '_owner is required';
+        END IF;
+
+        -- _uploadId is required
+        IF coalesce(TRIM(_uploadId), '') = '' THEN
+            RAISE EXCEPTION '_uploadId is required';
+        END IF;
+
+        -- RAISE INFO 'uploadId: %', _uploadId;
+        -- RAISE INFO '_file: %', _file;
+
+        UPDATE resources.file
+            SET sha256sum = _file->>'sha256sum'
+            WHERE owner = _owner AND id = _id
+            RETURNING jsonb_build_object('id', id::varchar(255),
+                                         'transient_uri', transient_uri::varchar(255),
+                                         'filename', filename::varchar(255),
+                                         'mime_type', mime_type::varchar(255),
+                                         'size', COALESCE(size::bigint, -1),
+                                         'sha256sum', sha256sum::varchar(255)
+
+                                        )
+            INTO _updated_file;
+
+            -- RAISE INFO '_updated_file: %', _updated_file;
+
+            -- UPDATE email.message
+			-- SET payload = email.attachments_set(payload, _uploadId, _file)   
+			-- WHERE owner = _owner AND
+			-- payload @@ '$.**.type == "attachment"' AND
+			-- payload @@ format('$.**.uploadId == "%s"', _uploadId)::jsonpath;
+
+        RETURN _updated_file;
+    END;			
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
+----------------------------------------------------people--------------------------------------------------------------
 
     IF EXISTS (SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema = 'people') THEN
         RAISE WARNING 'database schema "people" already exists -> drop & create';

@@ -1,4 +1,4 @@
-package mailbox
+package message
 
 import (
 	"context"
@@ -15,7 +15,7 @@ import (
 	imta "github.com/cargomail-org/cargomail/imta"
 	cfg "github.com/cargomail-org/cargomail/internal/config"
 	"github.com/cargomail-org/cargomail/internal/database"
-	"github.com/cargomail-org/cargomail/mailbox/filestore"
+	"github.com/cargomail-org/cargomail/mailbox/resource"
 	"github.com/rs/cors"
 	"github.com/sirupsen/logrus"
 	"github.com/zitadel/oidc/pkg/client/rs"
@@ -81,7 +81,7 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 		logrus.Fatalf("tcp listener on %s failed: %w", httpPort, err)
 	}
 
-	filestore.Run(httpMux, repo, config)
+	resource.Run(httpMux, repo, config)
 
 	imta.Start(wg, config)
 	errCh := make(chan error, 1)
