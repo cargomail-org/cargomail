@@ -104,6 +104,16 @@ func (h *handler) DraftsUpdate(ctx context.Context, req *emailv1.DraftsUpdateReq
 	return draft, nil
 }
 
+func (h *handler) DraftsUpdateAttachment(ctx context.Context, req *emailv1.DraftsUpdateAttachmentRequest) (*emptypb.Empty, error) {
+	cnt, err := h.repo.DraftsUpdateAttachment(ctx, req.Attachment)
+	if err != nil {
+		return &emptypb.Empty{}, status.Error(codes.Aborted, err.Error())
+	} else if cnt == 0 {
+		return &emptypb.Empty{}, status.Error(codes.Aborted, fmt.Sprintf("attachments with uploadId: %s not found", req.Attachment.UploadId))
+	}
+	return &emptypb.Empty{}, nil
+}
+
 func (h *handler) DraftsDelete(ctx context.Context, req *emailv1.DraftsDeleteRequest) (*emptypb.Empty, error) {
 	id, err := strconv.ParseInt(req.GetId(), 10, 64)
 	if err != nil {
@@ -111,7 +121,7 @@ func (h *handler) DraftsDelete(ctx context.Context, req *emailv1.DraftsDeleteReq
 	}
 	cnt := h.repo.DraftsDelete(ctx, id)
 	if cnt == 0 {
-		return &emptypb.Empty{}, status.Error(codes.Aborted, fmt.Sprintf("the record id:%d not found", id))
+		return &emptypb.Empty{}, status.Error(codes.Aborted, fmt.Sprintf("the record id: %d not found", id))
 	}
 	return &emptypb.Empty{}, nil
 }

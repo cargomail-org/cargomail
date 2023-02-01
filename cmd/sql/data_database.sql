@@ -116,7 +116,7 @@ BEGIN
     -- Resources
     do $$
     BEGIN
-        INSERT INTO resources.file (owner, transient_uri, sha256sum, filename, mime_type, size, payload) VALUES 
+        INSERT INTO resources.file (owner, download_url, sha256sum, filename, mime_type, size, payload) VALUES 
         ('matthew.cuthbert@demo.localhost',
         'http://localhost:8180/files/727940dc3cf0fd3119ea523775ca8c98',
         '77145c94c11f3754207499158df22406e1fe7635553c1c86dc5e881dfeb32016',

@@ -16,10 +16,11 @@ import useModal from '../../hooks/useModal'
 import Button from '../../ui/Button'
 import { InsertAttachmentPayload, INSERT_ATTACHMENT_COMMAND, SHOW_FILE_DIALOG_COMMAND } from '../AttachmentsPlugin'
 import Dropzone from './Dropzone'
-import { createTusUploadInstance } from '../../../../api/fileAPI'
+import { createTusUploadInstance } from '../../../../api/ResourceAPI'
 import { AttachmentsContext } from '../../../../context'
 import { IAttachment, ResumableState } from '../../../../context/AttachmentsContext'
 import { $isAttachmentNode, AttachmentNode } from '../../nodes/AttachmentNode'
+import useEmailAPI from '../../../../api/EmailAPI'
 
 export default function ActionsPlugin({ isRichText }: { isRichText: boolean }): JSX.Element {
   const [editor] = useLexicalComposerContext()
@@ -110,6 +111,7 @@ function getAllAttachmentNodes(node: LexicalNode): Array<AttachmentNode> {
 function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose: () => void }): JSX.Element {
   const [validFiles, setValidFiles] = useState<any>([])
   const { addAttachment, updateAttachment, updateProgress } = useContext(AttachmentsContext)
+  const { draftsUpdateAttachment } = useEmailAPI()
 
   return (
     <>
@@ -161,7 +163,7 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                       for (const attachmentChild of attachmentChildren) {
                         if (attachmentChild.getUploadId() === uploadId) {
                           attachmentChild.setUploadId('')
-                          attachmentChild.setTransientUri(attachment.downloadUrl || '')
+                          attachmentChild.setDownloadUrl(attachment.downloadUrl || '')
                           attachmentChild.setFilename(attachment.filename || '')
                           attachmentChild.setMimeType(attachment.mimeType || '')
                           attachmentChild.setFileSize(attachment.fileSize || -1)
@@ -171,6 +173,9 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                     },
                     { tag: 'history-merge' } // https://github.com/facebook/lexical/discussions/3520
                   )
+                  setTimeout(() => {
+                    draftsUpdateAttachment(attachment)
+                  }, 1000) // time should be the same or greater then in debouncedSubjectSave
                 }
 
                 addAttachment(attachment)
@@ -190,7 +195,7 @@ function ShowUploadDialog({ editor, onClose }: { editor: LexicalEditor; onClose:
                   width: 180,
                   height: 150,
                   uploadId: uploadId,
-                  transientUri: '',
+                  downloadUrl: '',
                   mimeType: '',
                   fileSize: -1,
                   sha256sum: '',

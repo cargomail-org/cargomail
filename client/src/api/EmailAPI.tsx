@@ -9,6 +9,7 @@ import encode from '../utils/mails/encode'
 import { useOidcUser } from '@axa-fr/react-oidc'
 import { Draft, Label_Type, Message, Thread } from './generated/proto/email/v1/email'
 import { buildDraftRecipients, b64EncodeUnicode } from '../utils/rfc5322'
+import { IAttachment } from '../context/AttachmentsContext'
 
 const baseUrl: string = process.env.REACT_APP_SERVER_BASE_URL || ''
 
@@ -277,6 +278,31 @@ const useEmailAPI = () => {
     })
   }
 
+  const draftsUpdateAttachment = (attachment: IAttachment) => {
+    console.log('EmailAPI', attachment)
+    const a = {
+      uploadId: attachment.uploadId,
+      downloadUrl: attachment.downloadUrl || '',
+      filename: attachment.filename || '',
+      mimeType: attachment.mimeType || '',
+      fileSize: BigInt(attachment.fileSize || 0),
+      sha256Sum: attachment.sha256sum || '',
+    }
+    const unaryCall = emailClient.draftsUpdateAttachment(
+      {
+        attachment: a,
+      },
+      options
+    )
+
+    unaryCall.then((response) => {
+      if (response.status.code !== 'OK') {
+        console.log(response.status.code, response.status.detail)
+        return null
+      }
+    })
+  }
+
   const draftsDelete = (id: any) => {
     console.log('EmailAPI', id)
     const unaryCall = emailClient.draftsDelete(
@@ -315,6 +341,7 @@ const useEmailAPI = () => {
     draftsCreate,
     draftsUpdate,
     draftsSend,
+    draftsUpdateAttachment,
     draftsDelete,
   }
 }

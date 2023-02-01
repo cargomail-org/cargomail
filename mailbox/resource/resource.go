@@ -43,7 +43,7 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 			event := <-handler.CompleteUploads
 			username := event.HTTPRequest.Header.Get("Username")
 			id := event.Upload.ID
-			transientUri := config.Mailbox.Uri + config.Filestore.BasePath + id
+			downloadUrl := config.Mailbox.Uri + config.Filestore.BasePath + id
 			filename := event.Upload.MetaData["filename"]
 			mimeType := event.Upload.MetaData["filetype"]
 			uploadId := event.Upload.MetaData["uploadId"]
@@ -51,7 +51,7 @@ func Run(mux *http.ServeMux, repo emailRepository.Repo, config *cfg.Config) {
 			path := event.Upload.Storage["Path"]
 			uploadSha256sum := event.HTTPRequest.Header.Get("sha256sum")
 
-			file := resourcev1.File{TransientUri: transientUri, Filename: filename, MimeType: mimeType, Size: fileSize}
+			file := resourcev1.File{DownloadUrl: downloadUrl, Filename: filename, MimeType: mimeType, FileSize: fileSize}
 
 			logrus.Printf("User %s uploaded %s file %s using uploadId: %s", username, id, mimeType, uploadId)
 

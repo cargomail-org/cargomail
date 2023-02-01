@@ -24,9 +24,14 @@ type ScanThread struct {
 type ScanMessage struct {
 	*emailv1.Message
 }
+
 type ScanDraft struct {
 	*emailv1.Draft
 	Message *ScanMessage `json:"message,omitempty"`
+}
+
+type ScanAttachment struct {
+	*emailv1.Attachment
 }
 
 func (s ScanLabel) Value() (driver.Value, error) {
@@ -76,6 +81,19 @@ func (s *ScanMessage) Scan(value interface{}) error {
 	data, ok := value.([]byte)
 	if !ok {
 		s.Message = &emailv1.Message{}
+		return nil
+	}
+	return json.Unmarshal(data, &s)
+}
+
+func (s ScanAttachment) Value() (driver.Value, error) {
+	return json.Marshal(s)
+}
+
+func (s *ScanAttachment) Scan(value interface{}) error {
+	data, ok := value.([]byte)
+	if !ok {
+		s.Attachment = &emailv1.Attachment{}
 		return nil
 	}
 	return json.Unmarshal(data, &s)

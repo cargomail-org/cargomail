@@ -6,8 +6,8 @@ import (
 	"strconv"
 
 	emailv1 "github.com/cargomail-org/cargomail/generated/proto/email/v1"
-	resourcev1 "github.com/cargomail-org/cargomail/internal/models/resource/v1"
 	"github.com/cargomail-org/cargomail/internal/mail"
+	resourcev1 "github.com/cargomail-org/cargomail/internal/models/resource/v1"
 	"google.golang.org/grpc/metadata"
 )
 
@@ -20,6 +20,7 @@ type Repo interface {
 	DraftsGet(context.Context, int64) (*emailv1.Draft, error)
 	DraftsCreate(context.Context, *emailv1.Draft) (*emailv1.Draft, error)
 	DraftsUpdate(context.Context, int64, *emailv1.Message) (*emailv1.Draft, error)
+	DraftsUpdateAttachment(context.Context, *emailv1.Attachment) (int64, error)
 	DraftsDelete(context.Context, int64) int64
 	FilesCreate(string, *resourcev1.File) (*resourcev1.File, error)
 	FilesUpdate(string, int64, string, *resourcev1.File) (*resourcev1.File, error)
@@ -206,6 +207,17 @@ func (r *Repository) DraftsUpdate(ctx context.Context, id int64, message *emailv
 	}
 
 	return scanDraft.Draft, err
+}
+
+func (r *Repository) DraftsUpdateAttachment(ctx context.Context, attachment *emailv1.Attachment) (int64, error) {
+	var scanAttachment ScanAttachment
+	scanAttachment.Attachment = attachment
+	var cnt int64
+
+	sqlStatement := `SELECT email.drafts_update_attachment_v1($1, $2);`
+	err := r.db.QueryRow(sqlStatement, getUsername(ctx), scanAttachment).Scan(&cnt)
+
+	return cnt, err
 }
 
 func (r *Repository) DraftsDelete(ctx context.Context, id int64) int64 {

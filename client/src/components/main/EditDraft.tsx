@@ -53,6 +53,7 @@ const EditDraft: FC<EditDraftProps> = (props) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSubjectSave = useCallback(
+    // time should be the same or lower then in attachment.upload.options.onSuccess
     debounce((draftEdit, subject) => updateSubject(draftEdit, subject), 1000),
     [] // will be created only once initially
   )

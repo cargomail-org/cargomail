@@ -309,27 +309,28 @@ BEGIN
     $BODY$
     DECLARE
 	    _rec RECORD;
-	    _transient_uri_path TEXT[];
+	    _download_url_path TEXT[];
 	    _filename_path TEXT[];
 	    _mime_type_path TEXT[];
 	    _file_size_path TEXT[];
 	    _sha256sum_path TEXT[];
     BEGIN
-        -- RAISE INFO '_file: %', _file;
+        -- RAISE INFO '_file: %'\n, _file;
+        -- RAISE INFO '_payload: %\n', _payload;
 
         FOR _rec IN SELECT * FROM email.jsonb_paths(_payload, '{}') path WHERE path @> '{"uploadId"}'
         LOOP
             IF ((_payload #>> _rec.path)::text = _uploadId) THEN
-                _transient_uri_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'transientUri');
+                _download_url_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'downloadUrl');
                 _filename_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'filename');
                 _mime_type_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'mimeType');
                 _file_size_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'fileSize');
                 _sha256sum_path = email.array_set(_rec.path, array_length(_rec.path, 1), 'sha256sum');
                 _payload := jsonb_set(_payload, _rec.path, '""');
-                _payload := jsonb_set(_payload, _transient_uri_path, _file->'transient_uri');
+                _payload := jsonb_set(_payload, _download_url_path, _file->'download_url');
                 _payload := jsonb_set(_payload, _filename_path, _file->'filename');
                 _payload := jsonb_set(_payload, _mime_type_path, _file->'mime_type');
-                _payload := jsonb_set(_payload, _file_size_path, _file->'size');
+                _payload := jsonb_set(_payload, _file_size_path, _file->'file_size');
                 _payload := jsonb_set(_payload, _sha256sum_path, _file->'sha256sum');
             END IF;
         END LOOP;
@@ -406,6 +407,32 @@ BEGIN
     $BODY$
     LANGUAGE plpgsql VOLATILE;
 
+    CREATE OR REPLACE FUNCTION email.drafts_update_attachment_v1(IN _owner character varying, IN _attachment jsonb)
+    RETURNS bigint AS
+    $BODY$
+    DECLARE
+        _updated_cnt bigint = 0;
+    BEGIN
+        -- _owner is required
+        IF coalesce(TRIM(_owner), '') = '' THEN
+            RAISE EXCEPTION '_owner is required';
+        END IF;
+
+        RAISE INFO 'uploadId: %', _attachment->>'upload_id';
+
+        WITH affected_rows AS (
+            UPDATE email.message
+                SET payload = email.attachments_set(payload, _attachment->>'upload_id', _attachment)   
+                WHERE owner = _owner AND
+                    payload @@ '$.**.type == "attachment"' AND
+                    payload @@ format('$.**.uploadId == "%s"', _attachment->>'upload_id')::jsonpath RETURNING 1
+        ) SELECT COUNT(*) INTO _updated_cnt
+          FROM affected_rows;		
+        RETURN _updated_cnt;
+    END;			
+    $BODY$
+    LANGUAGE plpgsql VOLATILE;
+
 ---------------------------------------------------resources------------------------------------------------------------
 
     IF EXISTS (SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema = 'resources') THEN
@@ -432,7 +459,7 @@ BEGIN
     CREATE TABLE resources.file (
         id bigint DEFAULT nextval('resources.file_id_seq'::regclass) PRIMARY KEY,
         owner character varying(255) NOT NULL,
-        transient_uri character varying(255) NOT NULL,
+        download_url character varying(255) NOT NULL,
         filename character varying(255) NOT NULL,
         mime_type character varying(255) NOT NULL,
         size bigint NOT NULL DEFAULT -1,
@@ -480,10 +507,10 @@ BEGIN
             RAISE EXCEPTION '_owner is required';
         END IF;
 
-        INSERT INTO resources.file(owner, transient_uri, filename, mime_type, size, sha256sum)
-            VALUES (_owner, _file->>'transient_uri', _file->>'filename', _file->>'mime_type', NULLIF(_file->>'size', '')::bigint, _file->>'sha256sum')
+        INSERT INTO resources.file(owner, download_url, filename, mime_type, size, sha256sum)
+            VALUES (_owner, _file->>'download_url', _file->>'filename', _file->>'mime_type', NULLIF(_file->>'size', '')::bigint, _file->>'sha256sum')
             RETURNING jsonb_build_object('id', id::varchar(255),
-                                         'transient_uri', transient_uri::varchar(255),
+                                         'download_url', download_url::varchar(255),
                                          'filename', filename::varchar(255),
                                          'mime_type', mime_type::varchar(255),
                                          'size', COALESCE(size, -1),
@@ -518,7 +545,7 @@ BEGIN
             SET sha256sum = _file->>'sha256sum'
             WHERE owner = _owner AND id = _id
             RETURNING jsonb_build_object('id', id::varchar(255),
-                                         'transient_uri', transient_uri::varchar(255),
+                                         'download_url', download_url::varchar(255),
                                          'filename', filename::varchar(255),
                                          'mime_type', mime_type::varchar(255),
                                          'size', COALESCE(size::bigint, -1),

@@ -96,7 +96,7 @@ function LazyAttachment({
 export default function AttachmentComponent({
   src,
   uploadId,
-  transientUri,
+  downloadUrl,
   filename,
   mimeType,
   fileSize,
@@ -120,7 +120,7 @@ export default function AttachmentComponent({
   showCaption: boolean
   src: string
   uploadId: string
-  transientUri: string
+  downloadUrl: string
   filename: string
   mimeType: string
   fileSize: number
@@ -329,8 +329,8 @@ export default function AttachmentComponent({
   } = useSettings()
 
   const findAttachment = (): IAttachment | null | undefined => {
-    const a = transientUri.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
-    return a ? a : transientUri.length === 0 ? null : attachments.find((a) => a.downloadUrl === transientUri)
+    const a = downloadUrl.length > 0 ? null : attachments.find((a) => a.uploadId === uploadId)
+    return a ? a : downloadUrl.length === 0 ? null : attachments.find((a) => a.downloadUrl === downloadUrl)
   }
 
   let attachment = findAttachment()
@@ -339,7 +339,7 @@ export default function AttachmentComponent({
   const isFocused = isSelected || isResizing
 
   const DownloadLink = () => {
-    const downloadUrl = attachment?.downloadUrl || transientUri
+    const downloadURL = attachment?.downloadUrl || downloadUrl
     const downloadFilename = attachment?.filename || filename
     const downloadMimeType = attachment?.mimeType || mimeType
     const downloadFileSize = attachment?.fileSize || fileSize
@@ -358,7 +358,7 @@ export default function AttachmentComponent({
               uploadProgress: 0,
               download: null,
               downloadProgress: -1,
-              downloadUrl: downloadUrl,
+              downloadUrl: downloadURL,
               filename: downloadFilename,
               mimeType: downloadMimeType,
               fileSize: downloadFileSize,
@@ -380,7 +380,7 @@ export default function AttachmentComponent({
           }
 
           attachment.download = new DownloadService(
-            downloadUrl,
+            downloadURL,
             downloadFilename,
             downloadMimeType,
             downloadFileSize,
@@ -409,8 +409,8 @@ export default function AttachmentComponent({
           />
           <div className="attachment-progress-container">
             {(() => {
-              const downloadUrl = attachment?.downloadUrl || transientUri
-              return downloadUrl.length > 0 ? (
+              const downloadURL = attachment?.downloadUrl || downloadUrl
+              return downloadURL.length > 0 ? (
                 <>
                   {attachment ? (
                     attachment.downloadProgress === -1 ? (

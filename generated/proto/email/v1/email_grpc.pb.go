@@ -28,6 +28,7 @@ type EmailClient interface {
 	DraftsSend(ctx context.Context, in *DraftsSendRequest, opts ...grpc.CallOption) (*Message, error)
 	DraftsGet(ctx context.Context, in *DraftsGetRequest, opts ...grpc.CallOption) (*Draft, error)
 	DraftsUpdate(ctx context.Context, in *DraftsUpdateRequest, opts ...grpc.CallOption) (*Draft, error)
+	DraftsUpdateAttachment(ctx context.Context, in *DraftsUpdateAttachmentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DraftsDelete(ctx context.Context, in *DraftsDeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	LabelsList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListLabelsResponse, error)
 	LabelsCreate(ctx context.Context, in *LabelsCreateRequest, opts ...grpc.CallOption) (*Label, error)
@@ -100,6 +101,15 @@ func (c *emailClient) DraftsGet(ctx context.Context, in *DraftsGetRequest, opts 
 func (c *emailClient) DraftsUpdate(ctx context.Context, in *DraftsUpdateRequest, opts ...grpc.CallOption) (*Draft, error) {
 	out := new(Draft)
 	err := c.cc.Invoke(ctx, "/email.v1.Email/DraftsUpdate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *emailClient) DraftsUpdateAttachment(ctx context.Context, in *DraftsUpdateAttachmentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/email.v1.Email/DraftsUpdateAttachment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -322,6 +332,7 @@ type EmailServer interface {
 	DraftsSend(context.Context, *DraftsSendRequest) (*Message, error)
 	DraftsGet(context.Context, *DraftsGetRequest) (*Draft, error)
 	DraftsUpdate(context.Context, *DraftsUpdateRequest) (*Draft, error)
+	DraftsUpdateAttachment(context.Context, *DraftsUpdateAttachmentRequest) (*emptypb.Empty, error)
 	DraftsDelete(context.Context, *DraftsDeleteRequest) (*emptypb.Empty, error)
 	LabelsList(context.Context, *emptypb.Empty) (*ListLabelsResponse, error)
 	LabelsCreate(context.Context, *LabelsCreateRequest) (*Label, error)
@@ -366,6 +377,9 @@ func (UnimplementedEmailServer) DraftsGet(context.Context, *DraftsGetRequest) (*
 }
 func (UnimplementedEmailServer) DraftsUpdate(context.Context, *DraftsUpdateRequest) (*Draft, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DraftsUpdate not implemented")
+}
+func (UnimplementedEmailServer) DraftsUpdateAttachment(context.Context, *DraftsUpdateAttachmentRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DraftsUpdateAttachment not implemented")
 }
 func (UnimplementedEmailServer) DraftsDelete(context.Context, *DraftsDeleteRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DraftsDelete not implemented")
@@ -535,6 +549,24 @@ func _Email_DraftsUpdate_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(EmailServer).DraftsUpdate(ctx, req.(*DraftsUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Email_DraftsUpdateAttachment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DraftsUpdateAttachmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EmailServer).DraftsUpdateAttachment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/email.v1.Email/DraftsUpdateAttachment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EmailServer).DraftsUpdateAttachment(ctx, req.(*DraftsUpdateAttachmentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -979,6 +1011,10 @@ var Email_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DraftsUpdate",
 			Handler:    _Email_DraftsUpdate_Handler,
+		},
+		{
+			MethodName: "DraftsUpdateAttachment",
+			Handler:    _Email_DraftsUpdateAttachment_Handler,
 		},
 		{
 			MethodName: "DraftsDelete",

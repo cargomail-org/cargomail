@@ -144,6 +144,24 @@ message DraftsUpdateRequest {
   Draft message_raw = 2;
 }
 
+message Attachment {
+  string upload_id = 1;
+
+  string download_url = 2;
+
+  string filename = 3;
+
+  string mime_type = 4;
+
+  int64 file_size = 5;
+
+  string sha256sum = 6;
+}
+
+message DraftsUpdateAttachmentRequest {
+  Attachment attachment = 1;
+}
+
 message DraftsDeleteRequest {
   string id = 1;
 }
@@ -260,6 +278,9 @@ service Email {
   }
 
   rpc DraftsUpdate ( DraftsUpdateRequest ) returns ( Draft ) {
+  }
+
+  rpc DraftsUpdateAttachment ( DraftsUpdateAttachmentRequest ) returns ( google.protobuf.Empty ) {
   }
 
   rpc DraftsDelete ( DraftsDeleteRequest ) returns ( google.protobuf.Empty ) {

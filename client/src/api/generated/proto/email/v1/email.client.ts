@@ -31,8 +31,9 @@ import type { LabelsGetRequest } from "./email";
 import type { Label } from "./email";
 import type { LabelsCreateRequest } from "./email";
 import type { ListLabelsResponse } from "./email";
-import type { Empty } from "../../../google/protobuf/empty";
 import type { DraftsDeleteRequest } from "./email";
+import type { Empty } from "../../../google/protobuf/empty";
+import type { DraftsUpdateAttachmentRequest } from "./email";
 import type { DraftsUpdateRequest } from "./email";
 import type { DraftsGetRequest } from "./email";
 import type { Message } from "./email";
@@ -68,6 +69,10 @@ export interface IEmailClient {
      * @generated from protobuf rpc: DraftsUpdate(email.v1.DraftsUpdateRequest) returns (email.v1.Draft);
      */
     draftsUpdate(input: DraftsUpdateRequest, options?: RpcOptions): UnaryCall<DraftsUpdateRequest, Draft>;
+    /**
+     * @generated from protobuf rpc: DraftsUpdateAttachment(email.v1.DraftsUpdateAttachmentRequest) returns (google.protobuf.Empty);
+     */
+    draftsUpdateAttachment(input: DraftsUpdateAttachmentRequest, options?: RpcOptions): UnaryCall<DraftsUpdateAttachmentRequest, Empty>;
     /**
      * @generated from protobuf rpc: DraftsDelete(email.v1.DraftsDeleteRequest) returns (google.protobuf.Empty);
      */
@@ -206,164 +211,171 @@ export class EmailClient implements IEmailClient, ServiceInfo {
         return stackIntercept<DraftsUpdateRequest, Draft>("unary", this._transport, method, opt, input);
     }
     /**
+     * @generated from protobuf rpc: DraftsUpdateAttachment(email.v1.DraftsUpdateAttachmentRequest) returns (google.protobuf.Empty);
+     */
+    draftsUpdateAttachment(input: DraftsUpdateAttachmentRequest, options?: RpcOptions): UnaryCall<DraftsUpdateAttachmentRequest, Empty> {
+        const method = this.methods[5], opt = this._transport.mergeOptions(options);
+        return stackIntercept<DraftsUpdateAttachmentRequest, Empty>("unary", this._transport, method, opt, input);
+    }
+    /**
      * @generated from protobuf rpc: DraftsDelete(email.v1.DraftsDeleteRequest) returns (google.protobuf.Empty);
      */
     draftsDelete(input: DraftsDeleteRequest, options?: RpcOptions): UnaryCall<DraftsDeleteRequest, Empty> {
-        const method = this.methods[5], opt = this._transport.mergeOptions(options);
+        const method = this.methods[6], opt = this._transport.mergeOptions(options);
         return stackIntercept<DraftsDeleteRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: LabelsList(google.protobuf.Empty) returns (email.v1.ListLabelsResponse);
      */
     labelsList(input: Empty, options?: RpcOptions): UnaryCall<Empty, ListLabelsResponse> {
-        const method = this.methods[6], opt = this._transport.mergeOptions(options);
+        const method = this.methods[7], opt = this._transport.mergeOptions(options);
         return stackIntercept<Empty, ListLabelsResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: LabelsCreate(email.v1.LabelsCreateRequest) returns (email.v1.Label);
      */
     labelsCreate(input: LabelsCreateRequest, options?: RpcOptions): UnaryCall<LabelsCreateRequest, Label> {
-        const method = this.methods[7], opt = this._transport.mergeOptions(options);
+        const method = this.methods[8], opt = this._transport.mergeOptions(options);
         return stackIntercept<LabelsCreateRequest, Label>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: LabelsGet(email.v1.LabelsGetRequest) returns (email.v1.Label);
      */
     labelsGet(input: LabelsGetRequest, options?: RpcOptions): UnaryCall<LabelsGetRequest, Label> {
-        const method = this.methods[8], opt = this._transport.mergeOptions(options);
+        const method = this.methods[9], opt = this._transport.mergeOptions(options);
         return stackIntercept<LabelsGetRequest, Label>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: LabelsUpdate(email.v1.LabelsUpdateRequest) returns (email.v1.Label);
      */
     labelsUpdate(input: LabelsUpdateRequest, options?: RpcOptions): UnaryCall<LabelsUpdateRequest, Label> {
-        const method = this.methods[9], opt = this._transport.mergeOptions(options);
+        const method = this.methods[10], opt = this._transport.mergeOptions(options);
         return stackIntercept<LabelsUpdateRequest, Label>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: LabelsDelete(email.v1.LabelsDeleteRequest) returns (google.protobuf.Empty);
      */
     labelsDelete(input: LabelsDeleteRequest, options?: RpcOptions): UnaryCall<LabelsDeleteRequest, Empty> {
-        const method = this.methods[10], opt = this._transport.mergeOptions(options);
+        const method = this.methods[11], opt = this._transport.mergeOptions(options);
         return stackIntercept<LabelsDeleteRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: LabelsPatch(email.v1.LabelsPatchRequest) returns (email.v1.Label);
      */
     labelsPatch(input: LabelsPatchRequest, options?: RpcOptions): UnaryCall<LabelsPatchRequest, Label> {
-        const method = this.methods[11], opt = this._transport.mergeOptions(options);
+        const method = this.methods[12], opt = this._transport.mergeOptions(options);
         return stackIntercept<LabelsPatchRequest, Label>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: MessagesList(email.v1.MessagesListRequest) returns (email.v1.ListMessagesResponse);
      */
     messagesList(input: MessagesListRequest, options?: RpcOptions): UnaryCall<MessagesListRequest, ListMessagesResponse> {
-        const method = this.methods[12], opt = this._transport.mergeOptions(options);
+        const method = this.methods[13], opt = this._transport.mergeOptions(options);
         return stackIntercept<MessagesListRequest, ListMessagesResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: MessagesBatchDelete(email.v1.MessagesBatchDeleteRequest) returns (google.protobuf.Empty);
      */
     messagesBatchDelete(input: MessagesBatchDeleteRequest, options?: RpcOptions): UnaryCall<MessagesBatchDeleteRequest, Empty> {
-        const method = this.methods[13], opt = this._transport.mergeOptions(options);
+        const method = this.methods[14], opt = this._transport.mergeOptions(options);
         return stackIntercept<MessagesBatchDeleteRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: MessagesBatchModify(email.v1.MessagesBatchModifyRequest) returns (google.protobuf.Empty);
      */
     messagesBatchModify(input: MessagesBatchModifyRequest, options?: RpcOptions): UnaryCall<MessagesBatchModifyRequest, Empty> {
-        const method = this.methods[14], opt = this._transport.mergeOptions(options);
+        const method = this.methods[15], opt = this._transport.mergeOptions(options);
         return stackIntercept<MessagesBatchModifyRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: MessagesSend(email.v1.MessagesSendRequest) returns (email.v1.Message);
      */
     messagesSend(input: MessagesSendRequest, options?: RpcOptions): UnaryCall<MessagesSendRequest, Message> {
-        const method = this.methods[15], opt = this._transport.mergeOptions(options);
+        const method = this.methods[16], opt = this._transport.mergeOptions(options);
         return stackIntercept<MessagesSendRequest, Message>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: MessagesGet(email.v1.MessagesGetRequest) returns (email.v1.Message);
      */
     messagesGet(input: MessagesGetRequest, options?: RpcOptions): UnaryCall<MessagesGetRequest, Message> {
-        const method = this.methods[16], opt = this._transport.mergeOptions(options);
+        const method = this.methods[17], opt = this._transport.mergeOptions(options);
         return stackIntercept<MessagesGetRequest, Message>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: MessagesDelete(email.v1.MessagesDeleteRequest) returns (google.protobuf.Empty);
      */
     messagesDelete(input: MessagesDeleteRequest, options?: RpcOptions): UnaryCall<MessagesDeleteRequest, Empty> {
-        const method = this.methods[17], opt = this._transport.mergeOptions(options);
+        const method = this.methods[18], opt = this._transport.mergeOptions(options);
         return stackIntercept<MessagesDeleteRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: MessagesModify(email.v1.MessagesModifyRequest) returns (email.v1.Message);
      */
     messagesModify(input: MessagesModifyRequest, options?: RpcOptions): UnaryCall<MessagesModifyRequest, Message> {
-        const method = this.methods[18], opt = this._transport.mergeOptions(options);
+        const method = this.methods[19], opt = this._transport.mergeOptions(options);
         return stackIntercept<MessagesModifyRequest, Message>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: MessagesTrash(email.v1.MessagesTrashRequest) returns (email.v1.Message);
      */
     messagesTrash(input: MessagesTrashRequest, options?: RpcOptions): UnaryCall<MessagesTrashRequest, Message> {
-        const method = this.methods[19], opt = this._transport.mergeOptions(options);
+        const method = this.methods[20], opt = this._transport.mergeOptions(options);
         return stackIntercept<MessagesTrashRequest, Message>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: MessagesUntrash(email.v1.MessagesUntrashRequest) returns (email.v1.Message);
      */
     messagesUntrash(input: MessagesUntrashRequest, options?: RpcOptions): UnaryCall<MessagesUntrashRequest, Message> {
-        const method = this.methods[20], opt = this._transport.mergeOptions(options);
+        const method = this.methods[21], opt = this._transport.mergeOptions(options);
         return stackIntercept<MessagesUntrashRequest, Message>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: MessagesAttachmentsGet(email.v1.MessagesAttachmentsGetRequest) returns (email.v1.MessagePartBody);
      */
     messagesAttachmentsGet(input: MessagesAttachmentsGetRequest, options?: RpcOptions): UnaryCall<MessagesAttachmentsGetRequest, MessagePartBody> {
-        const method = this.methods[21], opt = this._transport.mergeOptions(options);
+        const method = this.methods[22], opt = this._transport.mergeOptions(options);
         return stackIntercept<MessagesAttachmentsGetRequest, MessagePartBody>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: ThreadsList(email.v1.ThreadsListRequest) returns (email.v1.ListThreadsResponse);
      */
     threadsList(input: ThreadsListRequest, options?: RpcOptions): UnaryCall<ThreadsListRequest, ListThreadsResponse> {
-        const method = this.methods[22], opt = this._transport.mergeOptions(options);
+        const method = this.methods[23], opt = this._transport.mergeOptions(options);
         return stackIntercept<ThreadsListRequest, ListThreadsResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: ThreadsGet(email.v1.ThreadsGetRequest) returns (email.v1.Thread);
      */
     threadsGet(input: ThreadsGetRequest, options?: RpcOptions): UnaryCall<ThreadsGetRequest, Thread> {
-        const method = this.methods[23], opt = this._transport.mergeOptions(options);
+        const method = this.methods[24], opt = this._transport.mergeOptions(options);
         return stackIntercept<ThreadsGetRequest, Thread>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: ThreadsDelete(email.v1.ThreadsDeleteRequest) returns (google.protobuf.Empty);
      */
     threadsDelete(input: ThreadsDeleteRequest, options?: RpcOptions): UnaryCall<ThreadsDeleteRequest, Empty> {
-        const method = this.methods[24], opt = this._transport.mergeOptions(options);
+        const method = this.methods[25], opt = this._transport.mergeOptions(options);
         return stackIntercept<ThreadsDeleteRequest, Empty>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: ThreadsModify(email.v1.ThreadsModifyRequest) returns (email.v1.Thread);
      */
     threadsModify(input: ThreadsModifyRequest, options?: RpcOptions): UnaryCall<ThreadsModifyRequest, Thread> {
-        const method = this.methods[25], opt = this._transport.mergeOptions(options);
+        const method = this.methods[26], opt = this._transport.mergeOptions(options);
         return stackIntercept<ThreadsModifyRequest, Thread>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: ThreadsTrash(email.v1.ThreadsTrashRequest) returns (email.v1.Thread);
      */
     threadsTrash(input: ThreadsTrashRequest, options?: RpcOptions): UnaryCall<ThreadsTrashRequest, Thread> {
-        const method = this.methods[26], opt = this._transport.mergeOptions(options);
+        const method = this.methods[27], opt = this._transport.mergeOptions(options);
         return stackIntercept<ThreadsTrashRequest, Thread>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: ThreadsUntrash(email.v1.ThreadsUntrashRequest) returns (email.v1.Thread);
      */
     threadsUntrash(input: ThreadsUntrashRequest, options?: RpcOptions): UnaryCall<ThreadsUntrashRequest, Thread> {
-        const method = this.methods[27], opt = this._transport.mergeOptions(options);
+        const method = this.methods[28], opt = this._transport.mergeOptions(options);
         return stackIntercept<ThreadsUntrashRequest, Thread>("unary", this._transport, method, opt, input);
     }
 }
