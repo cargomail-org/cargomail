@@ -212,9 +212,11 @@ export default function AttachmentComponent({
     const checkResumable = async () => {
       if (attachment) {
         attachment.nodesCount++
-        if (attachment.resumableState === ResumableState.Aborted) {
-          if (await resumeUpload(attachment.upload)) {
-            attachment.resumableState = ResumableState.Resumed
+        if (attachment?.upload?.uploadId?.length > 0) {
+          if (attachment.resumableState === ResumableState.Aborted) {
+            if (await resumeUpload(attachment.upload)) {
+              attachment.resumableState = ResumableState.Resumed
+            }
           }
         }
       }
@@ -230,8 +232,10 @@ export default function AttachmentComponent({
       if (attachment) {
         attachment.nodesCount--
         if (attachment.nodesCount === 0) {
-          attachment.upload.abort()
-          attachment.resumableState = ResumableState.Aborted
+          if (attachment?.upload?.uploadId?.length > 0) {
+            attachment.upload.abort()
+            attachment.resumableState = ResumableState.Aborted
+          }
         }
       }
     },
