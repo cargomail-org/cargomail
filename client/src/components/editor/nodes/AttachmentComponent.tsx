@@ -342,33 +342,58 @@ export default function AttachmentComponent({
   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected || isResizing
 
-  interface BufferStreamProps<W> {
-    onStart?(): void
-    onChunk?(chunk: W): void | PromiseLike<void>
-    onEnd?(): void
-    queuingStrategy?: QueuingStrategy<W>
-  }
+  const PlayLink = () => {
+    const downloadURL = attachment?.downloadUrl || downloadUrl
+    const downloadFilename = attachment?.filename || filename
+    const downloadMimeType = attachment?.mimeType || mimeType
+    const downloadFileSize = attachment?.fileSize || fileSize
+    const downloadSha256sum = attachment?.sha256sum || sha256sum
 
-  class BufferStream<W> extends WritableStream<W> {
-    constructor(props: BufferStreamProps<W>) {
-      super(
-        {
-          start() {
-            if (props.onStart) props.onStart()
-          },
-          async write(chunk) {
-            if (props.onChunk) await props.onChunk(chunk)
-          },
-          close() {
-            if (props.onEnd) props.onEnd()
-          },
-          abort(error) {
-            return Promise.reject(error)
-          },
-        },
-        props.queuingStrategy
-      )
-    }
+    return (
+      <>
+        <a
+          href="#"
+          onClick={async () => {
+            if (!attachment) {
+              attachment = {
+                nodesCount: 0,
+                resumableState: ResumableState.None,
+                uploadId: '',
+                upload: null,
+                uploadProgress: 0,
+                download: null,
+                downloadProgress: -1,
+                downloadUrl: downloadURL,
+                filename: downloadFilename,
+                mimeType: downloadMimeType,
+                fileSize: downloadFileSize,
+                sha256sum: downloadSha256sum,
+              }
+              addAttachment(attachment)
+            }
+
+            const mediaSource = new MediaSource()
+            // const video = document.querySelector('video')
+            const video = videoAttachment.current
+            video!.src = URL.createObjectURL(mediaSource)
+            video!.onloadedmetadata = () => {
+              video!.play()
+            }
+
+            attachment.download = new DownloadService(
+              downloadURL,
+              downloadFilename,
+              downloadMimeType,
+              downloadFileSize,
+              downloadSha256sum,
+              null
+            )
+            attachment.download.streamToMedia(mediaSource, video)
+          }}>
+          Play
+        </a>
+      </>
+    )
   }
 
   const DownloadLink = () => {
@@ -401,128 +426,35 @@ export default function AttachmentComponent({
               addAttachment(attachment)
             }
 
-            const mediaSource = new MediaSource()
-            const video = document.querySelector('video')
-            video!.src = URL.createObjectURL(mediaSource)
-            video!.onloadedmetadata = () => {
-              console.log('Play')
-              video!.play()
-            }
-
-            /*try {
-              const src = new MediaSource()
-              video!.src = URL.createObjectURL(src)
-              await new Promise((r) => (src.onsourceopen = r))
-              const sb = src.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
-              const wait = () => new Promise((resolve) => (sb.onupdateend = resolve))
-              const writable = new BufferStream({
-                onChunk: async (chunk: any) => {
-                  if (video!.error) return
-                  sb.appendBuffer(chunk)
-                  await wait()
-
-                  console.log('on Chunk')
-                },
-                onEnd: () => {
-                  // sourceBuffer.addEventListener('updateend', mediaSource.endOfStream)
-
-                  console.log('on End')
-                },
-              })
-              ;(await fetchOk()).body!.pipeTo(writable)
-              // await video!.play()
-            } catch (e) {
-              console.log(e)
-            }
-
-            async function fetchOk() {
-              const res = await fetch(attachment?.downloadUrl || downloadUrl)
-              if (!res.ok) throw new Error(await res.text())
-              return res
-            }*/
-
-            mediaSource.addEventListener('sourceopen', async () => {
-              // create video buffer
-              // const sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vorbis,vp8"')
-
-              const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
-              const response = await fetch(attachment?.downloadUrl || downloadUrl)
-              const wait = () => new Promise((resolve) => (sourceBuffer.onupdateend = resolve))
-              const writable = new BufferStream({
-                onChunk: async (chunk: any) => {
-                  if (video!.error) return
-                  sourceBuffer.appendBuffer(chunk)
-                  await wait()
-
-                  console.log('on Chunk')
-                },
-                onEnd: () => {
-                  // sourceBuffer.addEventListener('updateend', mediaSource.endOfStream)
-
-                  console.log('on End')
-                },
-              })
-
-              const body = response.body
-              body!.pipeTo(writable)
-            })
-
-            /*mediaSource.addEventListener('sourceopen', async () => {
-              const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
-              const response = await fetch(attachment?.downloadUrl || downloadUrl)
-              const body = response.body
-              const reader = body!.getReader()
-
-              let streamNotDone = true
-
-              while (streamNotDone) {
-                const { value, done } = await reader.read()
-
-                if (done) {
-                  streamNotDone = false
-                  break
-                }
-
-                await new Promise((resolve, reject) => {
-                  sourceBuffer.appendBuffer(value)
-
-                  sourceBuffer.onupdateend = () => {
-                    resolve(true)
-                  }
-                })
+            const onProgress = (bytesDownloaded: number, bytesTotal: number) => {
+              const percentage = ((bytesDownloaded / bytesTotal) * 100).toFixed(2)
+              if (bytesDownloaded === bytesTotal) {
+                setTimeout(() => {
+                  attachment!.downloadProgress = -1
+                  updateProgress(attachment!)
+                }, 2000)
               }
-            })*/
-
-            /*const onProgress = (bytesDownloaded: number, bytesTotal: number) => {
-            const percentage = ((bytesDownloaded / bytesTotal) * 100).toFixed(2)
-            if (bytesDownloaded === bytesTotal) {
-              setTimeout(() => {
-                attachment!.downloadProgress = -1
-                updateProgress(attachment!)
-              }, 2000)
+              attachment!.downloadProgress = parseFloat(percentage)
+              updateProgress(attachment!)
             }
-            attachment!.downloadProgress = parseFloat(percentage)
-            updateProgress(attachment!)
-          }
 
-          attachment.download = new DownloadService(
-            downloadURL,
-            downloadFilename,
-            downloadMimeType,
-            downloadFileSize,
-            downloadSha256sum,
-            onProgress
-          )
-          attachment.download.streamToFile()*/
+            attachment.download = new DownloadService(
+              downloadURL,
+              downloadFilename,
+              downloadMimeType,
+              downloadFileSize,
+              downloadSha256sum,
+              onProgress
+            )
+            attachment.download.streamToFile()
           }}>
           Download
         </a>
-        <video width="100" height="100" autoPlay>
-          Your browser does not support the video tag.
-        </video>
       </>
     )
   }
+
+  const videoAttachment = useRef<HTMLVideoElement | null>(null)
 
   return (
     <Suspense fallback={null}>
@@ -540,22 +472,34 @@ export default function AttachmentComponent({
           <div className="attachment-progress-container">
             {(() => {
               const downloadURL = attachment?.downloadUrl || downloadUrl
+              const mimeTYPE = attachment?.mimeType || (mimeType as string)
               return downloadURL.length > 0 ? (
                 <>
-                  {attachment ? (
-                    attachment.downloadProgress === -1 ? (
-                      <DownloadLink />
-                    ) : (
-                      'Downloading...'
-                    )
+                  {mimeTYPE === 'video/mp4' ? (
+                    <>
+                      <video ref={videoAttachment} width="100%" height="100%" controls>
+                        Your browser does not support the video tag.
+                      </video>
+                      <PlayLink />
+                    </>
                   ) : (
-                    <DownloadLink />
+                    <>
+                      {attachment ? (
+                        attachment.downloadProgress === -1 ? (
+                          <DownloadLink />
+                        ) : (
+                          'Downloading...'
+                        )
+                      ) : (
+                        <DownloadLink />
+                      )}
+                      <div>
+                        {attachment && attachment.downloadProgress >= 0
+                          ? attachment?.downloadProgress.toString().concat('%')
+                          : '\u00A0'}
+                      </div>
+                    </>
                   )}
-                  <div>
-                    {attachment && attachment.downloadProgress >= 0
-                      ? attachment?.downloadProgress.toString().concat('%')
-                      : '\u00A0'}
-                  </div>
                 </>
               ) : (
                 <>

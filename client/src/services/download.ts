@@ -1,6 +1,35 @@
 import { mimeTypes } from 'mime-wrapper'
 import jsSHA from 'jssha'
 
+interface BufferStreamProps<W> {
+  onStart?(): void
+  onChunk?(chunk: W): void | PromiseLike<void>
+  onEnd?(): void
+  queuingStrategy?: QueuingStrategy<W>
+}
+
+class BufferStream<W> extends WritableStream<W> {
+  constructor(props: BufferStreamProps<W>) {
+    super(
+      {
+        start() {
+          if (props.onStart) props.onStart()
+        },
+        async write(chunk) {
+          if (props.onChunk) await props.onChunk(chunk)
+        },
+        close() {
+          if (props.onEnd) props.onEnd()
+        },
+        abort(error) {
+          return Promise.reject(error)
+        },
+      },
+      props.queuingStrategy
+    )
+  }
+}
+
 export class DownloadService {
   __url: string
   __filename: string
@@ -16,6 +45,75 @@ export class DownloadService {
     this.__fileSize = fileSize
     this.__sha256sum = sha256sum
     this.__onProgress = onProgress
+  }
+
+  streamToMedia = async (mediaSource: any, video: any) => {
+    let shaObj: any
+
+    mediaSource.addEventListener('sourceopen', async () => {
+      const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
+      const response = await fetch(this.__url)
+      const wait = () => new Promise((resolve) => (sourceBuffer.onupdateend = resolve))
+      const writable = new BufferStream({
+        onStart() {
+          shaObj = new jsSHA('SHA-256', 'ARRAYBUFFER')
+        },
+        onChunk: async (chunk: any) => {
+          if (video!.error) return
+
+          shaObj.update(chunk)
+
+          sourceBuffer.appendBuffer(chunk)
+          await wait()
+        },
+        onEnd: () => {
+          sourceBuffer.addEventListener('updateend', mediaSource.endOfStream)
+
+          mediaSource.endOfStream()
+          // sourceBuffer.onupdateend = () => {
+          //   mediaSource.endOfStream()
+          // }
+
+          if (this.__url.length > 0 && shaObj.getHash('HEX') !== this.__sha256sum) {
+            throw new DOMException('checksum mismatch', 'ChecksumError')
+          }
+        },
+      })
+
+      const body = response.body
+      body!.pipeTo(writable).catch((err: any) => {
+        console.error(err)
+        setTimeout(() => {
+          alert(err)
+        }, 200)
+      })
+    })
+
+    /*mediaSource.addEventListener('sourceopen', async () => {
+      const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
+      const response = await fetch(this.__url)
+      const body = response.body
+      const reader = body!.getReader()
+
+      let streamNotDone = true
+
+      while (streamNotDone) {
+        const { value, done } = await reader.read()
+
+        if (done) {
+          streamNotDone = false
+          break
+        }
+
+        await new Promise((resolve, reject) => {
+          sourceBuffer.appendBuffer(value)
+
+          sourceBuffer.onupdateend = () => {
+            resolve(true)
+          }
+        })
+      }
+    })*/
   }
 
   streamToFile = async () => {
