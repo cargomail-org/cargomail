@@ -77,8 +77,8 @@ const Dropzone = ({ validFiles, setValidFiles }: any) => {
   }
 
   const validateFile = (file: any) => {
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/x-icon']
-    if (validTypes.indexOf(file.type) === -1) {
+    const validTypes: string[] | null = null // ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/x-icon']
+    if (validTypes && (validTypes as string[]).indexOf(file.type) === -1) {
       return false
     }
 
