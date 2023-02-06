@@ -2,12 +2,13 @@
 
 Email is the most pervasive form of business information exchange. Email is often used not only as an interpersonal communication tool but also as the default choice to send files. Over time, your inbox becomes a personal knowledge repository of what was sent by whom and when. Such an email repository has one fundamental flaw. Due to the design principle of the email system, the email cannot contain large messages. Thus, users often send links to external files instead of attachments or inline images. Links may expire with time, and external files can change. Consequently, your knowledge repository deteriorates.
 
-# Internet Mail 2000 Legacy
-
-This effort enhances the [Internet Mail 2000](https://en.wikipedia.org/wiki/Internet_Mail_2000) pull-based concept proposed by Daniel J. Bernstein and uses a specific [OAuth 2.0 constrained delegation mechanism](https://github.com/cargomail-org/identity-propagation-and-assertions), designed on the principle that the final storage of message resources—binary data (blobs) referenced by links in the message—should be the responsibility of the recipients, and not of the sender as it is with the SMTP push-based email architecture.
 # Cargomail
 
 Cargomail is built on top of the OAuth 2.0 industry-standard protocol and its extensions. It uses an advanced web editor, which allows users to link documents, images, and videos in the message body while keeping the respective resource data at the Cargo resource server. To ensure the integrity of email message and their resources, Cargomail relies on resource hashes. The newly designed [intermodal Message Transfer Agent (iMTA)](https://github.com/cargomail-org/imta) enables the transfer of email messages and resources in two modes — push and pull. The sender's iMTA sends an email to the recipient's iMTA, which checks for the presence of links to the message resources, and then pulls the respective resources via the sender's iMTA. This concept allows transferring of a massive amount of data without the risk of receiving spam.
+
+# Internet Mail 2000 Legacy
+
+This effort enhances the [Internet Mail 2000](https://en.wikipedia.org/wiki/Internet_Mail_2000) pull-based concept proposed by Daniel J. Bernstein and uses a specific [OAuth 2.0 constrained delegation mechanism](https://github.com/cargomail-org/identity-propagation-and-assertions), designed on the principle that the final storage of message resources—binary data (blobs) referenced by links in the message—should be the responsibility of the recipients, and not of the sender as it is with the SMTP push-based email architecture.
 
 # Architecture
 
