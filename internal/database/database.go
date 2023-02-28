@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/lib/pq"
-	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 
 	cfg "github.com/cargomail-org/cargomail/internal/config"
@@ -69,17 +68,6 @@ func ConnectAsUser(config *cfg.Config) (*sql.DB, error) {
 }
 
 func connect(databaseURL string, maxOpenConns int) (*sql.DB, error) {
-	client, err := sql.Open("postgres", databaseURL)
-	if err != nil {
-		return nil, err
-	}
-
-	client.SetMaxOpenConns(maxOpenConns)
-
-	if err := client.Ping(); err != nil {
-		return nil, err
-	}
-
 	baseConn, err := pq.NewConnector(databaseURL)
 	if err != nil {
 		return nil, err
@@ -95,6 +83,12 @@ func connect(databaseURL string, maxOpenConns int) (*sql.DB, error) {
 	})
 
 	db := sql.OpenDB(loggingConn)
+
+	db.SetMaxOpenConns(maxOpenConns)
+
+	if err := db.Ping(); err != nil {
+		return nil, err
+	}
 
 	return db, nil
 }

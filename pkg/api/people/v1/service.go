@@ -1,4 +1,4 @@
-package handler
+package service
 
 import (
 	"context"
@@ -10,16 +10,16 @@ import (
 	// "google.golang.org/protobuf/types/known/emptypb"
 )
 
-type handler struct {
+type service struct {
 	peoplev1.UnimplementedPeopleServer
 	repo repository.Repo
 }
 
-func NewHandler(repo repository.Repo) *handler {
-	return &handler{repo: repo}
+func NewService(repo repository.Repo) *service {
+	return &service{repo: repo}
 }
 
-func (h *handler) ContactsList(ctx context.Context, req *peoplev1.ContactsListRequest) (*peoplev1.ListContactsResponse, error) {
+func (h *service) ContactsList(ctx context.Context, req *peoplev1.ContactsListRequest) (*peoplev1.ListContactsResponse, error) {
 	people, err := h.repo.ContactsList(ctx, req)
 	if err != nil {
 		return nil, status.Error(codes.Aborted, err.Error())
@@ -28,7 +28,7 @@ func (h *handler) ContactsList(ctx context.Context, req *peoplev1.ContactsListRe
 	return connectionsList, nil
 }
 
-func (h *handler) ContactsCreate(ctx context.Context, req *peoplev1.ContactsCreateRequest) (*peoplev1.Person, error) {
+func (h *service) ContactsCreate(ctx context.Context, req *peoplev1.ContactsCreateRequest) (*peoplev1.Person, error) {
 	person, err := h.repo.ContactsCreate(ctx, req)
 	if err != nil {
 		return nil, status.Error(codes.Aborted, err.Error())

@@ -33,8 +33,8 @@ import (
 	peoplev1 "github.com/cargomail-org/cargomail/generated/proto/people/v1"
 	emailRepository "github.com/cargomail-org/cargomail/internal/repository/email/v1"
 	peopleRepository "github.com/cargomail-org/cargomail/internal/repository/people/v1"
-	emailHandler "github.com/cargomail-org/cargomail/pkg/api/email/v1"
-	peopleHandler "github.com/cargomail-org/cargomail/pkg/api/people/v1"
+	emailService "github.com/cargomail-org/cargomail/pkg/api/email/v1"
+	peopleService "github.com/cargomail-org/cargomail/pkg/api/people/v1"
 )
 
 type AuthIterceptor struct {
@@ -64,9 +64,9 @@ func Start(wg *sync.WaitGroup, config *cfg.Config) error {
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(auth.UnaryInterceptor))
 
 	grpc_health_v1.RegisterHealthServer(grpcServer, &GrpcHealthService{})
-	peoplev1.RegisterPeopleServer(grpcServer, peopleHandler.NewHandler(peopleRepository.NewRepository(db)))
+	peoplev1.RegisterPeopleServer(grpcServer, peopleService.NewService(peopleRepository.NewRepository(db)))
 	repo := emailRepository.NewRepository(db)
-	emailv1.RegisterEmailServer(grpcServer, emailHandler.NewHandler(repo))
+	emailv1.RegisterEmailServer(grpcServer, emailService.NewService(repo))
 
 	httpMux := http.NewServeMux()
 
@@ -191,7 +191,7 @@ func (s *AuthIterceptor) Authenticate(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
-	
+
 		username, ok := resp.GetClaim("username").(string)
 		if !ok {
 			logrus.Errorf("%v: claim 'username' does't not exists", codes.Unauthenticated)
