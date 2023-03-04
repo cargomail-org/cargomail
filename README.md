@@ -20,7 +20,7 @@ As of December 2022, the following resources have been used to develop the Cargo
 
 - Gmail API [documentation](https://developers.google.com/gmail/api/reference/rest), licensed under the Creative Commons Attribution 4.0 License, has been used to design a gRPC interface between Cargomail Client and Cargo Mailbox.
 
-- Zitadel [OpenID Connect SDK](https://github.com/zitadel/oidc), licensed under the Apache-2.0 License, has been adapted to meet the [Identity Propagation and Assertions Protocol](https://github.com/cargomail-org/identity-propagation-and-assertions-protocol) concept.
+- Zitadel [OpenID Connect SDK](https://github.com/zitadel/oidc), licensed under the Apache-2.0 License, has been adapted to meet the [Global Reference Identity Protocol (GRIP)](https://github.com/cargomail-org/grip) concept.
 
 - Linbox, a Google Inbox-inspired [webmail client](https://github.com/yanglin5689446/linbox) licensed under the DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE, was cloned to speed up the Cargomail Client application development. The source code has been heavily customized to be aligned with the MTA proof of concept.
 
