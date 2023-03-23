@@ -4,6 +4,6 @@ Email is the most pervasive form of business information exchange. People use em
 
 # Cargomail
 
-Cargomail does not use attachments. Instead, it uses an advanced web editor, which allows users to define documents, images, and videos in the message body by their content, keeping the respective data in a content-addressable mailbox.
+Cargomail does not use attachments or links to external files. Instead, it uses an advanced web editor, which allows users to define documents, images, and videos in the message body by their content, keeping the respective data in a content-addressable mailbox.
 
 
