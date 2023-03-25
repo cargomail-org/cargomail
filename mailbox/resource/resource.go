@@ -9,8 +9,8 @@ import (
 	"strconv"
 
 	"github.com/sirupsen/logrus"
-	"github.com/tus/tusd/pkg/filestore"
-	tusd "github.com/tus/tusd/pkg/handler"
+	"github.com/tus/tusd/v2/pkg/filestore"
+	tusd "github.com/tus/tusd/v2/pkg/handler"
 
 	resourcev1 "github.com/cargomail-org/cargomail/internal/models/resource/v1"
 	cfg "github.com/cargomail-org/cargomail/internal/config"

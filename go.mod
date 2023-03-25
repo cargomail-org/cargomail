@@ -4,9 +4,9 @@ go 1.19
 
 require (
 	github.com/rs/cors v1.8.3
-	github.com/tus/tusd v1.10.0
+	github.com/tus/tusd/v2 v2.0.0-rc9.0.20230308120318-a75c24996f37
 	github.com/zitadel/oidc v1.7.0
-	google.golang.org/grpc v1.51.0
+	google.golang.org/grpc v1.53.0
 	google.golang.org/protobuf v1.28.1
 )
 
@@ -28,13 +28,13 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
-	github.com/spf13/afero v1.8.2 // indirect
+	github.com/spf13/afero v1.9.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.3.0 // indirect
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
-	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783 // indirect
+	golang.org/x/oauth2 v0.5.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
@@ -52,13 +52,10 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.12.0
-	golang.org/x/net v0.0.0-20221014081412-f15817d10f9b
-	golang.org/x/sys v0.0.0-20220728004956-3c1f35247d10 // indirect
-	golang.org/x/text v0.5.0 // indirect
-	google.golang.org/genproto v0.0.0-20221206210731-b1a01be3a5f6 // indirect
+	golang.org/x/net v0.7.0
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
+	google.golang.org/genproto v0.0.0-20230223222841-637eb2293923 // indirect
 )
 
-replace (
-	github.com/tus/tusd => ../cargomail-tusd
-	github.com/zitadel/oidc => ../cargomail-zitadel-oidc
-)
+replace github.com/zitadel/oidc => ../cargomail-zitadel-oidc
