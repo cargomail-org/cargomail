@@ -20,4 +20,4 @@ Cargomail uses the [GRIP](https://github.com/cargomail-org/grip) mechanism to pr
 
 ## Privacy
 
-The [GRIP](https://github.com/cargomail-org/grip) mechanism decouples the content-addressable mailbox from the user's email address. This separation allows a user with a single email address to use multiple mailboxes. You can keep official, business, and personal correspondence separately in designated mailboxes using a single email address.
+The [GRIP](https://github.com/cargomail-org/grip) mechanism decouples the content-addressable mailbox from the user's email address. This separation allows a user with a single email address to use multiple mailboxes. You can keep official, business, and personal correspondence separate on designated servers by using a single email address.
