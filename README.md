@@ -4,7 +4,7 @@ Email is the most pervasive form of business information exchange. People use em
 
 # Cargomail
 
-Cargomail does not use attachments or links to external files. Instead, it uses an advanced web editor that allows users to reference documents, images, and videos in the message body by their content via a cryptographic hash value while keeping the respective resources in a content-addressable mailbox. Cargomail exchanges referenced resources between content-addressable mailboxes along with the corresponding email message. The final download link is constructed in the email client using the content-addressable mailbox location and the cryptographic hash value of the referenced resource.
+Cargomail does not use attachments or links to external files. Instead, it uses an advanced web editor that allows users to reference documents, images, and videos in the message body by their content via a cryptographic hash value while keeping the respective resources in a content-addressed mailbox. Cargomail exchanges referenced resources between content-addressed mailboxes along with the corresponding email message. The final download link is constructed in the email client using the content-addressed mailbox location and the cryptographic hash value of the referenced resource.
 
 # Advantages
 
@@ -12,11 +12,11 @@ Being different from the current email system, Cargomail has several decisive ad
 
 ## Timeline Consistency
 
-Your email feed will never break apart. Messages and their resources are kept together in chronological tamper-resistant records.
+Your email feed will never break apart. Messages and their resources are kept together in chronological tamper-resistant records. A content-addressed mailbox ensures the authenticity and integrity of email messages and their resources. The cryptographic hash value guarantees the storage of only a single instance of a resource.
 
 ## Security
 
-Cargomail uses the [GRIP](https://github.com/cargomail-org/grip) mechanism to protect against spam. This mechanism does not protect against unsolicited emails — anyone can send you an email — it protects you from mass spam bots that send lots of emails.
+Cargomail uses the [GRIP](https://github.com/cargomail-org/grip) mechanism to protect against spam. This mechanism does not protect against unsolicited emails — anyone can send you an email —  it protects you against a [DKIM replay attack](https://www.ietf.org/id/draft-chuang-dkim-replay-problem-01.html) that spammers use to bypass spam filters.
 
 ## Privacy
 
