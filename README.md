@@ -6,9 +6,9 @@ Email is the most pervasive form of business information exchange. People use em
 
 Cargomail does not use attachments or links to external files. Instead, it uses an advanced web editor that allows users to reference documents, images, and videos in the message body by their content via a cryptographic hash value while keeping the respective resources in a content-addressed mailbox. Cargomail exchanges referenced resources between content-addressed mailboxes along with the corresponding email message. The final download link is constructed in the email client using the content-addressed mailbox location and the cryptographic hash value of the referenced resource.
 
-# Advantages
+# Features and Benefits
 
-Being different from the current email system, Cargomail has several decisive advantages.
+People can use Cargomail to store and exchange messages, documents, images, audio, and videos. Since Cargomail differs from the current email system, several decisive advantages are worth mentioning.
 
 ## Timeline Consistency
 
