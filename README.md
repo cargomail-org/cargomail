@@ -10,7 +10,7 @@ Cargomail does not use attachments or links to external files. Instead, it uses 
 
 People can use Cargomail to store and exchange messages, documents, images, audio, and videos. Since Cargomail differs from the current email system, several decisive advantages are worth mentioning.
 
-## Timeline Consistency
+## Consistency
 
 Your email feed will never break apart. Messages and their resources are kept together in chronological tamper-resistant records. A content-addressed mailbox ensures the authenticity and integrity of email messages and their resources. The cryptographic hash value guarantees the storage of only a single instance of a resource.
 
