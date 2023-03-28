@@ -4,7 +4,7 @@ Email is the most pervasive form of business information exchange. People use em
 
 # Cargomail
 
-Cargomail does not use attachments or links to external files. Instead, it uses an advanced web editor that allows users to reference documents, images, and videos in the message body by their content via a cryptographic hash value while keeping the respective resources in a content-addressed resource mailbox. Cargomail exchanges referenced resources between resource mailboxes and the corresponding email message using the [GRIP](https://github.com/cargomail-org/grip) mechanism. The final download link is constructed in the email client using the resource mailbox location and the cryptographic hash value of the referenced resource.
+Cargomail does not use attachments or links to external files. Instead, it uses an advanced web editor that allows users to reference documents, images, and videos in the message body by their content via a cryptographic hash value while keeping the respective resources in a content-addressed resource mailbox. Cargomail exchanges referenced resources between resource mailboxes using the [GRIP](https://github.com/cargomail-org/grip) mechanism. The final download link is constructed in the email client using the resource mailbox location and the cryptographic hash value of the referenced resource. The content of the email resource can be displayed directly in the message body.
 
 # Features and Benefits
 
