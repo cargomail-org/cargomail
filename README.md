@@ -25,7 +25,7 @@ The [GRIP](https://github.com/cargomail-org/grip) mechanism decouples the resour
 ## How it works
 
 <div class="diagram">
-    <img src=./images/cargomail_architecture.svg alt="Cargomail architecture">
+    <img src=./images/cargomail_architecture.png alt="Cargomail architecture">
 </div>
 
 <p class="figure">
