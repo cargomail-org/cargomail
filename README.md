@@ -32,6 +32,8 @@ The [GRIP](https://github.com/cargomail-org/grip) mechanism decouples the resour
 Fig.&nbsp;1.&emsp;Cargomail architecture
 </p>
 
+<!-- https://tex.stackexchange.com/questions/41681/correct-way-to-bold-italicize-text >
+<!-- https://editor.codecogs.com/ >
 <!-- \textbf{\raisebox{.5pt}{\textcircled{\raisebox{-.9pt}{\small{1}}}} -->
 
 * ![](images/1.svg) TBD
