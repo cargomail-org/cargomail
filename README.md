@@ -31,3 +31,13 @@ The [GRIP](https://github.com/cargomail-org/grip) mechanism decouples the resour
 <p class="figure">
 Fig.&nbsp;1.&emsp;Cargomail architecture
 </p>
+
+<!-- \textbf{\raisebox{.5pt}{\textcircled{\raisebox{-.9pt}{\small{1}}}} -->
+
+* ![](images/1.svg) TBD
+* ![](images/2.svg) TBD
+* ![](images/3.svg) TBD
+* ![](images/4.svg) TBD
+* ![](images/5.svg) TBD
+* ![](images/6.svg) TBD
+* ![](images/7.svg) TBD
