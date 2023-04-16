@@ -22,7 +22,9 @@ Cargomail may use the [GRIP](https://github.com/cargomail-org/grip) mechanism to
 
 The [GRIP](https://github.com/cargomail-org/grip) mechanism decouples the resource mailbox from the user's email address. This separation allows a user with a single email address to use multiple mailboxes. You can keep official, business, and personal correspondence separate on designated servers by using a single email address.
 
-## How it works
+## How It Works
+
+Cargomail introduces a new type of mailbox—a resource mailbox—compatible with the existing email ecosystem. While the actual correspondence takes place between the resource mailboxes, the default user mailbox of the email system is used only for notification emails, as shown in Figure 1.
 
 <div class="diagram">
     <img src=./images/cargomail_architecture.png alt="Cargomail architecture">
@@ -32,14 +34,25 @@ The [GRIP](https://github.com/cargomail-org/grip) mechanism decouples the resour
 Fig.&nbsp;1.&emsp;Cargomail architecture
 </p>
 
+#### *Key Points*
+
 <!-- https://tex.stackexchange.com/questions/41681/correct-way-to-bold-italicize-text >
 <!-- https://editor.codecogs.com/ >
 <!-- \textbf{\raisebox{.5pt}{\textcircled{\raisebox{-.9pt}{\small{1}}}} -->
 
-* ![](images/1.svg) TBD
-* ![](images/2.svg) TBD
-* ![](images/3.svg) TBD
-* ![](images/4.svg) TBD
+
+* Each email consists of resources (message and referenced files) stored in the resource mailbox—on the email-specific resource server.
+* ![](images/1.svg) The email resources owned by the sender, stored in a sender's resource mailbox, are temporarily shared with the recipient.
+* ![](images/2.svg), ![](images/3.svg), ![](images/4.svg) Following a successful sharing process, a notification email is sent to the recipient's email application through the standard email system. The notification email contains the sender's resource mailbox URI, the cryptographic hash values of the referenced resources, and the category of correspondence, e.g., personal, business, or healthcare, as illustrated in Figure 2. 
 * ![](images/5.svg) TBD
 * ![](images/6.svg) TBD
 * ![](images/7.svg) TBD
+
+<div class="diagram">
+    <img src=./images/notification-message.png alt="Notification message">
+</div>
+
+<p class="figure">
+Fig.&nbsp;2.&emsp;Notification message
+</p>
+
