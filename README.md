@@ -16,8 +16,7 @@ Your email feed will never break apart. Messages and their resources are kept to
 
 ## Security
 
-Cargomail may use the [GRIP](https://github.com/cargomail-org/grip) mechanism to protect against spam. This mechanism does not protect against unsolicited emails — anyone can send you an email —  it protects you against a [DKIM replay attack](https://www.ietf.org/id/draft-chuang-dkim-replay-problem-01.html) that spammers use to bypass spam filters.
-
+Cargomail may use the [GRIP](https://github.com/cargomail-org/grip) mechanism to protect against spam. This mechanism does not protect against unsolicited emails — anyone can send you an email —  it protects you against a [DKIM replay attack](https://www.ietf.org/id/draft-chuang-dkim-replay-problem-01.html) that spammers use to bypass spam filters. This protection only applies if the GRIP authentication mechanism is used in addition to DKIM during SMTP data transfer.
 ## Privacy
 
 The [GRIP](https://github.com/cargomail-org/grip) mechanism decouples the resource mailbox from the user's email address. This separation allows a user with a single email address to use multiple mailboxes. You can keep official, business, and personal correspondence separate on designated servers by using a single email address. Information you send or receive—buying a car, applying for a loan, taking out insurance, purchasing a T-shirt for your dad, requesting a government grant, getting turned down for credit, seeing a doctor—never reaches an email service provider.
