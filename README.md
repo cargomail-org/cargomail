@@ -20,7 +20,7 @@ Cargomail may use the [GRIP](https://github.com/cargomail-org/grip) mechanism to
 
 ## Privacy
 
-The [GRIP](https://github.com/cargomail-org/grip) mechanism decouples the resource mailbox from the user's email address. This separation allows a user with a single email address to use multiple mailboxes. You can keep official, business, and personal correspondence separate on designated servers by using a single email address.
+The [GRIP](https://github.com/cargomail-org/grip) mechanism decouples the resource mailbox from the user's email address. This separation allows a user with a single email address to use multiple mailboxes. You can keep official, business, and personal correspondence separate on designated servers by using a single email address. Information you send or receive—buying a car, applying for a loan, taking out insurance, purchasing a T-shirt for your dad, requesting a government grant, getting turned down for credit, seeing a doctor—never reaches an email service provider.
 
 ## How It Works
 
