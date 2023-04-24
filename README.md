@@ -2,6 +2,8 @@
 
 Cargomail is a privacy-aware email system designed with the precept that the storage of email messages should be the responsibility of the sender and respective recipients and not of the email providers, as it is with the current email architecture.
 
+Here is the [whitepaper](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf) if anyone is interested.
+
 # Email
 
 Email is the most pervasive form of business information exchange. People use email as an interpersonal communication tool and as the default choice to send files. Over time, your inbox becomes a personal email feed of what was sent by whom and when. Such an email feed has one fundamental flaw. Due to the design principle of the email system, the email cannot contain large attachments. Therefore, users often send links to external files instead of email attachments. However, external files lose their authenticity by being removed from the correspondence context. Furthermore, links may expire with time or be blocked. As a result, your email feed deteriorates.
