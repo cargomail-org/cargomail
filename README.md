@@ -73,4 +73,4 @@ As an alternative to email-based notifications, a new decentralized notification
 
 ## Discussion
 
-Although this proposal seems closely related to the [Internet Mail 2000](https://en.wikipedia.org/wiki/Internet_Mail_2000) concept proposed by Daniel J. Bernstein, Cargomail is designed on a different principle——that the storage of message and its resources should be the responsibility of the sender and recipients and not of the email providers, as it is with the current email architecture.
+Although this proposal seems closely related to the [Internet Mail 2000](https://en.wikipedia.org/wiki/Internet_Mail_2000) concept proposed by Daniel J. Bernstein, Cargomail is designed on a different principle—that the storage of message and its resources should be the responsibility of the sender and recipients and not of the email providers, as it is with the current email architecture.
