@@ -61,6 +61,14 @@ Fig.&nbsp;1.&emsp;Cargomail architecture
 Fig.&nbsp;2.&emsp;Notification message
 </p>
 
+## Screencast
+
+
+
+https://user-images.githubusercontent.com/13551645/234233539-03e1b8a1-670a-44ce-a716-5d0192410300.mp4
+
+
+
 ## Implementation Concerns
 
 This section deals with the issues of implementing the Cargomail data exchange mechanism into the existing email infrastructure.
