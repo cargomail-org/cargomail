@@ -40,6 +40,10 @@ Cargomail introduces a new type of mailbox—a resource mailbox—compatible wit
 Fig.&nbsp;1.&emsp;Cargomail architecture
 </p>
 
+The approach depicted in Figure 1. separates the identifier (the email address) and locator (the resource mailbox URL). By decoupling location and identification, data can be exchanged between designated resource mailboxes using individual user email addresses. This enables both the sender and recipient to use multiple resource mailboxes while still using their single email address.
+
+To reference email resources, Cargomail uses content-addressed identifiers instead of URLs, as the location of the resources differs between the sender and recipient.
+
 #### _Key Points_
 
 <!-- https://tex.stackexchange.com/questions/41681/correct-way-to-bold-italicize-text >
