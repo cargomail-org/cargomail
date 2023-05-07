@@ -22,7 +22,7 @@ Your email feed will never break apart. Messages and their resources are kept to
 
 ## Security
 
-Cargomail may use the [GRIP](https://github.com/cargomail-org/grip) authentication mechanism to protect against spam. This mechanism does not protect against unsolicited emails — anyone can send you an email — it protects you against a [DKIM replay attack](https://www.ietf.org/id/draft-chuang-dkim-replay-problem-01.html) that spammers use to bypass spam filters. This protection only applies if the GRIP authentication mechanism is used in addition to DKIM during SMTP data transfer.
+The current email system design defines an email address as a character string that identifies a user to whom mail will be sent or a location into which mail will be deposited. In that sense, the terms mailbox and email address can be used interchangeably. However, Cargomail uses a different architecture that separates the identifier and the locator of the address/mailbox to prevent spam. This architecture does not protect against unsolicited emails — anyone can send you an email —it allows for a more detailed assessment of the sender's reputation by evaluating their email address identifier and mailbox locator separately.
 
 ## Privacy
 
