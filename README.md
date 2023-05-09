@@ -1,8 +1,7 @@
+This project is constantly evolving. You can download the latest revision of the whitepaper here: [Cargomail.pdf](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf)
 # Introduction
 
-Cargomail is a privacy-aware email system designed with the precept that the storage of email messages should be the responsibility of the sender and respective recipients and not of the email providers, as it is with the current email architecture.
-
-You can download the [whitepaper](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf) if anyone is interested.
+Cargomail is a privacy-aware email system designed with the precept that the storage of email messages should be the responsibility of users and not of email providers.
 
 # Email
 
