@@ -1,8 +1,0 @@
-export const INBOX = '/'
-export const DONE = '/done'
-export const DRAFTS = '/drafts'
-export const TRASH = '/trash'
-export const ACCOUNT = '/account'
-export const SIGNIN = '/signin'
-export const AUTH_CALLBACK = '/auth/callback'
-export const NOT_FOUND = '*'
