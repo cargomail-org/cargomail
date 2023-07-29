@@ -1,0 +1,65 @@
+{{template "base" .}}
+{{define "files"}}
+
+<div class="container">
+    <!-- Upload -->
+    <form class="row g-2" id="uploadForm" method="POST" enctype="multipart/form-data" action="/api/v1/files/upload">
+        <input type="hidden" name="csrf" value="{{.}}" />
+        <div class="col-auto">
+            <input class="form-control" id="inputUpload" type="file" name="files" multiple id="formFile">
+        </div>
+        <div class="col-auto">
+            <div class="input-group">
+                <input class="disabled btn btn-primary" id="uploadButton" type="submit" value="Upload">
+                <button class="disabled btn btn-primary" id="clearButton">Clear</button>
+            </div>
+        </div>
+        <div class="row-auto">
+            <div class="progress" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar" id="uploadProgressBar" style="width: 0%"></div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="filesConfirmDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="filesStaticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filesStaticBackdropLabel">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Selected file(s) will be deleted from Files and Drafts!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="filesConfirmButton" class="btn btn-primary">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Table -->
+    <table id="filesTable" class="table table-striped table-bordered" width="100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th></th>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<script type="module">
+    import { inputUploadChanged, clearUpload, deleteItems, copySelectedFiles } from "/public/js/files.js";
+    document.querySelector('#inputUpload').addEventListener('change', inputUploadChanged)
+    document.querySelector('#clearButton').addEventListener('click', clearUpload);
+    document.querySelector('#filesConfirmButton').addEventListener('click', deleteItems);
+    document.querySelector('#copySelectedFiles').addEventListener('click', copySelectedFiles);
+</script>
+
+{{end}}

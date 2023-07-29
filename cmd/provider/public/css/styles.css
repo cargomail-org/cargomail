@@ -1,0 +1,106 @@
+#loginForm {
+  width: 22rem !important;
+}
+
+#registerForm {
+  width: 22rem !important;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  color: white;
+}
+
+a.nav-link {
+  color: #ffffffaa;
+}
+
+a.nav-link:hover {
+  color: #ffffffe3;
+}
+
+div.dt-buttons.btn-group {
+  margin-bottom: 10px;
+}
+
+.subject-heading {
+  display: -webkit-box;
+  max-width: 240px;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bi-postcard {
+  margin-bottom: 0px !important;
+}
+
+/* Bootstrap 5 tweak: do not underline links unless hovered over */
+a:not([class*="btn"]) {
+  text-decoration: none;
+}
+a:not([class*="btn"]):hover {
+  text-decoration: underline;
+}
+
+.dataTables_wrapper .dataTables_filter input::-webkit-search-cancel-button {
+  -webkit-appearance: button !important;
+  appearance: button !important;
+}
+
+.notransition {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+}
+
+.base-spinner {
+  display: block;
+  position: fixed;
+  z-index: 1031;
+  top: calc(50% - (0px / 2));
+  right: calc(50% - (30px / 2));
+}
+
+@media screen and (max-width: 575px) {
+  .responsive-menu {
+    flex-direction: column;
+  }
+  .menu-spinner {
+    display: block;
+    position: fixed;
+    z-index: 1031;
+    top: calc(50% - (0px / 2));
+    right: calc(50% - (30px / 2));
+  }
+  #loggedUsername {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .responsive-menu {
+    flex-direction: row;
+  }
+  .menu-spinner {
+    display: block;
+    position: fixed;
+    z-index: 1031;
+    top: calc(50% - (0px / 2));
+    right: calc(50% - (210px / 2));
+  }
+  #loggedUsername {
+    display: inline-block;
+    max-width: calc(22vw - 70px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #loggedUsername {
+    max-width: calc(16vw - 90px);
+  }
+}

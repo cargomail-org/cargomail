@@ -1,0 +1,29 @@
+# Docs
+README.pdf
+
+# Tmps
+.~*.*
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+__debug_bin
+cargomail/cargomail
+
+# Test binary, built with `go test -c`
+*.test
+
+# SQLite3 database
+**.db
+
+# Resources storage
+resources/
+
+# Postman collections
+postman/
+
+# Dependency directories (remove the comment below to include it)
+# vendor/

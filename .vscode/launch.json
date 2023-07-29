@@ -1,0 +1,59 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "cargomail.org",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            // "console": "integratedTerminal",
+            "env": {
+                "DOMAIN_NAME": "cargomail.org",
+                "STORAGE_PATH": "./storage/cargomail.org",
+                "DATABASE_PATH": "./storage/cargomail.org/database/cargomail.db",
+                "FILES_PATH": "./storage/cargomail.org/resources/files/",
+                "TRANSFER_CERT_PATH": "./storage/cargomail.org/certificates/server.crt",
+                "TRANSFER_KEY_PATH": "./storage/cargomail.org/certificates/server.key",
+                "PROVIDER_BIND": "127.0.0.1:8181",
+                "TRANSFER_BIND": "127.0.0.1:2125",
+              }
+        },
+        {
+            "name": "federizer.org",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            // "console": "integratedTerminal",
+            "env": {
+                "DOMAIN_NAME": "federizer.org",
+                "STORAGE_PATH": "./storage/federizer.org",
+                "DATABASE_PATH": "./storage/federizer.org/database/cargomail.db",
+                "FILES_PATH": "./storage/federizer.org/resources/files/",
+                "TRANSFER_CERT_PATH": "./storage/federizer.org/certificates/server.crt",
+                "TRANSFER_KEY_PATH": "./storage/federizer.org/certificates/server.key",
+                "PROVIDER_BIND": "127.0.0.2:8181",
+                "TRANSFER_BIND": "127.0.0.2:2125",
+              }
+        },
+        {
+            "name": "umabox.org",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            // "console": "integratedTerminal",
+            "env": {
+                "DOMAIN_NAME": "umabox.org",
+                "STORAGE_PATH": "./storage/umabox.org",
+                "DATABASE_PATH": "./storage/umabox.org/database/cargomail.db",
+                "FILES_PATH": "./storage/umabox.org/resources/files/",
+                "TRANSFER_CERT_PATH": "./storage/umabox.org/certificates/server.crt",
+                "TRANSFER_KEY_PATH": "./storage/umabox.org/certificates/server.key",
+                "PROVIDER_BIND": "127.0.0.3:8181",
+                "TRANSFER_BIND": "127.0.0.3:2125",
+              }
+        },
+    ]
+}

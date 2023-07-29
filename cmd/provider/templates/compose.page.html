@@ -1,0 +1,61 @@
+{{template "base" .}}
+{{define "compose"}}
+
+<div class="container">
+    <!-- Compose -->
+    <form class="row g-2" id="composeForm" method="POST" enctype="multipart/form-data" action="/api/v1/cargo/create">
+        <div class="form-floating mb-1">
+            <input class="form-control" id="toInput" type="text" placeholder="To" data-sb-validations="" />
+            <label for="to">To</label>
+        </div>
+        <div class="form-floating mb-1">
+            <input class="form-control" id="subjectInput" type="text" placeholder="Subject" data-sb-validations="" />
+            <label for="subject">Subject</label>
+        </div>
+        <div class="form-floating mb-1">
+            <textarea class="form-control" id="messageText" type="text" placeholder="Message" style="height: 8rem;"
+                data-sb-validations=""></textarea>
+            <label for="message">Message</label>
+        </div>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="composeConfirmDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="composeStaticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="composeStaticBackdropLabel">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Selected file(s) will be removed from this Draft!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="composeConfirmButton" class="btn btn-primary">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Table -->
+    <table id="composeTable" class="table table-striped table-bordered" width="100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th></th>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<script type="module">
+    import { deleteItems } from "/public/js/compose.js";
+    document.querySelector('#composeConfirmButton').addEventListener('click', deleteItems);
+
+</script>
+
+{{end}}

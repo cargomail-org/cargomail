@@ -1,0 +1,64 @@
+{{define "base"}}
+<html lang="en">
+
+<head>
+  <title>Cargomail Lite</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- DataTables -->
+  <!-- <script src="https://cdn.datatables.net/1.13.3/js/importmap.js"></script> -->
+  <script type="importmap">
+    {
+      "imports": {
+        "datatables.net": "https://cdn.datatables.net/1.13.5/js/jquery.dataTables.mjs",
+        "datatables.net-bs5": "https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.mjs",
+        "datatables.net-select": "https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.mjs",
+        "datatables.net-select-bs5": "https://cdn.datatables.net/select/1.7.0/js/select.bootstrap5.min.mjs",
+        "datatables.net-buttons": "https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.mjs",
+        "datatables.net-buttons-bs5": "https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.mjs",
+        "datatables.net-responsive": "https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.mjs",
+        "datatables.net-responsive-bs5": "https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.mjs",
+        "jquery": "https://esm.sh/jquery@3.7.0"
+      }
+    }
+</script>
+
+  <!-- Favicon -->
+  <link rel='icon' type='image/x-icon' href='/public/images/favicon.ico'>
+
+  <!-- Icons -->
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css' />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
+
+  <!-- Custom CSS -->
+  <link href='/public/css/styles.css' rel='stylesheet'>
+
+  <!-- Bootstrap js-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- api js-->
+  <script src='/public/js/api.js'></script>
+
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div hidden class="base-spinner">
+      <div class="spinner-border" role="status">
+      </div>
+    </div>
+    {{template "page" .}}
+  </div>
+</body>
+
+</html>
+{{end}}

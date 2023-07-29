@@ -1,0 +1,29 @@
+{{template "base" .}}
+{{define "profile"}}
+
+<div class="container">
+    <!-- Profile -->
+    <form class="row g-2" id="profileForm" method="POST" action="/api/v1/user/profile">
+        <div hidden id="profileDomainName">{{.DomainName}}</div>
+        <p class="font-weight-normal" id="profileUsername"></p>
+        <div class="form-floating mb-1">
+            <input class="form-control" id="firstNameInput" type="text" name="firstname" placeholder="First name"
+                data-sb-validations="" />
+            <label for="firstNameInput">First name</label>
+        </div>
+        <div class="form-floating mb-1">
+            <input class="form-control" id="lastNameInput" type="text" name="lastname" placeholder="Last name"
+                data-sb-validations="" />
+            <label for="lastNameInput">Last name</label>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" id="profileSubmitButton" type="submit">Save</button>
+        </div>
+    </form>
+</div>
+
+<script type="module">
+    import * as profile from "/public/js/profile.js";
+</script>
+
+{{end}}
