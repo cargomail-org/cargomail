@@ -40,6 +40,7 @@ func Start() error {
 			FilesPath:    startFlags.FilesPath,
 			DB:           db,
 			ProviderBind: startFlags.ProviderBind,
+			Stage:            startFlags.Stage,
 		})
 	if err != nil {
 		log.Fatal(err)
@@ -55,6 +56,7 @@ func Start() error {
 			TransferCertPath: startFlags.TransferCertPath,
 			TransferKeyPath:  startFlags.TransferKeyPath,
 			TransferBind:     startFlags.TransferBind,
+			Stage:            startFlags.Stage,
 		})
 	transferService.Serve(ctx, errs)
 

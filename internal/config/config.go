@@ -22,6 +22,7 @@ type StartFlags = struct {
 	TransferKeyPath  string `yaml:"transfer_key_path"`
 	ProviderBind     string `yaml:"provider_bind"`
 	TransferBind     string `yaml:"transfer_bind"`
+	Stage            string `yaml:"stage"`
 }
 
 func NewStartFlags() StartFlags {

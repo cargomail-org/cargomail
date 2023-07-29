@@ -19,13 +19,15 @@ type ServiceParams struct {
 	TransferCertPath string
 	TransferKeyPath  string
 	TransferBind     string
+	Stage            string
 }
 
 type service struct {
 	api              api.Api
 	transferBind     string
-	TransferCertPath string
-	TransferKeyPath  string
+	transferCertPath string
+	transferKeyPath  string
+	stage            string
 }
 
 func NewService(params *ServiceParams) service {
@@ -38,8 +40,9 @@ func NewService(params *ServiceParams) service {
 				FilesPath:  params.FilesPath,
 			}),
 		transferBind:     params.TransferBind,
-		TransferCertPath: params.TransferCertPath,
-		TransferKeyPath:  params.TransferKeyPath,
+		transferCertPath: params.TransferCertPath,
+		transferKeyPath:  params.TransferKeyPath,
+		stage:            params.Stage,
 	}
 }
 
@@ -65,6 +68,6 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 
 	errs.Go(func() error {
 		log.Printf("transfer service is listening on https://%s", http1Server.Addr)
-		return http1Server.ListenAndServeTLS(svc.TransferCertPath, svc.TransferKeyPath)
+		return http1Server.ListenAndServeTLS(svc.transferCertPath, svc.transferKeyPath)
 	})
 }
