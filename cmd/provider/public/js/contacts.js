@@ -211,6 +211,10 @@ export const showContactsFormDialog = (e) => {
     emailInput.value = contact.email_address;
     firstNameInput.value = contact.firstname;
     lastNameInput.value = contact.lastname;
+  } else {
+    emailInput.value = "";
+    firstNameInput.value = "";
+    lastNameInput.value = "";
   }
 };
 
