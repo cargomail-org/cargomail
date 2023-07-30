@@ -53,7 +53,7 @@ func (api *ContactsApi) GetAll() http.Handler {
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusCreated, contactHistory)
+		helper.SetJsonResponse(w, http.StatusOK, contactHistory)
 	})
 }
 
@@ -105,7 +105,7 @@ func (api *ContactsApi) Update() http.Handler {
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusCreated, contact)
+		helper.SetJsonResponse(w, http.StatusOK, contact)
 	})
 }
 

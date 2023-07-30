@@ -103,7 +103,7 @@ const composeTable = new DataTable("#composeTable", {
     ["10 rows", "25 rows", "50 rows"],
   ],
   buttons: [
-    "pageLength",
+    // "pageLength",
     {
       text: "Delete",
       className: "files-delete",

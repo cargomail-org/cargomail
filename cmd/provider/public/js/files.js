@@ -214,7 +214,7 @@ const filesTable = new DataTable("#filesTable", {
     ["10 rows", "25 rows", "50 rows"],
   ],
   buttons: [
-    "pageLength",
+    // "pageLength",
     {
       text: "Refresh",
       action: function () {

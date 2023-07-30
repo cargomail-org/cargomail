@@ -9,10 +9,10 @@ const parseJSON = async (response) => {
   return await response.json();
 };
 
-const api = async (formId, status, url, options) => {
-  const form = document.getElementById(formId);
+const api = async (parentId, status, url, options) => {
+  const parent = document.getElementById(parentId);
 
-  const alert = form.querySelector('div[name="alert"]');
+  const alert = parent.querySelector('div[name="alert"]');
   if (alert) alert.remove();
   let response;
 
@@ -54,12 +54,12 @@ const api = async (formId, status, url, options) => {
       errMessage = error.message;
     }
 
-    form.insertAdjacentHTML(
+    parent.insertAdjacentHTML(
       "beforeend",
       `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="alert">
-                ${errMessage}
-                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-           </div>`
+          ${errMessage}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+       </div>`
     );
     return false;
   } finally {
