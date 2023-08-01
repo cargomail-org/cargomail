@@ -6,8 +6,8 @@
     <!-- <form class="row g-2" id="contactsForm" method="POST" enctype="multipart/form-data" action="/api/v1/contacts">
             <input type="hidden" name="csrf" value="{{.}}" />
         </form> -->
-    <div class="modal fade" id="contactsFormDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="contactsFormDialogLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="contactsFormDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="contactsFormDialogLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -15,27 +15,28 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="contactsForm" method="POST" enctype="multipart/form-data" action="/api/v1/contacts">
+                    <form id="contactsForm" method="POST" enctype="multipart/form-data" action="#">
+                        <input class="form-control" id="contactIdInput" type="hidden" name="contactId" />
                         <div class="form-floating mb-1">
-                            <input class="form-control" id="emailInput" type="email" placeholder="Email"
+                            <input class="form-control" id="emailInput" type="email" name="email" placeholder="Email"
                                 data-sb-validations="" />
-                            <label for="temail">Email</label>
+                            <label for="emailInput">Email</label>
                         </div>
                         <div class="form-floating mb-1">
-                            <input class="form-control" id="firstNameInput" type="text" placeholder="First name"
-                                data-sb-validations="" />
-                            <label for="firstName">First name</label>
+                            <input class="form-control" id="firstNameInput" type="text" name="firstname"
+                                placeholder="First name" data-sb-validations="" />
+                            <label for="firstNameInput">First name</label>
                         </div>
                         <div class="form-floating mb-1">
-                            <input class="form-control" id="lastNameInput" type="text" placeholder="Last name"
-                                data-sb-validations="" />
-                            <label for="lastName">Last name</label>
+                            <input class="form-control" id="lastNameInput" type="text" name="lastname"
+                                placeholder="Last name" data-sb-validations="" />
+                            <label for="lastNameInput">Last name</label>
                         </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" form="contactsForm" class="btn btn-primary" id="saveContact">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,8 +75,10 @@
 </div>
 
 <script type="module">
-    import { showContactsFormDialog, deleteItems } from "/public/js/contacts.js";
+    import { showContactsFormDialog, submitFormContact, deleteItems } from "/public/js/contacts.js";
     document.querySelector('#contactsFormDialog').addEventListener('show.bs.modal', showContactsFormDialog)
+    document.querySelector("#contactsForm").addEventListener('submit', submitFormContact);
+    // document.querySelector('#saveContact').addEventListener('click', saveContact);
     document.querySelector('#contactsConfirmButton').addEventListener('click', deleteItems);
 </script>
 

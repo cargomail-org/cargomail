@@ -75,7 +75,7 @@ const contactsTable = new DataTable("#contactsTable", {
     selector: "td:first-child",
     info: true,
   },
-  order: [[2, "desc"]],
+  order: [[2, "asc"]],
   dom: "Bfrtip",
   language: {
     buttons: {
@@ -119,6 +119,10 @@ const contactsTable = new DataTable("#contactsTable", {
             if (notFound) {
               contactsTable.row.add(contact);
             }
+          }
+
+          for (const contact of response.updated) {
+            contactsTable.row(`#${contact.id}`).data(contact);
           }
 
           for (const contact of response.trashed) {
@@ -192,8 +196,12 @@ export const showContactsFormDialog = (e) => {
   const mode = button.getAttribute("data-mode");
 
   const modalTitle = formDialog.querySelector(".modal-title");
+
+  const contactIdInput = formDialog.querySelector(".modal-body #contactIdInput");
   const emailInput = formDialog.querySelector(".modal-body #emailInput");
-  const firstNameInput = formDialog.querySelector(".modal-body #firstNameInput");
+  const firstNameInput = formDialog.querySelector(
+    ".modal-body #firstNameInput"
+  );
   const lastNameInput = formDialog.querySelector(".modal-body #lastNameInput");
 
   let contact;
@@ -208,14 +216,66 @@ export const showContactsFormDialog = (e) => {
   }
 
   if (contact) {
+    contactIdInput.value = contact.id;
     emailInput.value = contact.email_address;
     firstNameInput.value = contact.firstname;
     lastNameInput.value = contact.lastname;
   } else {
+    contactIdInput.value = "";
     emailInput.value = "";
     firstNameInput.value = "";
     lastNameInput.value = "";
   }
+};
+
+export const submitFormContact = async (e) => {
+  e.preventDefault();
+
+  const form = e.currentTarget;
+
+  const formData = {
+    id: form.querySelector('input[name="contactId"]').value,
+    email_address: form.querySelector('input[name="email"]').value,
+    firstname: form.querySelector('input[name="firstname"]').value,
+    lastname: form.querySelector('input[name="lastname"]').value,
+  };
+
+  if (formData.id.length == 0) {
+    // new
+    delete formData.id;
+
+    const response = await api(form.id, 201, "/api/v1/contacts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response === false) {
+      return;
+    }
+
+    contactsTable.row.add(response).draw();
+
+  } else if (formData.id.length == 32) {
+    // edit
+    const response = await api(form.id, 200, "/api/v1/contacts", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response === false) {
+      return;
+    }
+
+    contactsTable.row(`#${response.id}`).data(response).draw();
+  }
+
+  contactsFormDialog.hide();
 };
 
 export const deleteItems = (e) => {

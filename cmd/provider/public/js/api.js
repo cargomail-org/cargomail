@@ -67,5 +67,21 @@ const api = async (parentId, status, url, options) => {
     spinner.hidden = true;
   }
 
+  if (response === null) {
+    response = false;
+  }
+
+  if (options.method != "HEAD" && response === false) {
+    errMessage = "no response";
+
+    parent.insertAdjacentHTML(
+      "beforeend",
+      `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="alert">
+          ${errMessage}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+       </div>`
+    );
+  }
+
   return response;
 };
