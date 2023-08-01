@@ -2,6 +2,7 @@ package transfer
 
 import (
 	"cargomail/cmd/transfer/api"
+	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"context"
 	"database/sql"
@@ -13,19 +14,11 @@ import (
 )
 
 type ServiceParams struct {
-	DomainName       string
-	FilesPath        string
-	DB               *sql.DB
-	TransferCertPath string
-	TransferKeyPath  string
-	TransferBind     string
+	DB *sql.DB
 }
 
 type service struct {
-	api              api.Api
-	transferBind     string
-	transferCertPath string
-	transferKeyPath  string
+	api api.Api
 }
 
 func NewService(params *ServiceParams) service {
@@ -33,13 +26,8 @@ func NewService(params *ServiceParams) service {
 	return service{
 		api: api.NewApi(
 			api.ApiParams{
-				DomainName: params.DomainName,
 				Repository: repository,
-				FilesPath:  params.FilesPath,
 			}),
-		transferBind:     params.TransferBind,
-		transferCertPath: params.TransferCertPath,
-		transferKeyPath:  params.TransferKeyPath,
 	}
 }
 
@@ -48,7 +36,7 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 	mux := http.NewServeMux()
 	svc.routes(mux)
 
-	http1Server := &http.Server{Handler: mux, Addr: svc.transferBind}
+	http1Server := &http.Server{Handler: mux, Addr: config.Configuration.TransferBind}
 
 	errs.Go(func() error {
 		<-ctx.Done()
@@ -65,6 +53,6 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 
 	errs.Go(func() error {
 		log.Printf("transfer service is listening on https://%s", http1Server.Addr)
-		return http1Server.ListenAndServeTLS(svc.transferCertPath, svc.transferKeyPath)
+		return http1Server.ListenAndServeTLS(config.Configuration.TransferCertPath, config.Configuration.TransferKeyPath)
 	})
 }

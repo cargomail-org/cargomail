@@ -34,10 +34,7 @@ func Start() error {
 	// provider service
 	providerService, err := provider.NewService(
 		&provider.ServiceParams{
-			DomainName:   config.Configuration.DomainName,
-			FilesPath:    config.Configuration.FilesPath,
 			DB:           db,
-			ProviderBind: config.Configuration.ProviderBind,
 		})
 	if err != nil {
 		log.Fatal(err)
@@ -47,12 +44,7 @@ func Start() error {
 	// transfer service
 	transferService := transfer.NewService(
 		&transfer.ServiceParams{
-			DomainName:       config.Configuration.DomainName,
-			FilesPath:        config.Configuration.FilesPath,
 			DB:               db,
-			TransferCertPath: config.Configuration.TransferCertPath,
-			TransferKeyPath:  config.Configuration.TransferKeyPath,
-			TransferBind:     config.Configuration.TransferBind,
 		})
 	transferService.Serve(ctx, errs)
 

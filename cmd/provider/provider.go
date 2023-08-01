@@ -17,16 +17,12 @@ import (
 )
 
 type ServiceParams struct {
-	DomainName   string
-	FilesPath    string
-	DB           *sql.DB
-	ProviderBind string
+	DB *sql.DB
 }
 
 type service struct {
-	app          app.App
-	api          api.Api
-	providerBind string
+	app app.App
+	api api.Api
 }
 
 func NewService(params *ServiceParams) (service, error) {
@@ -40,7 +36,6 @@ func NewService(params *ServiceParams) (service, error) {
 	return service{
 		app: app.NewApp(
 			app.AppParams{
-				DomainName:       params.DomainName,
 				Repository:       repository,
 				HomeTemplate:     templates[homePage],
 				LoginTemplate:    templates[loginPage],
@@ -48,11 +43,8 @@ func NewService(params *ServiceParams) (service, error) {
 			}),
 		api: api.NewApi(
 			api.ApiParams{
-				DomainName: params.DomainName,
 				Repository: repository,
-				FilesPath:  params.FilesPath,
 			}),
-		providerBind: params.ProviderBind,
 	}, err
 }
 
@@ -124,7 +116,7 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 
 	router.Route("GET", "/"+publicDir+"/", http.StripPrefix("/", fs))
 
-	http1Server := &http.Server{Handler: router, Addr: svc.providerBind}
+	http1Server := &http.Server{Handler: router, Addr: config.Configuration.ProviderBind}
 	// http2.ConfigureServer(http1Server, &http2.Server{})
 
 	errs.Go(func() error {

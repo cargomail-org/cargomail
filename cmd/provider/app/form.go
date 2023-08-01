@@ -1,6 +1,7 @@
 package app
 
 import (
+	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"fmt"
 	"log"
@@ -21,7 +22,7 @@ func (app *App) HomePage() http.Handler {
 			log.Fatal("missing user context")
 		}
 
-		data := Data{DomainName: app.domainName, Username: user.Username, UsernameLetter: fmt.Sprintf("%c", strings.ToUpper(user.Username)[0])}
+		data := Data{DomainName: config.Configuration.DomainName, Username: user.Username, UsernameLetter: fmt.Sprintf("%c", strings.ToUpper(user.Username)[0])}
 
 		t := app.HomeTemplate
 		t.Execute(w, data)
@@ -33,7 +34,7 @@ func (app *App) LoginPage() http.Handler {
 		data := struct {
 			DomainName string
 		}{
-			app.domainName,
+			config.Configuration.DomainName,
 		}
 
 		t := app.LoginTemplate
@@ -46,7 +47,7 @@ func (app *App) RegisterPage() http.Handler {
 		data := struct {
 			DomainName string
 		}{
-			app.domainName,
+			config.Configuration.DomainName,
 		}
 
 		t := app.RegisterTemplate

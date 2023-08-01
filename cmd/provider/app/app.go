@@ -12,7 +12,6 @@ import (
 )
 
 type AppParams struct {
-	DomainName       string
 	Repository       repository.Repository
 	HomeTemplate     *template.Template
 	LoginTemplate    *template.Template
@@ -20,7 +19,6 @@ type AppParams struct {
 }
 
 type App struct {
-	domainName       string
 	repository       repository.Repository
 	HomeTemplate     *template.Template
 	LoginTemplate    *template.Template
@@ -29,7 +27,6 @@ type App struct {
 
 func NewApp(params AppParams) App {
 	return App{
-		domainName:       params.DomainName,
 		repository:       params.Repository,
 		HomeTemplate:     params.HomeTemplate,
 		LoginTemplate:    params.LoginTemplate,

@@ -10,8 +10,6 @@ import (
 )
 
 type ApiParams struct {
-	DomainName string
-	FilesPath  string
 	Repository repository.Repository
 }
 
@@ -25,8 +23,8 @@ type Api struct {
 
 func NewApi(params ApiParams) Api {
 	return Api{
-		Health:   HealthApi{domainName: params.DomainName},
-		Files:    FilesApi{files: params.Repository.Files, filesPath: params.FilesPath},
+		Health:   HealthApi{},
+		Files:    FilesApi{files: params.Repository.Files},
 		Session:  SessionApi{user: params.Repository.User, session: params.Repository.Session},
 		User:     UserApi{user: params.Repository.User},
 		Contacts: ContactsApi{contacts: params.Repository.Contacts},

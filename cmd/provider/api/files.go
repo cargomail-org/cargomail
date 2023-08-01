@@ -2,6 +2,7 @@ package api
 
 import (
 	"cargomail/cmd/provider/api/helper"
+	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"crypto/sha256"
 	"encoding/json"
@@ -23,8 +24,7 @@ import (
 )
 
 type FilesApi struct {
-	files     repository.FilesRepository
-	filesPath string
+	files repository.FilesRepository
 }
 
 func ToAscii(str string) (string, error) {
@@ -60,7 +60,7 @@ func (api *FilesApi) Upload() http.Handler {
 			}
 			defer file.Close()
 
-			filePath := api.filesPath
+			filePath := config.Configuration.FilesPath
 
 			if _, err := os.Stat(filePath); errors.Is(err, os.ErrNotExist) {
 				err := os.MkdirAll(filePath, os.ModePerm)
@@ -148,7 +148,7 @@ func (api *FilesApi) Download() http.Handler {
 				return
 			}
 
-			filePath := filepath.Join(api.filesPath, id)
+			filePath := filepath.Join(config.Configuration.FilesPath, id)
 			w.Header().Set("Content-Type", "application/octet-stream")
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiFileName, urlEncodedFileName))
 			http.ServeFile(w, r, filePath)
@@ -274,7 +274,7 @@ func (api *FilesApi) DeleteByIdList() http.Handler {
 			return
 		}
 
-		filepath := api.filesPath
+		filepath := config.Configuration.FilesPath
 
 		var bodyList []string
 
