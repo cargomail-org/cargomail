@@ -19,7 +19,6 @@ type ServiceParams struct {
 	TransferCertPath string
 	TransferKeyPath  string
 	TransferBind     string
-	Stage            string
 }
 
 type service struct {
@@ -27,7 +26,6 @@ type service struct {
 	transferBind     string
 	transferCertPath string
 	transferKeyPath  string
-	stage            string
 }
 
 func NewService(params *ServiceParams) service {
@@ -42,7 +40,6 @@ func NewService(params *ServiceParams) service {
 		transferBind:     params.TransferBind,
 		transferCertPath: params.TransferCertPath,
 		transferKeyPath:  params.TransferKeyPath,
-		stage:            params.Stage,
 	}
 }
 

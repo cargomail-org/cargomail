@@ -18,14 +18,12 @@ import (
 )
 
 func Start() error {
-	startFlags := config.NewStartFlags()
-
 	ctx, done := context.WithCancel(context.Background())
 	defer done()
 	errs, ctx := errgroup.WithContext(ctx)
 
-	log.Printf("using database %v", startFlags.DatabasePath)
-	db, err := sql.Open("sqlite3", startFlags.DatabasePath)
+	log.Printf("using database %v", config.Configuration.DatabasePath)
+	db, err := sql.Open("sqlite3", config.Configuration.DatabasePath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -36,11 +34,10 @@ func Start() error {
 	// provider service
 	providerService, err := provider.NewService(
 		&provider.ServiceParams{
-			DomainName:   startFlags.DomainName,
-			FilesPath:    startFlags.FilesPath,
+			DomainName:   config.Configuration.DomainName,
+			FilesPath:    config.Configuration.FilesPath,
 			DB:           db,
-			ProviderBind: startFlags.ProviderBind,
-			Stage:            startFlags.Stage,
+			ProviderBind: config.Configuration.ProviderBind,
 		})
 	if err != nil {
 		log.Fatal(err)
@@ -50,13 +47,12 @@ func Start() error {
 	// transfer service
 	transferService := transfer.NewService(
 		&transfer.ServiceParams{
-			DomainName:       startFlags.DomainName,
-			FilesPath:        startFlags.FilesPath,
+			DomainName:       config.Configuration.DomainName,
+			FilesPath:        config.Configuration.FilesPath,
 			DB:               db,
-			TransferCertPath: startFlags.TransferCertPath,
-			TransferKeyPath:  startFlags.TransferKeyPath,
-			TransferBind:     startFlags.TransferBind,
-			Stage:            startFlags.Stage,
+			TransferCertPath: config.Configuration.TransferCertPath,
+			TransferKeyPath:  config.Configuration.TransferKeyPath,
+			TransferBind:     config.Configuration.TransferBind,
 		})
 	transferService.Serve(ctx, errs)
 

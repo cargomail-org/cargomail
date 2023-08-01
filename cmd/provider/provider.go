@@ -3,6 +3,7 @@ package provider
 import (
 	"cargomail/cmd/provider/api"
 	"cargomail/cmd/provider/app"
+	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"context"
 	"database/sql"
@@ -10,7 +11,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"golang.org/x/sync/errgroup"
@@ -21,14 +21,12 @@ type ServiceParams struct {
 	FilesPath    string
 	DB           *sql.DB
 	ProviderBind string
-	Stage        string
 }
 
 type service struct {
 	app          app.App
 	api          api.Api
 	providerBind string
-	stage        string
 }
 
 func NewService(params *ServiceParams) (service, error) {
@@ -55,7 +53,6 @@ func NewService(params *ServiceParams) (service, error) {
 				FilesPath:  params.FilesPath,
 			}),
 		providerBind: params.ProviderBind,
-		stage:        params.Stage,
 	}, err
 }
 
@@ -119,7 +116,7 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 
 	var fs http.Handler
 
-	if strings.EqualFold(svc.stage, "dev") {
+	if config.DevStage() {
 		fs = http.FileServer(http.Dir("cmd/provider"))
 	} else {
 		fs = http.FileServer(http.FS(files))

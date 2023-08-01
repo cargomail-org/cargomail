@@ -13,7 +13,11 @@ import (
 //go:embed default.yaml
 var defaultConfig []byte
 
-type StartFlags = struct {
+var (
+	Configuration Config
+)
+
+type Config = struct {
 	DomainName       string `yaml:"domain_name"`
 	StoragePath      string `yaml:"storage_path"`
 	DatabasePath     string `yaml:"database_path"`
@@ -25,37 +29,45 @@ type StartFlags = struct {
 	Stage            string `yaml:"stage"`
 }
 
-func NewStartFlags() StartFlags {
-	sf := StartFlags{}
+func newConfig() Config {
+	c := Config{}
 
-	setDefaults(&sf)
-	loadConfig(&sf)
+	setDefaults(&c)
+	loadConfig(&c)
 
-	return sf
+	return c
 }
 
-func setDefaults(sf *StartFlags) {
-	err := yaml.Unmarshal(defaultConfig, sf)
+func setDefaults(c *Config) {
+	err := yaml.Unmarshal(defaultConfig, c)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for i := 0; i < reflect.TypeOf(*sf).NumField(); i++ {
-		field := reflect.TypeOf(*sf).Field(i)
+	for i := 0; i < reflect.TypeOf(*c).NumField(); i++ {
+		field := reflect.TypeOf(*c).Field(i)
 		if value, ok := field.Tag.Lookup("yaml"); ok {
-			reflect.ValueOf(sf).Elem().FieldByName(field.Name).Set(reflect.ValueOf(os.Getenv(strings.ToUpper(value))))
+			reflect.ValueOf(c).Elem().FieldByName(field.Name).Set(reflect.ValueOf(os.Getenv(strings.ToUpper(value))))
 		}
 	}
 }
 
-func loadConfig(sf *StartFlags) {
+func loadConfig(c *Config) {
 	configFile, err := os.ReadFile("config.yaml")
 	if err != nil {
 		return
 	}
 
-	err = yaml.Unmarshal(configFile, sf)
+	err = yaml.Unmarshal(configFile, c)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func DevStage() bool {
+	return strings.EqualFold(Configuration.Stage, "dev")
+}
+
+func init() {
+	Configuration = newConfig()
 }
