@@ -155,7 +155,7 @@ func (r *ContactsRepository) GetAll(user *User) (*contactAllHistory, error) {
 	return contactHistory, nil
 }
 
-func (r *ContactsRepository) GetHistory(user *User, history *History) (*contactSyncHistory, error) {
+func (r *ContactsRepository) Sync(user *User, history *History) (*contactSyncHistory, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 

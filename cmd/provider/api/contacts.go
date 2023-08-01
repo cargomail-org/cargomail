@@ -57,7 +57,7 @@ func (api *ContactsApi) GetAll() http.Handler {
 	})
 }
 
-func (api *ContactsApi) GetHistory() http.Handler {
+func (api *ContactsApi) Sync() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -73,7 +73,7 @@ func (api *ContactsApi) GetHistory() http.Handler {
 			return
 		}
 
-		contactHistory, err := api.contacts.GetHistory(user, history)
+		contactHistory, err := api.contacts.Sync(user, history)
 		if err != nil {
 			log.Println(err)
 			return

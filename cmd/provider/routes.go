@@ -80,7 +80,7 @@ func (svc *service) routes(r *Router) {
 	// Contacts API
 	r.Route("POST", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.Create()))
 	r.Route("GET", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.GetAll()))
-	r.Route("POST", "/api/v1/contacts/sync", svc.api.Authenticate(svc.api.Contacts.GetHistory()))
+	r.Route("POST", "/api/v1/contacts/sync", svc.api.Authenticate(svc.api.Contacts.Sync()))
 	r.Route("PUT", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.Update()))
 	r.Route("POST", "/api/v1/contacts/trash", svc.api.Authenticate(svc.api.Contacts.TrashByIdList()))
 	r.Route("POST", "/api/v1/contacts/untrash", svc.api.Authenticate(svc.api.Contacts.UntrashByIdList()))
@@ -89,7 +89,7 @@ func (svc *service) routes(r *Router) {
 	// Files API
 	r.Route("POST", "/api/v1/files/upload", svc.api.Authenticate(svc.api.Files.Upload()))
 	r.Route("GET", "/api/v1/files", svc.api.Authenticate(svc.api.Files.GetAll()))
-	r.Route("POST", "/api/v1/files/sync", svc.api.Authenticate(svc.api.Files.GetHistory()))
+	r.Route("POST", "/api/v1/files/sync", svc.api.Authenticate(svc.api.Files.Sync()))
 	r.Route("HEAD", "/api/v1/files/", svc.api.Authenticate(svc.api.Files.Download()))
 	r.Route("GET", "/api/v1/files/", svc.api.Authenticate(svc.api.Files.Download()))
 	r.Route("POST", "/api/v1/files/trash", svc.api.Authenticate(svc.api.Files.TrashByIdList()))

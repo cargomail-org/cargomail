@@ -174,7 +174,7 @@ func (api *FilesApi) GetAll() http.Handler {
 	})
 }
 
-func (api *FilesApi) GetHistory() http.Handler {
+func (api *FilesApi) Sync() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -190,7 +190,7 @@ func (api *FilesApi) GetHistory() http.Handler {
 			return
 		}
 
-		fileHistory, err := api.files.GetHistory(user, history)
+		fileHistory, err := api.files.Sync(user, history)
 		if err != nil {
 			log.Println(err)
 			return

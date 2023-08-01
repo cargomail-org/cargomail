@@ -156,7 +156,7 @@ func (r FilesRepository) GetAll(user *User) (*fileAllHistory, error) {
 	return fileHistory, nil
 }
 
-func (r *FilesRepository) GetHistory(user *User, history *History) (*fileSyncHistory, error) {
+func (r *FilesRepository) Sync(user *User, history *History) (*fileSyncHistory, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
