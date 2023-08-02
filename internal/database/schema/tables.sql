@@ -19,9 +19,9 @@ CREATE TABLE IF NOT EXISTS session (
 );
 
 CREATE TABLE IF NOT EXISTS file (
-    id				UUID NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    id				VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     user_id 		INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
-    checksum 		TEXT NOT NULL,
+    checksum 		VARCHAR(32) NOT NULL,
     name			TEXT NOT NULL,
     path			TEXT NOT NULL,
     size			INTEGER NOT NULL,
@@ -31,11 +31,44 @@ CREATE TABLE IF NOT EXISTS file (
     timeline_id		INTEGER(8) NOT NULL DEFAULT 0,
     history_id 		INTEGER(8) NOT NULL DEFAULT 0,
     last_stmt  		INTEGER(2) NOT NULL DEFAULT 0, -- 0-inserted, 1-updated, 2-trashed
-    device_id       UUID
+    device_id       VARCHAR(32)
+);
+
+CREATE TABLE IF NOT EXISTS message
+(
+    id              VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    user_id 	    INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
+    message_uid     VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))),
+    parent_uid      VARCHAR(32),
+    thread_uid      VARCHAR(32) NOT NULL,
+    fwd             INTEGER(2) NOT NULL DEFAULT 0,   -- 1-forwarded
+    system_label    INTEGER(2) NOT NULL,             -- 0-draft, 1-sent, 2-inbox
+    label_ids       TEXT,                            -- json array of label ids
+    "from"          TEXT NOT NULL,                   -- json array of recipients
+    "to"            TEXT,                            -- json array of recipients
+    "cc"            TEXT,                            -- json array of recipients
+    "bcc"           TEXT,                            -- json array of recipients
+    "group"         TEXT,                            -- json array of recipients
+    tags            TEXT,                            -- json array of key/value
+    cargoes         TEXT,                            -- json array of mimetype, filename, uri, checksum
+    subject         VARCHAR(255),
+    snippet         VARCHAR(255),
+    body_mimetype   VARCHAR(255),
+    body_uri        TEXT,
+    body_checksum   VARCHAR(32),
+    sent_at         TIMESTAMP,
+    received_at     TIMESTAMP,
+    snoozed_at      TIMESTAMP,
+    created_at		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at		TIMESTAMP,
+    timeline_id     INTEGER(8) NOT NULL DEFAULT 0,
+    history_id      INTEGER(8) NOT NULL DEFAULT 0,
+    last_stmt       INTEGER(2) NOT NULL DEFAULT 0, -- 0-inserted, 1-updated, 2-trashed
+    device_id       VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS contact (
-    id				UUID NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    id				VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     user_id 		INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
     email_address   TEXT,
     firstname		TEXT,
@@ -45,21 +78,21 @@ CREATE TABLE IF NOT EXISTS contact (
     timeline_id		INTEGER(8) NOT NULL DEFAULT 0,
     history_id 		INTEGER(8) NOT NULL DEFAULT 0,
     last_stmt  		INTEGER(2) NOT NULL DEFAULT 0, -- 0-inserted, 1-updated, 2-trashed
-    device_id       UUID
+    device_id       VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS file_deleted (
-    id				UUID NOT NULL PRIMARY KEY,
+    id				VARCHAR(32) NOT NULL PRIMARY KEY,
     user_id 		INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
     history_id 		INTEGER(8) NOT NULL DEFAULT 0,
-    device_id       UUID
+    device_id       VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS contact_deleted (
-    id				UUID NOT NULL PRIMARY KEY,
+    id				VARCHAR(32) NOT NULL PRIMARY KEY,
     user_id 		INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
     history_id 		INTEGER(8) NOT NULL DEFAULT 0,
-    device_id       UUID
+    device_id       VARCHAR(32)
 );
 
 
