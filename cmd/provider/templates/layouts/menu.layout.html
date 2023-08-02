@@ -26,10 +26,10 @@
                 <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto me-2 justify-content-end align-items-center align-items-sm-start"
                     id="menu">
                     <li class="nav-item">
-                        <a href="/" id="cargoesLink" class="nav-link px-sm-0 px-2"
-                            onclick='cargoesContent();return false;'>
+                        <a href="/" id="messagesLink" class="nav-link px-sm-0 px-2"
+                            onclick='messagesContent();return false;'>
                             <i class="bi bi-grid-1x2 h5"></i>
-                            <span class="ms-1 d-none d-sm-inline">Cargoes</span>
+                            <span class="ms-1 d-none d-sm-inline">Messages</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -81,8 +81,8 @@
                     <div hidden class="container" id="composeContainer">
                         {{template "compose" .}}
                     </div>
-                    <div hidden class="cargoes" id="cargoesContainer">
-                        {{template "cargoes" .}}
+                    <div hidden class="messages" id="messagesContainer">
+                        {{template "messages" .}}
                     </div>
                     <div hidden class="files" id="filesContainer">
                         {{template "files" .}}
@@ -111,9 +111,9 @@
                         </a>
                     </div>
                 </div>
-                <div hidden class="container" id="cargoesPanel">
+                <div hidden class="container" id="messagesPanel">
                     <div class="d-flex justify-content-evenly">
-                        <a class="btn disabled btn-light px-sm-0 px-2" id="copySelectedCargoes">
+                        <a class="btn disabled btn-light px-sm-0 px-2" id="copySelectedMessages">
                             <i class="fs-5 bi-box-arrow-in-up"></i>
                             <span class="ms-1 d-none d-sm-inline">Copy selected to Compose Form</span>
                         </a>

@@ -58,7 +58,7 @@ const (
 	contactsPage = "contacts.page.html"
 	profilePage  = "profile.page.html"
 	composePage  = "compose.page.html"
-	cargoesPage  = "cargoes.page.html"
+	messagesPage = "messages.page.html"
 	filesPage    = "files.page.html"
 	loginPage    = "login.page.html"
 	registerPage = "register.page.html"
@@ -90,7 +90,7 @@ func LoadTemplates() (map[string]*template.Template, error) {
 		templatesDir+contactsPage,
 		templatesDir+profilePage,
 		templatesDir+composePage,
-		templatesDir+cargoesPage,
+		templatesDir+messagesPage,
 		templatesDir+filesPage,
 		layoutsDir+menuLayout,
 		layoutsDir+baseLayout)

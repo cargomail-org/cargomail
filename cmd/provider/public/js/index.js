@@ -1,7 +1,7 @@
 let profileForm;
 
 document.addEventListener("DOMContentLoaded", function () {
-  filesContent(); // in prod should be cargoesContent
+  filesContent(); // in prod should be messagesContent
 
   profileForm = document.getElementById("profileForm");
   loadProfile(profileForm);
@@ -13,8 +13,8 @@ function composeContent(e) {
   document.getElementById("composeContainer").hidden = false;
   document.getElementById("composeLink").classList.add("active");
 
-  document.getElementById("cargoesContainer").hidden = true;
-  document.getElementById("cargoesLink").classList.remove("active");
+  document.getElementById("messagesContainer").hidden = true;
+  document.getElementById("messagesLink").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -26,20 +26,20 @@ function composeContent(e) {
   document.getElementById("profileLink").classList.remove("active");
 
   document.getElementById("composePanel").hidden = false;
-  document.getElementById("cargoesPanel").hidden = true;
+  document.getElementById("messagesPanel").hidden = true;
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = true;
 }
 
-function cargoesContent(e) {
+function messagesContent(e) {
   e?.preventDefault();
 
   document.getElementById("composeContainer").hidden = true;
   document.getElementById("composeLink").classList.remove("active");
 
-  document.getElementById("cargoesContainer").hidden = false;
-  document.getElementById("cargoesLink").classList.add("active");
+  document.getElementById("messagesContainer").hidden = false;
+  document.getElementById("messagesLink").classList.add("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -51,7 +51,7 @@ function cargoesContent(e) {
   document.getElementById("profileLink").classList.remove("active");
 
   document.getElementById("composePanel").hidden = true;
-  document.getElementById("cargoesPanel").hidden = false;
+  document.getElementById("messagesPanel").hidden = false;
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = true;
@@ -63,8 +63,8 @@ function filesContent(e) {
   document.getElementById("composeContainer").hidden = true;
   document.getElementById("composeLink").classList.remove("active");
 
-  document.getElementById("cargoesContainer").hidden = true;
-  document.getElementById("cargoesLink").classList.remove("active");
+  document.getElementById("messagesContainer").hidden = true;
+  document.getElementById("messagesLink").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = false;
   document.getElementById("filesLink").classList.add("active");
@@ -76,7 +76,7 @@ function filesContent(e) {
   document.getElementById("profileLink").classList.remove("active");
 
   document.getElementById("composePanel").hidden = true;
-  document.getElementById("cargoesPanel").hidden = true;
+  document.getElementById("messagesPanel").hidden = true;
   document.getElementById("filesPanel").hidden = false;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = true;
@@ -88,8 +88,8 @@ function contactsContent(e) {
   document.getElementById("composeContainer").hidden = true;
   document.getElementById("composeLink").classList.remove("active");
 
-  document.getElementById("cargoesContainer").hidden = true;
-  document.getElementById("cargoesLink").classList.remove("active");
+  document.getElementById("messagesContainer").hidden = true;
+  document.getElementById("messagesLink").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -101,7 +101,7 @@ function contactsContent(e) {
   document.getElementById("profileLink").classList.remove("active");
 
   document.getElementById("composePanel").hidden = true;
-  document.getElementById("cargoesPanel").hidden = true;
+  document.getElementById("messagesPanel").hidden = true;
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = false;
   document.getElementById("profilePanel").hidden = true;
@@ -113,8 +113,8 @@ function profileContent(e) {
   document.getElementById("composeContainer").hidden = true;
   document.getElementById("composeLink").classList.remove("active");
 
-  document.getElementById("cargoesContainer").hidden = true;
-  document.getElementById("cargoesLink").classList.remove("active");
+  document.getElementById("messagesContainer").hidden = true;
+  document.getElementById("messagesLink").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -126,7 +126,7 @@ function profileContent(e) {
   document.getElementById("profileLink").classList.add("active");
 
   document.getElementById("composePanel").hidden = true;
-  document.getElementById("cargoesPanel").hidden = true;
+  document.getElementById("messagesPanel").hidden = true;
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = false;
