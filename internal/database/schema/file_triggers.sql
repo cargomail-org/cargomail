@@ -57,7 +57,8 @@ BEGIN
 END;
 
 CREATE TRIGGER IF NOT EXISTS file_after_delete
-AFTER DELETE ON file
+AFTER DELETE
+ON file
 FOR EACH ROW
 BEGIN
     UPDATE file_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;

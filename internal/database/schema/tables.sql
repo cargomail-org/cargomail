@@ -72,9 +72,20 @@ CREATE TABLE IF NOT EXISTS message
     device_id       VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS label (
+CREATE TABLE IF NOT EXISTS user_label (
     id				VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     user_id 		INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
+    name            VARCHAR(255) NOT NULL,
+    created_at		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at		TIMESTAMP,
+    timeline_id		INTEGER(8) NOT NULL DEFAULT 0,
+    history_id 		INTEGER(8) NOT NULL DEFAULT 0,
+    last_stmt  		INTEGER(2) NOT NULL DEFAULT 0, -- 0-inserted, 1-updated, 2-trashed
+    device_id       VARCHAR(32)
+);
+
+CREATE TABLE IF NOT EXISTS shared_label (
+    id				VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     name            VARCHAR(255) NOT NULL,
     created_at		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     modified_at		TIMESTAMP,
@@ -112,9 +123,15 @@ CREATE TABLE IF NOT EXISTS message_deleted (
     device_id       VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS label_deleted (
+CREATE TABLE IF NOT EXISTS user_label_deleted (
     id				VARCHAR(32) NOT NULL PRIMARY KEY,
     user_id 		INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
+    history_id 		INTEGER(8) NOT NULL DEFAULT 0,
+    device_id       VARCHAR(32)
+);
+
+CREATE TABLE IF NOT EXISTS shared_label_deleted (
+    id				VARCHAR(32) NOT NULL PRIMARY KEY,
     history_id 		INTEGER(8) NOT NULL DEFAULT 0,
     device_id       VARCHAR(32)
 );
@@ -146,13 +163,21 @@ CREATE TABLE IF NOT EXISTS message_history_seq (
     last_history_id INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS label_timeline_seq (
+CREATE TABLE IF NOT EXISTS user_label_timeline_seq (
     user_id 		INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
     last_timeline_id INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS label_history_seq (
+CREATE TABLE IF NOT EXISTS user_label_history_seq (
     user_id 		INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
+    last_history_id INTEGER(8) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS shared_label_timeline_seq (
+    last_timeline_id INTEGER(8) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS shared_label_history_seq (
     last_history_id INTEGER(8) NOT NULL
 );
 
@@ -177,10 +202,15 @@ CREATE INDEX IF NOT EXISTS idx_message_timeline_id ON message (timeline_id);
 CREATE INDEX IF NOT EXISTS idx_message_history_id ON message (history_id);
 CREATE INDEX IF NOT EXISTS idx_message_last_stmt ON message (last_stmt);
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_label_name ON label(name);
-CREATE INDEX IF NOT EXISTS idx_label_timeline_id ON label (timeline_id);
-CREATE INDEX IF NOT EXISTS idx_label_history_id ON label (history_id);
-CREATE INDEX IF NOT EXISTS idx_label_last_stmt ON label (last_stmt);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_user_label_name ON user_label(name);
+CREATE INDEX IF NOT EXISTS idx_user_label_timeline_id ON user_label (timeline_id);
+CREATE INDEX IF NOT EXISTS idx_user_label_history_id ON user_label (history_id);
+CREATE INDEX IF NOT EXISTS idx_user_label_last_stmt ON user_label (last_stmt);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_shared_label_name ON shared_label(name);
+CREATE INDEX IF NOT EXISTS idx_shared_label_timeline_id ON shared_label (timeline_id);
+CREATE INDEX IF NOT EXISTS idx_shared_label_history_id ON shared_label (history_id);
+CREATE INDEX IF NOT EXISTS idx_shared_label_last_stmt ON shared_label (last_stmt);
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_contact ON contact(email_address, firstname, lastname);
 CREATE INDEX IF NOT EXISTS idx_contact_timeline_id ON contact (timeline_id);
@@ -193,8 +223,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_file_history_seq ON file_history_seq(user_
 CREATE UNIQUE INDEX IF NOT EXISTS idx_message_timeline_seq ON message_timeline_seq(user_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_message_history_seq ON message_history_seq(user_id);
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_label_timeline_seq ON label_timeline_seq(user_id);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_label_history_seq ON label_history_seq(user_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_user_label_timeline_seq ON user_label_timeline_seq(user_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_user_label_history_seq ON user_label_history_seq(user_id);
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_contact_timeline_seq ON contact_timeline_seq(user_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_contact_history_seq ON contact_history_seq(user_id);

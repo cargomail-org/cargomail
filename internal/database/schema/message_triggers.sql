@@ -101,7 +101,7 @@ CREATE TRIGGER IF NOT EXISTS message_after_update
     -- snippet,
     body_mimetype,
     body_uri,
-    body_size,
+    body_size
     ON message
     FOR EACH ROW
 BEGIN
@@ -146,7 +146,8 @@ BEGIN
 END;
 
 CREATE TRIGGER IF NOT EXISTS message_after_delete
-AFTER DELETE ON message
+AFTER DELETE
+ON message
 FOR EACH ROW
 BEGIN
     UPDATE message_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;

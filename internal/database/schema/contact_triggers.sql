@@ -71,7 +71,8 @@ BEGIN
 END;
 
 CREATE TRIGGER IF NOT EXISTS contact_after_delete
-AFTER DELETE ON contact
+AFTER DELETE
+ON contact
 FOR EACH ROW
 BEGIN
     UPDATE contact_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;
