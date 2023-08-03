@@ -87,12 +87,12 @@ func (api *FilesApi) Upload() http.Handler {
 			}
 
 			hashSum := hash.Sum(nil)
-			checksum := fmt.Sprintf("%x", hashSum)
+			uri := fmt.Sprintf("%x", hashSum)
 
 			contentType := files[i].Header.Get("content-type")
 
 			uploadedFile := &repository.File{
-				Checksum:    checksum,
+				Uri:         uri,
 				Name:        files[i].Filename,
 				Size:        written,
 				ContentType: contentType,

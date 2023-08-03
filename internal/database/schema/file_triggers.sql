@@ -1,4 +1,3 @@
-
 CREATE TRIGGER IF NOT EXISTS file_after_insert
     AFTER INSERT
     ON file
@@ -16,7 +15,8 @@ END;
 CREATE TRIGGER IF NOT EXISTS file_before_update
     BEFORE UPDATE OF
         id,
-        checksum,
+        user_id,
+        uri,
         name,
         path,
         size,

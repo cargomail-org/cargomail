@@ -14,7 +14,7 @@ type FilesRepository struct {
 type File struct {
 	Id          string     `json:"id"`
 	UserId      int64      `json:"-"`
-	Checksum    string     `json:"-"`
+	Uri         string     `json:"-"`
 	Name        string     `json:"name"`
 	Path        string     `json:"-"`
 	Size        int64      `json:"file_size"`
@@ -74,13 +74,13 @@ func (r FilesRepository) Create(user *User, file *File) (*File, error) {
 
 	query := `
 		INSERT INTO
-			file (user_id, device_id, checksum, name, path, content_type, size)
+			file (user_id, device_id, uri, name, path, content_type, size)
 			VALUES ($1, $2, $3, $4, $5, $6, $7)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{user.Id, prefixedDeviceId, file.Checksum, file.Name, file.Path, file.ContentType, file.Size}
+	args := []interface{}{user.Id, prefixedDeviceId, file.Uri, file.Name, file.Path, file.ContentType, file.Size}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
 	if err != nil {

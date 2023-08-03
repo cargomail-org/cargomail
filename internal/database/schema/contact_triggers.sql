@@ -1,4 +1,3 @@
-
 CREATE TRIGGER IF NOT EXISTS contact_after_insert
     AFTER INSERT
     ON contact
@@ -15,7 +14,8 @@ END;
 
 CREATE TRIGGER IF NOT EXISTS contact_before_update
     BEFORE UPDATE OF
-        id
+        id,
+        user_id
     ON contact
     FOR EACH ROW
 BEGIN

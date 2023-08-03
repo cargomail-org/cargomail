@@ -11,6 +11,20 @@ BEGIN
         VALUES (new.id, 0);
 
     INSERT
+        INTO message_timeline_seq (user_id, last_timeline_id)
+        VALUES (new.id, 0);
+    INSERT
+        INTO message_history_seq (user_id, last_history_id)
+        VALUES (new.id, 0);
+
+    INSERT
+        INTO label_timeline_seq (user_id, last_timeline_id)
+        VALUES (new.id, 0);
+    INSERT
+        INTO label_history_seq (user_id, last_history_id)
+        VALUES (new.id, 0);
+
+    INSERT
         INTO contact_timeline_seq (user_id, last_timeline_id)
         VALUES (new.id, 0);
     INSERT
