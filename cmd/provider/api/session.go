@@ -5,7 +5,6 @@ import (
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"errors"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -145,7 +144,6 @@ func (api *SessionApi) Login() http.Handler {
 			case errors.Is(err, http.ErrNoCookie):
 				device_id = strings.Replace(uuid.NewString(), "-", "", -1)
 			default:
-				log.Println(err)
 				http.Error(w, "server error", http.StatusInternalServerError)
 				return
 			}
@@ -198,7 +196,6 @@ func (api *SessionApi) Logout() http.Handler {
 			case errors.Is(err, http.ErrNoCookie):
 				http.Error(w, "cookie not found", http.StatusBadRequest)
 			default:
-				log.Println(err)
 				http.Error(w, "server error", http.StatusInternalServerError)
 			}
 			return

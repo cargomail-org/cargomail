@@ -4,8 +4,8 @@ import (
 	"cargomail/cmd/provider/api/helper"
 	"cargomail/internal/repository"
 	"encoding/json"
+	"errors"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -31,7 +31,12 @@ func (api *ContactsApi) Create() http.Handler {
 
 		contact, err = api.contacts.Create(user, contact)
 		if err != nil {
-			log.Println(err)
+			switch {
+			case errors.Is(err, repository.ErrDuplicateContact):
+				helper.ReturnErr(w, err, http.StatusBadRequest)
+			default:
+				helper.ReturnErr(w, err, http.StatusInternalServerError)
+			}
 			return
 		}
 
@@ -49,7 +54,7 @@ func (api *ContactsApi) GetAll() http.Handler {
 
 		contactHistory, err := api.contacts.GetAll(user)
 		if err != nil {
-			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -75,7 +80,7 @@ func (api *ContactsApi) Sync() http.Handler {
 
 		contactHistory, err := api.contacts.Sync(user, history)
 		if err != nil {
-			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -101,7 +106,14 @@ func (api *ContactsApi) Update() http.Handler {
 
 		contact, err = api.contacts.Update(user, contact)
 		if err != nil {
-			helper.ReturnErr(w, err, http.StatusNotFound)
+			switch {
+			case errors.Is(err, repository.ErrContactNotFound):
+				helper.ReturnErr(w, err, http.StatusNotFound)
+			case errors.Is(err, repository.ErrDuplicateContact):
+				helper.ReturnErr(w, err, http.StatusBadRequest)
+			default:
+				helper.ReturnErr(w, err, http.StatusInternalServerError)
+			}
 			return
 		}
 
@@ -119,7 +131,7 @@ func (api *ContactsApi) TrashByIdList() http.Handler {
 
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
-			log.Println(err)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -127,7 +139,7 @@ func (api *ContactsApi) TrashByIdList() http.Handler {
 
 		err = api.contacts.TrashByIdList(user, bodyString)
 		if err != nil {
-			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -145,7 +157,7 @@ func (api *ContactsApi) UntrashByIdList() http.Handler {
 
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
-			log.Println(err)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -153,7 +165,7 @@ func (api *ContactsApi) UntrashByIdList() http.Handler {
 
 		err = api.contacts.UntrashByIdList(user, bodyString)
 		if err != nil {
-			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -171,7 +183,7 @@ func (api *ContactsApi) DeleteByIdList() http.Handler {
 
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
-			log.Println(err)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 

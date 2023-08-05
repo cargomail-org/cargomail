@@ -7,7 +7,6 @@ import (
 	"context"
 	"errors"
 	"html/template"
-	"log"
 	"net/http"
 )
 
@@ -52,7 +51,6 @@ func (app *App) Authenticate(next http.Handler) http.Handler {
 			case errors.Is(err, http.ErrNoCookie):
 				redirectToLoginPage(w, r)
 			default:
-				log.Println(err)
 				http.Error(w, "server error", http.StatusInternalServerError)
 			}
 			return
@@ -85,7 +83,6 @@ func (app *App) Authenticate(next http.Handler) http.Handler {
 			case errors.Is(err, http.ErrNoCookie):
 				// nothing to do
 			default:
-				log.Println(err)
 				http.Error(w, "server error", http.StatusInternalServerError)
 				return
 			}
@@ -130,7 +127,6 @@ func (app *App) Logout() http.Handler {
 			case errors.Is(err, http.ErrNoCookie):
 				redirectToLoginPage(w, r)
 			default:
-				log.Println(err)
 				redirectToLoginPage(w, r)
 			}
 			return

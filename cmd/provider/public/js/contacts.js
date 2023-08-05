@@ -122,7 +122,15 @@ const contactsTable = new DataTable("#contactsTable", {
           }
 
           for (const contact of response.updated) {
-            contactsTable.row(`#${contact.id}`).data(contact);
+            // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+            const notFound =
+              contactsTable.column(0).data().toArray().indexOf(contact.id) ===
+              -1; // !!! must be
+            if (notFound) {
+              contactsTable.row.add(contact);
+            } else {
+              contactsTable.row(`#${contact.id}`).data(contact);
+            }
           }
 
           for (const contact of response.trashed) {
@@ -190,6 +198,9 @@ contactsTable.on("select.dt deselect.dt", () => {
 
 export const showContactsFormDialog = (e) => {
   const formDialog = e.currentTarget;
+
+  const alert = formDialog.querySelector('div[name="alert"]');
+  if (alert) alert.remove();
 
   const button = e.relatedTarget.currentTarget;
 

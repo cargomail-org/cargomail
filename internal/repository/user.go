@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"cargomail/internal/config"
 	"context"
 	"crypto/sha256"
 	"database/sql"
@@ -33,6 +34,25 @@ type UserProfile struct {
 type password struct {
 	plaintext *string
 	hash      []byte
+}
+
+func (u User) Fullname() string {
+	if len(u.FirstName) > 0 && len(u.LastName) > 0 {
+		return u.FirstName + " " + u.LastName
+	}
+
+	return u.FirstName + u.LastName
+}
+
+func (u User) FullnameAndAddress() string {
+	address := "<" + u.Username + "@" + config.Configuration.DomainName + ">"
+	fullname := u.Fullname()
+
+	if len(fullname) > 0 {
+		return fullname + " " + address
+	}
+
+	return address
 }
 
 func (p *password) Set(plaintextPassword string) error {
@@ -145,7 +165,7 @@ func (r UserRepository) GetByUsername(username string) (*User, error) {
 	defer cancel()
 
 	query := `
-		SELECT id, username, password_hash, created_at
+		SELECT id, username, password_hash, firstname, lastname, created_at
 			FROM user
 			WHERE username = $1;`
 
@@ -155,6 +175,8 @@ func (r UserRepository) GetByUsername(username string) (*User, error) {
 		&user.Id,
 		&user.Username,
 		&user.Password.hash,
+		&user.FirstName,
+		&user.LastName,
 		&user.CreatedAt,
 	)
 
@@ -177,7 +199,7 @@ func (r UserRepository) GetBySession(sessionScope, sessionPlaintext string) (*Us
 	sessionHash := sha256.Sum256([]byte(sessionPlaintext))
 
 	query := `
-		SELECT user.id, user.username, user.password_hash, user.created_at
+		SELECT user.id, user.username, user.password_hash, user.firstname, user.lastname, user.created_at
 			FROM user
 			INNER JOIN session
 			ON user.id = session.user_id
@@ -193,6 +215,8 @@ func (r UserRepository) GetBySession(sessionScope, sessionPlaintext string) (*Us
 		&user.Id,
 		&user.Username,
 		&user.Password.hash,
+		&user.FirstName,
+		&user.LastName,
 		&user.CreatedAt,
 	)
 

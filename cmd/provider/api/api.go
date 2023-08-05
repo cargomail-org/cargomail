@@ -5,7 +5,6 @@ import (
 	"cargomail/internal/repository"
 	"context"
 	"errors"
-	"log"
 	"net/http"
 )
 
@@ -19,6 +18,8 @@ type Api struct {
 	Session  SessionApi
 	User     UserApi
 	Contacts ContactsApi
+	Drafts   DraftsApi
+	Messages MessagesApi
 }
 
 func NewApi(params ApiParams) Api {
@@ -28,6 +29,8 @@ func NewApi(params ApiParams) Api {
 		Session:  SessionApi{user: params.Repository.User, session: params.Repository.Session},
 		User:     UserApi{user: params.Repository.User},
 		Contacts: ContactsApi{contacts: params.Repository.Contacts},
+		Drafts:   DraftsApi{drafts: params.Repository.Drafts},
+		Messages: MessagesApi{messages: params.Repository.Messages},
 	}
 }
 
@@ -57,7 +60,6 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 			case errors.Is(err, http.ErrNoCookie):
 				http.Error(w, "cookie not found", http.StatusBadRequest)
 			default:
-				log.Println(err)
 				http.Error(w, "server error", http.StatusInternalServerError)
 			}
 			return
@@ -90,7 +92,6 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 			case errors.Is(err, http.ErrNoCookie):
 				// nothing to do
 			default:
-				log.Println(err)
 				http.Error(w, "server error", http.StatusInternalServerError)
 				return
 			}

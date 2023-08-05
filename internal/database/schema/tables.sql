@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS message
 (
     id              VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     user_id 	    INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
-    message_uid     VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))),
+    message_uid     VARCHAR(32) NOT NULL,
     parent_uid      VARCHAR(32),
     thread_uid      VARCHAR(32) NOT NULL,
     forwarded       BOOLEAN NOT NULL DEFAULT FALSE,
@@ -212,7 +212,7 @@ CREATE INDEX IF NOT EXISTS idx_shared_label_timeline_id ON shared_label (timelin
 CREATE INDEX IF NOT EXISTS idx_shared_label_history_id ON shared_label (history_id);
 CREATE INDEX IF NOT EXISTS idx_shared_label_last_stmt ON shared_label (last_stmt);
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_contact ON contact(email_address, firstname, lastname);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_contact ON contact(email_address, firstname, lastname) WHERE last_stmt < 2;
 CREATE INDEX IF NOT EXISTS idx_contact_timeline_id ON contact (timeline_id);
 CREATE INDEX IF NOT EXISTS idx_contact_history_id ON contact (history_id);
 CREATE INDEX IF NOT EXISTS idx_contact_last_stmt ON contact (last_stmt);

@@ -14,6 +14,8 @@ var (
 	ErrInvalidOrMissingSession  = errors.New("invalid or missing session")
 	ErrFailedValidationResponse = errors.New("failed validation")
 	ErrFileNameNotFound         = errors.New("filename not found")
+	ErrContactNotFound          = errors.New("contact not found")
+	ErrDuplicateContact         = errors.New("contact already exists")
 )
 
 type History struct {
@@ -25,6 +27,8 @@ type Repository struct {
 	Session  SessionRepository
 	User     UserRepository
 	Contacts ContactsRepository
+	Drafts   DraftsRepository
+	Messages MessagesRepository
 }
 
 func NewRepository(db *sql.DB) Repository {
@@ -33,6 +37,8 @@ func NewRepository(db *sql.DB) Repository {
 		Session:  SessionRepository{db: db},
 		User:     UserRepository{db: db},
 		Contacts: ContactsRepository{db: db},
+		Drafts:   DraftsRepository{db: db},
+		Messages: MessagesRepository{db: db},
 	}
 }
 

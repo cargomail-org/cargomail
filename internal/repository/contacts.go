@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"reflect"
 	"time"
 )
@@ -83,7 +84,12 @@ func (r *ContactsRepository) Create(user *User, contact *Contact) (*Contact, err
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(contact.Scan()...)
 	if err != nil {
-		return nil, err
+		switch {
+		case err.Error() == `UNIQUE constraint failed: contact.email_address, contact.firstname, contact.lastname`:
+			return nil, ErrDuplicateContact
+		default:
+			return nil, err
+		}
 	}
 
 	return contact, nil
@@ -341,7 +347,8 @@ func (r *ContactsRepository) Update(user *User, contact *Contact) (*Contact, err
 				lastname = $3,
 				device_id = $4
 			WHERE user_id = $5 AND
-			      id = $6
+			      id = $6 AND
+				  last_stmt <> 2
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
@@ -350,7 +357,14 @@ func (r *ContactsRepository) Update(user *User, contact *Contact) (*Contact, err
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(contact.Scan()...)
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, ErrContactNotFound
+		case err.Error() == `UNIQUE constraint failed: contact.email_address, contact.firstname, contact.lastname`:
+			return nil, ErrDuplicateContact
+		default:
+			return nil, err
+		}
 	}
 
 	return contact, nil
