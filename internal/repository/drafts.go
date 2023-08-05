@@ -58,8 +58,30 @@ func (r *DraftsRepository) Create(user *User, draft *Draft) (*Draft, error) {
 
 	query := `
 		INSERT
-			INTO message (user_id, device_id, message_uid, thread_uid, unread, folder, "from", "to", subject)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+			INTO message (user_id,
+				 device_id,
+				 message_uid,
+				 thread_uid,
+				 unread,
+				 folder,
+				 "from",
+				 "to",
+				 "cc",
+				 "bcc",
+				 "group",
+				 subject)
+			VALUES ($1,
+					$2,
+					$3,
+					$4,
+					$5,
+					$6,
+					$7,
+					$8,
+					$9,
+					$10,
+					$11,
+					$12)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
@@ -70,7 +92,18 @@ func (r *DraftsRepository) Create(user *User, draft *Draft) (*Draft, error) {
 	folder := 0 // 0-draft
 	unread := false
 
-	args := []interface{}{user.Id, prefixedDeviceId, messageUid, threadUid, unread, folder, from, draft.To, draft.Subject}
+	args := []interface{}{user.Id,
+		prefixedDeviceId,
+		messageUid,
+		threadUid,
+		unread,
+		folder,
+		from,
+		draft.To,
+		draft.Cc,
+		draft.Bcc,
+		draft.Group,
+		draft.Subject}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
 	if err != nil {

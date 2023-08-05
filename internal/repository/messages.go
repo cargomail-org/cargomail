@@ -3,6 +3,9 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
 	"reflect"
 	"time"
 )
@@ -11,41 +14,48 @@ type MessagesRepository struct {
 	db *sql.DB
 }
 
+type Recipient struct {
+	Fullname     string `json:"fullname,omitempty"`
+	EmailAddress string `json:"email_address,omitempty"`
+}
+
+type Recipients []Recipient
+
 type Message struct {
-	Id             string     `json:"id"`
-	UserId         int64      `json:"-"`
-	MessageUid     string     `json:"message_uid"`
-	ParentUid      *string    `json:"parent_uid"`
-	ThreadUid      string     `json:"thread_uid"`
-	Forwarded      bool       `json:"forwarded"`
-	Unread         bool       `json:"unread"`
-	Starred        bool       `json:"starred"`
-	Folder         int16      `json:"folder"`
-	UserLabelIds   *string    `json:"user_label_ids"`
-	SharedLabelIds *string    `json:"shared_label_ids"`
-	From           string     `json:"from"`
-	To             *string    `json:"to"`
-	Cc             *string    `json:"cc"`
-	Bcc            *string    `json:"bcc"`
-	Group          *string    `json:"group"`
-	Subject        *string    `json:"subject"`
-	OriginUrl      *string    `json:"origin_url"`
-	DesinationUrl  *string    `json:"desination_url"`
-	Tags           *string    `json:"tags"`
-	Cargoes        *string    `json:"cargoes"`
-	Snippet        *string    `json:"snippet"`
-	BodyMimetype   *string    `json:"body_mimetype"`
-	BodyUri        *string    `json:"body_uri"`
-	BodySize       *int64     `json:"body_size"`
-	SentAt         *Timestamp `json:"sent_at"`
-	ReceivedAt     *Timestamp `json:"received_at"`
-	SnoozedAt      *Timestamp `json:"snoozed_at"`
-	CreatedAt      Timestamp  `json:"created_at"`
-	ModifiedAt     *Timestamp `json:"modified_at"`
-	TimelineId     int64      `json:"-"`
-	HistoryId      int64      `json:"-"`
-	LastStmt       int        `json:"-"`
-	DeviceId       *string    `json:"-"`
+	Id             string      `json:"id"`
+	UserId         int64       `json:"-"`
+	MessageUid     string      `json:"message_uid"`
+	ParentUid      *string     `json:"parent_uid"`
+	ThreadUid      string      `json:"thread_uid"`
+	Forwarded      bool        `json:"forwarded"`
+	Unread         bool        `json:"unread"`
+	Starred        bool        `json:"starred"`
+	Folder         int16       `json:"folder"`
+	UserLabelIds   *string     `json:"user_label_ids"`
+	SharedLabelIds *string     `json:"shared_label_ids"`
+	From           string      `json:"from"`
+	To             *Recipients `json:"to"`
+	Cc             *Recipients `json:"cc"`
+	Bcc            *Recipients `json:"bcc"`
+	Group          *Recipients `json:"group"`
+	OriginUrl      *string     `json:"origin_url"`
+	DesinationUrl  *string     `json:"desination_url"`
+	Tags           *string     `json:"tags"`
+	Cargoes        *string     `json:"cargoes"`
+	Subject        *string     `json:"subject"`
+	Snippet        *string     `json:"snippet"`
+	BodyMimetype   *string     `json:"body_mimetype"`
+	BodyUri        *string     `json:"body_uri"`
+	BodySize       *int64      `json:"body_size"`
+	SentAt         *Timestamp  `json:"sent_at"`
+	ReceivedAt     *Timestamp  `json:"received_at"`
+	SnoozedAt      *Timestamp  `json:"snoozed_at"`
+	CreatedAt      Timestamp   `json:"created_at"`
+	ModifiedAt     *Timestamp  `json:"modified_at"`
+	TimelineId     int64       `json:"-"`
+	HistoryId      int64       `json:"-"`
+	LastStmt       int         `json:"-"`
+	DeviceId       *string     `json:"-"`
 }
 
 type MessageDeleted struct {
@@ -66,6 +76,19 @@ type messageSyncHistory struct {
 	MessagesUpdated  []*Message        `json:"updated"`
 	MessagesTrashed  []*Message        `json:"trashed"`
 	MessagesDeleted  []*MessageDeleted `json:"deleted"`
+}
+
+func (r Recipients) Value() (driver.Value, error) {
+	return json.Marshal(r)
+}
+
+func (r *Recipients) Scan(value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	return json.Unmarshal(b, &r)
 }
 
 func (c *Message) Scan() []interface{} {

@@ -13,7 +13,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	_ "github.com/mattn/go-sqlite3"
+	sqlite3 "github.com/mattn/go-sqlite3"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -22,7 +22,10 @@ func Start() error {
 	defer done()
 	errs, ctx := errgroup.WithContext(ctx)
 
-	log.Printf("using database %v", config.Configuration.DatabasePath)
+	sqlite3LibVersion, _, _ := sqlite3.Version()
+
+	log.Printf("using sqlite3 version: %v, database %v", sqlite3LibVersion, config.Configuration.DatabasePath)
+
 	db, err := sql.Open("sqlite3", config.Configuration.DatabasePath)
 	if err != nil {
 		log.Fatal(err)
@@ -34,7 +37,7 @@ func Start() error {
 	// provider service
 	providerService, err := provider.NewService(
 		&provider.ServiceParams{
-			DB:           db,
+			DB: db,
 		})
 	if err != nil {
 		log.Fatal(err)
@@ -44,7 +47,7 @@ func Start() error {
 	// transfer service
 	transferService := transfer.NewService(
 		&transfer.ServiceParams{
-			DB:               db,
+			DB: db,
 		})
 	transferService.Serve(ctx, errs)
 
