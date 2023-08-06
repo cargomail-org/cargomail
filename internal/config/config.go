@@ -21,6 +21,8 @@ type Config = struct {
 	DomainName       string `yaml:"domain_name"`
 	StoragePath      string `yaml:"storage_path"`
 	DatabasePath     string `yaml:"database_path"`
+	BodyPath         string `yaml:"body_path"`
+	TagsPath         string `yaml:"tags_path"`
 	FilesPath        string `yaml:"files_path"`
 	TransferCertPath string `yaml:"transfer_cert_path"`
 	TransferKeyPath  string `yaml:"transfer_key_path"`
