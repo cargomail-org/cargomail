@@ -68,8 +68,7 @@ func (r *DraftsRepository) Create(user *User, draft *Draft) (*Draft, error) {
 				 "to",
 				 "cc",
 				 "bcc",
-				 "group",
-				 subject)
+				 "group")
 			VALUES ($1,
 					$2,
 					$3,
@@ -80,8 +79,7 @@ func (r *DraftsRepository) Create(user *User, draft *Draft) (*Draft, error) {
 					$8,
 					$9,
 					$10,
-					$11,
-					$12)
+					$11)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
@@ -102,8 +100,7 @@ func (r *DraftsRepository) Create(user *User, draft *Draft) (*Draft, error) {
 		draft.To,
 		draft.Cc,
 		draft.Bcc,
-		draft.Group,
-		draft.Subject}
+		draft.Group}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
 	if err != nil {

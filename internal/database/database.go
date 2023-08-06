@@ -14,14 +14,16 @@ var (
 	tables string
 	//go:embed schema/user_triggers.sql
 	userTriggers string
+	//go:embed schema/body_triggers.sql
+	bodyTriggers string
+	//go:embed schema/tag_triggers.sql
+	tagTriggers string
 	//go:embed schema/file_triggers.sql
 	fileTriggers string
 	//go:embed schema/message_triggers.sql
 	messageTriggers string
-	//go:embed schema/user_label_triggers.sql
-	userLabelTriggers string
-	//go:embed schema/shared_label_triggers.sql
-	sharedLabelTriggers string
+	//go:embed schema/label_triggers.sql
+	labelTriggers string
 	//go:embed schema/contact_triggers.sql
 	contactTriggers string
 )
@@ -40,6 +42,16 @@ func Init(db *sql.DB) {
 		log.Fatal("sql user triggers: ", err)
 	}
 
+	_, err = db.ExecContext(ctx, bodyTriggers)
+	if err != nil {
+		log.Fatal("sql body triggers: ", err)
+	}
+
+	_, err = db.ExecContext(ctx, tagTriggers)
+	if err != nil {
+		log.Fatal("sql tag triggers: ", err)
+	}
+
 	_, err = db.ExecContext(ctx, fileTriggers)
 	if err != nil {
 		log.Fatal("sql file triggers: ", err)
@@ -50,14 +62,9 @@ func Init(db *sql.DB) {
 		log.Fatal("sql message triggers: ", err)
 	}
 
-	_, err = db.ExecContext(ctx, userLabelTriggers)
+	_, err = db.ExecContext(ctx, labelTriggers)
 	if err != nil {
-		log.Fatal("sql user label triggers: ", err)
-	}
-
-	_, err = db.ExecContext(ctx, sharedLabelTriggers)
-	if err != nil {
-		log.Fatal("sql shared label triggers: ", err)
+		log.Fatal("sql label triggers: ", err)
 	}
 
 	_, err = db.ExecContext(ctx, contactTriggers)
