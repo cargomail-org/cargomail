@@ -8,7 +8,7 @@ import (
 )
 
 type DraftsApi struct {
-	drafts repository.DraftsRepository
+	drafts repository.DraftRepository
 }
 
 func (api *DraftsApi) Create() http.Handler {
@@ -37,7 +37,7 @@ func (api *DraftsApi) Create() http.Handler {
 	})
 }
 
-func (api *DraftsApi) GetAll() http.Handler {
+func (api *DraftsApi) List() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -45,7 +45,7 @@ func (api *DraftsApi) GetAll() http.Handler {
 			return
 		}
 
-		draftHistory, err := api.drafts.GetAll(user)
+		draftHistory, err := api.drafts.List(user)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

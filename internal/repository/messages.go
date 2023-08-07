@@ -10,46 +10,39 @@ import (
 	"time"
 )
 
-type MessagesRepository struct {
+type MessageRepository struct {
 	db *sql.DB
 }
 
-type Recipient struct {
-	Fullname     string `json:"fullname,omitempty"`
-	EmailAddress string `json:"email_address,omitempty"`
-}
-
-type Recipients []Recipient
-
 type Message struct {
-	Id         string      `json:"id"`
-	UserId     int64       `json:"-"`
-	MessageUid string      `json:"message_uid"`
-	ParentUid  *string     `json:"parent_uid"`
-	ThreadUid  string      `json:"thread_uid"`
-	Forwarded  bool        `json:"forwarded"`
-	Unread     bool        `json:"unread"`
-	Starred    bool        `json:"starred"`
-	Folder     int16       `json:"folder"`
-	Headers    *string     `json:"headers"`
-	Body       *string     `json:"body"`
-	Tags       *string     `json:"tags"`
-	Files      *string     `json:"files"`
-	From       string      `json:"from"`
-	To         *Recipients `json:"to"`
-	Cc         *Recipients `json:"cc"`
-	Bcc        *Recipients `json:"bcc"`
-	Group      *Recipients `json:"group"`
-	LabelIds   *string `json:"labbel_ids"`
-	SentAt     *Timestamp  `json:"sent_at"`
-	ReceivedAt *Timestamp  `json:"received_at"`
-	SnoozedAt  *Timestamp  `json:"snoozed_at"`
-	CreatedAt  Timestamp   `json:"created_at"`
-	ModifiedAt *Timestamp  `json:"modified_at"`
-	TimelineId int64       `json:"-"`
-	HistoryId  int64       `json:"-"`
-	LastStmt   int         `json:"-"`
-	DeviceId   *string     `json:"-"`
+	Id         string         `json:"id"`
+	UserId     int64          `json:"-"`
+	MessageUid string         `json:"message_uid"`
+	ParentUid  *string        `json:"parent_uid"`
+	ThreadUid  string         `json:"thread_uid"`
+	Forwarded  bool           `json:"forwarded"`
+	Unread     bool           `json:"unread"`
+	Starred    bool           `json:"starred"`
+	Folder     int16          `json:"folder"`
+	Headers    *string        `json:"headers"`
+	Body       *BodyResource  `json:"body"`
+	Tags       *TagsResource  `json:"tags"`
+	Files      *FilesResource `json:"files"`
+	From       string         `json:"from"`
+	To         *Recipients    `json:"to"`
+	Cc         *Recipients    `json:"cc"`
+	Bcc        *Recipients    `json:"bcc"`
+	Group      *Recipients    `json:"group"`
+	LabelIds   *string        `json:"labbel_ids"`
+	SentAt     *Timestamp     `json:"sent_at"`
+	ReceivedAt *Timestamp     `json:"received_at"`
+	SnoozedAt  *Timestamp     `json:"snoozed_at"`
+	CreatedAt  Timestamp      `json:"created_at"`
+	ModifiedAt *Timestamp     `json:"modified_at"`
+	TimelineId int64          `json:"-"`
+	HistoryId  int64          `json:"-"`
+	LastStmt   int            `json:"-"`
+	DeviceId   *string        `json:"-"`
 }
 
 type MessageDeleted struct {
@@ -59,18 +52,46 @@ type MessageDeleted struct {
 	DeviceId  *string `json:"-"`
 }
 
-type messageAllHistory struct {
+type MessageList struct {
 	History  int64      `json:"last_history_id"`
 	Messages []*Message `json:"messages"`
 }
 
-type messageSyncHistory struct {
+type MessageSync struct {
 	History          int64             `json:"last_history_id"`
 	MessagesInserted []*Message        `json:"inserted"`
 	MessagesUpdated  []*Message        `json:"updated"`
 	MessagesTrashed  []*Message        `json:"trashed"`
 	MessagesDeleted  []*MessageDeleted `json:"deleted"`
 }
+
+type BodyResource struct {
+	ContentType string
+	Uri         string
+	Size        int64
+}
+
+type TagResource struct {
+	ContentType string
+	Uri         string
+	Size        int64
+}
+
+type FileResource struct {
+	ContentType string
+	Uri         string
+	Size        int64
+}
+
+type Recipient struct {
+	Fullname     string `json:"fullname,omitempty"`
+	EmailAddress string `json:"email_address,omitempty"`
+}
+
+type TagsResource []TagResource
+type FilesResource []FileResource
+
+type Recipients []Recipient
 
 func (r Recipients) Value() (driver.Value, error) {
 	return json.Marshal(r)
@@ -107,7 +128,7 @@ func (c *MessageDeleted) Scan() []interface{} {
 	return columns
 }
 
-func (r *MessagesRepository) GetAll(user *User) (*messageAllHistory, error) {
+func (r *MessageRepository) List(user *User) (*MessageList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -134,7 +155,7 @@ func (r *MessagesRepository) GetAll(user *User) (*messageAllHistory, error) {
 
 	defer rows.Close()
 
-	messageHistory := &messageAllHistory{
+	messageList := &MessageList{
 		Messages: []*Message{},
 	}
 
@@ -147,7 +168,7 @@ func (r *MessagesRepository) GetAll(user *User) (*messageAllHistory, error) {
 			return nil, err
 		}
 
-		messageHistory.Messages = append(messageHistory.Messages, &message)
+		messageList.Messages = append(messageList.Messages, &message)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -162,7 +183,7 @@ func (r *MessagesRepository) GetAll(user *User) (*messageAllHistory, error) {
 
 	args = []interface{}{user.Id}
 
-	err = tx.QueryRowContext(ctx, query, args...).Scan(&messageHistory.History)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&messageList.History)
 	if err != nil {
 		return nil, err
 	}
@@ -171,5 +192,5 @@ func (r *MessagesRepository) GetAll(user *User) (*messageAllHistory, error) {
 		return nil, err
 	}
 
-	return messageHistory, nil
+	return messageList, nil
 }

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type ContactsRepository struct {
+type ContactRepository struct {
 	db *sql.DB
 }
 
@@ -33,12 +33,12 @@ type ContactDeleted struct {
 	DeviceId  *string `json:"-"`
 }
 
-type contactAllHistory struct {
+type ContactList struct {
 	History  int64      `json:"last_history_id"`
 	Contacts []*Contact `json:"contacts"`
 }
 
-type contactSyncHistory struct {
+type ContactSync struct {
 	History          int64             `json:"last_history_id"`
 	ContactsInserted []*Contact        `json:"inserted"`
 	ContactsUpdated  []*Contact        `json:"updated"`
@@ -68,7 +68,7 @@ func (c *ContactDeleted) Scan() []interface{} {
 	return columns
 }
 
-func (r *ContactsRepository) Create(user *User, contact *Contact) (*Contact, error) {
+func (r *ContactRepository) Create(user *User, contact *Contact) (*Contact, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -95,7 +95,7 @@ func (r *ContactsRepository) Create(user *User, contact *Contact) (*Contact, err
 	return contact, nil
 }
 
-func (r *ContactsRepository) GetAll(user *User) (*contactAllHistory, error) {
+func (r *ContactRepository) List(user *User) (*ContactList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -121,7 +121,7 @@ func (r *ContactsRepository) GetAll(user *User) (*contactAllHistory, error) {
 
 	defer rows.Close()
 
-	contactHistory := &contactAllHistory{
+	contactList := &ContactList{
 		Contacts: []*Contact{},
 	}
 
@@ -134,7 +134,7 @@ func (r *ContactsRepository) GetAll(user *User) (*contactAllHistory, error) {
 			return nil, err
 		}
 
-		contactHistory.Contacts = append(contactHistory.Contacts, &contact)
+		contactList.Contacts = append(contactList.Contacts, &contact)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -149,7 +149,7 @@ func (r *ContactsRepository) GetAll(user *User) (*contactAllHistory, error) {
 
 	args = []interface{}{user.Id}
 
-	err = tx.QueryRowContext(ctx, query, args...).Scan(&contactHistory.History)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&contactList.History)
 	if err != nil {
 		return nil, err
 	}
@@ -158,10 +158,10 @@ func (r *ContactsRepository) GetAll(user *User) (*contactAllHistory, error) {
 		return nil, err
 	}
 
-	return contactHistory, nil
+	return contactList, nil
 }
 
-func (r *ContactsRepository) Sync(user *User, history *History) (*contactSyncHistory, error) {
+func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -190,7 +190,7 @@ func (r *ContactsRepository) Sync(user *User, history *History) (*contactSyncHis
 
 	defer rows.Close()
 
-	contactHistory := &contactSyncHistory{
+	contactSync := &ContactSync{
 		ContactsInserted: []*Contact{},
 		ContactsUpdated:  []*Contact{},
 		ContactsTrashed:  []*Contact{},
@@ -206,7 +206,7 @@ func (r *ContactsRepository) Sync(user *User, history *History) (*contactSyncHis
 			return nil, err
 		}
 
-		contactHistory.ContactsInserted = append(contactHistory.ContactsInserted, &contact)
+		contactSync.ContactsInserted = append(contactSync.ContactsInserted, &contact)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -241,7 +241,7 @@ func (r *ContactsRepository) Sync(user *User, history *History) (*contactSyncHis
 			return nil, err
 		}
 
-		contactHistory.ContactsUpdated = append(contactHistory.ContactsUpdated, &contact)
+		contactSync.ContactsUpdated = append(contactSync.ContactsUpdated, &contact)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -276,7 +276,7 @@ func (r *ContactsRepository) Sync(user *User, history *History) (*contactSyncHis
 			return nil, err
 		}
 
-		contactHistory.ContactsTrashed = append(contactHistory.ContactsTrashed, &contact)
+		contactSync.ContactsTrashed = append(contactSync.ContactsTrashed, &contact)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -309,7 +309,7 @@ func (r *ContactsRepository) Sync(user *User, history *History) (*contactSyncHis
 			return nil, err
 		}
 
-		contactHistory.ContactsDeleted = append(contactHistory.ContactsDeleted, &contactDeleted)
+		contactSync.ContactsDeleted = append(contactSync.ContactsDeleted, &contactDeleted)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -324,7 +324,7 @@ func (r *ContactsRepository) Sync(user *User, history *History) (*contactSyncHis
 
 	args = []interface{}{user.Id}
 
-	err = tx.QueryRowContext(ctx, query, args...).Scan(&contactHistory.History)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&contactSync.History)
 	if err != nil {
 		return nil, err
 	}
@@ -333,10 +333,10 @@ func (r *ContactsRepository) Sync(user *User, history *History) (*contactSyncHis
 		return nil, err
 	}
 
-	return contactHistory, nil
+	return contactSync, nil
 }
 
-func (r *ContactsRepository) Update(user *User, contact *Contact) (*Contact, error) {
+func (r *ContactRepository) Update(user *User, contact *Contact) (*Contact, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -370,7 +370,7 @@ func (r *ContactsRepository) Update(user *User, contact *Contact) (*Contact, err
 	return contact, nil
 }
 
-func (r *ContactsRepository) TrashByIdList(user *User, idList string) error {
+func (r *ContactRepository) Trash(user *User, idList string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -395,7 +395,7 @@ func (r *ContactsRepository) TrashByIdList(user *User, idList string) error {
 	return nil
 }
 
-func (r *ContactsRepository) UntrashByIdList(user *User, idList string) error {
+func (r *ContactRepository) Untrash(user *User, idList string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -420,7 +420,7 @@ func (r *ContactsRepository) UntrashByIdList(user *User, idList string) error {
 	return nil
 }
 
-func (r ContactsRepository) DeleteByIdList(user *User, idList string) error {
+func (r ContactRepository) Delete(user *User, idList string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

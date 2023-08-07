@@ -7,10 +7,10 @@ import (
 )
 
 type MessagesApi struct {
-	messages repository.MessagesRepository
+	messages repository.MessageRepository
 }
 
-func (api *MessagesApi) GetAll() http.Handler {
+func (api *MessagesApi) List() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -18,7 +18,7 @@ func (api *MessagesApi) GetAll() http.Handler {
 			return
 		}
 
-		messageHistory, err := api.messages.GetAll(user)
+		messageHistory, err := api.messages.List(user)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

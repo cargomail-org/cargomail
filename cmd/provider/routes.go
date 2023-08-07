@@ -79,28 +79,38 @@ func (svc *service) routes(r *Router) {
 
 	// Contacts API
 	r.Route("POST", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.Create()))
-	r.Route("GET", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.GetAll()))
+	r.Route("GET", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.List()))
 	r.Route("POST", "/api/v1/contacts/sync", svc.api.Authenticate(svc.api.Contacts.Sync()))
 	r.Route("PUT", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.Update()))
-	r.Route("POST", "/api/v1/contacts/trash", svc.api.Authenticate(svc.api.Contacts.TrashByIdList()))
-	r.Route("POST", "/api/v1/contacts/untrash", svc.api.Authenticate(svc.api.Contacts.UntrashByIdList()))
-	r.Route("DELETE", "/api/v1/contacts/delete", svc.api.Authenticate(svc.api.Contacts.DeleteByIdList()))
+	r.Route("POST", "/api/v1/contacts/trash", svc.api.Authenticate(svc.api.Contacts.Trash()))
+	r.Route("POST", "/api/v1/contacts/untrash", svc.api.Authenticate(svc.api.Contacts.Untrash()))
+	r.Route("DELETE", "/api/v1/contacts/delete", svc.api.Authenticate(svc.api.Contacts.Delete()))
+
+	// Bodies API
+	r.Route("POST", "/api/v1/bodies/upload", svc.api.Authenticate(svc.api.Bodies.Upload()))
+	r.Route("GET", "/api/v1/bodies", svc.api.Authenticate(svc.api.Bodies.List()))
+	r.Route("POST", "/api/v1/bodies/sync", svc.api.Authenticate(svc.api.Bodies.Sync()))
+	r.Route("HEAD", "/api/v1/bodies/", svc.api.Authenticate(svc.api.Bodies.Download()))
+	r.Route("GET", "/api/v1/bodies/", svc.api.Authenticate(svc.api.Bodies.Download()))
+	r.Route("POST", "/api/v1/bodies/trash", svc.api.Authenticate(svc.api.Bodies.Trash()))
+	r.Route("POST", "/api/v1/bodies/untrash", svc.api.Authenticate(svc.api.Bodies.Untrash()))
+	r.Route("DELETE", "/api/v1/bodies/delete", svc.api.Authenticate(svc.api.Bodies.Delete()))
 
 	// Files API
 	r.Route("POST", "/api/v1/files/upload", svc.api.Authenticate(svc.api.Files.Upload()))
-	r.Route("GET", "/api/v1/files", svc.api.Authenticate(svc.api.Files.GetAll()))
+	r.Route("GET", "/api/v1/files", svc.api.Authenticate(svc.api.Files.List()))
 	r.Route("POST", "/api/v1/files/sync", svc.api.Authenticate(svc.api.Files.Sync()))
 	r.Route("HEAD", "/api/v1/files/", svc.api.Authenticate(svc.api.Files.Download()))
 	r.Route("GET", "/api/v1/files/", svc.api.Authenticate(svc.api.Files.Download()))
-	r.Route("POST", "/api/v1/files/trash", svc.api.Authenticate(svc.api.Files.TrashByIdList()))
-	r.Route("POST", "/api/v1/files/untrash", svc.api.Authenticate(svc.api.Files.UntrashByIdList()))
-	r.Route("DELETE", "/api/v1/files/delete", svc.api.Authenticate(svc.api.Files.DeleteByIdList()))
+	r.Route("POST", "/api/v1/files/trash", svc.api.Authenticate(svc.api.Files.Trash()))
+	r.Route("POST", "/api/v1/files/untrash", svc.api.Authenticate(svc.api.Files.Untrash()))
+	r.Route("DELETE", "/api/v1/files/delete", svc.api.Authenticate(svc.api.Files.Delete()))
 
 	// Drafts API
 	r.Route("POST", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.Create()))
-	r.Route("GET", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.GetAll()))
+	r.Route("GET", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.List()))
 
 	// Messages API
-	r.Route("GET", "/api/v1/messages", svc.api.Authenticate(svc.api.Messages.GetAll()))
+	r.Route("GET", "/api/v1/messages", svc.api.Authenticate(svc.api.Messages.List()))
 
 }

@@ -56,7 +56,7 @@ const composeTable = new DataTable("#composeTable", {
       },
     },
     {
-      data: "file_size",
+      data: "size",
       render: function (data, type) {
         if (type === "display" || type === "filter") {
           return formatBytes(data, 0);

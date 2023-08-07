@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type DraftsRepository struct {
+type DraftRepository struct {
 	db *sql.DB
 }
 
@@ -17,12 +17,12 @@ type Draft Message
 
 type DraftDeleted MessageDeleted
 
-type draftAllHistory struct {
+type DraftList struct {
 	History int64    `json:"last_history_id"`
 	Drafts  []*Draft `json:"drafts"`
 }
 
-type draftSyncHistory struct {
+type DraftSync struct {
 	History        int64           `json:"last_history_id"`
 	DraftsInserted []*Draft        `json:"inserted"`
 	DraftsUpdated  []*Draft        `json:"updated"`
@@ -52,7 +52,7 @@ func (c *DraftDeleted) Scan() []interface{} {
 	return columns
 }
 
-func (r *DraftsRepository) Create(user *User, draft *Draft) (*Draft, error) {
+func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -110,7 +110,7 @@ func (r *DraftsRepository) Create(user *User, draft *Draft) (*Draft, error) {
 	return draft, nil
 }
 
-func (r *DraftsRepository) GetAll(user *User) (*draftAllHistory, error) {
+func (r *DraftRepository) List(user *User) (*DraftList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -137,7 +137,7 @@ func (r *DraftsRepository) GetAll(user *User) (*draftAllHistory, error) {
 
 	defer rows.Close()
 
-	draftHistory := &draftAllHistory{
+	draftList := &DraftList{
 		Drafts: []*Draft{},
 	}
 
@@ -150,7 +150,7 @@ func (r *DraftsRepository) GetAll(user *User) (*draftAllHistory, error) {
 			return nil, err
 		}
 
-		draftHistory.Drafts = append(draftHistory.Drafts, &draft)
+		draftList.Drafts = append(draftList.Drafts, &draft)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -165,7 +165,7 @@ func (r *DraftsRepository) GetAll(user *User) (*draftAllHistory, error) {
 
 	args = []interface{}{user.Id}
 
-	err = tx.QueryRowContext(ctx, query, args...).Scan(&draftHistory.History)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&draftList.History)
 	if err != nil {
 		return nil, err
 	}
@@ -174,5 +174,5 @@ func (r *DraftsRepository) GetAll(user *User) (*draftAllHistory, error) {
 		return nil, err
 	}
 
-	return draftHistory, nil
+	return draftList, nil
 }

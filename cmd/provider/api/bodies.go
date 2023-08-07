@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -18,11 +19,11 @@ import (
 	"github.com/google/uuid"
 )
 
-type FilesApi struct {
-	files repository.FileRepository
+type BodiesApi struct {
+	bodies repository.BodyRepository
 }
 
-func (api *FilesApi) Upload() http.Handler {
+func (api *BodiesApi) Upload() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -36,9 +37,11 @@ func (api *FilesApi) Upload() http.Handler {
 			return
 		}
 
-		uploadedFiles := []*repository.File{}
+		uploadedBodies := []*repository.Body{}
 
-		files := r.MultipartForm.File["files"]
+		log.Printf("%v", r.MultipartForm.Value)
+
+		files := r.MultipartForm.File["bodies"]
 		for i := range files {
 			file, err := files[i].Open()
 			if err != nil {
@@ -47,10 +50,10 @@ func (api *FilesApi) Upload() http.Handler {
 			}
 			defer file.Close()
 
-			filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
+			bodiesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BodiesFolder)
 
-			if _, err := os.Stat(filesPath); errors.Is(err, os.ErrNotExist) {
-				err := os.MkdirAll(filesPath, os.ModePerm)
+			if _, err := os.Stat(bodiesPath); errors.Is(err, os.ErrNotExist) {
+				err := os.MkdirAll(bodiesPath, os.ModePerm)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusInternalServerError)
 					return
@@ -59,7 +62,7 @@ func (api *FilesApi) Upload() http.Handler {
 
 			uuid := uuid.NewString()
 
-			f, err := os.OpenFile(filepath.Join(filesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
+			f, err := os.OpenFile(filepath.Join(bodiesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -78,33 +81,33 @@ func (api *FilesApi) Upload() http.Handler {
 
 			contentType := files[i].Header.Get("content-type")
 
-			uploadedFile := &repository.File{
+			uploadedBody := &repository.Body{
 				Uri:         uri,
-				Name:        files[i].Filename,
+				Subject:     files[i].Filename,
 				Size:        written,
 				ContentType: contentType,
 			}
 
-			uploadedFile, err = api.files.Create(user, uploadedFile)
+			uploadedBody, err = api.bodies.Create(user, uploadedBody)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
 			}
 
-			os.Rename(filepath.Join(filesPath, uuid), filepath.Join(filesPath, uploadedFile.Id))
+			os.Rename(filepath.Join(bodiesPath, uuid), filepath.Join(bodiesPath, uploadedBody.Id))
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
 			}
 
-			uploadedFiles = append(uploadedFiles, uploadedFile)
+			uploadedBodies = append(uploadedBodies, uploadedBody)
 		}
 
-		helper.SetJsonResponse(w, http.StatusCreated, uploadedFiles)
+		helper.SetJsonResponse(w, http.StatusCreated, uploadedBodies)
 	})
 }
 
-func (api *FilesApi) Download() http.Handler {
+func (api *BodiesApi) Download() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -114,7 +117,7 @@ func (api *FilesApi) Download() http.Handler {
 
 		id := path.Base(r.URL.Path)
 
-		fileName, err := api.files.GetFileName(user, id)
+		bodyName, err := api.bodies.GetSubject(user, id)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusNotFound)
 			return
@@ -123,29 +126,29 @@ func (api *FilesApi) Download() http.Handler {
 		if r.Method == "HEAD" {
 			w.WriteHeader(http.StatusOK)
 		} else if r.Method == "GET" {
-			asciiFileName, err := helper.ToAscii(fileName)
+			asciiBodyName, err := helper.ToAscii(bodyName)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
 			}
 
-			urlEncodedFileName, err := url.Parse(fileName)
+			urlEncodedBodyName, err := url.Parse(bodyName)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
 			}
 
-			filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
+			bodiesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BodiesFolder)
 
-			filePath := filepath.Join(filesPath, id)
+			bodyPath := filepath.Join(bodiesPath, id)
 			w.Header().Set("Content-Type", "application/octet-stream")
-			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiFileName, urlEncodedFileName))
-			http.ServeFile(w, r, filePath)
+			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiBodyName, urlEncodedBodyName))
+			http.ServeFile(w, r, bodyPath)
 		}
 	})
 }
 
-func (api *FilesApi) List() http.Handler {
+func (api *BodiesApi) List() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -153,17 +156,17 @@ func (api *FilesApi) List() http.Handler {
 			return
 		}
 
-		fileList, err := api.files.List(user)
+		bodyList, err := api.bodies.List(user)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, fileList)
+		helper.SetJsonResponse(w, http.StatusOK, bodyList)
 	})
 }
 
-func (api *FilesApi) Sync() http.Handler {
+func (api *BodiesApi) Sync() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -179,17 +182,17 @@ func (api *FilesApi) Sync() http.Handler {
 			return
 		}
 
-		fileSync, err := api.files.Sync(user, history)
+		bodySync, err := api.bodies.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, fileSync)
+		helper.SetJsonResponse(w, http.StatusOK, bodySync)
 	})
 }
 
-func (api *FilesApi) Trash() http.Handler {
+func (api *BodiesApi) Trash() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -205,33 +208,7 @@ func (api *FilesApi) Trash() http.Handler {
 
 		bodyString := string(body)
 
-		err = api.files.Trash(user, bodyString)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
-	})
-}
-
-func (api *FilesApi) Untrash() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
-		if !ok {
-			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
-			return
-		}
-
-		body, err := io.ReadAll(r.Body)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		bodyString := string(body)
-
-		err = api.files.Untrash(user, bodyString)
+		err = api.bodies.Trash(user, bodyString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -241,7 +218,7 @@ func (api *FilesApi) Untrash() http.Handler {
 	})
 }
 
-func (api *FilesApi) Delete() http.Handler {
+func (api *BodiesApi) Untrash() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -257,13 +234,39 @@ func (api *FilesApi) Delete() http.Handler {
 
 		bodyString := string(body)
 
-		err = api.files.Delete(user, bodyString)
+		err = api.bodies.Untrash(user, bodyString)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
+	})
+}
+
+func (api *BodiesApi) Delete() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		bodyString := string(body)
+
+		err = api.bodies.Delete(user, bodyString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
+		bodiesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BodiesFolder)
 
 		var bodyList []string
 
@@ -274,7 +277,7 @@ func (api *FilesApi) Delete() http.Handler {
 		}
 
 		for _, uuid := range bodyList {
-			_ = os.Remove(filepath.Join(filesPath, uuid))
+			_ = os.Remove(filepath.Join(bodiesPath, uuid))
 		}
 
 		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})

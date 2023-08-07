@@ -7,15 +7,16 @@ import (
 	"time"
 )
 
-type FileRepository struct {
+type BodyRepository struct {
 	db *sql.DB
 }
 
-type File struct {
+type Body struct {
 	Id          string     `json:"id"`
 	UserId      int64      `json:"-"`
 	Uri         string     `json:"-"`
-	Name        string     `json:"name"`
+	Subject     string     `json:"subject"`
+	Snippet     string     `json:"snippet"`
 	Path        string     `json:"-"`
 	Size        int64      `json:"size"`
 	ContentType string     `json:"content_type"`
@@ -27,27 +28,27 @@ type File struct {
 	DeviceId    *string    `json:"-"`
 }
 
-type FileDeleted struct {
+type BodyDeleted struct {
 	Id        string  `json:"id"`
 	UserId    int64   `json:"-"`
 	HistoryId int64   `json:"-"`
 	DeviceId  *string `json:"-"`
 }
 
-type FileList struct {
+type BodyList struct {
 	History int64   `json:"last_history_id"`
-	Files   []*File `json:"files"`
+	Bodies  []*Body `json:"bodies"`
 }
 
-type FileSync struct {
-	History       int64          `json:"last_history_id"`
-	FilesInserted []*File        `json:"inserted"`
-	FilesTrashed  []*File        `json:"trashed"`
-	FilesDeleted  []*FileDeleted `json:"deleted"`
+type BodySync struct {
+	History        int64          `json:"last_history_id"`
+	BodiesInserted []*Body        `json:"inserted"`
+	BodiesTrashed  []*Body        `json:"trashed"`
+	BodiesDeleted  []*BodyDeleted `json:"deleted"`
 }
 
-func (f *File) Scan() []interface{} {
-	s := reflect.ValueOf(f).Elem()
+func (b *Body) Scan() []interface{} {
+	s := reflect.ValueOf(b).Elem()
 	numCols := s.NumField()
 	columns := make([]interface{}, numCols)
 	for i := 0; i < numCols; i++ {
@@ -57,8 +58,8 @@ func (f *File) Scan() []interface{} {
 	return columns
 }
 
-func (f *FileDeleted) Scan() []interface{} {
-	s := reflect.ValueOf(f).Elem()
+func (b *BodyDeleted) Scan() []interface{} {
+	s := reflect.ValueOf(b).Elem()
 	numCols := s.NumField()
 	columns := make([]interface{}, numCols)
 	for i := 0; i < numCols; i++ {
@@ -68,29 +69,29 @@ func (f *FileDeleted) Scan() []interface{} {
 	return columns
 }
 
-func (r FileRepository) Create(user *User, file *File) (*File, error) {
+func (r BodyRepository) Create(user *User, body *Body) (*Body, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	query := `
 		INSERT INTO
-			file (user_id, device_id, uri, name, path, content_type, size)
-			VALUES ($1, $2, $3, $4, $5, $6, $7)
+			body (user_id, device_id, uri, subject, snippet, path, content_type, size)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{user.Id, prefixedDeviceId, file.Uri, file.Name, file.Path, file.ContentType, file.Size}
+	args := []interface{}{user.Id, prefixedDeviceId, body.Uri, body.Subject, body.Snippet, body.Path, body.ContentType, body.Size}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
 	if err != nil {
 		return nil, err
 	}
 
-	return file, nil
+	return body, nil
 }
 
-func (r FileRepository) List(user *User) (*FileList, error) {
+func (r BodyRepository) List(user *User) (*BodyList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -100,13 +101,12 @@ func (r FileRepository) List(user *User) (*FileList, error) {
 	}
 	defer tx.Rollback()
 
-	// files
+	// body
 	query := `
 		SELECT *
-			FROM file
+			FROM body
 			WHERE user_id = $1 AND
-			last_stmt < 2
-			ORDER BY created_at DESC;`
+			last_stmt < 2;`
 
 	args := []interface{}{user.Id}
 
@@ -117,19 +117,19 @@ func (r FileRepository) List(user *User) (*FileList, error) {
 
 	defer rows.Close()
 
-	fileList := &FileList{
-		Files: []*File{},
+	bodyList := &BodyList{
+		Bodies: []*Body{},
 	}
 
 	for rows.Next() {
-		var file File
+		var body Body
 
-		err := rows.Scan(file.Scan()...)
+		err := rows.Scan(body.Scan()...)
 		if err != nil {
 			return nil, err
 		}
 
-		fileList.Files = append(fileList.Files, &file)
+		bodyList.Bodies = append(bodyList.Bodies, &body)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -139,12 +139,12 @@ func (r FileRepository) List(user *User) (*FileList, error) {
 	// history
 	query = `
 		SELECT last_history_id
-		   FROM file_history_seq
-		   WHERE user_id = $1 ;`
+			FROM body_history_seq
+			WHERE user_id = $1 ;`
 
 	args = []interface{}{user.Id}
 
-	err = tx.QueryRowContext(ctx, query, args...).Scan(&fileList.History)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&bodyList.History)
 	if err != nil {
 		return nil, err
 	}
@@ -153,10 +153,10 @@ func (r FileRepository) List(user *User) (*FileList, error) {
 		return nil, err
 	}
 
-	return fileList, nil
+	return bodyList, nil
 }
 
-func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
+func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -169,7 +169,7 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 	// inserted rows
 	query := `
 		SELECT *
-			FROM file
+			FROM body
 			WHERE user_id = $1 AND
 				(device_id <> $2 OR device_id IS NULL) AND
 				last_stmt = 0 AND
@@ -185,22 +185,22 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 
 	defer rows.Close()
 
-	fileSync := &FileSync{
-		FilesInserted: []*File{},
-		FilesTrashed:  []*File{},
-		FilesDeleted:  []*FileDeleted{},
+	bodySync := &BodySync{
+		BodiesInserted: []*Body{},
+		BodiesTrashed:  []*Body{},
+		BodiesDeleted:  []*BodyDeleted{},
 	}
 
 	for rows.Next() {
-		var file File
+		var body Body
 
-		err := rows.Scan(file.Scan()...)
+		err := rows.Scan(body.Scan()...)
 
 		if err != nil {
 			return nil, err
 		}
 
-		fileSync.FilesInserted = append(fileSync.FilesInserted, &file)
+		bodySync.BodiesInserted = append(bodySync.BodiesInserted, &body)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -210,7 +210,7 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 	// trashed rows
 	query = `
 		SELECT *
-			FROM file
+			FROM body
 			WHERE user_id = $1 AND
 			(device_id <> $2 OR device_id IS NULL) AND
 			last_stmt = 2 AND
@@ -227,15 +227,15 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var file File
+		var body Body
 
-		err := rows.Scan(file.Scan()...)
+		err := rows.Scan(body.Scan()...)
 
 		if err != nil {
 			return nil, err
 		}
 
-		fileSync.FilesTrashed = append(fileSync.FilesTrashed, &file)
+		bodySync.BodiesTrashed = append(bodySync.BodiesTrashed, &body)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -245,7 +245,7 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 	// deleted rows
 	query = `
 		SELECT *
-			FROM file_deleted
+			FROM body_deleted
 			WHERE user_id = $1 AND
 			    (device_id <> $2 OR device_id IS NULL) AND
 				history_id > $3;`
@@ -260,15 +260,15 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var fileDeleted FileDeleted
+		var bodyDeleted BodyDeleted
 
-		err := rows.Scan(fileDeleted.Scan()...)
+		err := rows.Scan(bodyDeleted.Scan()...)
 
 		if err != nil {
 			return nil, err
 		}
 
-		fileSync.FilesDeleted = append(fileSync.FilesDeleted, &fileDeleted)
+		bodySync.BodiesDeleted = append(bodySync.BodiesDeleted, &bodyDeleted)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -278,12 +278,12 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 	// history
 	query = `
 	SELECT last_history_id
-	   FROM file_history_seq
+	   FROM body_history_seq
 	   WHERE user_id = $1 ;`
 
 	args = []interface{}{user.Id}
 
-	err = tx.QueryRowContext(ctx, query, args...).Scan(&fileSync.History)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&bodySync.History)
 	if err != nil {
 		return nil, err
 	}
@@ -292,16 +292,16 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 		return nil, err
 	}
 
-	return fileSync, nil
+	return bodySync, nil
 }
 
-func (r *FileRepository) Trash(user *User, idList string) error {
+func (r *BodyRepository) Trash(user *User, idList string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if len(idList) > 0 {
 		query := `
-		UPDATE file
+		UPDATE body
 			SET last_stmt = 2,
 				device_id = $1
 			WHERE user_id = $2 AND
@@ -320,13 +320,13 @@ func (r *FileRepository) Trash(user *User, idList string) error {
 	return nil
 }
 
-func (r *FileRepository) Untrash(user *User, idList string) error {
+func (r *BodyRepository) Untrash(user *User, idList string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if len(idList) > 0 {
 		query := `
-		UPDATE file
+		UPDATE body
 			SET last_stmt = 0,
 				device_id = $1
 			WHERE user_id = $2 AND
@@ -345,14 +345,14 @@ func (r *FileRepository) Untrash(user *User, idList string) error {
 	return nil
 }
 
-func (r FileRepository) Delete(user *User, idList string) error {
+func (r BodyRepository) Delete(user *User, idList string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if len(idList) > 0 {
 		query := `
 		DELETE
-			FROM file
+			FROM body
 			WHERE user_id = $1 AND
 			id IN (SELECT value FROM json_each($2));`
 
@@ -367,24 +367,24 @@ func (r FileRepository) Delete(user *User, idList string) error {
 	return nil
 }
 
-func (r FileRepository) GetFileName(user *User, id string) (string, error) {
+func (r BodyRepository) GetSubject(user *User, id string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	query := `
 		SELECT *
-			FROM file
+			FROM body
 			WHERE user_id = $1 AND
 				id = $2;`
 
-	file := &File{}
+	body := &Body{}
 
 	args := []interface{}{user.Id, id}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
 	if err != nil {
 		return "", err
 	}
 
-	return file.Name, nil
+	return body.Subject, nil
 }

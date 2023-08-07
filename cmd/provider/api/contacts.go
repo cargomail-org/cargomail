@@ -10,7 +10,7 @@ import (
 )
 
 type ContactsApi struct {
-	contacts repository.ContactsRepository
+	contacts repository.ContactRepository
 }
 
 func (api *ContactsApi) Create() http.Handler {
@@ -44,7 +44,7 @@ func (api *ContactsApi) Create() http.Handler {
 	})
 }
 
-func (api *ContactsApi) GetAll() http.Handler {
+func (api *ContactsApi) List() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -52,7 +52,7 @@ func (api *ContactsApi) GetAll() http.Handler {
 			return
 		}
 
-		contactHistory, err := api.contacts.GetAll(user)
+		contactHistory, err := api.contacts.List(user)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -121,7 +121,7 @@ func (api *ContactsApi) Update() http.Handler {
 	})
 }
 
-func (api *ContactsApi) TrashByIdList() http.Handler {
+func (api *ContactsApi) Trash() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -137,7 +137,7 @@ func (api *ContactsApi) TrashByIdList() http.Handler {
 
 		bodyString := string(body)
 
-		err = api.contacts.TrashByIdList(user, bodyString)
+		err = api.contacts.Trash(user, bodyString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -147,7 +147,7 @@ func (api *ContactsApi) TrashByIdList() http.Handler {
 	})
 }
 
-func (api *ContactsApi) UntrashByIdList() http.Handler {
+func (api *ContactsApi) Untrash() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -163,7 +163,7 @@ func (api *ContactsApi) UntrashByIdList() http.Handler {
 
 		bodyString := string(body)
 
-		err = api.contacts.UntrashByIdList(user, bodyString)
+		err = api.contacts.Untrash(user, bodyString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -173,7 +173,7 @@ func (api *ContactsApi) UntrashByIdList() http.Handler {
 	})
 }
 
-func (api *ContactsApi) DeleteByIdList() http.Handler {
+func (api *ContactsApi) Delete() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -189,7 +189,7 @@ func (api *ContactsApi) DeleteByIdList() http.Handler {
 
 		bodyString := string(body)
 
-		err = api.contacts.DeleteByIdList(user, bodyString)
+		err = api.contacts.Delete(user, bodyString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

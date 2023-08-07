@@ -23,22 +23,24 @@ type History struct {
 }
 
 type Repository struct {
-	Files    FilesRepository
+	Bodies   BodyRepository
+	Files    FileRepository
 	Session  SessionRepository
 	User     UserRepository
-	Contacts ContactsRepository
-	Drafts   DraftsRepository
-	Messages MessagesRepository
+	Contacts ContactRepository
+	Drafts   DraftRepository
+	Messages MessageRepository
 }
 
 func NewRepository(db *sql.DB) Repository {
 	return Repository{
-		Files:    FilesRepository{db: db},
+		Bodies:   BodyRepository{db: db},
+		Files:    FileRepository{db: db},
 		Session:  SessionRepository{db: db},
 		User:     UserRepository{db: db},
-		Contacts: ContactsRepository{db: db},
-		Drafts:   DraftsRepository{db: db},
-		Messages: MessagesRepository{db: db},
+		Contacts: ContactRepository{db: db},
+		Drafts:   DraftRepository{db: db},
+		Messages: MessageRepository{db: db},
 	}
 }
 
