@@ -59,10 +59,10 @@ func (api *FilesApi) Upload() http.Handler {
 			}
 			defer file.Close()
 
-			filePath := config.Configuration.FilesPath
+			filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
 
-			if _, err := os.Stat(filePath); errors.Is(err, os.ErrNotExist) {
-				err := os.MkdirAll(filePath, os.ModePerm)
+			if _, err := os.Stat(filesPath); errors.Is(err, os.ErrNotExist) {
+				err := os.MkdirAll(filesPath, os.ModePerm)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusInternalServerError)
 					return
@@ -71,7 +71,7 @@ func (api *FilesApi) Upload() http.Handler {
 
 			uuid := uuid.NewString()
 
-			f, err := os.OpenFile(filepath.Join(filePath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
+			f, err := os.OpenFile(filepath.Join(filesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -103,7 +103,7 @@ func (api *FilesApi) Upload() http.Handler {
 				return
 			}
 
-			os.Rename(filepath.Join(filePath, uuid), filepath.Join(filePath, uploadedFile.Id))
+			os.Rename(filepath.Join(filesPath, uuid), filepath.Join(filesPath, uploadedFile.Id))
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
@@ -147,7 +147,9 @@ func (api *FilesApi) Download() http.Handler {
 				return
 			}
 
-			filePath := filepath.Join(config.Configuration.FilesPath, id)
+			filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
+
+			filePath := filepath.Join(filesPath, id)
 			w.Header().Set("Content-Type", "application/octet-stream")
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiFileName, urlEncodedFileName))
 			http.ServeFile(w, r, filePath)
@@ -273,7 +275,7 @@ func (api *FilesApi) DeleteByIdList() http.Handler {
 			return
 		}
 
-		filepath := config.Configuration.FilesPath
+		filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
 
 		var bodyList []string
 
@@ -284,7 +286,7 @@ func (api *FilesApi) DeleteByIdList() http.Handler {
 		}
 
 		for _, uuid := range bodyList {
-			_ = os.Remove(filepath + uuid)
+			_ = os.Remove(filepath.Join(filesPath, uuid))
 		}
 
 		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})

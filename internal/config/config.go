@@ -21,9 +21,10 @@ type Config = struct {
 	DomainName       string `yaml:"domain_name"`
 	StoragePath      string `yaml:"storage_path"`
 	DatabasePath     string `yaml:"database_path"`
-	BodyPath         string `yaml:"body_path"`
-	TagsPath         string `yaml:"tags_path"`
-	FilesPath        string `yaml:"files_path"`
+	ResourcesPath    string `yaml:"resources_path"`
+	BodyFolder       string `yaml:"body_folder"`
+	TagsFolder       string `yaml:"tags_folder"`
+	FilesFolder      string `yaml:"files_folder"`
 	TransferCertPath string `yaml:"transfer_cert_path"`
 	TransferKeyPath  string `yaml:"transfer_key_path"`
 	ProviderBind     string `yaml:"provider_bind"`
@@ -31,11 +32,29 @@ type Config = struct {
 	Stage            string `yaml:"stage"`
 }
 
+const (
+	DefaultBodyFolder  = "body"
+	DefaultTagsFolder  = "tags"
+	DefaultFilesFolder = "files"
+)
+
 func newConfig() Config {
 	c := Config{}
 
 	setDefaults(&c)
 	loadConfig(&c)
+
+	if len(c.BodyFolder) == 0 {
+		c.BodyFolder = DefaultBodyFolder
+	}
+
+	if len(c.TagsFolder) == 0 {
+		c.TagsFolder = DefaultTagsFolder
+	}
+
+	if len(c.FilesFolder) == 0 {
+		c.FilesFolder = DefaultFilesFolder
+	}
 
 	return c
 }
