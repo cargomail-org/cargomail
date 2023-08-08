@@ -2,7 +2,6 @@ package api
 
 import (
 	"cargomail/cmd/provider/api/helper"
-	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"errors"
 	"net/http"
@@ -126,8 +125,8 @@ func (api *SessionApi) Login() http.Handler {
 			Value:    session.Plaintext,
 			Path:     "/",
 			HttpOnly: true,
-			Secure:   !config.DevStage(),
-			SameSite: http.SameSiteLaxMode,
+			Secure:   true, // !config.DevStage(),
+			SameSite: http.SameSiteNoneMode,
 		}
 
 		if input.RememberMe {
@@ -156,8 +155,8 @@ func (api *SessionApi) Login() http.Handler {
 			Value:    device_id,
 			Path:     "/",
 			HttpOnly: true,
-			Secure:   !config.DevStage(),
-			SameSite: http.SameSiteLaxMode,
+			Secure:   true, // !config.DevStage(),
+			SameSite: http.SameSiteNoneMode,
 			Expires:  time.Now().AddDate(1, 0, 0), // 1 year
 		}
 
@@ -175,8 +174,8 @@ func (api *SessionApi) Logout() http.Handler {
 			MaxAge:   -1,
 			Path:     "/",
 			HttpOnly: true,
-			Secure:   !config.DevStage(),
-			SameSite: http.SameSiteLaxMode,
+			Secure:   true, // !config.DevStage(),
+			SameSite: http.SameSiteNoneMode,
 		}
 		http.SetCookie(w, &clearCookie)
 

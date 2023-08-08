@@ -2,7 +2,6 @@ package app
 
 import (
 	"cargomail/cmd/provider/api/helper"
-	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"context"
 	"errors"
@@ -106,8 +105,8 @@ func (app *App) Logout() http.Handler {
 			MaxAge:   -1,
 			Path:     "/",
 			HttpOnly: true,
-			Secure:   !config.DevStage(),
-			SameSite: http.SameSiteLaxMode,
+			Secure:   true, // !config.DevStage(),
+			SameSite: http.SameSiteNoneMode,
 		}
 		http.SetCookie(w, &clearCookie)
 

@@ -28,7 +28,7 @@ func (t *Router) Route(method, path string, handler http.Handler) {
 }
 
 func (e *Entry) Match(r *http.Request) bool {
-	if r.Method != e.Method {
+	if r.Method != "OPTIONS" && r.Method != e.Method {
 		return false
 	}
 
@@ -43,11 +43,23 @@ func (e *Entry) Match(r *http.Request) bool {
 	return false
 }
 
+func setupCORS(w *http.ResponseWriter, r *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, PATCH, DELETE, HEAD")
+	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+}
+
 func (t *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	for _, e := range t.routes {
 		match := e.Match(r)
 		if !match {
 			continue
+		}
+
+		setupCORS(&w, r)
+		if r.Method == "OPTIONS" {
+			return
 		}
 
 		e.Handler.ServeHTTP(w, r)
