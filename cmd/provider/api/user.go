@@ -19,7 +19,7 @@ func (api *UserApi) Profile() http.Handler {
 			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
 			return
 		}
-		if r.Method == "PATCH" {
+		if r.Method == "PUT" {
 			err := json.NewDecoder(r.Body).Decode(&user)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)

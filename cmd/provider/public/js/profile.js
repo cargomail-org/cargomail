@@ -11,7 +11,7 @@ profileForm.onsubmit = async (e) => {
   };
 
   const response = await api(form.id, 200, "/api/v1/user/profile", {
-    method: "PATCH",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },

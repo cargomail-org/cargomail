@@ -86,7 +86,7 @@ func (svc *service) routes(r *Router) {
 	r.Route("POST", "/api/v1/auth/logout", svc.api.Session.Logout())
 
 	// User API
-	r.Route("PATCH", "/api/v1/user/profile", svc.api.Authenticate(svc.api.User.Profile()))
+	r.Route("PUT", "/api/v1/user/profile", svc.api.Authenticate(svc.api.User.Profile()))
 	r.Route("GET", "/api/v1/user/profile", svc.api.Authenticate(svc.api.User.Profile()))
 
 	// Contacts API
