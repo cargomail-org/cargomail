@@ -12,13 +12,6 @@ BEGIN
         VALUES (new.id, 0);
 
     INSERT
-        INTO tag_timeline_seq (user_id, last_timeline_id)
-        VALUES (new.id, 0);
-    INSERT
-        INTO tag_history_seq (user_id, last_history_id)
-        VALUES (new.id, 0);
-
-    INSERT
         INTO file_timeline_seq (user_id, last_timeline_id)
         VALUES (new.id, 0);
     INSERT

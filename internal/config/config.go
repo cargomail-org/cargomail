@@ -23,7 +23,6 @@ type Config = struct {
 	DatabasePath     string `yaml:"database_path"`
 	ResourcesPath    string `yaml:"resources_path"`
 	BodiesFolder     string `yaml:"bodies_folder"`
-	TagsFolder       string `yaml:"tags_folder"`
 	FilesFolder      string `yaml:"files_folder"`
 	TransferCertPath string `yaml:"transfer_cert_path"`
 	TransferKeyPath  string `yaml:"transfer_key_path"`
@@ -34,7 +33,6 @@ type Config = struct {
 
 const (
 	DefaultBodiesFolder = "bodies"
-	DefaultTagsFolder   = "tags"
 	DefaultFilesFolder  = "files"
 )
 
@@ -46,10 +44,6 @@ func newConfig() Config {
 
 	if len(c.BodiesFolder) == 0 {
 		c.BodiesFolder = DefaultBodiesFolder
-	}
-
-	if len(c.TagsFolder) == 0 {
-		c.TagsFolder = DefaultTagsFolder
 	}
 
 	if len(c.FilesFolder) == 0 {

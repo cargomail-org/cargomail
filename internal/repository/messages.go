@@ -26,7 +26,6 @@ type Message struct {
 	Folder     int16          `json:"folder"`
 	Headers    *string        `json:"headers"`
 	Body       *BodyResource  `json:"body"`
-	Tags       *TagsResource  `json:"tags"`
 	Files      *FilesResource `json:"files"`
 	From       string         `json:"from"`
 	To         *Recipients    `json:"to"`
@@ -71,12 +70,6 @@ type BodyResource struct {
 	Size        int64
 }
 
-type TagResource struct {
-	ContentType string
-	Uri         string
-	Size        int64
-}
-
 type FileResource struct {
 	ContentType string
 	Uri         string
@@ -88,7 +81,6 @@ type Recipient struct {
 	EmailAddress string `json:"email_address,omitempty"`
 }
 
-type TagsResource []TagResource
 type FilesResource []FileResource
 
 type Recipients []Recipient
