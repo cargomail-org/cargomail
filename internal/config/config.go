@@ -3,6 +3,7 @@ package config
 import (
 	_ "embed"
 	"log"
+	"net/http"
 	"os"
 	"reflect"
 	"strings"
@@ -18,22 +19,24 @@ var (
 )
 
 type Config = struct {
-	DomainName       string `yaml:"domain_name"`
-	StoragePath      string `yaml:"storage_path"`
-	DatabasePath     string `yaml:"database_path"`
-	ResourcesPath    string `yaml:"resources_path"`
-	BodiesFolder     string `yaml:"bodies_folder"`
-	FilesFolder      string `yaml:"files_folder"`
-	TransferCertPath string `yaml:"transfer_cert_path"`
-	TransferKeyPath  string `yaml:"transfer_key_path"`
-	ProviderBind     string `yaml:"provider_bind"`
-	TransferBind     string `yaml:"transfer_bind"`
-	Stage            string `yaml:"stage"`
+	DomainName       string        `yaml:"domain_name"`
+	StoragePath      string        `yaml:"storage_path"`
+	DatabasePath     string        `yaml:"database_path"`
+	ResourcesPath    string        `yaml:"resources_path"`
+	BodiesFolder     string        `yaml:"bodies_folder"`
+	FilesFolder      string        `yaml:"files_folder"`
+	TransferCertPath string        `yaml:"transfer_cert_path"`
+	TransferKeyPath  string        `yaml:"transfer_key_path"`
+	ProviderBind     string        `yaml:"provider_bind"`
+	TransferBind     string        `yaml:"transfer_bind"`
+	CookieSameSite   http.SameSite `yaml:"cookie_same_site"`
+	Stage            string        `yaml:"stage"`
 }
 
 const (
-	DefaultBodiesFolder = "bodies"
-	DefaultFilesFolder  = "files"
+	DefaultBodiesFolder   = "bodies"
+	DefaultFilesFolder    = "files"
+	DefaultCookieSameSite = http.SameSiteStrictMode
 )
 
 func newConfig() Config {
@@ -50,6 +53,10 @@ func newConfig() Config {
 		c.FilesFolder = DefaultFilesFolder
 	}
 
+	if c.CookieSameSite == 0 {
+		c.CookieSameSite = DefaultCookieSameSite
+	}
+
 	return c
 }
 
@@ -62,7 +69,26 @@ func setDefaults(c *Config) {
 	for i := 0; i < reflect.TypeOf(*c).NumField(); i++ {
 		field := reflect.TypeOf(*c).Field(i)
 		if value, ok := field.Tag.Lookup("yaml"); ok {
-			reflect.ValueOf(c).Elem().FieldByName(field.Name).Set(reflect.ValueOf(os.Getenv(strings.ToUpper(value))))
+			if value == "cookie_same_site" {
+				var sameSite http.SameSite
+
+				envValue := os.Getenv(strings.ToUpper(value))
+
+				switch envValue {
+				case "STRICT":
+					sameSite = http.SameSiteStrictMode
+				case "LAX":
+					sameSite = http.SameSiteLaxMode
+				case "NONE":
+					sameSite = http.SameSiteNoneMode
+				default:
+					sameSite = DefaultCookieSameSite
+				}
+
+				reflect.ValueOf(c).Elem().FieldByName(field.Name).Set(reflect.ValueOf(sameSite))
+			} else {
+				reflect.ValueOf(c).Elem().FieldByName(field.Name).Set(reflect.ValueOf(os.Getenv(strings.ToUpper(value))))
+			}
 		}
 	}
 }
