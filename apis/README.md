@@ -1,0 +1,1 @@
+Use the website `https://www.jsplayground.dev/` to run the scripts.
