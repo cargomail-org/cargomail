@@ -19,18 +19,10 @@ CREATE TRIGGER IF NOT EXISTS message_draft_before_update
     -- message_uid,
     -- parent_uid,
     -- thread_uid,
-    -- forwarded,
     -- unread, 
     -- starred, 
     -- folder,
-    -- headers,
-    -- body,
-    -- files,
-    -- "from",
-    -- "to",
-    -- "cc",
-    -- "bcc",
-    -- "group",
+    -- payload,
     -- label_ids,
     sent_at,
     received_at,
@@ -49,18 +41,10 @@ CREATE TRIGGER IF NOT EXISTS message_not_draft_before_update
     message_uid,
     parent_uid,
     thread_uid,
-    forwarded,
     -- unread, 
     -- starred, 
     folder,
-    -- headers,
-    -- body,
-    -- files,
-    "from",
-    "to",
-    "cc",
-    "bcc",
-    "group",
+    payload,
     -- label_ids,
     sent_at,
     received_at,
@@ -74,11 +58,7 @@ END;
 
 CREATE TRIGGER IF NOT EXISTS message_after_update
     AFTER UPDATE OF
-    "from",
-    "to",
-    "cc",
-    "bcc",
-    "group"
+    payload
     ON message
     FOR EACH ROW
 BEGIN

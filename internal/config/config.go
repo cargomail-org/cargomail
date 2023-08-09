@@ -72,7 +72,7 @@ func setDefaults(c *Config) {
 			if value == "cookie_same_site" {
 				var sameSite http.SameSite
 
-				envValue := os.Getenv(strings.ToUpper(value))
+				envValue := strings.ToUpper(os.Getenv(strings.ToUpper(value)))
 
 				switch envValue {
 				case "STRICT":

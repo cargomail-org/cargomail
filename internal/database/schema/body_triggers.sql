@@ -17,7 +17,7 @@ CREATE TRIGGER IF NOT EXISTS body_before_update
         id,
         user_id,
         -- uri,
-        -- subject,
+        -- name,
         -- snippet,
         path,
         -- size,
@@ -31,7 +31,7 @@ END;
 CREATE TRIGGER IF NOT EXISTS body_after_update
     AFTER UPDATE OF
         uri,
-        subject,
+        name,
         snippet,
         size
     ON body

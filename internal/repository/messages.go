@@ -14,34 +14,43 @@ type MessageRepository struct {
 	db *sql.DB
 }
 
+// type Header struct {
+// 	Name  string `json:"name"`
+// 	Value string `json:"value"`
+// }
+
+type Header struct {
+	Value map[string]interface{} `json:"header"`
+}
+
+type MessagePart struct {
+	PartId      string         `json:"part_id"`
+	ContentType string         `json:"content_type"`
+	Headers     []*Header      `json:"headers"`
+	Body        *BodyResource  `json:"body"`
+	Parts       []*MessagePart `json:"parts"`
+}
+
 type Message struct {
-	Id         string         `json:"id"`
-	UserId     int64          `json:"-"`
-	MessageUid string         `json:"message_uid"`
-	ParentUid  *string        `json:"parent_uid"`
-	ThreadUid  string         `json:"thread_uid"`
-	Forwarded  bool           `json:"forwarded"`
-	Unread     bool           `json:"unread"`
-	Starred    bool           `json:"starred"`
-	Folder     int16          `json:"folder"`
-	Headers    *string        `json:"headers"`
-	Body       *BodyResource  `json:"body"`
-	Files      *FilesResource `json:"files"`
-	From       string         `json:"from"`
-	To         *Recipients    `json:"to"`
-	Cc         *Recipients    `json:"cc"`
-	Bcc        *Recipients    `json:"bcc"`
-	Group      *Recipients    `json:"group"`
-	LabelIds   *string        `json:"labbel_ids"`
-	SentAt     *Timestamp     `json:"sent_at"`
-	ReceivedAt *Timestamp     `json:"received_at"`
-	SnoozedAt  *Timestamp     `json:"snoozed_at"`
-	CreatedAt  Timestamp      `json:"created_at"`
-	ModifiedAt *Timestamp     `json:"modified_at"`
-	TimelineId int64          `json:"-"`
-	HistoryId  int64          `json:"-"`
-	LastStmt   int            `json:"-"`
-	DeviceId   *string        `json:"-"`
+	Id         string       `json:"id"`
+	UserId     int64        `json:"-"`
+	MessageUid string       `json:"message_uid"`
+	ParentUid  *string      `json:"parent_uid"`
+	ThreadUid  string       `json:"thread_uid"`
+	Unread     bool         `json:"unread"`
+	Starred    bool         `json:"starred"`
+	Folder     int16        `json:"folder"`
+	Payload    *MessagePart `json:"payload"`
+	LabelIds   *string      `json:"labbel_ids"`
+	SentAt     *Timestamp   `json:"sent_at"`
+	ReceivedAt *Timestamp   `json:"received_at"`
+	SnoozedAt  *Timestamp   `json:"snoozed_at"`
+	CreatedAt  Timestamp    `json:"created_at"`
+	ModifiedAt *Timestamp   `json:"modified_at"`
+	TimelineId int64        `json:"-"`
+	HistoryId  int64        `json:"-"`
+	LastStmt   int          `json:"-"`
+	DeviceId   *string      `json:"-"`
 }
 
 type MessageDeleted struct {

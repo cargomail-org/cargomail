@@ -1,9 +1,11 @@
 const formdata = new FormData();
-formdata.append("Subject", "Meeting 1");
-
 
 const blob = new Blob(["Hello World!"], { type: "plain/text" });
-formdata.append("bodies", blob, "readme.txt");
+formdata.append(
+  "bodies",
+  blob,
+  encodeURIComponent("Any text / it can be used as an alt subject!")
+);
 
 const requestOptions = {
   method: "POST",

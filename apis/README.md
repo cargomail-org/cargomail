@@ -1,1 +1,1 @@
-Use the website `https://www.jsplayground.dev/` to run the scripts.
+Use the website `https://jsitor.com/profile/1token` to run the scripts.

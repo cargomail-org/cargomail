@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS body (
     id				VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     user_id 		INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
     uri 	    	VARCHAR(32) NOT NULL,
-    subject         VARCHAR(255),
+    name            VARCHAR(255),
     snippet         VARCHAR(255),
     path			TEXT NOT NULL,
     size			INTEGER NOT NULL,
@@ -58,19 +58,16 @@ CREATE TABLE IF NOT EXISTS message
     message_uid     VARCHAR(32) NOT NULL,
     parent_uid      VARCHAR(32),
     thread_uid      VARCHAR(32) NOT NULL,
-    forwarded       BOOLEAN NOT NULL DEFAULT FALSE,
     unread          BOOLEAN NOT NULL DEFAULT TRUE, 
-    starred         BOOLEAN NOT NULL DEFAULT FALSE, 
-    folder          INTEGER(2) NOT NULL,             -- 0-draft, 1-sent, 2-inbox, 3-spam
-    headers         TEXT,                            -- json array of key/value e.g. [{origin_url: "foo.com"}, {desination_url: "bar.com"}, {correspondence_category: "healthcare"}]
-    body            TEXT,                            -- json object of body (mimetype, uri, size)
-    files           TEXT,                            -- json array of files (mimetype, uri, size)
-    "from"          TEXT NOT NULL,                   -- json array of recipients
-    "to"            TEXT,                            -- json array of recipients
-    "cc"            TEXT,                            -- json array of recipients
-    "bcc"           TEXT,                            -- json array of recipients
-    "group"         TEXT,                            -- json array of recipients
-    label_ids       TEXT,                            -- json array of label ids
+    starred         BOOLEAN NOT NULL DEFAULT FALSE,
+    folder          INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox, 3-spam
+    payload         TEXT,                 -- json 'message_part' object
+ -- part_id         VARCHAR(32)           -- id of the 'message_part'
+ -- part_content_type VARCHAR(255)          -- content type of the 'message_part'
+ -- part_headers    TEXT,                 -- json array of key/value e.g. [{to: [{email: "alice@foo.com", fullname: "Alice Greenwood"}]}, {origin_url: "foo.com"}, {desination_url: "bar.com"}, {correspondence_category: "healthcare"}]
+ -- part_body       TEXT,                 -- json 'body' object {Content-Type: "message/external-body", uri: "69dcdefc34a84efd9e2e4e32ba1ec14d", size: 254180}
+ -- part_parts      TEXT,                 -- json array of 'message_part'
+    label_ids       TEXT,                 -- json 'label_ids' array
     sent_at         TIMESTAMP,
     received_at     TIMESTAMP,
     snoozed_at      TIMESTAMP,

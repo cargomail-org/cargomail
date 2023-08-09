@@ -15,7 +15,7 @@ type Body struct {
 	Id          string     `json:"id"`
 	UserId      int64      `json:"-"`
 	Uri         string     `json:"-"`
-	Subject     string     `json:"subject"`
+	Name        string     `json:"name"`
 	Snippet     string     `json:"snippet"`
 	Path        string     `json:"-"`
 	Size        int64      `json:"size"`
@@ -75,13 +75,13 @@ func (r BodyRepository) Create(user *User, body *Body) (*Body, error) {
 
 	query := `
 		INSERT INTO
-			body (user_id, device_id, uri, subject, snippet, path, content_type, size)
+			body (user_id, device_id, uri, name, snippet, path, content_type, size)
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{user.Id, prefixedDeviceId, body.Uri, body.Subject, body.Snippet, body.Path, body.ContentType, body.Size}
+	args := []interface{}{user.Id, prefixedDeviceId, body.Uri, body.Name, body.Snippet, body.Path, body.ContentType, body.Size}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
 	if err != nil {
@@ -367,7 +367,7 @@ func (r BodyRepository) Delete(user *User, idList string) error {
 	return nil
 }
 
-func (r BodyRepository) GetSubject(user *User, id string) (string, error) {
+func (r BodyRepository) GetName(user *User, id string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -386,5 +386,5 @@ func (r BodyRepository) GetSubject(user *User, id string) (string, error) {
 		return "", err
 	}
 
-	return body.Subject, nil
+	return body.Name, nil
 }

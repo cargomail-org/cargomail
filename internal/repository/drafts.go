@@ -64,27 +64,19 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 				 thread_uid,
 				 unread,
 				 folder,
-				 "from",
-				 "to",
-				 "cc",
-				 "bcc",
-				 "group")
+				 payload)
 			VALUES ($1,
 					$2,
 					$3,
 					$4,
 					$5,
 					$6,
-					$7,
-					$8,
-					$9,
-					$10,
-					$11)
+					$7)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	from := user.FullnameAndAddress()
+	// from := user.FullnameAndAddress()
 	messageUid := uuid.NewString()
 	threadUid := uuid.NewString()
 	folder := 0 // 0-draft
@@ -96,11 +88,7 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 		threadUid,
 		unread,
 		folder,
-		from,
-		draft.To,
-		draft.Cc,
-		draft.Bcc,
-		draft.Group}
+		draft.Payload}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
 	if err != nil {

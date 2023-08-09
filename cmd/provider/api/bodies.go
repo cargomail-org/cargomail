@@ -9,7 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -38,8 +37,6 @@ func (api *BodiesApi) Upload() http.Handler {
 		}
 
 		uploadedBodies := []*repository.Body{}
-
-		log.Printf("%v", r.MultipartForm.Value)
 
 		files := r.MultipartForm.File["bodies"]
 		for i := range files {
@@ -83,7 +80,7 @@ func (api *BodiesApi) Upload() http.Handler {
 
 			uploadedBody := &repository.Body{
 				Uri:         uri,
-				Subject:     files[i].Filename,
+				Name:        files[i].Filename,
 				Size:        written,
 				ContentType: contentType,
 			}
@@ -117,7 +114,7 @@ func (api *BodiesApi) Download() http.Handler {
 
 		id := path.Base(r.URL.Path)
 
-		bodyName, err := api.bodies.GetSubject(user, id)
+		bodyName, err := api.bodies.GetName(user, id)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusNotFound)
 			return
