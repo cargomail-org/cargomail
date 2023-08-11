@@ -37,6 +37,8 @@ const uploadFile = (url, file, onProgress) =>
     xhr.addEventListener("abort", () =>
       reject(new Error("File upload aborted"))
     );
+    // cross domain !!!
+    xhr.withCredentials = true;
     xhr.open("POST", url, true);
     xhr.responseType = "json";
     const formData = new FormData();
@@ -136,7 +138,7 @@ const filesTable = new DataTable("#filesTable", {
   },
   ajax: function (data, callback, settings) {
     (async () => {
-      const response = await api(uploadForm.id, 200, "/api/v1/files", {
+      const response = await api(uploadForm.id, 200, "http://127.0.0.1:8181/api/v1/files", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -158,7 +160,7 @@ const filesTable = new DataTable("#filesTable", {
     {
       data: "name",
       render: (data, type, full, meta) => {
-        const link = "/api/v1/files/";
+        const link = "http://127.0.0.1:8181/api/v1/files/";
         return `<a href="javascript:;" onclick="downloadURI('uploadForm', '${link}${full.id}', '${data}');">${data}</a>`;
       },
     },
@@ -219,7 +221,7 @@ const filesTable = new DataTable("#filesTable", {
       text: "Refresh",
       action: function () {
         (async () => {
-          const response = await api(uploadForm.id, 200, "/api/v1/files/sync", {
+          const response = await api(uploadForm.id, 200, "http://127.0.0.1:8181/api/v1/files/sync", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -287,13 +289,13 @@ filesTable.on("select.dt deselect.dt", () => {
   }
 });
 
-export const deleteItems = (e) => {
+export const deleteFiles = (e) => {
   e?.preventDefault();
 
   filesConfirmDialog.hide();
 
   (async () => {
-    const response = await api(uploadForm.id, 200, "api/v1/files/trash", {
+    const response = await api(uploadForm.id, 200, "http://127.0.0.1:8181/api/v1/files/trash", {
       method: "POST",
       headers: {
         Accept: "application/json",

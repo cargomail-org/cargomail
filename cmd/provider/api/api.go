@@ -16,6 +16,7 @@ type Api struct {
 	Health   HealthApi
 	Bodies   BodiesApi
 	Files    FilesApi
+	Auth     AuthApi
 	Session  SessionApi
 	User     UserApi
 	Contacts ContactsApi
@@ -28,6 +29,7 @@ func NewApi(params ApiParams) Api {
 		Health:   HealthApi{},
 		Bodies:   BodiesApi{bodies: params.Repository.Bodies},
 		Files:    FilesApi{files: params.Repository.Files},
+		Auth:     AuthApi{},
 		Session:  SessionApi{user: params.Repository.User, session: params.Repository.Session},
 		User:     UserApi{user: params.Repository.User},
 		Contacts: ContactsApi{contacts: params.Repository.Contacts},

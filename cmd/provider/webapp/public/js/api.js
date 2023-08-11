@@ -12,8 +12,11 @@ const parseJSON = async (response) => {
 const api = async (parentId, status, url, options) => {
   const parent = document.getElementById(parentId);
 
-  const alert = parent.querySelector('div[name="alert"]');
-  if (alert) alert.remove();
+  if (parent) {
+    const alert = parent.querySelector('div[name="alert"]');
+    if (alert) alert.remove();
+  }
+
   let response;
 
   let spinner = document.querySelector(".menu-spinner");
@@ -27,6 +30,10 @@ const api = async (parentId, status, url, options) => {
       spinner.hidden = false;
     }
   }, "200");
+
+  // cross-domain !!!
+  options["credentials"] = "include";
+
   try {
     const result = await fetch(url, options);
 
@@ -54,13 +61,15 @@ const api = async (parentId, status, url, options) => {
       errMessage = error.message;
     }
 
-    parent.insertAdjacentHTML(
-      "beforeend",
-      `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="alert">
-          ${errMessage}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-       </div>`
-    );
+    if (parent) {
+      parent.insertAdjacentHTML(
+        "beforeend",
+        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="alert">
+            ${errMessage}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>`
+      );
+    }
     return false;
   } finally {
     loading = false;
@@ -74,13 +83,15 @@ const api = async (parentId, status, url, options) => {
   if (options.method != "HEAD" && response === false) {
     errMessage = "no response";
 
-    parent.insertAdjacentHTML(
-      "beforeend",
-      `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="alert">
-          ${errMessage}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-       </div>`
-    );
+    if (parent) {
+      parent.insertAdjacentHTML(
+        "beforeend",
+        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="alert">
+            ${errMessage}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>`
+      );
+    }
   }
 
   return response;

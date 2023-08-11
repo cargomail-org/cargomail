@@ -1,9 +1,6 @@
-{{template "base" .}}
-{{define "profile"}}
-
 <div class="container">
     <!-- Profile -->
-    <form class="row g-2" id="profileForm" method="POST" action="/api/v1/user/profile">
+    <form class="row g-2" id="profileForm" method="POST" action="http://127.0.0.1:8181/api/v1/user/profile">
         <div hidden id="profileDomainName">{{.DomainName}}</div>
         <p class="font-weight-normal" id="profileUsername"></p>
         <div class="form-floating mb-1">
@@ -25,5 +22,3 @@
 <script type="module">
     import * as profile from "/public/js/profile.js";
 </script>
-
-{{end}}

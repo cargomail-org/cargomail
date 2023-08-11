@@ -32,11 +32,17 @@ func (e *Entry) Match(r *http.Request) bool {
 		return false
 	}
 
-	if r.URL.Path == e.Path ||
+	urlPath := r.URL.Path
+
+	if !strings.HasPrefix(urlPath, "/snippets/") {
+		urlPath = strings.TrimSuffix(urlPath, ".html")
+	}
+
+	if urlPath == e.Path ||
 		(len(e.Path) > 1 &&
 			e.Path[len(e.Path)-2] != '/' &&
 			e.Path[len(e.Path)-1] == '/' &&
-			strings.HasPrefix(r.URL.Path, e.Path)) {
+			strings.HasPrefix(urlPath, e.Path)) {
 		return true
 	}
 
@@ -71,7 +77,7 @@ func (t *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (svc *service) routes(r *Router) {
 	// App
-	r.Route("GET", "/", svc.app.Authenticate(svc.app.HomePage()))
+	r.Route("GET", "/", http.StripPrefix("/", svc.app.Authenticate(svc.app.HomePage())))
 	r.Route("GET", "/login", svc.app.LoginPage())
 	r.Route("GET", "/logout", svc.app.Logout())
 	r.Route("GET", "/register", svc.app.RegisterPage())
@@ -81,6 +87,7 @@ func (svc *service) routes(r *Router) {
 	r.Route("GET", "/api/v1/health", svc.api.Health.Healthcheck())
 
 	// Auth API
+	r.Route("GET", "/api/v1/auth/info", svc.api.Auth.Info())
 	r.Route("POST", "/api/v1/auth/register", svc.api.User.Register())
 	r.Route("POST", "/api/v1/auth/authenticate", svc.api.Session.Login())
 	r.Route("POST", "/api/v1/auth/logout", svc.api.Session.Logout())

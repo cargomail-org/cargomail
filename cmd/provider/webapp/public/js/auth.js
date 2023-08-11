@@ -1,22 +1,43 @@
-const registerForm = document.getElementById('registerForm');
-const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById("registerForm");
+const loginForm = document.getElementById("loginForm");
+
+(async () => {
+  const response = await api(null, 200, "http://127.0.0.1:8181/api/v1/auth/info", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (response && response.domain_name) {
+    if (registerForm) {
+      registerForm.querySelector('input[name="domainName"]').placeholder =
+        response.domain_name;
+    }
+
+    if (loginForm) {
+      loginForm.querySelector('input[name="domainName"]').placeholder =
+        response.domain_name;
+    }
+  }
+})();
 
 if (registerForm) {
   registerForm.onsubmit = async (e) => {
     e?.preventDefault();
 
     const form = e.currentTarget;
-  
+
     const formData = {
       username: form.querySelector('input[name="username"]').value,
       password: form.querySelector('input[name="password"]').value,
     };
-  
+
     const confirmation = form.querySelector('input[name="confirmation"]').value;
-  
-    const alert = form.querySelector('div[name="alert"]')
+
+    const alert = form.querySelector('div[name="alert"]');
     if (alert) alert.remove();
-  
+
     if (formData.password != confirmation) {
       form.insertAdjacentHTML(
         "beforeend",
@@ -25,22 +46,22 @@ if (registerForm) {
            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>`
       );
-      return
+      return;
     }
 
-    const response = await api(form.id, 201, "/api/v1/auth/register", {
+    const response = await api(form.id, 201, "http://127.0.0.1:8181/api/v1/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
     });
-  
+
     if (response === false) {
       return;
     }
 
-    window.location.href="/login";  
+    window.location.href = "/login.html";
   };
 }
 
@@ -49,27 +70,25 @@ if (loginForm) {
     e?.preventDefault();
 
     const form = e.currentTarget;
-  
+
     const formData = {
       username: form.querySelector('input[name="username"]').value,
       password: form.querySelector('input[name="password"]').value,
       rememberMe: form.querySelector('input[name="rememberMe"]').checked,
     };
 
-    const response = await api(form.id, 200, "/api/v1/auth/authenticate", {
+    const response = await api(form.id, 200, "http://127.0.0.1:8181/api/v1/auth/authenticate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
     });
-  
+
     if (response === false) {
       return;
     }
-  
-    window.location.href="/";
+
+    window.location.href = "/";
   };
 }
-
-

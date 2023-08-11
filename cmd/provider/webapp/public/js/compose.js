@@ -51,7 +51,7 @@ const composeTable = new DataTable("#composeTable", {
     {
       data: "name",
       render: (data, type, full, meta) => {
-        const link = "/api/v1/files/";
+        const link = "http://127.0.0.1:8181/api/v1/files/";
         return `<a href="javascript:;" onclick="downloadURI('composeForm', '${link}${full.id}', '${data}');">${data}</a>`;
       },
     },
@@ -137,7 +137,7 @@ composeTable.on("select.dt deselect.dt", () => {
   }
 });
 
-export const deleteItems = (e) => {
+export const deleteCargoes = (e) => {
   e?.preventDefault();
 
   composeConfirmDialog.hide();

@@ -147,7 +147,7 @@ const formatBytes = (bytes, decimals = 2) => {
 };
 
 const loadProfile = async (form) => {
-  const response = await api(form.id, 200, "/api/v1/user/profile", {
+  const response = await api(form.id, 200, "http://127.0.0.1:8181/api/v1/user/profile", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

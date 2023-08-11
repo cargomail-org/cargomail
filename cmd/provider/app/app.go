@@ -6,30 +6,20 @@ import (
 	"cargomail/internal/repository"
 	"context"
 	"errors"
-	"html/template"
 	"net/http"
 )
 
 type AppParams struct {
-	Repository       repository.Repository
-	HomeTemplate     *template.Template
-	LoginTemplate    *template.Template
-	RegisterTemplate *template.Template
+	Repository repository.Repository
 }
 
 type App struct {
-	repository       repository.Repository
-	HomeTemplate     *template.Template
-	LoginTemplate    *template.Template
-	RegisterTemplate *template.Template
+	repository repository.Repository
 }
 
 func NewApp(params AppParams) App {
 	return App{
-		repository:       params.Repository,
-		HomeTemplate:     params.HomeTemplate,
-		LoginTemplate:    params.LoginTemplate,
-		RegisterTemplate: params.RegisterTemplate,
+		repository: params.Repository,
 	}
 }
 
@@ -39,7 +29,7 @@ func (app *App) contextSetUser(r *http.Request, user *repository.User) *http.Req
 }
 
 func redirectToLoginPage(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/login", http.StatusSeeOther)
+	http.Redirect(w, r, "/login.html", http.StatusSeeOther)
 }
 
 // middleware

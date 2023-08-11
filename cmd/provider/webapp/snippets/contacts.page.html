@@ -1,11 +1,5 @@
-{{template "base" .}}
-{{define "contacts"}}
-
 <div class="container">
     <!-- Contacts -->
-    <!-- <form class="row g-2" id="contactsForm" method="POST" enctype="multipart/form-data" action="/api/v1/contacts">
-            <input type="hidden" name="csrf" value="{{.}}" />
-        </form> -->
     <div class="modal fade" id="contactsFormDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="contactsFormDialogLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -75,11 +69,9 @@
 </div>
 
 <script type="module">
-    import { showContactsFormDialog, submitFormContact, deleteItems } from "/public/js/contacts.js";
+    import { showContactsFormDialog, submitFormContact, deleteContacts } from "/public/js/contacts.js";
     document.querySelector('#contactsFormDialog').addEventListener('show.bs.modal', showContactsFormDialog)
     document.querySelector("#contactsForm").addEventListener('submit', submitFormContact);
     // document.querySelector('#saveContact').addEventListener('click', saveContact);
-    document.querySelector('#contactsConfirmButton').addEventListener('click', deleteItems);
+    document.querySelector('#contactsConfirmButton').addEventListener('click', deleteContacts);
 </script>
-
-{{end}}
