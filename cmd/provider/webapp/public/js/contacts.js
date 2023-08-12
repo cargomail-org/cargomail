@@ -31,7 +31,7 @@ const contactsTable = new DataTable("#contactsTable", {
   },
   ajax: function (data, callback, settings) {
     (async () => {
-      const response = await api(contactsForm.id, 200, "http://127.0.0.1:8181/api/v1/contacts", {
+      const response = await api(contactsForm.id, 200, `${window.apiHost}/api/v1/contacts`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +95,7 @@ const contactsTable = new DataTable("#contactsTable", {
           const response = await api(
             uploadForm.id,
             200,
-            "http://127.0.0.1:8181/api/v1/contacts/sync",
+            `${window.apiHost}/api/v1/contacts/sync`,
             {
               method: "POST",
               headers: {
@@ -255,7 +255,7 @@ export const submitFormContact = async (e) => {
     // new
     delete formData.id;
 
-    const response = await api(form.id, 201, "http://127.0.0.1:8181/api/v1/contacts", {
+    const response = await api(form.id, 201, `${window.apiHost}/api/v1/contacts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -271,7 +271,7 @@ export const submitFormContact = async (e) => {
 
   } else if (formData.id.length == 32) {
     // edit
-    const response = await api(form.id, 200, "http://127.0.0.1:8181/api/v1/contacts", {
+    const response = await api(form.id, 200, `${window.apiHost}/api/v1/contacts`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -295,7 +295,7 @@ export const deleteContacts = (e) => {
   contactsConfirmDialog.hide();
 
   (async () => {
-    const response = await api(uploadForm.id, 200, "http://127.0.0.1:8181/api/v1/contacts/trash", {
+    const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/contacts/trash`, {
       method: "POST",
       headers: {
         Accept: "application/json",

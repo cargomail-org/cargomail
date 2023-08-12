@@ -1,6 +1,6 @@
 <div class="container">
     <!-- Upload -->
-    <form class="row g-2" id="uploadForm" method="POST" enctype="multipart/form-data" action="http://127.0.0.1:8181/api/v1/files/upload">
+    <form class="row g-2" id="uploadForm" method="" action="#" enctype="multipart/form-data">
         <div class="col-auto">
             <input class="form-control" id="inputUpload" type="file" name="files" multiple id="formFile">
         </div>
@@ -49,11 +49,3 @@
         </thead>
     </table>
 </div>
-
-<script type="module">
-    import { inputUploadChanged, clearUpload, deleteFiles, copySelectedFiles } from "/public/js/files.js";
-    document.querySelector('#inputUpload').addEventListener('change', inputUploadChanged)
-    document.querySelector('#clearButton').addEventListener('click', clearUpload);
-    document.querySelector('#filesConfirmButton').addEventListener('click', deleteFiles);
-    document.querySelector('#copySelectedFiles').addEventListener('click', copySelectedFiles);
-</script>

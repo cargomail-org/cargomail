@@ -7,7 +7,6 @@
             "request": "launch",
             "mode": "auto",
             "program": "main.go",
-            // "console": "integratedTerminal",
             "env": {
                 "DOMAIN_NAME": "cargomail.org",
                 "STORAGE_PATH": "./storage/cargomail.org",
@@ -18,8 +17,8 @@
                 "PROVIDER_BIND": "127.0.0.1:8181",
                 "TRANSFER_BIND": "127.0.0.1:2125",
                 "COOKIE_SAME_SITE": "none",
-                "STAGE": "dev",
-              }
+                "STAGE": "dev"
+            }
         },
         {
             "name": "federizer.org",
@@ -27,7 +26,6 @@
             "request": "launch",
             "mode": "auto",
             "program": "main.go",
-            // "console": "integratedTerminal",
             "env": {
                 "DOMAIN_NAME": "federizer.org",
                 "STORAGE_PATH": "./storage/federizer.org",
@@ -38,8 +36,8 @@
                 "PROVIDER_BIND": "127.0.0.2:8181",
                 "TRANSFER_BIND": "127.0.0.2:2125",
                 "COOKIE_SAME_SITE": "none",
-                "STAGE": "dev",
-              }
+                "STAGE": "dev"
+            }
         },
         {
             "name": "umabox.org",
@@ -47,7 +45,6 @@
             "request": "launch",
             "mode": "auto",
             "program": "main.go",
-            // "console": "integratedTerminal",
             "env": {
                 "DOMAIN_NAME": "umabox.org",
                 "STORAGE_PATH": "./storage/umabox.org",
@@ -58,8 +55,14 @@
                 "PROVIDER_BIND": "127.0.0.3:8181",
                 "TRANSFER_BIND": "127.0.0.3:2125",
                 "COOKIE_SAME_SITE": "none",
-                "STAGE": "dev",
-              }
+                "STAGE": "dev"
+            }
         },
+        {
+            "type": "chrome",
+            "name": "webapp",
+            "request": "launch",
+            "url": "http://127.0.0.1:3000/index.html"
+        }
     ]
 }

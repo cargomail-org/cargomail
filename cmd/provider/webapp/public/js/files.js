@@ -101,7 +101,7 @@ uploadForm.onsubmit = async (e) => {
   uploadProgressBar.classList.remove("notransition");
   uploadProgressBar.innerText = "";
 
-  const url = uploadForm.action;
+  const url = `${window.apiHost}/api/v1/files/upload`;
   const files = [...e.currentTarget.files.files];
 
   filesCnt += files.length;
@@ -138,7 +138,7 @@ const filesTable = new DataTable("#filesTable", {
   },
   ajax: function (data, callback, settings) {
     (async () => {
-      const response = await api(uploadForm.id, 200, "http://127.0.0.1:8181/api/v1/files", {
+      const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/files`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -160,7 +160,7 @@ const filesTable = new DataTable("#filesTable", {
     {
       data: "name",
       render: (data, type, full, meta) => {
-        const link = "http://127.0.0.1:8181/api/v1/files/";
+        const link = `${window.apiHost}/api/v1/files/`;
         return `<a href="javascript:;" onclick="downloadURI('uploadForm', '${link}${full.id}', '${data}');">${data}</a>`;
       },
     },
@@ -221,7 +221,7 @@ const filesTable = new DataTable("#filesTable", {
       text: "Refresh",
       action: function () {
         (async () => {
-          const response = await api(uploadForm.id, 200, "http://127.0.0.1:8181/api/v1/files/sync", {
+          const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/files/sync`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -295,7 +295,7 @@ export const deleteFiles = (e) => {
   filesConfirmDialog.hide();
 
   (async () => {
-    const response = await api(uploadForm.id, 200, "http://127.0.0.1:8181/api/v1/files/trash", {
+    const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/files/trash`, {
       method: "POST",
       headers: {
         Accept: "application/json",

@@ -1,7 +1,7 @@
 <div class="container">
     <!-- Profile -->
-    <form class="row g-2" id="profileForm" method="POST" action="http://127.0.0.1:8181/api/v1/user/profile">
-        <div hidden id="profileDomainName">{{.DomainName}}</div>
+    <form class="row g-2" id="profileForm">
+        <div hidden id="profileDomainName"></div>
         <p class="font-weight-normal" id="profileUsername"></p>
         <div class="form-floating mb-1">
             <input class="form-control" id="firstNameInput" type="text" name="firstname" placeholder="First name"
@@ -18,7 +18,3 @@
         </div>
     </form>
 </div>
-
-<script type="module">
-    import * as profile from "/public/js/profile.js";
-</script>

@@ -9,7 +9,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="contactsForm" method="POST" enctype="multipart/form-data" action="#">
+                    <form id="contactsForm" method="" action="#" enctype="multipart/form-data">
                         <input class="form-control" id="contactIdInput" type="hidden" name="contactId" />
                         <div class="form-floating mb-1">
                             <input class="form-control" id="emailInput" type="email" name="email" placeholder="Email"
@@ -67,11 +67,3 @@
         </thead>
     </table>
 </div>
-
-<script type="module">
-    import { showContactsFormDialog, submitFormContact, deleteContacts } from "/public/js/contacts.js";
-    document.querySelector('#contactsFormDialog').addEventListener('show.bs.modal', showContactsFormDialog)
-    document.querySelector("#contactsForm").addEventListener('submit', submitFormContact);
-    // document.querySelector('#saveContact').addEventListener('click', saveContact);
-    document.querySelector('#contactsConfirmButton').addEventListener('click', deleteContacts);
-</script>

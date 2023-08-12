@@ -1,6 +1,6 @@
 <div class="container">
     <!-- Compose -->
-    <form class="row g-2" id="composeForm" method="POST" enctype="multipart/form-data" action="http://127.0.0.1:8181/api/v1/message/create">
+    <form class="row g-2" id="composeForm" method="" action="#" enctype="multipart/form-data">
         <div class="form-floating mb-1">
             <input class="form-control" id="toInput" type="text" placeholder="To" data-sb-validations="" />
             <label for="to">To</label>
@@ -48,8 +48,3 @@
         </thead>
     </table>
 </div>
-
-<script type="module">
-    import { deleteCargoes } from "/public/js/compose.js";
-    document.querySelector('#composeConfirmButton').addEventListener('click', deleteCargoes);
-</script>

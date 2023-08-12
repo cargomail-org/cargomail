@@ -1,27 +1,6 @@
 const registerForm = document.getElementById("registerForm");
 const loginForm = document.getElementById("loginForm");
 
-(async () => {
-  const response = await api(null, 200, "http://127.0.0.1:8181/api/v1/auth/info", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (response && response.domain_name) {
-    if (registerForm) {
-      registerForm.querySelector('input[name="domainName"]').placeholder =
-        response.domain_name;
-    }
-
-    if (loginForm) {
-      loginForm.querySelector('input[name="domainName"]').placeholder =
-        response.domain_name;
-    }
-  }
-})();
-
 if (registerForm) {
   registerForm.onsubmit = async (e) => {
     e?.preventDefault();
@@ -49,13 +28,18 @@ if (registerForm) {
       return;
     }
 
-    const response = await api(form.id, 201, "http://127.0.0.1:8181/api/v1/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await api(
+      form.id,
+      201,
+      `${window.apiHost}/api/v1/auth/register`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
     if (response === false) {
       return;
@@ -77,13 +61,18 @@ if (loginForm) {
       rememberMe: form.querySelector('input[name="rememberMe"]').checked,
     };
 
-    const response = await api(form.id, 200, "http://127.0.0.1:8181/api/v1/auth/authenticate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await api(
+      form.id,
+      200,
+      `${window.apiHost}/api/v1/auth/authenticate`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
     if (response === false) {
       return;
