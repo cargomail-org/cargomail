@@ -140,6 +140,9 @@ func (api *BodiesApi) Download() http.Handler {
 			bodyPath := filepath.Join(bodiesPath, id)
 			w.Header().Set("Content-Type", "application/octet-stream")
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiBodyName, urlEncodedBodyName))
+
+			bodyPath = filepath.Clean(bodyPath)
+
 			http.ServeFile(w, r, bodyPath)
 		}
 	})

@@ -6,4 +6,5 @@ transfer_cert_path: ${TRANSFER_CERT_PATH}
 transfer_key_path: ${TRANSFER_KEY_PATH}
 provider_bind: ${PROVIDER_BIND}
 transfer_bind: ${TRANSFER_BIND}
+cookie_same_site: ${COOKIE_SAME_SITE}
 

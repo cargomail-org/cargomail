@@ -19,18 +19,18 @@ var (
 )
 
 type Config = struct {
-	DomainName       string        `yaml:"domain_name"`
-	StoragePath      string        `yaml:"storage_path"`
-	DatabasePath     string        `yaml:"database_path"`
-	ResourcesPath    string        `yaml:"resources_path"`
-	BodiesFolder     string        `yaml:"bodies_folder"`
-	FilesFolder      string        `yaml:"files_folder"`
-	TransferCertPath string        `yaml:"transfer_cert_path"`
-	TransferKeyPath  string        `yaml:"transfer_key_path"`
-	ProviderBind     string        `yaml:"provider_bind"`
-	TransferBind     string        `yaml:"transfer_bind"`
-	CookieSameSite   http.SameSite `yaml:"cookie_same_site"`
-	Stage            string        `yaml:"stage"`
+	DomainName       string `yaml:"domain_name"`
+	StoragePath      string `yaml:"storage_path"`
+	DatabasePath     string `yaml:"database_path"`
+	ResourcesPath    string `yaml:"resources_path"`
+	BodiesFolder     string `yaml:"bodies_folder"`
+	FilesFolder      string `yaml:"files_folder"`
+	TransferCertPath string `yaml:"transfer_cert_path"`
+	TransferKeyPath  string `yaml:"transfer_key_path"`
+	ProviderBind     string `yaml:"provider_bind"`
+	TransferBind     string `yaml:"transfer_bind"`
+	CookieSameSite   string `yaml:"cookie_same_site"`
+	Stage            string `yaml:"stage"`
 }
 
 const (
@@ -53,10 +53,6 @@ func newConfig() Config {
 		c.FilesFolder = DefaultFilesFolder
 	}
 
-	if c.CookieSameSite == 0 {
-		c.CookieSameSite = DefaultCookieSameSite
-	}
-
 	return c
 }
 
@@ -69,26 +65,7 @@ func setDefaults(c *Config) {
 	for i := 0; i < reflect.TypeOf(*c).NumField(); i++ {
 		field := reflect.TypeOf(*c).Field(i)
 		if value, ok := field.Tag.Lookup("yaml"); ok {
-			if value == "cookie_same_site" {
-				var sameSite http.SameSite
-
-				envValue := strings.ToUpper(os.Getenv(strings.ToUpper(value)))
-
-				switch envValue {
-				case "STRICT":
-					sameSite = http.SameSiteStrictMode
-				case "LAX":
-					sameSite = http.SameSiteLaxMode
-				case "NONE":
-					sameSite = http.SameSiteNoneMode
-				default:
-					sameSite = DefaultCookieSameSite
-				}
-
-				reflect.ValueOf(c).Elem().FieldByName(field.Name).Set(reflect.ValueOf(sameSite))
-			} else {
-				reflect.ValueOf(c).Elem().FieldByName(field.Name).Set(reflect.ValueOf(os.Getenv(strings.ToUpper(value))))
-			}
+			reflect.ValueOf(c).Elem().FieldByName(field.Name).Set(reflect.ValueOf(os.Getenv(strings.ToUpper(value))))
 		}
 	}
 }
@@ -107,6 +84,21 @@ func loadConfig(c *Config) {
 
 func DevStage() bool {
 	return strings.EqualFold(Configuration.Stage, "dev")
+}
+
+func CookieSameSite() http.SameSite {
+	cookieSameSite := strings.ToUpper(Configuration.CookieSameSite)
+
+	switch cookieSameSite {
+	case "STRICT":
+		return http.SameSiteStrictMode
+	case "LAX":
+		return http.SameSiteLaxMode
+	case "NONE":
+		return http.SameSiteNoneMode
+	default:
+		return DefaultCookieSameSite
+	}
 }
 
 func init() {

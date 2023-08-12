@@ -6,4 +6,4 @@ transfer_cert_path: ./storage/cargomail.org/certificates/server.crt
 transfer_key_path: ./storage/cargomail.org/certificates/server.key
 provider_bind: 127.0.0.1:8181
 transfer_bind: 127.0.0.1:2125
-cookie_same_site: none
+cookie_same_site: strict

@@ -11,7 +11,7 @@ README.pdf
 *.so
 *.dylib
 __debug_bin
-cargomail/cargomail
+cargomail
 
 # Test binary, built with `go test -c`
 *.test

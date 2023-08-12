@@ -5,21 +5,25 @@ import (
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"context"
+	"embed"
 	"errors"
 	"net/http"
 )
 
 type AppParams struct {
 	Repository repository.Repository
+	Files      embed.FS
 }
 
 type App struct {
 	repository repository.Repository
+	files      embed.FS
 }
 
 func NewApp(params AppParams) App {
 	return App{
 		repository: params.Repository,
+		files:      params.Files,
 	}
 }
 
@@ -97,7 +101,7 @@ func (app *App) Logout() http.Handler {
 			Path:     "/",
 			HttpOnly: true,
 			Secure:   true,
-			SameSite: config.Configuration.CookieSameSite,
+			SameSite: config.CookieSameSite(),
 		}
 		http.SetCookie(w, &clearCookie)
 

@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"cargomail/internal/config"
 	"net/http"
 	"strings"
 )
@@ -66,6 +67,12 @@ func (t *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		setupCORS(&w, r)
 		if r.Method == "OPTIONS" {
 			return
+		}
+
+		if !config.DevStage() {
+			if strings.HasPrefix(r.URL.Path, "/public/") || strings.HasPrefix(r.URL.Path, "/snippets/") {
+				r.URL.Path = "/webapp" + r.URL.Path
+			}
 		}
 
 		e.Handler.ServeHTTP(w, r)

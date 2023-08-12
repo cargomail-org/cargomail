@@ -127,7 +127,7 @@ func (api *SessionApi) Login() http.Handler {
 			Path:     "/",
 			HttpOnly: true,
 			Secure:   true,
-			SameSite: config.Configuration.CookieSameSite,
+			SameSite: config.CookieSameSite(),
 		}
 
 		if input.RememberMe {
@@ -157,7 +157,7 @@ func (api *SessionApi) Login() http.Handler {
 			Path:     "/",
 			HttpOnly: true,
 			Secure:   true,
-			SameSite: config.Configuration.CookieSameSite,
+			SameSite: config.CookieSameSite(),
 			Expires:  time.Now().AddDate(1, 0, 0), // 1 year
 		}
 
@@ -176,7 +176,7 @@ func (api *SessionApi) Logout() http.Handler {
 			Path:     "/",
 			HttpOnly: true,
 			Secure:   true,
-			SameSite: config.Configuration.CookieSameSite,
+			SameSite: config.CookieSameSite(),
 		}
 		http.SetCookie(w, &clearCookie)
 

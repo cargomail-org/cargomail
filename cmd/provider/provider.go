@@ -15,6 +15,16 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+const (
+	webappDir = "webapp"
+	publicDir = "public"
+)
+
+var (
+	//go:embed webapp/*
+	files embed.FS
+)
+
 type ServiceParams struct {
 	DB *sql.DB
 }
@@ -31,6 +41,7 @@ func NewService(params *ServiceParams) (service, error) {
 		app: app.NewApp(
 			app.AppParams{
 				Repository: repository,
+				Files:      files,
 			}),
 		api: api.NewApi(
 			api.ApiParams{
@@ -38,16 +49,6 @@ func NewService(params *ServiceParams) (service, error) {
 			}),
 	}, nil
 }
-
-const (
-	webappDir = "webapp"
-	publicDir = "public"
-)
-
-var (
-	//go:embed webapp/*
-	files embed.FS
-)
 
 func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 	router := NewRouter()

@@ -1,23 +1,51 @@
 package app
 
 import (
+	"cargomail/internal/config"
 	"net/http"
 )
 
 func (app *App) HomePage() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "cmd/provider/webapp/index.html")
+		if config.DevStage() {
+			http.ServeFile(w, r, "cmd/provider/webapp/index.html")
+		} else {
+			p, err := app.files.ReadFile("webapp/index.html")
+			if err != nil {
+				w.Write([]byte(err.Error()))
+				return
+			}
+			w.Write(p)
+		}
 	})
 }
 
 func (app *App) LoginPage() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "cmd/provider/webapp/login.html")
+		if config.DevStage() {
+			http.ServeFile(w, r, "cmd/provider/webapp/login.html")
+		} else {
+			p, err := app.files.ReadFile("webapp/login.html")
+			if err != nil {
+				w.Write([]byte(err.Error()))
+				return
+			}
+			w.Write(p)
+		}
 	})
 }
 
 func (app *App) RegisterPage() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "cmd/provider/webapp/register.html")
+		if config.DevStage() {
+			http.ServeFile(w, r, "cmd/provider/webapp/register.html")
+		} else {
+			p, err := app.files.ReadFile("webapp/register.html")
+			if err != nil {
+				w.Write([]byte(err.Error()))
+				return
+			}
+			w.Write(p)
+		}
 	})
 }
