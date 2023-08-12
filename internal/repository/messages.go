@@ -14,13 +14,9 @@ type MessageRepository struct {
 	db *sql.DB
 }
 
-// type Header struct {
-// 	Name  string `json:"name"`
-// 	Value string `json:"value"`
-// }
-
 type Header struct {
-	Value map[string]interface{} `json:"header"`
+	Name string      `json:"name"`
+	Data interface{} `json:"value"`
 }
 
 type MessagePart struct {
@@ -28,6 +24,7 @@ type MessagePart struct {
 	ContentType string         `json:"content_type"`
 	Headers     []*Header      `json:"headers"`
 	Body        *BodyResource  `json:"body"`
+	Files       *FilesResource `json:"files"`
 	Parts       []*MessagePart `json:"parts"`
 }
 
@@ -41,7 +38,7 @@ type Message struct {
 	Starred    bool         `json:"starred"`
 	Folder     int16        `json:"folder"`
 	Payload    *MessagePart `json:"payload"`
-	LabelIds   *string      `json:"labbel_ids"`
+	LabelIds   *string      `json:"label_ids"`
 	SentAt     *Timestamp   `json:"sent_at"`
 	ReceivedAt *Timestamp   `json:"received_at"`
 	SnoozedAt  *Timestamp   `json:"snoozed_at"`
@@ -74,37 +71,30 @@ type MessageSync struct {
 }
 
 type BodyResource struct {
-	ContentType string
-	Uri         string
-	Size        int64
+	ContentType string `json:"content_type"`
+	Uri         string `json:"uri"`
+	Size        int64  `json:"size"`
 }
 
 type FileResource struct {
-	ContentType string
-	Uri         string
-	Size        int64
-}
-
-type Recipient struct {
-	Fullname     string `json:"fullname,omitempty"`
-	EmailAddress string `json:"email_address,omitempty"`
+	ContentType string `json:"content_type"`
+	Uri         string `json:"uri"`
+	Size        int64  `json:"size"`
 }
 
 type FilesResource []FileResource
 
-type Recipients []Recipient
-
-func (r Recipients) Value() (driver.Value, error) {
-	return json.Marshal(r)
+func (v MessagePart) Value() (driver.Value, error) {
+	return json.Marshal(v)
 }
 
-func (r *Recipients) Scan(value interface{}) error {
+func (v *MessagePart) Scan(value interface{}) error {
 	b, ok := value.([]byte)
 	if !ok {
 		return errors.New("type assertion to []byte failed")
 	}
 
-	return json.Unmarshal(b, &r)
+	return json.Unmarshal(b, &v)
 }
 
 func (c *Message) Scan() []interface{} {

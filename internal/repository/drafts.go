@@ -30,8 +30,8 @@ type DraftSync struct {
 	DraftsDeleted  []*DraftDeleted `json:"deleted"`
 }
 
-func (c *Draft) Scan() []interface{} {
-	s := reflect.ValueOf(c).Elem()
+func (d *Draft) Scan() []interface{} {
+	s := reflect.ValueOf(d).Elem()
 	numCols := s.NumField()
 	columns := make([]interface{}, numCols)
 	for i := 0; i < numCols; i++ {
