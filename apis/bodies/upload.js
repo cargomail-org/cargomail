@@ -1,6 +1,6 @@
 const formdata = new FormData();
 
-const blob = new Blob(["Hello World!"], { type: "plain/text" });
+const blob = new Blob(["Hi there!"], { type: "plain/text" });
 formdata.append(
   "bodies",
   blob,

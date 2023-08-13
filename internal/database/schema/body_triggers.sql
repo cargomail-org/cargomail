@@ -67,7 +67,7 @@ CREATE TRIGGER IF NOT EXISTS body_after_trash
     ON body
     FOR EACH ROW
     WHEN (new.last_stmt <> old.last_stmt AND old.last_stmt = 2) OR
-            (new.last_stmt <> old.last_stmt AND new.last_stmt = 2)
+         (new.last_stmt <> old.last_stmt AND new.last_stmt = 2)
 BEGIN
     UPDATE body_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;
     UPDATE body

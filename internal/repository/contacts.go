@@ -177,7 +177,7 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 			FROM contact
 			WHERE user_id = $1 AND
 				last_stmt = 0 AND
-				(device_id <> $2 OR device_id IS NULL) AND
+				(device_id = $2 OR device_id IS NULL) AND
 				history_id > $3
 			ORDER BY created_at DESC;`
 
@@ -219,7 +219,7 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 			FROM contact
 			WHERE user_id = $1 AND
 				last_stmt = 1 AND
-				(device_id <> $2 OR device_id IS NULL) AND
+				(device_id = $2 OR device_id IS NULL) AND
 				history_id > $3
 			ORDER BY created_at DESC;`
 
@@ -254,7 +254,7 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 			FROM contact
 			WHERE user_id = $1 AND
 				last_stmt = 2 AND
-				(device_id <> $2 OR device_id IS NULL) AND
+				(device_id = $2 OR device_id IS NULL) AND
 				history_id > $3
 			ORDER BY created_at DESC;`
 
@@ -288,7 +288,7 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 		SELECT *
 			FROM contact_deleted
 			WHERE user_id = $1 AND
-			(device_id <> $2 OR device_id IS NULL) AND
+			(device_id = $2 OR device_id IS NULL) AND
 			history_id > $3;`
 
 	args = []interface{}{user.Id, user.DeviceId, history.Id}
