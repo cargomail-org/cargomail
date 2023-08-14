@@ -1,6 +1,6 @@
 CREATE TRIGGER IF NOT EXISTS "MessageAfterInsert"
     AFTER INSERT
-    ON "Message"xxx
+    ON "Message"
     FOR EACH ROW
 BEGIN
     UPDATE message_timeline_seq SET last_timeline_id = (last_timeline_id + 1) WHERE user_id = new.user_id;
