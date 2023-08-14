@@ -3,103 +3,103 @@ CREATE TRIGGER IF NOT EXISTS "MessageAfterInsert"
     ON "Message"
     FOR EACH ROW
 BEGIN
-    UPDATE message_timeline_seq SET last_timeline_id = (last_timeline_id + 1) WHERE user_id = new.user_id;
-    UPDATE message_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = new.user_id;
+    UPDATE "MessageTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = new."userId";
+    UPDATE "MessageHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = new."userId";
     UPDATE message
-    SET timeline_id = (SELECT last_timeline_id FROM message_timeline_seq WHERE user_id = new.user_id),
-        history_id  = (SELECT last_history_id FROM message_history_seq WHERE user_id = new.user_id),
-        last_stmt   = 0
-    WHERE id = new.id;
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "MessageTimelineSeq" WHERE "userId" = new."userId"),
+        "historyId"  = (SELECT "lastHistoryId" FROM "MessageHistorySeq" WHERE "userId" = new."userId"),
+        "lastStmt"   = 0
+    WHERE "id" = new."id";
 END;
 
 CREATE TRIGGER IF NOT EXISTS "MessageDraftBeforeUpdate"
     BEFORE UPDATE OF
-    id,
-    user_id,
-    -- message_uid,
-    -- parent_uid,
-    -- thread_uid,
-    -- unread, 
-    -- starred, 
-    -- folder,
-    -- payload,
-    -- label_ids,
-    sent_at,
-    received_at,
-    snoozed_at
+    "id",
+    "userId",
+    -- "messageUid",
+    -- "parentUid",
+    -- "threadUid",
+    -- "unread", 
+    -- "starred", 
+    -- "folder",
+    -- "payload",
+    -- "labelIds",
+    "sentAt",
+    "receivedAt",
+    "snoozedAt"
     ON "Message"
     FOR EACH ROW
-    WHEN old.folder = 0 -- draft
+    WHEN old."folder" = 0 -- draft
 BEGIN
     SELECT RAISE(ABORT, 'Update not allowed');
 END;
 
 CREATE TRIGGER IF NOT EXISTS "MessageNotDraftBeforeUpdate"
     BEFORE UPDATE OF
-    id,
-    user_id,
-    message_uid,
-    parent_uid,
-    thread_uid,
-    -- unread, 
-    -- starred, 
-    folder,
-    payload,
-    -- label_ids,
-    sent_at,
-    received_at,
-    snoozed_at
+    "id",
+    "userId",
+    "messageUid",
+    "parentUid",
+    "threadUid",
+    -- "unread", 
+    -- "starred", 
+    "folder",
+    "payload",
+    -- "labelIds",
+    "sentAt",
+    "receivedAt",
+    "snoozedAt"
     ON "Message"
     FOR EACH ROW
-    WHEN old.folder > 0 -- not draft
+    WHEN old."folder" > 0 -- not draft
 BEGIN
     SELECT RAISE(ABORT, 'Update not allowed');
 END;
 
 CREATE TRIGGER IF NOT EXISTS "MessageAfterUpdate"
     AFTER UPDATE OF
-    payload
+        "payload"
     ON "Message"
     FOR EACH ROW
 BEGIN
-    UPDATE message_timeline_seq SET last_timeline_id = (last_timeline_id + 1) WHERE user_id = old.user_id;
-    UPDATE message_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;
+    UPDATE "MessageTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = old."userId";
+    UPDATE "MessageHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
     UPDATE "Message"
-    SET timeline_id = (SELECT last_timeline_id FROM message_timeline_seq WHERE user_id = old.user_id),
-        history_id  = (SELECT last_history_id FROM message_history_seq WHERE user_id = old.user_id),
-        last_stmt   = 1,
-        modified_at = CURRENT_TIMESTAMP
-    WHERE id = old.id;
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "MessageTimelineSeq" WHERE "userId" = old."userId"),
+        "historyId"  = (SELECT "lastHistoryId" FROM "MessageHistorySeq" WHERE "userId" = old."userId"),
+        "lastStmt"   = 1,
+        "modifiedAt" = CURRENT_TIMESTAMP
+    WHERE "id" = old."id";
 END;
 
 -- Trashed
 CREATE TRIGGER IF NOT EXISTS "MessageBeforeTrash"
     BEFORE UPDATE OF
-        last_stmt
+        "lastStmt"
     ON "Message"
     FOR EACH ROW
 BEGIN
-    SELECT RAISE(ABORT, 'Update "last_stmt" not allowed')
-    WHERE NOT (new.last_stmt == 0 OR new.last_stmt == 1 OR new.last_stmt == 2)
-        OR (old.last_stmt = 2 AND new.last_stmt = 1); -- Untrash = trashed (2) -> inserted (0)
+    SELECT RAISE(ABORT, 'Update "lastStmt" not allowed')
+    WHERE NOT (new."lastStmt" == 0 OR new."lastStmt" == 1 OR new."lastStmt" == 2)
+        OR (old."lastStmt" = 2 AND new."lastStmt" = 1); -- Untrash = trashed (2) -> inserted (0)
     UPDATE "Message" 
-	SET device_id = iif(length(new.device_id) = 39 AND substr(new.device_id, 1, 7) = 'device:', substr(new.device_id, 8, 32), NULL)
-	WHERE id = new.id;
+	SET "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL)
+	WHERE "id" = new."id";
 END;
 
 CREATE TRIGGER IF NOT EXISTS "MessageAfterTrash"
     AFTER UPDATE OF
-        last_stmt
+        "lastStmt"
     ON "Message"
     FOR EACH ROW
-    WHEN (new.last_stmt <> old.last_stmt AND old.last_stmt = 2) OR
-            (new.last_stmt <> old.last_stmt AND new.last_stmt = 2)
+    WHEN (new."lastStmt" <> old."lastStmt" AND old."lastStmt" = 2) OR
+            (new."lastStmt" <> old."lastStmt" AND new."lastStmt" = 2)
 BEGIN
-    UPDATE message_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;
+    UPDATE "MessageHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
     UPDATE "Message"
-    SET history_id  = (SELECT last_history_id FROM message_history_seq WHERE user_id = old.user_id),
-        device_id = iif(length(new.device_id) = 39 AND substr(new.device_id, 1, 7) = 'device:', substr(new.device_id, 8, 32), NULL) 
-    WHERE id = old.id;
+    SET "historyId"  = (SELECT "lastHistoryId" FROM "MessageHistorySeq" WHERE "userId" = old."userId"),
+        "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL) 
+    WHERE "id" = old."id";
 END;
 
 CREATE TRIGGER IF NOT EXISTS "MessageAfterDelete"
@@ -107,9 +107,9 @@ AFTER DELETE
 ON "Message"
 FOR EACH ROW
 BEGIN
-    UPDATE message_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;
-    INSERT INTO message_deleted (id, user_id, history_id)
-      VALUES (old.id,
-              old.user_id,
-              (SELECT last_history_id FROM message_history_seq WHERE user_id = old.user_id));
+    UPDATE "MessageHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
+    INSERT INTO "MessageDeleted" ("id", "userId", "historyId")
+      VALUES (old."id",
+              old."userId",
+              (SELECT "lastHistoryId" FROM "MessageHistorySeq" WHERE "userId" = old."userId"));
 END;
