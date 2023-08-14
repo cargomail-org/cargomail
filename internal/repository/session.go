@@ -63,7 +63,7 @@ func (r SessionRepository) Insert(session *Session) error {
 	defer cancel()
 
 	query := `
-		INSERT INTO session (hash, user_id, expiry, scope)
+		INSERT INTO "Session" ("hash", "userId", "expiry", "scope")
 			VALUES ($1, $2, $3, $4);`
 
 	args := []interface{}{session.Hash, session.UserID, session.Expiry, session.Scope}
@@ -79,8 +79,8 @@ func (r SessionRepository) Remove(session string) error {
 	sessionHash := sha256.Sum256([]byte(session))
 
 	query := `
-		DELETE FROM session
-			WHERE hash = $1;`
+		DELETE FROM "Session"
+			WHERE "hash" = $1;`
 
 	_, err := r.db.ExecContext(ctx, query, sessionHash[:])
 	return err

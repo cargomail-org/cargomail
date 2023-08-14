@@ -5,9 +5,9 @@ PRAGMA foreign_keys=ON;
 CREATE TABLE IF NOT EXISTS "User" (
     "id"			INTEGER PRIMARY KEY,
     "username"		TEXT NOT NULL UNIQUE,
-    "password_hash"	TEXT NOT NULL,
-    "firstname"		TEXT DEFAULT "",
-    "lastname"		TEXT DEFAULT "",
+    "passwordHash"	TEXT NOT NULL,
+    "firstName"		TEXT DEFAULT "",
+    "lastName"		TEXT DEFAULT "",
     "createdAt"		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS "Label" (
 CREATE TABLE IF NOT EXISTS "Contact" (
     "id"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
-    "email_address" VARCHAR(255),
+    "emailAddress"  VARCHAR(255),
     "firstName"		VARCHAR(255),
     "lastName"		VARCHAR(255),
     "createdAt"		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

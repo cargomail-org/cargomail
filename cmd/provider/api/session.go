@@ -136,24 +136,24 @@ func (api *SessionApi) Login() http.Handler {
 
 		http.SetCookie(w, &sessionCookie)
 
-		var device_id string
+		var deviceId string
 
-		deviceIdCookie, err := r.Cookie("device_id")
+		deviceIdCookie, err := r.Cookie("deviceId")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
-				device_id = strings.Replace(uuid.NewString(), "-", "", -1)
+				deviceId = strings.Replace(uuid.NewString(), "-", "", -1)
 			default:
 				http.Error(w, "server error", http.StatusInternalServerError)
 				return
 			}
 		} else {
-			device_id = deviceIdCookie.Value
+			deviceId = deviceIdCookie.Value
 		}
 
 		deviceIdCookie = &http.Cookie{
-			Name:     "device_id",
-			Value:    device_id,
+			Name:     "deviceId",
+			Value:    deviceId,
 			Path:     "/",
 			HttpOnly: true,
 			Secure:   true,

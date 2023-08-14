@@ -36,8 +36,8 @@ window.apiHost = "";
 
     let domainName = "";
 
-    if (response && response.domain_name) {
-      domainName = response.domain_name;
+    if (response && response.domainName) {
+      domainName = response.domainName;
     }
 
     const registerForm = document.getElementById("registerForm");

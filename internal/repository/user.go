@@ -19,16 +19,16 @@ type User struct {
 	Id        int64     `json:"id"`
 	Username  string    `json:"username"`
 	Password  password  `json:"-"`
-	FirstName string    `json:"firstname"`
-	LastName  string    `json:"lastname"`
-	CreatedAt time.Time `json:"created_at"`
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
+	CreatedAt time.Time `json:"createdAt"`
 	DeviceId  *string   `json:"-"`
 }
 
 type UserProfile struct {
 	Username  string `json:"username"`
-	FirstName string `json:"firstname"`
-	LastName  string `json:"lastname"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
 }
 
 type password struct {
@@ -86,16 +86,16 @@ func (r UserRepository) Create(user *User) error {
 	defer cancel()
 
 	query := `
-		INSERT INTO user (username, password_hash, firstname, lastname)
+		INSERT INTO "user" ("username", "passwordHash", "firstName", "lastName")
 			VALUES ($1, $2, $3, $4)
-			RETURNING id, created_at;`
+			RETURNING "id", "createdAt";`
 
 	args := []interface{}{user.Username, user.Password.hash, user.FirstName, user.LastName}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(&user.Id, &user.CreatedAt)
 	if err != nil {
 		switch {
-		case err.Error() == `UNIQUE constraint failed: user.username`:
+		case err.Error() == `UNIQUE constraint failed: User.username`:
 			return ErrUsernameAlreadyTaken
 		default:
 			return err
@@ -112,10 +112,10 @@ func (r UserRepository) UpdateProfile(user *User) (*UserProfile, error) {
 	profile := UserProfile{}
 
 	query := `
-		UPDATE user
-			SET firstname = $1,
-				lastname = $2
-			WHERE username = $3;`
+		UPDATE "user"
+			SET "firstName" = $1,
+				"lastName" = $2
+			WHERE "username" = $3;`
 
 	args := []interface{}{user.FirstName, user.LastName, user.Username}
 
@@ -136,9 +136,9 @@ func (r UserRepository) GetProfile(username string) (*UserProfile, error) {
 	defer cancel()
 
 	query := `
-		SELECT username, firstname, lastname
-			FROM user
-			WHERE username = $1;`
+		SELECT "username", "firstName", "lastName"
+			FROM "user"
+			WHERE "username" = $1;`
 
 	var profile UserProfile
 
@@ -165,9 +165,9 @@ func (r UserRepository) GetByUsername(username string) (*User, error) {
 	defer cancel()
 
 	query := `
-		SELECT id, username, password_hash, firstname, lastname, created_at
-			FROM user
-			WHERE username = $1;`
+		SELECT "id", "username", "passwordHash", "firstName", "lastName", "createdAt"
+			FROM "User"
+			WHERE "username" = $1;`
 
 	var user User
 
@@ -199,13 +199,13 @@ func (r UserRepository) GetBySession(sessionScope, sessionPlaintext string) (*Us
 	sessionHash := sha256.Sum256([]byte(sessionPlaintext))
 
 	query := `
-		SELECT user.id, user.username, user.password_hash, user.firstname, user.lastname, user.created_at
-			FROM user
-			INNER JOIN session
-			ON user.id = session.user_id
-			WHERE session.hash = $1
-			AND session.scope = $2
-			AND session.expiry > $3;`
+		SELECT "User"."id", "User"."username", "User"."passwordHash", "User"."firstName", "User"."lastName", "User"."createdAt"
+			FROM "User"
+			INNER JOIN "Session"
+			ON "User"."id" = "Session"."userId"
+			WHERE "Session"."hash" = $1
+			AND "Session"."scope" = $2
+			AND "Session"."expiry" > $3;`
 
 	args := []interface{}{sessionHash[:], sessionScope, time.Now()}
 

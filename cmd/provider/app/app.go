@@ -69,9 +69,9 @@ func (app *App) Authenticate(next http.Handler) http.Handler {
 			return
 		}
 
-		var device_id string
+		var deviceId string
 
-		deviceIdCookie, err := r.Cookie("device_id")
+		deviceIdCookie, err := r.Cookie("deviceId")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
@@ -81,10 +81,10 @@ func (app *App) Authenticate(next http.Handler) http.Handler {
 				return
 			}
 		} else {
-			device_id = deviceIdCookie.Value
+			deviceId = deviceIdCookie.Value
 		}
 
-		user.DeviceId = &device_id
+		user.DeviceId = &deviceId
 
 		r = app.contextSetUser(r, user)
 

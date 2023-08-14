@@ -42,7 +42,7 @@ const contactsTable = new DataTable("#contactsTable", {
         return;
       }
 
-      historyId = response.last_history_id;
+      historyId = response.lastHistoryId;
 
       callback({ data: response.contacts });
     })();
@@ -51,13 +51,13 @@ const contactsTable = new DataTable("#contactsTable", {
     { data: "id", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
-      data: "email_address",
+      data: "emailAddress",
     },
     {
-      data: "firstname",
+      data: "firstName",
     },
     {
-      data: "lastname",
+      data: "lastName",
     },
   ],
   rowId: "id",
@@ -101,7 +101,7 @@ const contactsTable = new DataTable("#contactsTable", {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ history_id: historyId }),
+              body: JSON.stringify({ historyId: historyId }),
             }
           );
 
@@ -109,7 +109,7 @@ const contactsTable = new DataTable("#contactsTable", {
             return;
           }
 
-          historyId = response.last_history_id;
+          historyId = response.lastHistoryId;
 
           for (const contact of response.inserted) {
             // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
@@ -228,9 +228,9 @@ export const showContactsFormDialog = (e) => {
 
   if (contact) {
     contactIdInput.value = contact.id;
-    emailInput.value = contact.email_address;
-    firstNameInput.value = contact.firstname;
-    lastNameInput.value = contact.lastname;
+    emailInput.value = contact.emailAddress;
+    firstNameInput.value = contact.firstName;
+    lastNameInput.value = contact.lastName;
   } else {
     contactIdInput.value = "";
     emailInput.value = "";
@@ -246,9 +246,9 @@ export const submitFormContact = async (e) => {
 
   const formData = {
     id: form.querySelector('input[name="contactId"]').value,
-    email_address: form.querySelector('input[name="email"]').value,
-    firstname: form.querySelector('input[name="firstname"]').value,
-    lastname: form.querySelector('input[name="lastname"]').value,
+    emailAddress: form.querySelector('input[name="emailAddress"]').value,
+    firstName: form.querySelector('input[name="firstName"]').value,
+    lastName: form.querySelector('input[name="lastName"]').value,
   };
 
   if (formData.id.length == 0) {

@@ -1,83 +1,83 @@
-CREATE TRIGGER IF NOT EXISTS contact_after_insert
+CREATE TRIGGER IF NOT EXISTS "ContactAfterInsert"
     AFTER INSERT
-    ON contact
+    ON "Contact"
     FOR EACH ROW
 BEGIN
-    UPDATE contact_timeline_seq SET last_timeline_id = (last_timeline_id + 1) WHERE user_id = new.user_id;
-    UPDATE contact_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = new.user_id;
-    UPDATE contact
-    SET timeline_id = (SELECT last_timeline_id FROM contact_timeline_seq WHERE user_id = new.user_id),
-        history_id  = (SELECT last_history_id FROM contact_history_seq WHERE user_id = new.user_id),
-        last_stmt   = 0
-    WHERE id = new.id;
+    UPDATE "ContactTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = new."userId";
+    UPDATE "ContactHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = new."userId";
+    UPDATE "Contact"
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "contactTimelineSeq" WHERE "userId" = new."userId"),
+        "historyId"  = (SELECT "lastHistoryId" FROM "contactHistorySeq" WHERE "userId" = new."userId"),
+        "lastStmt"   = 0
+    WHERE "id" = new."id";
 END;
 
-CREATE TRIGGER IF NOT EXISTS contact_before_update
+CREATE TRIGGER IF NOT EXISTS "ContactBeforeUpdate"
     BEFORE UPDATE OF
-        id,
-        user_id
-    ON contact
+        "id",
+        "userId"
+    ON "Contact"
     FOR EACH ROW
 BEGIN
     SELECT RAISE(ABORT, 'Update not allowed');
 END;
 
-CREATE TRIGGER IF NOT EXISTS contact_after_update
+CREATE TRIGGER IF NOT EXISTS "ContactAfterUpdate"
     AFTER UPDATE OF
-        email_address,
-        firstname,
-        lastname
-    ON contact
+        "emailAddress",
+        "firstName",
+        "lastName"
+    ON "Contact"
     FOR EACH ROW
 BEGIN
-    UPDATE contact_timeline_seq SET last_timeline_id = (last_timeline_id + 1) WHERE user_id = old.user_id;
-    UPDATE contact_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;
-    UPDATE contact
-    SET timeline_id = (SELECT last_timeline_id FROM contact_timeline_seq WHERE user_id = old.user_id),
-        history_id  = (SELECT last_history_id FROM contact_history_seq WHERE user_id = old.user_id),
-        last_stmt   = 1,
-        modified_at = CURRENT_TIMESTAMP
-    WHERE id = old.id;
+    UPDATE "ContactTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = old."userId";
+    UPDATE "ContactHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
+    UPDATE "Contact"
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "ContactTimelineSeq" WHERE "userId" = old."userId"),
+        "historyId"  = (SELECT "lastHistoryId" FROM "ContactHistorySeq" WHERE "userId" = old."userId"),
+        "lastStmt"   = 1,
+        "modifiedAt" = CURRENT_TIMESTAMP
+    WHERE "id" = old."id";
 END;
 
 -- Trashed
-CREATE TRIGGER IF NOT EXISTS contact_before_trash
+CREATE TRIGGER IF NOT EXISTS "ContactBeforeTrash"
     BEFORE UPDATE OF
-        last_stmt
-    ON contact
+        "lastStmt"
+    ON "Contact"
     FOR EACH ROW
 BEGIN
-    SELECT RAISE(ABORT, 'Update "last_stmt" not allowed')
-    WHERE NOT (new.last_stmt == 0 OR new.last_stmt == 1 OR new.last_stmt == 2)
-        OR (old.last_stmt = 2 AND new.last_stmt = 1); -- Untrash = trashed (2) -> inserted (0)
-    UPDATE contact 
-	SET device_id = iif(length(new.device_id) = 39 AND substr(new.device_id, 1, 7) = 'device:', substr(new.device_id, 8, 32), NULL)
-	WHERE id = new.id;
+    SELECT RAISE(ABORT, 'Update "lastStmt" not allowed')
+    WHERE NOT (new."lastStmt" == 0 OR new."lastStmt" == 1 OR new."lastStmt" == 2)
+        OR (old."lastStmt" = 2 AND new."lastStmt" = 1); -- Untrash = trashed (2) -> inserted (0)
+    UPDATE "Contact" 
+	SET "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL)
+	WHERE "id" = new."id";
 END;
 
-CREATE TRIGGER IF NOT EXISTS contact_after_trash
+CREATE TRIGGER IF NOT EXISTS "ContactAfterTrash"
     AFTER UPDATE OF
-        last_stmt
-    ON contact
+        "lastStmt"
+    ON "Contact"
     FOR EACH ROW
-    WHEN (new.last_stmt <> old.last_stmt AND old.last_stmt = 2) OR
-            (new.last_stmt <> old.last_stmt AND new.last_stmt = 2)
+    WHEN (new."lastStmt" <> old."lastStmt" AND old."lastStmt" = 2) OR
+            (new."lastStmt" <> old."lastStmt" AND new."lastStmt" = 2)
 BEGIN
-    UPDATE contact_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;
-    UPDATE contact
-    SET history_id  = (SELECT last_history_id FROM contact_history_seq WHERE user_id = old.user_id),
-        device_id = iif(length(new.device_id) = 39 AND substr(new.device_id, 1, 7) = 'device:', substr(new.device_id, 8, 32), NULL) 
-    WHERE id = old.id;
+    UPDATE "ContactHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
+    UPDATE "Contact"
+    SET "historyId"  = (SELECT "lastHistoryId" FROM "ContactHistorySeq" WHERE "userId" = old."userId"),
+        "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL) 
+    WHERE "id" = old."id";
 END;
 
-CREATE TRIGGER IF NOT EXISTS contact_after_delete
+CREATE TRIGGER IF NOT EXISTS "ContactAfterDelete"
 AFTER DELETE
-ON contact
+ON "Contact"
 FOR EACH ROW
 BEGIN
-    UPDATE contact_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;
-    INSERT INTO contact_deleted (id, user_id, history_id)
-      VALUES (old.id,
-              old.user_id,
-              (SELECT last_history_id FROM contact_history_seq WHERE user_id = old.user_id));
+    UPDATE "ContactHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
+    INSERT INTO "ContactDeleted" ("id", "userId", "historyId")
+      VALUES (old."id",
+              old."userId",
+              (SELECT "lastHistoryId" FROM "ContactHistorySeq" WHERE "userId" = old."userId"));
 END;

@@ -15,11 +15,11 @@ type ContactRepository struct {
 type Contact struct {
 	Id           string     `json:"id"`
 	UserId       int64      `json:"-"`
-	EmailAddress *string    `json:"email_address"`
-	FirstName    *string    `json:"firstname"`
-	LastName     *string    `json:"lastname"`
-	CreatedAt    Timestamp  `json:"created_at"`
-	ModifiedAt   *Timestamp `json:"modified_at"`
+	EmailAddress *string    `json:"emailAddress"`
+	FirstName    *string    `json:"firstName"`
+	LastName     *string    `json:"lastName"`
+	CreatedAt    Timestamp  `json:"createdAt"`
+	ModifiedAt   *Timestamp `json:"modifiedAt"`
 	TimelineId   int64      `json:"-"`
 	HistoryId    int64      `json:"-"`
 	LastStmt     int        `json:"-"`
@@ -34,12 +34,12 @@ type ContactDeleted struct {
 }
 
 type ContactList struct {
-	History  int64      `json:"last_history_id"`
+	History  int64      `json:"lastHistoryId"`
 	Contacts []*Contact `json:"contacts"`
 }
 
 type ContactSync struct {
-	History          int64             `json:"last_history_id"`
+	History          int64             `json:"lastHistoryId"`
 	ContactsInserted []*Contact        `json:"inserted"`
 	ContactsUpdated  []*Contact        `json:"updated"`
 	ContactsTrashed  []*Contact        `json:"trashed"`
@@ -74,7 +74,7 @@ func (r *ContactRepository) Create(user *User, contact *Contact) (*Contact, erro
 
 	query := `
 		INSERT
-			INTO contact (user_id, device_id, email_address, firstname, lastname)
+			INTO "Contact" ("userId", "deviceId", "emailAddress", "firstName", "lastName")
 			VALUES ($1, $2, $3, $4, $5)
 			RETURNING * ;`
 
@@ -85,7 +85,7 @@ func (r *ContactRepository) Create(user *User, contact *Contact) (*Contact, erro
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(contact.Scan()...)
 	if err != nil {
 		switch {
-		case err.Error() == `UNIQUE constraint failed: contact.email_address, contact.firstname, contact.lastname`:
+		case err.Error() == `UNIQUE constraint failed: Contact.emailAddress, Contact.firstName, Contact.lastName`:
 			return nil, ErrDuplicateContact
 		default:
 			return nil, err
@@ -107,10 +107,10 @@ func (r *ContactRepository) List(user *User) (*ContactList, error) {
 
 	query := `
 		SELECT *
-			FROM contact
-			WHERE user_id = $1 AND
-			last_stmt < 2
-			ORDER BY created_at DESC;`
+			FROM "Contact"
+			WHERE "userId" = $1 AND
+			"lastStmt" < 2
+			ORDER BY "createdAt" DESC;`
 
 	args := []interface{}{user.Id}
 
@@ -143,9 +143,9 @@ func (r *ContactRepository) List(user *User) (*ContactList, error) {
 
 	// history
 	query = `
-	SELECT last_history_id
-	   FROM contact_history_seq
-	   WHERE user_id = $1 ;`
+	SELECT "lastHistoryId"
+	   FROM "ContactHistorySeq"
+	   WHERE "userId" = $1 ;`
 
 	args = []interface{}{user.Id}
 
@@ -174,12 +174,12 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 	// inserted rows
 	query := `
 		SELECT *
-			FROM contact
-			WHERE user_id = $1 AND
-				last_stmt = 0 AND
-				(device_id = $2 OR device_id IS NULL) AND
-				history_id > $3
-			ORDER BY created_at DESC;`
+			FROM "Contact"
+			WHERE "userId" = $1 AND
+				"lastStmt" = 0 AND
+				("deviceId" = $2 OR "deviceId" IS NULL) AND
+				"historyId" > $3
+			ORDER BY "createdAt" DESC;`
 
 	args := []interface{}{user.Id, user.DeviceId, history.Id}
 
@@ -216,12 +216,12 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 	// updated rows
 	query = `
 		SELECT *
-			FROM contact
-			WHERE user_id = $1 AND
-				last_stmt = 1 AND
-				(device_id = $2 OR device_id IS NULL) AND
-				history_id > $3
-			ORDER BY created_at DESC;`
+			FROM "Contact"
+			WHERE "userId" = $1 AND
+				"lastStmt" = 1 AND
+				("deviceId" = $2 OR "deviceId" IS NULL) AND
+				"historyId" > $3
+			ORDER BY "createdAt" DESC;`
 
 	args = []interface{}{user.Id, user.DeviceId, history.Id}
 
@@ -251,12 +251,12 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 	// trashed rows
 	query = `
 		SELECT *
-			FROM contact
-			WHERE user_id = $1 AND
-				last_stmt = 2 AND
-				(device_id = $2 OR device_id IS NULL) AND
-				history_id > $3
-			ORDER BY created_at DESC;`
+			FROM "Contact"
+			WHERE "userId" = $1 AND
+				"lastStmt" = 2 AND
+				("deviceId" = $2 OR "deviceId" IS NULL) AND
+				"historyId" > $3
+			ORDER BY "createdAt" DESC;`
 
 	args = []interface{}{user.Id, user.DeviceId, history.Id}
 
@@ -286,10 +286,10 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 	// deleted rows
 	query = `
 		SELECT *
-			FROM contact_deleted
-			WHERE user_id = $1 AND
-			(device_id = $2 OR device_id IS NULL) AND
-			history_id > $3;`
+			FROM "ContactDeleted"
+			WHERE "userId" = $1 AND
+			("deviceId" = $2 OR "deviceId" IS NULL) AND
+			"historyId" > $3;`
 
 	args = []interface{}{user.Id, user.DeviceId, history.Id}
 
@@ -318,9 +318,9 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 
 	// history
 	query = `
-	SELECT last_history_id
-	   FROM contact_history_seq
-	   WHERE user_id = $1 ;`
+	SELECT "LastHistoryId"
+	   FROM "contactHistorySeq"
+	   WHERE "userId" = $1 ;`
 
 	args = []interface{}{user.Id}
 
@@ -341,14 +341,14 @@ func (r *ContactRepository) Update(user *User, contact *Contact) (*Contact, erro
 	defer cancel()
 
 	query := `
-		UPDATE contact
-			SET email_address = $1,
-			    firstname = $2,
-				lastname = $3,
-				device_id = $4
-			WHERE user_id = $5 AND
-			      id = $6 AND
-				  last_stmt <> 2
+		UPDATE "Contact"
+			SET "emailAddress" = $1,
+			    "firstName" = $2,
+				"lastName" = $3,
+				"deviceId" = $4
+			WHERE "userId" = $5 AND
+			      "id" = $6 AND
+				  "lastStmt" <> 2
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
@@ -360,7 +360,7 @@ func (r *ContactRepository) Update(user *User, contact *Contact) (*Contact, erro
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
 			return nil, ErrContactNotFound
-		case err.Error() == `UNIQUE constraint failed: contact.email_address, contact.firstname, contact.lastname`:
+		case err.Error() == `UNIQUE constraint failed: Contact.emailAddress, Contact.firstName, Contact.lastName`:
 			return nil, ErrDuplicateContact
 		default:
 			return nil, err
@@ -376,11 +376,11 @@ func (r *ContactRepository) Trash(user *User, idList string) error {
 
 	if len(idList) > 0 {
 		query := `
-		UPDATE contact
-			SET last_stmt = 2,
-			device_id = $1
-			WHERE user_id = $2 AND
-			id IN (SELECT value FROM json_each($3));`
+		UPDATE Contact
+			SET "lastStmt" = 2,
+			"deviceId" = $1
+			WHERE "userId" = $2 AND
+			"id" IN (SELECT value FROM json_each($3));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -401,11 +401,11 @@ func (r *ContactRepository) Untrash(user *User, idList string) error {
 
 	if len(idList) > 0 {
 		query := `
-		UPDATE contact
-			SET last_stmt = 0,
-			device_id = $1
-			WHERE user_id = $2 AND
-			id IN (SELECT value FROM json_each($3));`
+		UPDATE "Contact"
+			SET "lastStmt" = 0,
+			"deviceId" = $1
+			WHERE "userId" = $2 AND
+			"id" IN (SELECT value FROM json_each($3));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -427,9 +427,9 @@ func (r ContactRepository) Delete(user *User, idList string) error {
 	if len(idList) > 0 {
 		query := `
 		DELETE
-			FROM contact
-			WHERE user_id = $1 AND
-			id IN (SELECT value FROM json_each($2));`
+			FROM "Contact"
+			WHERE "userId" = $1 AND
+			"id" IN (SELECT value FROM json_each($2));`
 
 		args := []interface{}{user.Id, idList}
 

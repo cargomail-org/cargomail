@@ -18,9 +18,9 @@ type File struct {
 	Name        string     `json:"name"`
 	Path        string     `json:"-"`
 	Size        int64      `json:"size"`
-	ContentType string     `json:"content_type"`
-	CreatedAt   Timestamp  `json:"created_at"`
-	ModifiedAt  *Timestamp `json:"modified_at"`
+	ContentType string     `json:"contentType"`
+	CreatedAt   Timestamp  `json:"createdAt"`
+	ModifiedAt  *Timestamp `json:"modifiedAt"`
 	TimelineId  int64      `json:"-"`
 	HistoryId   int64      `json:"-"`
 	LastStmt    int        `json:"-"`
@@ -35,12 +35,12 @@ type FileDeleted struct {
 }
 
 type FileList struct {
-	History int64   `json:"last_history_id"`
+	History int64   `json:"lastHistoryId"`
 	Files   []*File `json:"files"`
 }
 
 type FileSync struct {
-	History       int64          `json:"last_history_id"`
+	History       int64          `json:"lastHistoryId"`
 	FilesInserted []*File        `json:"inserted"`
 	FilesTrashed  []*File        `json:"trashed"`
 	FilesDeleted  []*FileDeleted `json:"deleted"`
@@ -74,7 +74,7 @@ func (r FileRepository) Create(user *User, file *File) (*File, error) {
 
 	query := `
 		INSERT INTO
-			file (user_id, device_id, uri, name, path, content_type, size)
+			"File" ("userId", "deviceId", "uri", "name", "path", "contentType", "size")
 			VALUES ($1, $2, $3, $4, $5, $6, $7)
 			RETURNING * ;`
 
@@ -103,10 +103,10 @@ func (r FileRepository) List(user *User) (*FileList, error) {
 	// files
 	query := `
 		SELECT *
-			FROM file
-			WHERE user_id = $1 AND
-			last_stmt < 2
-			ORDER BY created_at DESC;`
+			FROM "File"
+			WHERE "userId" = $1 AND
+			"lastStmt" < 2
+			ORDER BY "createdAt" DESC;`
 
 	args := []interface{}{user.Id}
 
@@ -138,9 +138,9 @@ func (r FileRepository) List(user *User) (*FileList, error) {
 
 	// history
 	query = `
-		SELECT last_history_id
-		   FROM file_history_seq
-		   WHERE user_id = $1 ;`
+		SELECT lastHistoryId
+		   FROM fileHistorySeq
+		   WHERE userId = $1 ;`
 
 	args = []interface{}{user.Id}
 
@@ -169,12 +169,12 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 	// inserted rows
 	query := `
 		SELECT *
-			FROM file
-			WHERE user_id = $1 AND
-				(device_id = $2 OR device_id IS NULL) AND
-				last_stmt = 0 AND
-				history_id > $3
-			ORDER BY created_at DESC;`
+			FROM "File"
+			WHERE "userId" = $1 AND
+				("deviceId" = $2 OR "deviceId" IS NULL) AND
+				"lastStmt" = 0 AND
+				"historyId" > $3
+			ORDER BY "createdAt" DESC;`
 
 	args := []interface{}{user.Id, user.DeviceId, history.Id}
 
@@ -210,12 +210,12 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 	// trashed rows
 	query = `
 		SELECT *
-			FROM file
-			WHERE user_id = $1 AND
-			(device_id = $2 OR device_id IS NULL) AND
-			last_stmt = 2 AND
-				history_id > $3
-			ORDER BY created_at DESC;`
+			FROM "File"
+			WHERE "userId" = $1 AND
+			("deviceId" = $2 OR "deviceId" IS NULL) AND
+			"lastStmt" = 2 AND
+				"historyId" > $3
+			ORDER BY "createdAt" DESC;`
 
 	args = []interface{}{user.Id, user.DeviceId, history.Id}
 
@@ -245,10 +245,10 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 	// deleted rows
 	query = `
 		SELECT *
-			FROM file_deleted
-			WHERE user_id = $1 AND
-			    (device_id = $2 OR device_id IS NULL) AND
-				history_id > $3;`
+			FROM "FileDeleted"
+			WHERE "userId" = $1 AND
+			    ("deviceId" = $2 OR "deviceId" IS NULL) AND
+				"historyId" > $3;`
 
 	args = []interface{}{user.Id, user.DeviceId, history.Id}
 
@@ -277,9 +277,9 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 
 	// history
 	query = `
-	SELECT last_history_id
-	   FROM file_history_seq
-	   WHERE user_id = $1 ;`
+	SELECT "LastHistoryId"
+	   FROM "fileHistorySeq"
+	   WHERE "userId" = $1 ;`
 
 	args = []interface{}{user.Id}
 
@@ -301,11 +301,11 @@ func (r *FileRepository) Trash(user *User, idList string) error {
 
 	if len(idList) > 0 {
 		query := `
-		UPDATE file
-			SET last_stmt = 2,
-				device_id = $1
-			WHERE user_id = $2 AND
-			id IN (SELECT value FROM json_each($3));`
+		UPDATE "File"
+			SET "lastStmt" = 2,
+				"deviceId" = $1
+			WHERE "userId" = $2 AND
+			"id" IN (SELECT value FROM json_each($3));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -326,11 +326,11 @@ func (r *FileRepository) Untrash(user *User, idList string) error {
 
 	if len(idList) > 0 {
 		query := `
-		UPDATE file
-			SET last_stmt = 0,
-				device_id = $1
-			WHERE user_id = $2 AND
-			id IN (SELECT value FROM json_each($3));`
+		UPDATE "File"
+			SET "lastStmt" = 0,
+				"deviceId" = $1
+			WHERE "userId" = $2 AND
+			"id" IN (SELECT value FROM json_each($3));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -352,9 +352,9 @@ func (r FileRepository) Delete(user *User, idList string) error {
 	if len(idList) > 0 {
 		query := `
 		DELETE
-			FROM file
-			WHERE user_id = $1 AND
-			id IN (SELECT value FROM json_each($2));`
+			FROM "File"
+			WHERE "userId" = $1 AND
+			"id" IN (SELECT value FROM json_each($2));`
 
 		args := []interface{}{user.Id, idList}
 
@@ -373,9 +373,9 @@ func (r FileRepository) GetFileName(user *User, id string) (string, error) {
 
 	query := `
 		SELECT *
-			FROM file
-			WHERE user_id = $1 AND
-				id = $2;`
+			FROM "File"
+			WHERE "userId" = $1 AND
+				"id" = $2;`
 
 	file := &File{}
 

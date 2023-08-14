@@ -1,69 +1,69 @@
-CREATE TRIGGER IF NOT EXISTS file_after_insert
+CREATE TRIGGER IF NOT EXISTS "FileAfterInsert"
     AFTER INSERT
-    ON file
+    ON "File"
     FOR EACH ROW
 BEGIN
-    UPDATE file_timeline_seq SET last_timeline_id = (last_timeline_id + 1) WHERE user_id = new.user_id;
-    UPDATE file_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = new.user_id;
-    UPDATE file
-    SET timeline_id = (SELECT last_timeline_id FROM file_timeline_seq WHERE user_id = new.user_id),
-        history_id  = (SELECT last_history_id FROM file_history_seq WHERE user_id = new.user_id),
-        last_stmt   = 0
-    WHERE id = new.id;
+    UPDATE "FileTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = new."userId";
+    UPDATE "FileHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = new."userId";
+    UPDATE "File"
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "fileTimelineSeq" WHERE "userId" = new."userId"),
+        "historyId"  = (SELECT "lastHistoryId" FROM "fileHistorySeq" WHERE "userId" = new."userId"),
+        "lastStmt"   = 0
+    WHERE "id" = new."id";
 END;
 
-CREATE TRIGGER IF NOT EXISTS file_before_update
+CREATE TRIGGER IF NOT EXISTS "FileBeforeUpdate"
     BEFORE UPDATE OF
-        id,
-        user_id,
-        uri,
-        name,
-        path,
-        size,
-        content_type
-    ON file
+        "id",
+        "userId",
+        "uri",
+        "name",
+        "path",
+        "size",
+        "contentType"
+    ON "File"
     FOR EACH ROW
 BEGIN
     SELECT RAISE(ABORT, 'Update not allowed');
 END;
 
 -- Trashed
-CREATE TRIGGER IF NOT EXISTS file_before_trash
+CREATE TRIGGER IF NOT EXISTS "FileBeforeTrash"
     BEFORE UPDATE OF
-        last_stmt
-    ON file
+        "lastStmt"
+    ON "File"
     FOR EACH ROW
 BEGIN
-    SELECT RAISE(ABORT, 'Update "last_stmt" not allowed')
-    WHERE NOT (new.last_stmt == 0 OR new.last_stmt == 2); -- Untrash = trashed (2) -> inserted (0)
-  	UPDATE file 
-	SET device_id = iif(length(new.device_id) = 39 AND substr(new.device_id, 1, 7) = 'device:', substr(new.device_id, 8, 32), NULL)
-	WHERE id = new.id;
+    SELECT RAISE(ABORT, 'Update "lastStmt" not allowed')
+    WHERE NOT (new."lastStmt" == 0 OR new."lastStmt" == 2); -- Untrash = trashed (2) -> inserted (0)
+  	UPDATE "File" 
+	SET "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL)
+	WHERE "id" = new."id";
 END;
 
-CREATE TRIGGER IF NOT EXISTS file_after_trash
+CREATE TRIGGER IF NOT EXISTS "FileAfterTrash"
     AFTER UPDATE OF
-        last_stmt
-    ON file
+        "lastStmt"
+    ON "File"
     FOR EACH ROW
-    WHEN (new.last_stmt <> old.last_stmt AND old.last_stmt = 2) OR
-         (new.last_stmt <> old.last_stmt AND new.last_stmt = 2)
+    WHEN (new."lastStmt" <> old."lastStmt" AND old."lastStmt" = 2) OR
+         (new."lastStmt" <> old."lastStmt" AND new."lastStmt" = 2)
 BEGIN
-    UPDATE file_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;
-    UPDATE file
-    SET history_id  = (SELECT last_history_id FROM file_history_seq WHERE user_id = old.user_id),
-        device_id = iif(length(new.device_id) = 39 AND substr(new.device_id, 1, 7) = 'device:', substr(new.device_id, 8, 32), NULL)
-    WHERE id = old.id;
+    UPDATE "FileHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
+    UPDATE "File"
+    SET "historyId"  = (SELECT "lastHistoryId" FROM "FileHistorySeq" WHERE "userId" = old."userId"),
+        "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL)
+    WHERE "id" = old."id";
 END;
 
-CREATE TRIGGER IF NOT EXISTS file_after_delete
+CREATE TRIGGER IF NOT EXISTS "FileAfterDelete"
 AFTER DELETE
-ON file
+ON "File"
 FOR EACH ROW
 BEGIN
-    UPDATE file_history_seq SET last_history_id = (last_history_id + 1) WHERE user_id = old.user_id;
-    INSERT INTO file_deleted (id, user_id, history_id)
-      VALUES (old.id,
-              old.user_id,
-              (SELECT last_history_id FROM file_history_seq WHERE user_id = old.user_id));
+    UPDATE "FileHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
+    INSERT INTO "FileDeleted" ("id", "userId", "historyId")
+      VALUES (old."id",
+              old."userId",
+              (SELECT "lastHistoryId" FROM "FileHistorySeq" WHERE "userId" = old."userId"));
 END;

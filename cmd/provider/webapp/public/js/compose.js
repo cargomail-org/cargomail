@@ -66,7 +66,7 @@ const composeTable = new DataTable("#composeTable", {
       },
     },
     {
-      data: "created_at",
+      data: "createdAt",
       render: function (data, type) {
         if (type === "display" || type === "filter") {
           var d = new Date(data);

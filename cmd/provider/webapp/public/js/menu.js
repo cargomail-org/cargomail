@@ -152,7 +152,7 @@ const loadProfile = async (form) => {
   }
 
   const loggedUsername =
-    response.firstname.length > 0 ? response.firstname : response.username;
+    response.firstName.length > 0 ? response.firstName : response.username;
 
   if (loggedUsername?.length) {
     document.getElementById("loggedUsernameLetter").innerHTML = loggedUsername
@@ -165,8 +165,8 @@ const loadProfile = async (form) => {
 
   document.getElementById("profileUsername").innerHTML = `${response.username}@${profileDomainName}`;
 
-  form.querySelector('input[name="firstname"]').value = response.firstname;
-  form.querySelector('input[name="lastname"]').value = response.lastname;
+  form.querySelector('input[name="firstName"]').value = response.firstName;
+  form.querySelector('input[name="lastName"]').value = response.lastName;
 };
 
 const downloadURI = (formId, uri, name) => {

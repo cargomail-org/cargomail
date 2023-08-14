@@ -149,7 +149,7 @@ const filesTable = new DataTable("#filesTable", {
         return;
       }
 
-      historyId = response.last_history_id;
+      historyId = response.lastHistoryId;
 
       callback({ data: response.files });
     })();
@@ -175,7 +175,7 @@ const filesTable = new DataTable("#filesTable", {
       },
     },
     {
-      data: "created_at",
+      data: "createdAt",
       render: function (data, type) {
         if (type === "display" || type === "filter") {
           var d = new Date(data);
@@ -226,14 +226,14 @@ const filesTable = new DataTable("#filesTable", {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ history_id: historyId }),
+            body: JSON.stringify({ historyId: historyId }),
           });
 
           if (response === false) {
             return;
           }
 
-          historyId = response.last_history_id;
+          historyId = response.lastHistoryId;
 
           for (const file of response.inserted) {
             // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table

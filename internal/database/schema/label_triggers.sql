@@ -31,8 +31,8 @@ BEGIN
     UPDATE "LabelTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = old."userId";
     UPDATE "LabelHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
     UPDATE "Label"
-    SET "timelineId" = (SELECT "lastTimelineId" FROM "labelTimelineSeq" WHERE "userId" = old."userId"),
-        "historyId"  = (SELECT "lastHistoryId" FROM "labelHistorySeq" WHERE "userId" = old."userId"),
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "LabelTimelineSeq" WHERE "userId" = old."userId"),
+        "historyId"  = (SELECT "lastHistoryId" FROM "LabelHistorySeq" WHERE "userId" = old."userId"),
         "lastStmt"   = 1,
         "modifiedAt" = CURRENT_TIMESTAMP
     WHERE "id" = old."id";
@@ -63,7 +63,7 @@ CREATE TRIGGER IF NOT EXISTS "LabelAfterTrash"
 BEGIN
     UPDATE "LabelHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
     UPDATE "Label"
-    SET "historyId"  = (SELECT "lastHistoryId" FROM "labelHistorySeq" WHERE "userId" = old."userId"),
+    SET "historyId"  = (SELECT "lastHistoryId" FROM "LabelHistorySeq" WHERE "userId" = old."userId"),
         "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL) 
     WHERE "id" = old."id";
 END;

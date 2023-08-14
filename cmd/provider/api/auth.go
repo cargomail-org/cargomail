@@ -12,7 +12,7 @@ type AuthApi struct {
 func (api *AuthApi) Info() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		domainName := struct {
-			DomainName string `json:"domain_name"`
+			DomainName string `json:"domainName"`
 		}{
 			DomainName: config.Configuration.DomainName,
 		}

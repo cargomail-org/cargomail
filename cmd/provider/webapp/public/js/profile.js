@@ -6,8 +6,8 @@ profileForm.onsubmit = async (e) => {
   const form = e.currentTarget;
 
   const formData = {
-    firstname: form.querySelector('input[name="firstname"]').value,
-    lastname: form.querySelector('input[name="lastname"]').value,
+    firstName: form.querySelector('input[name="firstName"]').value,
+    lastName: form.querySelector('input[name="lastName"]').value,
   };
 
   const response = await api(
@@ -28,7 +28,7 @@ profileForm.onsubmit = async (e) => {
   }
 
   const loggedUsername =
-    response.firstname.length > 0 ? response.firstname : response.username;
+    response.firstName.length > 0 ? response.firstName : response.username;
 
   if (loggedUsername?.length) {
     document.getElementById("loggedUsernameLetter").innerHTML = loggedUsername

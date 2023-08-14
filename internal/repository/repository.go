@@ -19,7 +19,7 @@ var (
 )
 
 type History struct {
-	Id int64 `json:"history_id"`
+	Id int64 `json:"historyId"`
 }
 
 type Repository struct {
