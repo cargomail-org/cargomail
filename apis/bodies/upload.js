@@ -27,8 +27,10 @@ const blobHtml = new Blob(
 
 const blobFiles = new Blob(
   [
-    { contentType: "application/pdf", uri: "123", size: 25100 },
-    { contentType: "video/mp4", uri: "456", size: 195700 },
+    JSON.stringify([
+      { contentType: "application/pdf", uri: "123", size: 25100 },
+      { contentType: "video/mp4", uri: "456", size: 195700 },
+    ]),
   ],
   { type: "application/json" }
 );

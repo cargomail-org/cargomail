@@ -24,7 +24,6 @@ type MessagePart struct {
 	ContentType string         `json:"contentType"`
 	Headers     []*Header      `json:"headers"`
 	Body        *BodyResource  `json:"body"`
-	Files       *FilesResource `json:"files"`
 	Parts       []*MessagePart `json:"parts"`
 }
 

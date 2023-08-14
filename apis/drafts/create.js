@@ -19,7 +19,7 @@ const raw = JSON.stringify({
     ],
     parts: [
       {
-        partId: 1,
+        partId: "1",
         headers: [
           {
             name: "Content-Type",
@@ -28,7 +28,7 @@ const raw = JSON.stringify({
         ],
         parts: [
           {
-            partId: 1,
+            partId: "1",
             headers: [
               {
                 name: "Content-Disposition",
@@ -42,7 +42,7 @@ const raw = JSON.stringify({
             },
           },
           {
-            partId: 2,
+            partId: "2",
             headers: [
               {
                 name: "Content-Disposition",
@@ -58,7 +58,7 @@ const raw = JSON.stringify({
         ],
       },
       {
-        partId: 2,
+        partId: "2",
         headers: [
           {
             name: "Content-Disposition",
