@@ -171,7 +171,7 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 		SELECT *
 			FROM "File"
 			WHERE "userId" = $1 AND
-				("deviceId" = $2 OR "deviceId" IS NULL) AND
+				("deviceId" <> $2 OR "deviceId" IS NULL) AND
 				"lastStmt" = 0 AND
 				"historyId" > $3
 			ORDER BY "createdAt" DESC;`
@@ -212,7 +212,7 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 		SELECT *
 			FROM "File"
 			WHERE "userId" = $1 AND
-			("deviceId" = $2 OR "deviceId" IS NULL) AND
+			("deviceId" <> $2 OR "deviceId" IS NULL) AND
 			"lastStmt" = 2 AND
 				"historyId" > $3
 			ORDER BY "createdAt" DESC;`
@@ -247,7 +247,7 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 		SELECT *
 			FROM "FileDeleted"
 			WHERE "userId" = $1 AND
-			    ("deviceId" = $2 OR "deviceId" IS NULL) AND
+			    ("deviceId" <> $2 OR "deviceId" IS NULL) AND
 				"historyId" > $3;`
 
 	args = []interface{}{user.Id, user.DeviceId, history.Id}

@@ -171,7 +171,7 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 		SELECT *
 			FROM "Body"
 			WHERE "userId" = $1 AND
-				("deviceId" = $2 OR "deviceId" IS NULL) AND
+				("deviceId" <> $2 OR "deviceId" IS NULL) AND
 				"lastStmt" = 0 AND
 				"historyId" > $3
 			ORDER BY "createdAt" DESC;`
@@ -212,7 +212,7 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 		SELECT *
 			FROM "Body"
 			WHERE "userId" = $1 AND
-			("deviceId" = $2 OR "deviceId" IS NULL) AND
+			("deviceId" <> $2 OR "deviceId" IS NULL) AND
 			"lastStmt" = 2 AND
 				"historyId" > $3
 			ORDER BY "createdAt" DESC;`
@@ -247,7 +247,7 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 		SELECT *
 			FROM "BodyDeleted"
 			WHERE "userId" = $1 AND
-			    ("deviceId" = $2 OR "deviceId" IS NULL) AND
+			    ("deviceId" <> $2 OR "deviceId" IS NULL) AND
 				"historyId" > $3;`
 
 	args = []interface{}{user.Id, user.DeviceId, history.Id}
