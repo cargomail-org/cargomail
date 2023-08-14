@@ -1,27 +1,75 @@
 const raw = JSON.stringify({
   payload: {
-    content_type: "multipart/mixed",
+    contentType: "application/json",
     headers: [
       {
-        name: "to",
-        value: [{ fullname: "Peter Greenwood", email_address: "p@b.com" }],
+        name: "X-Destination-Resource-Mailbox-URL",
+        value: "http://127.0.0.:8181",
+      },
+      {
+        name: "To",
+        value: [
+          { fullname: "Bob Sanders", email: "bob@cargomail.org" },
+        ],
+      },
+      {
+        name: "Subject",
+        value: "A test message",
       },
     ],
-    body: {
-      content_type: "text/plain; charset=UTF-8",
-      uri: "abc",
-      size: 15,
-    },
-    files: [
+    parts: [
       {
-        content_type: "text/plain; charset=UTF-8",
-        uri: "123",
-        size: 230,
+        partId: 1,
+        headers: [
+          {
+            name: "Content-Type",
+            value: "multipart/alternative",
+          },
+        ],
+        parts: [
+          {
+            partId: 1,
+            headers: [
+              {
+                name: "Content-Disposition",
+                value: "inline",
+              },
+            ],
+            body: {
+              contentType: "application/json; charset=UTF-8",
+              uri: "abc",
+              size: 150,
+            },
+          },
+          {
+            partId: 2,
+            headers: [
+              {
+                name: "Content-Disposition",
+                value: "inline",
+              },
+            ],
+            body: {
+              contentType: "text/html; charset=UTF-8",
+              uri: "efg",
+              size: 160,
+            },
+          },
+        ],
       },
       {
-        content_type: "application/pdf",
-        uri: "456",
-        size: 634,
+        partId: 2,
+        headers: [
+          {
+            name: "Content-Disposition",
+            value: "attachment",
+          },
+        ],
+        body: {
+          contentType: "application/json",
+          uri: "ijk",
+          size: 145,
+        },
       },
     ],
   },

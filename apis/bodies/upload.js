@@ -1,9 +1,53 @@
 const formdata = new FormData();
 
-const blob = new Blob(["Hi there!"], { type: "plain/text" });
+const blobPlain = new Blob(
+  [
+    `
+    Hi there!
+
+    I'd like to contribute.
+
+    Regards`,
+  ],
+  { type: "text/plain; charset=UTF-8" }
+);
+
+const blobHtml = new Blob(
+  [
+    `
+    <html>
+    <h2>Hi there!</h2>
+    <i>I'd like to contribute.</i></br>
+    </br>
+    Regards
+    </html>`,
+  ],
+  { type: "text/html; charset=UTF-8" }
+);
+
+const blobFiles = new Blob(
+  [
+    { contentType: "application/pdf", uri: "123", size: 25100 },
+    { contentType: "video/mp4", uri: "456", size: 195700 },
+  ],
+  { type: "application/json" }
+);
+
 formdata.append(
   "bodies",
-  blob,
+  blobPlain,
+  encodeURIComponent("Any text / it can be used as an alt subject!")
+);
+
+formdata.append(
+  "bodies",
+  blobHtml,
+  encodeURIComponent("Any text / it can be used as an alt subject!")
+);
+
+formdata.append(
+  "bodies",
+  blobFiles,
   encodeURIComponent("Any text / it can be used as an alt subject!")
 );
 
