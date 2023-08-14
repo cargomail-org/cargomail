@@ -18,12 +18,12 @@ type Draft Message
 type DraftDeleted MessageDeleted
 
 type DraftList struct {
-	History int64    `json:"last_history_id"`
+	History int64    `json:"lastHistoryId"`
 	Drafts  []*Draft `json:"drafts"`
 }
 
 type DraftSync struct {
-	History        int64           `json:"last_history_id"`
+	History        int64           `json:"lastHistoryId"`
 	DraftsInserted []*Draft        `json:"inserted"`
 	DraftsUpdated  []*Draft        `json:"updated"`
 	DraftsTrashed  []*Draft        `json:"trashed"`
@@ -58,13 +58,13 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 
 	query := `
 		INSERT
-			INTO message (user_id,
-				 device_id,
-				 message_uid,
-				 thread_uid,
-				 unread,
-				 folder,
-				 payload)
+			INTO "Message" ("userId",
+				 "deviceId",
+				 "messageUid",
+				 "threadUid",
+				 "unread",
+				 "folder",
+				 "payload")
 			VALUES ($1,
 					$2,
 					$3,
@@ -110,11 +110,11 @@ func (r *DraftRepository) List(user *User) (*DraftList, error) {
 
 	query := `
 		SELECT *
-			FROM message
-			WHERE user_id = $1 AND
-			folder = 0 AND
-			last_stmt < 2
-			ORDER BY created_at DESC;`
+			FROM "Message"
+			WHERE "userId" = $1 AND
+			"folder" = 0 AND
+			"lastStmt" < 2
+			ORDER BY "createdAt" DESC;`
 
 	args := []interface{}{user.Id}
 
@@ -147,9 +147,9 @@ func (r *DraftRepository) List(user *User) (*DraftList, error) {
 
 	// history
 	query = `
-	SELECT last_history_id
-	   FROM message_history_seq
-	   WHERE user_id = $1 ;`
+	SELECT "lastHistoryId"
+	   FROM "MessageHistorySeq"
+	   WHERE "userId" = $1 ;`
 
 	args = []interface{}{user.Id}
 

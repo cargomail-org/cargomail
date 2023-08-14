@@ -20,8 +20,8 @@ type Header struct {
 }
 
 type MessagePart struct {
-	PartId      string         `json:"part_id"`
-	ContentType string         `json:"content_type"`
+	PartId      string         `json:"partId"`
+	ContentType string         `json:"contentType"`
 	Headers     []*Header      `json:"headers"`
 	Body        *BodyResource  `json:"body"`
 	Files       *FilesResource `json:"files"`
@@ -31,19 +31,19 @@ type MessagePart struct {
 type Message struct {
 	Id         string       `json:"id"`
 	UserId     int64        `json:"-"`
-	MessageUid string       `json:"message_uid"`
-	ParentUid  *string      `json:"parent_uid"`
-	ThreadUid  string       `json:"thread_uid"`
+	MessageUid string       `json:"messageUid"`
+	ParentUid  *string      `json:"parentUid"`
+	ThreadUid  string       `json:"threadUid"`
 	Unread     bool         `json:"unread"`
 	Starred    bool         `json:"starred"`
 	Folder     int16        `json:"folder"`
 	Payload    *MessagePart `json:"payload"`
-	LabelIds   *string      `json:"label_ids"`
-	SentAt     *Timestamp   `json:"sent_at"`
-	ReceivedAt *Timestamp   `json:"received_at"`
-	SnoozedAt  *Timestamp   `json:"snoozed_at"`
-	CreatedAt  Timestamp    `json:"created_at"`
-	ModifiedAt *Timestamp   `json:"modified_at"`
+	LabelIds   *string      `json:"labelIds"`
+	SentAt     *Timestamp   `json:"sentAt"`
+	ReceivedAt *Timestamp   `json:"receivedAt"`
+	SnoozedAt  *Timestamp   `json:"snoozedAt"`
+	CreatedAt  Timestamp    `json:"createdAt"`
+	ModifiedAt *Timestamp   `json:"modifiedAt"`
 	TimelineId int64        `json:"-"`
 	HistoryId  int64        `json:"-"`
 	LastStmt   int          `json:"-"`
@@ -58,12 +58,12 @@ type MessageDeleted struct {
 }
 
 type MessageList struct {
-	History  int64      `json:"last_history_id"`
+	History  int64      `json:"lastHistoryId"`
 	Messages []*Message `json:"messages"`
 }
 
 type MessageSync struct {
-	History          int64             `json:"last_history_id"`
+	History          int64             `json:"lastHistoryId"`
 	MessagesInserted []*Message        `json:"inserted"`
 	MessagesUpdated  []*Message        `json:"updated"`
 	MessagesTrashed  []*Message        `json:"trashed"`
@@ -71,13 +71,13 @@ type MessageSync struct {
 }
 
 type BodyResource struct {
-	ContentType string `json:"content_type"`
+	ContentType string `json:"contentType"`
 	Uri         string `json:"uri"`
 	Size        int64  `json:"size"`
 }
 
 type FileResource struct {
-	ContentType string `json:"content_type"`
+	ContentType string `json:"contentType"`
 	Uri         string `json:"uri"`
 	Size        int64  `json:"size"`
 }
@@ -131,11 +131,11 @@ func (r *MessageRepository) List(user *User) (*MessageList, error) {
 
 	query := `
 		SELECT *
-			FROM message
-			WHERE user_id = $1 AND
-			folder > 0 AND
-			last_stmt < 2
-			ORDER BY created_at DESC;`
+			FROM "Message"
+			WHERE "userId" = $1 AND
+			"folder" > 0 AND
+			"lastStmt" < 2
+			ORDER BY "createdAt" DESC;`
 
 	args := []interface{}{user.Id}
 
@@ -168,9 +168,9 @@ func (r *MessageRepository) List(user *User) (*MessageList, error) {
 
 	// history
 	query = `
-	SELECT last_history_id
-	   FROM message_history_seq
-	   WHERE user_id = $1 ;`
+	SELECT "lastHistoryId"
+	   FROM "MessageHistorySeq"
+	   WHERE "userId" = $1 ;`
 
 	args = []interface{}{user.Id}
 
