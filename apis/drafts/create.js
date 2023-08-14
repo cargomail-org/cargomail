@@ -9,7 +9,7 @@ const raw = JSON.stringify({
       {
         name: "To",
         value: [
-          { fullname: "Bob Sanders", email: "bob@cargomail.org" },
+          { fullname: "Bob Sanders", emailAddress: "bob@cargomail.org" },
         ],
       },
       {
