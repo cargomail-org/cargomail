@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"regexp"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -19,17 +20,17 @@ var (
 )
 
 type Config = struct {
-	DomainName       string `yaml:"domain_name"`
-	StoragePath      string `yaml:"storage_path"`
-	DatabasePath     string `yaml:"database_path"`
+	DomainName       string `yaml:"domainName"`
+	StoragePath      string `yaml:"storagePath"`
+	DatabasePath     string `yaml:"databasePath"`
 	ResourcesPath    string `yaml:"resources_path"`
-	BodiesFolder     string `yaml:"bodies_folder"`
-	FilesFolder      string `yaml:"files_folder"`
-	TransferCertPath string `yaml:"transfer_cert_path"`
-	TransferKeyPath  string `yaml:"transfer_key_path"`
-	ProviderBind     string `yaml:"provider_bind"`
-	TransferBind     string `yaml:"transfer_bind"`
-	CookieSameSite   string `yaml:"cookie_same_site"`
+	BodiesFolder     string `yaml:"bodiesFolder"`
+	FilesFolder      string `yaml:"filesFolder"`
+	TransferCertPath string `yaml:"transferCertPath"`
+	TransferKeyPath  string `yaml:"transferKeyPath"`
+	ProviderBind     string `yaml:"providerBind"`
+	TransferBind     string `yaml:"transferBind"`
+	CookieSameSite   string `yaml:"cookieSameSite"`
 	Stage            string `yaml:"stage"`
 }
 
@@ -65,7 +66,7 @@ func setDefaults(c *Config) {
 	for i := 0; i < reflect.TypeOf(*c).NumField(); i++ {
 		field := reflect.TypeOf(*c).Field(i)
 		if value, ok := field.Tag.Lookup("yaml"); ok {
-			reflect.ValueOf(c).Elem().FieldByName(field.Name).Set(reflect.ValueOf(os.Getenv(strings.ToUpper(value))))
+			reflect.ValueOf(c).Elem().FieldByName(field.Name).Set(reflect.ValueOf(os.Getenv(strings.ToUpper(toSnakeCase(value)))))
 		}
 	}
 }
@@ -80,6 +81,15 @@ func loadConfig(c *Config) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
+var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
+
+func toSnakeCase(str string) string {
+	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
+	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
+	return strings.ToLower(snake)
 }
 
 func DevStage() bool {
