@@ -23,7 +23,7 @@ const raw = JSON.stringify({
         headers: [
           {
             name: "Content-Type",
-            value: "multipart/alternative",
+            value: "multipart/mixed",
           },
         ],
         parts: [
@@ -36,9 +36,9 @@ const raw = JSON.stringify({
               },
             ],
             body: {
-              contentType: "application/json; charset=UTF-8",
-              uri: "abc",
-              size: 150,
+              contentType: "text/plain; charset=UTF-8",
+              uri: "http://127.0.0.1:8181/api/v1/bodies/2208f8b6265458ab1a05aa2094d70cba",
+              size: 56,
             },
           },
           {
@@ -51,25 +51,25 @@ const raw = JSON.stringify({
             ],
             body: {
               contentType: "text/html; charset=UTF-8",
-              uri: "efg",
-              size: 160,
+              uri: "http://127.0.0.1:8181/api/v1/bodies/cceea0dc10d6cbec9f9d702da4cd1e1b",
+              size: 108,
+            },
+          },
+          {
+            partId: "3",
+            headers: [
+              {
+                name: "Content-Disposition",
+                value: "attachment",
+              },
+            ],
+            body: {
+              contentType: "application/json",
+              uri: "http://127.0.0.1:8181/api/v1/bodies/9d7289527975b42198248dc517008eea",
+              size: 115,
             },
           },
         ],
-      },
-      {
-        partId: "2",
-        headers: [
-          {
-            name: "Content-Disposition",
-            value: "attachment",
-          },
-        ],
-        body: {
-          contentType: "application/json",
-          uri: "ijk",
-          size: 145,
-        },
       },
     ],
   },
