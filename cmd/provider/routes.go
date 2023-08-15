@@ -112,6 +112,16 @@ func (svc *service) routes(r *Router) {
 	r.Route("POST", "/api/v1/contacts/untrash", svc.api.Authenticate(svc.api.Contacts.Untrash()))
 	r.Route("DELETE", "/api/v1/contacts/delete", svc.api.Authenticate(svc.api.Contacts.Delete()))
 
+	// Files API
+	r.Route("POST", "/api/v1/files/upload", svc.api.Authenticate(svc.api.Files.Upload()))
+	r.Route("GET", "/api/v1/files", svc.api.Authenticate(svc.api.Files.List()))
+	r.Route("POST", "/api/v1/files/sync", svc.api.Authenticate(svc.api.Files.Sync()))
+	r.Route("HEAD", "/api/v1/files/", svc.api.Authenticate(svc.api.Files.Download()))
+	r.Route("GET", "/api/v1/files/", svc.api.Authenticate(svc.api.Files.Download()))
+	r.Route("POST", "/api/v1/files/trash", svc.api.Authenticate(svc.api.Files.Trash()))
+	r.Route("POST", "/api/v1/files/untrash", svc.api.Authenticate(svc.api.Files.Untrash()))
+	r.Route("DELETE", "/api/v1/files/delete", svc.api.Authenticate(svc.api.Files.Delete()))
+
 	// Bodies API
 	r.Route("POST", "/api/v1/bodies/upload", svc.api.Authenticate(svc.api.Bodies.Upload()))
 	r.Route("GET", "/api/v1/bodies", svc.api.Authenticate(svc.api.Bodies.List()))
@@ -122,16 +132,6 @@ func (svc *service) routes(r *Router) {
 	r.Route("POST", "/api/v1/bodies/trash", svc.api.Authenticate(svc.api.Bodies.Trash()))
 	r.Route("POST", "/api/v1/bodies/untrash", svc.api.Authenticate(svc.api.Bodies.Untrash()))
 	r.Route("DELETE", "/api/v1/bodies/delete", svc.api.Authenticate(svc.api.Bodies.Delete()))
-
-	// Files API
-	r.Route("POST", "/api/v1/files/upload", svc.api.Authenticate(svc.api.Files.Upload()))
-	r.Route("GET", "/api/v1/files", svc.api.Authenticate(svc.api.Files.List()))
-	r.Route("POST", "/api/v1/files/sync", svc.api.Authenticate(svc.api.Files.Sync()))
-	r.Route("HEAD", "/api/v1/files/", svc.api.Authenticate(svc.api.Files.Download()))
-	r.Route("GET", "/api/v1/files/", svc.api.Authenticate(svc.api.Files.Download()))
-	r.Route("POST", "/api/v1/files/trash", svc.api.Authenticate(svc.api.Files.Trash()))
-	r.Route("POST", "/api/v1/files/untrash", svc.api.Authenticate(svc.api.Files.Untrash()))
-	r.Route("DELETE", "/api/v1/files/delete", svc.api.Authenticate(svc.api.Files.Delete()))
 
 	// Drafts API
 	r.Route("POST", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.Create()))
