@@ -367,7 +367,7 @@ func (r FileRepository) Delete(user *User, idList string) error {
 	return nil
 }
 
-func (r FileRepository) GetFileName(user *User, id string) (string, error) {
+func (r FileRepository) GetFileByName(user *User, id string) (*File, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -383,8 +383,11 @@ func (r FileRepository) GetFileName(user *User, id string) (string, error) {
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
 	if err != nil {
-		return "", err
+		if err.Error() == "sql: no rows in result set" {
+			return &File{}, nil
+		}
+		return &File{}, err
 	}
 
-	return file.Name, nil
+	return file, nil
 }

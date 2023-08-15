@@ -62,13 +62,13 @@ func (api *BodiesApi) Upload() http.Handler {
 			uploadedBody := &repository.Body{}
 
 			if r.Method == "PUT" {
-				bodyId, err := api.bodies.GetBodyId(user, files[i].Filename)
+				body, err := api.bodies.GetBodyById(user, files[i].Filename)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusNotFound)
 					return
 				}
 
-				if len(bodyId) > 0 {
+				if len(body.Id) > 0 {
 					f, err := os.OpenFile(filepath.Join(bodiesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
 					if err != nil {
 						fmt.Println(err)
@@ -89,7 +89,7 @@ func (api *BodiesApi) Upload() http.Handler {
 					contentType := files[i].Header.Get("content-type")
 
 					uploadedBody = &repository.Body{
-						Id:          bodyId,
+						Id:          body.Id,
 						Uri:         uri,
 						Size:        written,
 						ContentType: contentType,
@@ -175,22 +175,27 @@ func (api *BodiesApi) Download() http.Handler {
 
 		id := path.Base(r.URL.Path)
 
-		bodyId, err := api.bodies.GetBodyId(user, id)
+		body, err := api.bodies.GetBodyById(user, id)
 		if err != nil {
-			helper.ReturnErr(w, err, http.StatusNotFound)
+			helper.ReturnErr(w, err, http.StatusInternalServerError)
+			return
+		}
+
+		if len(body.Id) == 0 {
+			helper.ReturnErr(w, repository.ErrBodyNotFound, http.StatusNotFound)
 			return
 		}
 
 		if r.Method == "HEAD" {
 			w.WriteHeader(http.StatusOK)
 		} else if r.Method == "GET" {
-			asciiBodyId, err := helper.ToAscii(bodyId)
+			asciiBodyId, err := helper.ToAscii(body.Id)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
 			}
 
-			urlEncodedBodyId, err := url.Parse(bodyId)
+			urlEncodedBodyId, err := url.Parse(body.Id)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
@@ -199,7 +204,7 @@ func (api *BodiesApi) Download() http.Handler {
 			bodiesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BodiesFolder)
 
 			bodyPath := filepath.Join(bodiesPath, id)
-			w.Header().Set("Content-Type", "application/octet-stream")
+			w.Header().Set("Content-Type", body.ContentType)
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiBodyId, urlEncodedBodyId))
 
 			bodyPath = filepath.Clean(bodyPath)

@@ -120,22 +120,27 @@ func (api *FilesApi) Download() http.Handler {
 
 		id := path.Base(r.URL.Path)
 
-		fileName, err := api.files.GetFileName(user, id)
+		file, err := api.files.GetFileByName(user, id)
 		if err != nil {
-			helper.ReturnErr(w, err, http.StatusNotFound)
+			helper.ReturnErr(w, err, http.StatusInternalServerError)
+			return
+		}
+
+		if len(file.Name) == 0 {
+			helper.ReturnErr(w, repository.ErrFileNotFound, http.StatusNotFound)
 			return
 		}
 
 		if r.Method == "HEAD" {
 			w.WriteHeader(http.StatusOK)
 		} else if r.Method == "GET" {
-			asciiFileName, err := helper.ToAscii(fileName)
+			asciiFileName, err := helper.ToAscii(file.Name)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
 			}
 
-			urlEncodedFileName, err := url.Parse(fileName)
+			urlEncodedFileName, err := url.Parse(file.Name)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return

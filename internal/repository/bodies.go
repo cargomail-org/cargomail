@@ -44,6 +44,7 @@ type BodyList struct {
 type BodySync struct {
 	History        int64          `json:"lastHistoryId"`
 	BodiesInserted []*Body        `json:"inserted"`
+	BodiesUpdated  []*Body        `json:"updated"`
 	BodiesTrashed  []*Body        `json:"trashed"`
 	BodiesDeleted  []*BodyDeleted `json:"deleted"`
 }
@@ -202,6 +203,41 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 		}
 
 		bodySync.BodiesInserted = append(bodySync.BodiesInserted, &body)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	// updated rows
+	query = `
+		SELECT *
+			FROM "Body"
+			WHERE "userId" = $1 AND
+				"lastStmt" = 1 AND
+				("deviceId" <> $2 OR "deviceId" IS NULL) AND
+				"historyId" > $3
+			ORDER BY "createdAt" DESC;`
+
+	args = []interface{}{user.Id, user.DeviceId, history.Id}
+
+	rows, err = tx.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var body Body
+
+		err := rows.Scan(body.Scan()...)
+
+		if err != nil {
+			return nil, err
+		}
+
+		bodySync.BodiesUpdated = append(bodySync.BodiesUpdated, &body)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -400,7 +436,7 @@ func (r BodyRepository) Delete(user *User, idList string) error {
 	return nil
 }
 
-func (r BodyRepository) GetBodyId(user *User, id string) (string, error) {
+func (r BodyRepository) GetBodyById(user *User, id string) (*Body, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -417,10 +453,10 @@ func (r BodyRepository) GetBodyId(user *User, id string) (string, error) {
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
 	if err != nil {
 		if err.Error() == "sql: no rows in result set" {
-			return "", nil
+			return &Body{}, nil
 		}
-		return "", err
+		return &Body{}, err
 	}
 
-	return body.Id, nil
+	return body, nil
 }

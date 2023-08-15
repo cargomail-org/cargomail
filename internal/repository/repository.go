@@ -13,10 +13,10 @@ var (
 	ErrMissingUserContext       = errors.New("missing user context")
 	ErrInvalidOrMissingSession  = errors.New("invalid or missing session")
 	ErrFailedValidationResponse = errors.New("failed validation")
-	ErrFileNameNotFound         = errors.New("filename not found")
 	ErrContactNotFound          = errors.New("contact not found")
 	ErrDuplicateContact         = errors.New("contact already exists")
 	ErrBodyNotFound             = errors.New("body not found")
+	ErrFileNotFound             = errors.New("file not found")
 )
 
 type History struct {
