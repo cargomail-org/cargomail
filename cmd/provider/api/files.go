@@ -97,10 +97,16 @@ func (api *FilesApi) Upload() http.Handler {
 				return
 			}
 
-			uploadedFiles = append(uploadedFiles, uploadedFile)
+			if uploadedFile != nil && (repository.File{}) != *uploadedFile {
+				uploadedFiles = append(uploadedFiles, uploadedFile)
+			}
 		}
 
-		helper.SetJsonResponse(w, http.StatusCreated, uploadedFiles)
+		if len(uploadedFiles) > 0 {
+			helper.SetJsonResponse(w, http.StatusCreated, uploadedFiles)
+		} else {
+			helper.SetJsonResponse(w, http.StatusOK, uploadedFiles)
+		}
 	})
 }
 

@@ -59,48 +59,109 @@ func (api *BodiesApi) Upload() http.Handler {
 
 			uuid := uuid.NewString()
 
-			f, err := os.OpenFile(filepath.Join(bodiesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
-			if err != nil {
-				fmt.Println(err)
-				return
+			uploadedBody := &repository.Body{}
+
+			if r.Method == "PUT" {
+				bodyId, err := api.bodies.GetBodyId(user, files[i].Filename)
+				if err != nil {
+					helper.ReturnErr(w, err, http.StatusNotFound)
+					return
+				}
+
+				if len(bodyId) > 0 {
+					f, err := os.OpenFile(filepath.Join(bodiesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
+					if err != nil {
+						fmt.Println(err)
+						return
+					}
+					defer f.Close()
+
+					hash := sha256.New()
+					written, err := io.Copy(f, io.TeeReader(file, hash))
+					if err != nil {
+						helper.ReturnErr(w, err, http.StatusInternalServerError)
+						return
+					}
+
+					hashSum := hash.Sum(nil)
+					uri := fmt.Sprintf("%x", hashSum)
+
+					contentType := files[i].Header.Get("content-type")
+
+					uploadedBody = &repository.Body{
+						Id:          bodyId,
+						Uri:         uri,
+						Size:        written,
+						ContentType: contentType,
+					}
+
+					uploadedBody, err = api.bodies.Update(user, uploadedBody)
+					if err != nil {
+						switch {
+						case errors.Is(err, repository.ErrBodyNotFound):
+							helper.ReturnErr(w, err, http.StatusNotFound)
+						default:
+							helper.ReturnErr(w, err, http.StatusInternalServerError)
+						}
+						return
+					}
+
+					os.Rename(filepath.Join(bodiesPath, uuid), filepath.Join(bodiesPath, uploadedBody.Id))
+					if err != nil {
+						helper.ReturnErr(w, err, http.StatusInternalServerError)
+						return
+					}
+				}
+			} else {
+				f, err := os.OpenFile(filepath.Join(bodiesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				defer f.Close()
+
+				hash := sha256.New()
+				written, err := io.Copy(f, io.TeeReader(file, hash))
+				if err != nil {
+					helper.ReturnErr(w, err, http.StatusInternalServerError)
+					return
+				}
+
+				hashSum := hash.Sum(nil)
+				uri := fmt.Sprintf("%x", hashSum)
+
+				contentType := files[i].Header.Get("content-type")
+
+				uploadedBody = &repository.Body{
+					Uri:         uri,
+					Name:        files[i].Filename,
+					Size:        written,
+					ContentType: contentType,
+				}
+
+				uploadedBody, err = api.bodies.Create(user, uploadedBody)
+				if err != nil {
+					helper.ReturnErr(w, err, http.StatusInternalServerError)
+					return
+				}
+
+				os.Rename(filepath.Join(bodiesPath, uuid), filepath.Join(bodiesPath, uploadedBody.Id))
+				if err != nil {
+					helper.ReturnErr(w, err, http.StatusInternalServerError)
+					return
+				}
 			}
-			defer f.Close()
 
-			hash := sha256.New()
-			written, err := io.Copy(f, io.TeeReader(file, hash))
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
+			if uploadedBody != nil && (repository.Body{}) != *uploadedBody {
+				uploadedBodies = append(uploadedBodies, uploadedBody)
 			}
-
-			hashSum := hash.Sum(nil)
-			uri := fmt.Sprintf("%x", hashSum)
-
-			contentType := files[i].Header.Get("content-type")
-
-			uploadedBody := &repository.Body{
-				Uri:         uri,
-				Name:        files[i].Filename,
-				Size:        written,
-				ContentType: contentType,
-			}
-
-			uploadedBody, err = api.bodies.Create(user, uploadedBody)
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			os.Rename(filepath.Join(bodiesPath, uuid), filepath.Join(bodiesPath, uploadedBody.Id))
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			uploadedBodies = append(uploadedBodies, uploadedBody)
 		}
 
-		helper.SetJsonResponse(w, http.StatusCreated, uploadedBodies)
+		if len(uploadedBodies) > 0 {
+			helper.SetJsonResponse(w, http.StatusCreated, uploadedBodies)
+		} else {
+			helper.SetJsonResponse(w, http.StatusOK, uploadedBodies)
+		}
 	})
 }
 
@@ -114,7 +175,7 @@ func (api *BodiesApi) Download() http.Handler {
 
 		id := path.Base(r.URL.Path)
 
-		bodyName, err := api.bodies.GetName(user, id)
+		bodyId, err := api.bodies.GetBodyId(user, id)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusNotFound)
 			return
@@ -123,13 +184,13 @@ func (api *BodiesApi) Download() http.Handler {
 		if r.Method == "HEAD" {
 			w.WriteHeader(http.StatusOK)
 		} else if r.Method == "GET" {
-			asciiBodyName, err := helper.ToAscii(bodyName)
+			asciiBodyId, err := helper.ToAscii(bodyId)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
 			}
 
-			urlEncodedBodyName, err := url.Parse(bodyName)
+			urlEncodedBodyId, err := url.Parse(bodyId)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
@@ -139,7 +200,7 @@ func (api *BodiesApi) Download() http.Handler {
 
 			bodyPath := filepath.Join(bodiesPath, id)
 			w.Header().Set("Content-Type", "application/octet-stream")
-			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiBodyName, urlEncodedBodyName))
+			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiBodyId, urlEncodedBodyId))
 
 			bodyPath = filepath.Clean(bodyPath)
 

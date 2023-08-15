@@ -35,26 +35,21 @@ const blobFiles = new Blob(
   { type: "application/json" }
 );
 
-formdata.append(
-  "bodies",
-  blobPlain,
-  encodeURIComponent("Any text / it can be used as an alt subject!")
-);
+formdata.append("bodies", blobPlain);
 
-formdata.append(
-  "bodies",
-  blobHtml,
-  encodeURIComponent("Any text / it can be used as an alt subject!")
-);
+formdata.append("bodies", blobHtml);
 
-formdata.append(
-  "bodies",
-  blobFiles,
+formdata.append("bodies", blobFiles);
+
+const headers = new Headers();
+headers.append(
+  "Original-Subject",
   encodeURIComponent("Any text / it can be used as an alt subject!")
 );
 
 const requestOptions = {
   method: "POST",
+  headers: headers,
   credentials: "include",
   body: formdata,
   redirect: "follow",

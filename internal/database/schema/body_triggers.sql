@@ -55,7 +55,8 @@ CREATE TRIGGER IF NOT EXISTS "BodyBeforeTrash"
     FOR EACH ROW
 BEGIN
     SELECT RAISE(ABORT, 'Update "lastStmt" not allowed')
-    WHERE NOT (new."lastStmt" == 0 OR new."lastStmt" == 2); -- Untrash = trashed (2) -> inserted (0)
+    WHERE NOT (new."lastStmt" == 0 OR new."lastStmt" == 1 OR new."lastStmt" == 2)
+        OR (old."lastStmt" = 2 AND new."lastStmt" = 1); -- Untrash = trashed (2) -> inserted (0)
   	UPDATE "Body" 
 	SET "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL)
 	WHERE "id" = new."id";

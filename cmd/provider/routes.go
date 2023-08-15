@@ -54,7 +54,7 @@ func setupCORS(w *http.ResponseWriter, r *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, PATCH, DELETE, HEAD")
 	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
-	(*w).Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Original-Subject, Origin, X-Requested-With, Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
 func (t *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -116,6 +116,7 @@ func (svc *service) routes(r *Router) {
 	r.Route("POST", "/api/v1/bodies/upload", svc.api.Authenticate(svc.api.Bodies.Upload()))
 	r.Route("GET", "/api/v1/bodies", svc.api.Authenticate(svc.api.Bodies.List()))
 	r.Route("POST", "/api/v1/bodies/sync", svc.api.Authenticate(svc.api.Bodies.Sync()))
+	r.Route("PUT", "/api/v1/bodies/upload", svc.api.Authenticate(svc.api.Bodies.Upload()))
 	r.Route("HEAD", "/api/v1/bodies/", svc.api.Authenticate(svc.api.Bodies.Download()))
 	r.Route("GET", "/api/v1/bodies/", svc.api.Authenticate(svc.api.Bodies.Download()))
 	r.Route("POST", "/api/v1/bodies/trash", svc.api.Authenticate(svc.api.Bodies.Trash()))

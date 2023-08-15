@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"reflect"
 	"time"
 )
@@ -295,6 +296,38 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 	return bodySync, nil
 }
 
+func (r BodyRepository) Update(user *User, body *Body) (*Body, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	query := `
+		UPDATE "Body"
+			SET "uri" = $1,
+				"snippet" = $2,
+				"size" = $3,
+				"deviceId" = $4
+			WHERE "userId" = $5 AND
+			      "id" = $6 AND
+				  "lastStmt" <> 2
+			RETURNING * ;`
+
+	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
+
+	args := []interface{}{body.Uri, body.Snippet, body.Size, prefixedDeviceId, user.Id, body.Id}
+
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, ErrBodyNotFound
+		default:
+			return nil, err
+		}
+	}
+
+	return body, nil
+}
+
 func (r *BodyRepository) Trash(user *User, idList string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -367,7 +400,7 @@ func (r BodyRepository) Delete(user *User, idList string) error {
 	return nil
 }
 
-func (r BodyRepository) GetName(user *User, id string) (string, error) {
+func (r BodyRepository) GetBodyId(user *User, id string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -383,8 +416,11 @@ func (r BodyRepository) GetName(user *User, id string) (string, error) {
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
 	if err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			return "", nil
+		}
 		return "", err
 	}
 
-	return body.Name, nil
+	return body.Id, nil
 }
