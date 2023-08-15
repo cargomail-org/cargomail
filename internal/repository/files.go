@@ -375,7 +375,8 @@ func (r FileRepository) GetFileByName(user *User, id string) (*File, error) {
 		SELECT *
 			FROM "File"
 			WHERE "userId" = $1 AND
-				"id" = $2;`
+				"id" = $2 AND
+				"lastStmt" < 2;`
 
 	file := &File{}
 

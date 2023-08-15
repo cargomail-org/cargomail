@@ -444,7 +444,8 @@ func (r BodyRepository) GetBodyById(user *User, id string) (*Body, error) {
 		SELECT *
 			FROM "Body"
 			WHERE "userId" = $1 AND
-				"id" = $2;`
+				"id" = $2 AND
+				"lastStmt" < 2;`
 
 	body := &Body{}
 
