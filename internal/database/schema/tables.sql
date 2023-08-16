@@ -119,104 +119,104 @@ CREATE TABLE IF NOT EXISTS "Contact" (
     "deviceId"      VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS "bodyDeleted" (
+CREATE TABLE IF NOT EXISTS "BodyDeleted" (
     "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS "fileDeleted" (
+CREATE TABLE IF NOT EXISTS "FileDeleted" (
     "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS "draftDeleted" (
+CREATE TABLE IF NOT EXISTS "DraftDeleted" (
     "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS "messageDeleted" (
+CREATE TABLE IF NOT EXISTS "MessageDeleted" (
     "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS "labelDeleted" (
+CREATE TABLE IF NOT EXISTS "LabelDeleted" (
     "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS "contactDeleted" (
+CREATE TABLE IF NOT EXISTS "ContactDeleted" (
     "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS "bodyTimelineSeq" (
+CREATE TABLE IF NOT EXISTS "BodyTimelineSeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastTimelineId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "bodyHistorySeq" (
+CREATE TABLE IF NOT EXISTS "BodyHistorySeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastHistoryId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "fileTimelineSeq" (
+CREATE TABLE IF NOT EXISTS "FileTimelineSeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastTimelineId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "fileHistorySeq" (
+CREATE TABLE IF NOT EXISTS "FileHistorySeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastHistoryId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "draftTimelineSeq" (
+CREATE TABLE IF NOT EXISTS "DraftTimelineSeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastTimelineId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "draftHistorySeq" (
+CREATE TABLE IF NOT EXISTS "DraftHistorySeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastHistoryId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "messageTimelineSeq" (
+CREATE TABLE IF NOT EXISTS "MessageTimelineSeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastTimelineId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "messageHistorySeq" (
+CREATE TABLE IF NOT EXISTS "MessageHistorySeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastHistoryId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "labelTimelineSeq" (
+CREATE TABLE IF NOT EXISTS "LabelTimelineSeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastTimelineId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "labelHistorySeq" (
+CREATE TABLE IF NOT EXISTS "LabelHistorySeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastHistoryId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "contactTimelineSeq" (
+CREATE TABLE IF NOT EXISTS "ContactTimelineSeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastTimelineId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "contactHistorySeq" (
+CREATE TABLE IF NOT EXISTS "ContactHistorySeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastHistoryId" INTEGER(8) NOT NULL
 );

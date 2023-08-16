@@ -6,8 +6,8 @@ BEGIN
     UPDATE "ContactTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = new."userId";
     UPDATE "ContactHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = new."userId";
     UPDATE "Contact"
-    SET "timelineId" = (SELECT "lastTimelineId" FROM "contactTimelineSeq" WHERE "userId" = new."userId"),
-        "historyId"  = (SELECT "lastHistoryId" FROM "contactHistorySeq" WHERE "userId" = new."userId"),
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "ContactTimelineSeq" WHERE "userId" = new."userId"),
+        "historyId"  = (SELECT "lastHistoryId" FROM "ContactHistorySeq" WHERE "userId" = new."userId"),
         "lastStmt"   = 0
     WHERE "id" = new."id";
 END;

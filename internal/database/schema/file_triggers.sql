@@ -6,8 +6,8 @@ BEGIN
     UPDATE "FileTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = new."userId";
     UPDATE "FileHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = new."userId";
     UPDATE "File"
-    SET "timelineId" = (SELECT "lastTimelineId" FROM "fileTimelineSeq" WHERE "userId" = new."userId"),
-        "historyId"  = (SELECT "lastHistoryId" FROM "fileHistorySeq" WHERE "userId" = new."userId"),
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "FileTimelineSeq" WHERE "userId" = new."userId"),
+        "historyId"  = (SELECT "lastHistoryId" FROM "FileHistorySeq" WHERE "userId" = new."userId"),
         "lastStmt"   = 0
     WHERE "id" = new."id";
 END;

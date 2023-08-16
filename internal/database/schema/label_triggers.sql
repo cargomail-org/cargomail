@@ -6,8 +6,8 @@ BEGIN
     UPDATE "LabelTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = new."userId";
     UPDATE "LabelHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = new."userId";
     UPDATE "Label"
-    SET "timelineId" = (SELECT "lastTimelineId" FROM "labelTimelineSeq" WHERE "userId" = new."userId"),
-        "historyId"  = (SELECT "lastHistoryId" FROM "labelHistorySeq" WHERE "userId" = new."userId"),
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "LabelTimelineSeq" WHERE "userId" = new."userId"),
+        "historyId"  = (SELECT "lastHistoryId" FROM "LabelHistorySeq" WHERE "userId" = new."userId"),
         "lastStmt"   = 0
     WHERE "id" = new."id";
 END;

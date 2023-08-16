@@ -6,8 +6,8 @@ BEGIN
     UPDATE "BodyTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = new."userId";
     UPDATE "BodyHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = new."userId";
     UPDATE "Body"
-    SET "timelineId" = (SELECT "lastTimelineId" FROM "bodyTimelineSeq" WHERE "userId" = new."userId"),
-        "historyId"  = (SELECT "lastHistoryId" FROM "bodyHistorySeq" WHERE "userId" = new."userId"),
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "BodyTimelineSeq" WHERE "userId" = new."userId"),
+        "historyId"  = (SELECT "lastHistoryId" FROM "BodyHistorySeq" WHERE "userId" = new."userId"),
         "lastStmt"   = 0
     WHERE "id" = new."id";
 END;
