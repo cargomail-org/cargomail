@@ -24,6 +24,8 @@ type History struct {
 	Id int64 `json:"historyId"`
 }
 
+type Ids []string
+
 type Repository struct {
 	Bodies   BodyRepository
 	Files    FileRepository

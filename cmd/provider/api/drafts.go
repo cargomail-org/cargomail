@@ -191,3 +191,29 @@ func (api *DraftsApi) Delete() http.Handler {
 		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
 	})
 }
+
+func (api *DraftsApi) Send() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
+		var ids repository.Ids
+
+		err := json.NewDecoder(r.Body).Decode(&ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		ids, err = api.drafts.Send(user, ids)
+		if err != nil {
+			helper.ReturnErr(w, err, http.StatusInternalServerError)
+			return
+		}
+
+		helper.SetJsonResponse(w, http.StatusOK, ids)
+	})
+}

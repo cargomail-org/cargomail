@@ -458,3 +458,34 @@ func (r DraftRepository) Delete(user *User, idList string) error {
 
 	return nil
 }
+
+func (r DraftRepository) Send(user *User, ids []string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	sent := []string{}
+
+	for id := range ids {
+		tx, err := r.db.BeginTx(ctx, nil)
+		if err != nil {
+			return nil, err
+		}
+		defer tx.Rollback()
+
+		query := `
+		SELECT "Hello World!";`
+
+		args := []interface{}{user.Id, id}
+
+		_, err = tx.ExecContext(ctx, query, args...)
+		if err != nil {
+			return sent, err
+		}
+
+		if err = tx.Commit(); err != nil {
+			return sent, err
+		}
+	}
+
+	return sent, nil
+}
