@@ -12,29 +12,7 @@ BEGIN
     WHERE "id" = new."id";
 END;
 
-CREATE TRIGGER IF NOT EXISTS "MessageDraftBeforeUpdate"
-    BEFORE UPDATE OF
-    "id",
-    "userId",
-    -- "messageUid",
-    -- "parentUid",
-    -- "threadUid",
-    -- "unread", 
-    -- "starred", 
-    -- "folder",
-    -- "payload",
-    -- "labelIds",
-    "sentAt",
-    "receivedAt",
-    "snoozedAt"
-    ON "Message"
-    FOR EACH ROW
-    WHEN old."folder" = 0 -- draft
-BEGIN
-    SELECT RAISE(ABORT, 'Update not allowed');
-END;
-
-CREATE TRIGGER IF NOT EXISTS "MessageNotDraftBeforeUpdate"
+CREATE TRIGGER IF NOT EXISTS "MessageBeforeUpdate"
     BEFORE UPDATE OF
     "id",
     "userId",
@@ -47,11 +25,10 @@ CREATE TRIGGER IF NOT EXISTS "MessageNotDraftBeforeUpdate"
     "payload",
     -- "labelIds",
     "sentAt",
-    "receivedAt",
-    "snoozedAt"
+    "receivedAt"
+    -- "snoozedAt"
     ON "Message"
     FOR EACH ROW
-    WHEN old."folder" > 0 -- not draft
 BEGIN
     SELECT RAISE(ABORT, 'Update not allowed');
 END;

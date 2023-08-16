@@ -136,11 +136,11 @@ func (svc *service) routes(r *Router) {
 	// Drafts API
 	r.Route("POST", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.Create()))
 	r.Route("GET", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.List()))
-	// r.Route("POST", "/api/v1/drafts/sync", svc.api.Authenticate(svc.api.Drafts.Sync()))
-	// r.Route("PUT", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.Update()))
-	// r.Route("POST", "/api/v1/drafts/trash", svc.api.Authenticate(svc.api.Drafts.Trash()))
-	// r.Route("POST", "/api/v1/drafts/untrash", svc.api.Authenticate(svc.api.Drafts.Untrash()))
-	// r.Route("DELETE", "/api/v1/drafts/delete", svc.api.Authenticate(svc.api.Drafts.Delete()))
+	r.Route("POST", "/api/v1/drafts/sync", svc.api.Authenticate(svc.api.Drafts.Sync()))
+	r.Route("PUT", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.Update()))
+	r.Route("POST", "/api/v1/drafts/trash", svc.api.Authenticate(svc.api.Drafts.Trash()))
+	r.Route("POST", "/api/v1/drafts/untrash", svc.api.Authenticate(svc.api.Drafts.Untrash()))
+	r.Route("DELETE", "/api/v1/drafts/delete", svc.api.Authenticate(svc.api.Drafts.Delete()))
 	// r.Route("POST", "/api/v1/drafts/send", svc.api.Authenticate(svc.api.Drafts.Send()))
 
 	// Messages API

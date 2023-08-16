@@ -51,6 +51,25 @@ CREATE TABLE IF NOT EXISTS "File" (
     "deviceId"      VARCHAR(32)
 );
 
+CREATE TABLE IF NOT EXISTS "Draft"
+(
+    "id"            VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
+    "messageUid"    VARCHAR(32) NOT NULL,
+    "parentUid"     VARCHAR(32),
+    "threadUid"     VARCHAR(32) NOT NULL,
+    "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
+    "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
+    "payload"       TEXT,                 -- json 'MessagePart' object
+    "labelIds"      TEXT,                 -- json 'labelIds' array
+    "createdAt"		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "modifiedAt"    TIMESTAMP,
+    "timelineId"    INTEGER(8) NOT NULL DEFAULT 0,
+    "historyId"     INTEGER(8) NOT NULL DEFAULT 0,
+    "lastStmt"      INTEGER(2) NOT NULL DEFAULT 0, -- 0-inserted, 1-updated, 2-trashed
+    "deviceId"      VARCHAR(32)
+);
+
 CREATE TABLE IF NOT EXISTS "Message"
 (
     "id"            VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
@@ -60,7 +79,7 @@ CREATE TABLE IF NOT EXISTS "Message"
     "threadUid"     VARCHAR(32) NOT NULL,
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
-    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox, 3-spam
+    "folder"        INTEGER(2) NOT NULL,  -- (0 reserverd) 1-sent, 2-inbox, 3-spam
     "payload"       TEXT,                 -- json 'MessagePart' object
     "labelIds"      TEXT,                 -- json 'labelIds' array
     "sentAt"        TIMESTAMP,
@@ -114,6 +133,13 @@ CREATE TABLE IF NOT EXISTS "fileDeleted" (
     "deviceId"      VARCHAR(32)
 );
 
+CREATE TABLE IF NOT EXISTS "draftDeleted" (
+    "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
+    "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
+    "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
+    "deviceId"      VARCHAR(32)
+);
+
 CREATE TABLE IF NOT EXISTS "messageDeleted" (
     "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
@@ -151,6 +177,16 @@ CREATE TABLE IF NOT EXISTS "fileTimelineSeq" (
 );
 
 CREATE TABLE IF NOT EXISTS "fileHistorySeq" (
+    "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
+    "lastHistoryId" INTEGER(8) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "draftTimelineSeq" (
+    "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
+    "lastTimelineId" INTEGER(8) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "draftHistorySeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastHistoryId" INTEGER(8) NOT NULL
 );
@@ -197,6 +233,10 @@ CREATE INDEX IF NOT EXISTS "IdxFileTimelineId" ON "File" ("timelineId");
 CREATE INDEX IF NOT EXISTS "IdxFileHistoryId" ON "File" ("historyId");
 CREATE INDEX IF NOT EXISTS "IdxFileLastStmt" ON "File" ("lastStmt");
 
+CREATE INDEX IF NOT EXISTS "IdxDraftTimelineId" ON "Draft" ("timelineId");
+CREATE INDEX IF NOT EXISTS "IdxDraftHistoryId" ON "Draft" ("historyId");
+CREATE INDEX IF NOT EXISTS "IdxDraftLastStmt" ON "Draft" ("lastStmt");
+
 CREATE INDEX IF NOT EXISTS "IdxMessageTimelineId" ON "Message" ("timelineId");
 CREATE INDEX IF NOT EXISTS "IdxMessageHistoryId" ON "Message" ("historyId");
 CREATE INDEX IF NOT EXISTS "IdxMessageLastStmt" ON "Message" ("lastStmt");
@@ -216,6 +256,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS "IdxBodyHistorySeq" ON "BodyHistorySeq" ("user
 
 CREATE UNIQUE INDEX IF NOT EXISTS "IdxFileTimelineSeq" ON "FileTimelineSeq" ("userId");
 CREATE UNIQUE INDEX IF NOT EXISTS "IdxFileHistorySeq" ON "FileHistorySeq" ("userId");
+
+CREATE UNIQUE INDEX IF NOT EXISTS "IdxDraftTimelineSeq" ON "DraftTimelineSeq" ("userId");
+CREATE UNIQUE INDEX IF NOT EXISTS "IdxDraftHistorySeq" ON "DraftHistorySeq" ("userId");
 
 CREATE UNIQUE INDEX IF NOT EXISTS "IdxMessageTimelineSeq" ON "MessageTimelineSeq" ("userId");
 CREATE UNIQUE INDEX IF NOT EXISTS "IdxMessageHistorySeq" ON "MessageHistorySeq" ("userId");

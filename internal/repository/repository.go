@@ -17,6 +17,7 @@ var (
 	ErrDuplicateContact         = errors.New("contact already exists")
 	ErrBodyNotFound             = errors.New("body not found")
 	ErrFileNotFound             = errors.New("file not found")
+	ErrDraftNotFound            = errors.New("draft not found")
 )
 
 type History struct {

@@ -18,6 +18,8 @@ var (
 	bodyTriggers string
 	//go:embed schema/file_triggers.sql
 	fileTriggers string
+	//go:embed schema/draft_triggers.sql
+	draftTriggers string
 	//go:embed schema/message_triggers.sql
 	messageTriggers string
 	//go:embed schema/label_triggers.sql
@@ -48,6 +50,11 @@ func Init(db *sql.DB) {
 	_, err = db.ExecContext(ctx, fileTriggers)
 	if err != nil {
 		log.Fatal("sql file triggers: ", err)
+	}
+
+	_, err = db.ExecContext(ctx, draftTriggers)
+	if err != nil {
+		log.Fatal("sql draft triggers: ", err)
 	}
 
 	_, err = db.ExecContext(ctx, messageTriggers)

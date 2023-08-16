@@ -19,6 +19,13 @@ BEGIN
         VALUES (new."id", 0);
 
     INSERT
+        INTO "DraftTimelineSeq" ("userId", "lastTimelineId")
+        VALUES (new."id", 0);
+    INSERT
+        INTO "DraftHistorySeq" ("userId", "lastHistoryId")
+        VALUES (new."id", 0);        
+
+    INSERT
         INTO "MessageTimelineSeq" ("userId", "lastTimelineId")
         VALUES (new."id", 0);
     INSERT
