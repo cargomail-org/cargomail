@@ -3,8 +3,8 @@ const raw = JSON.stringify({
     contentType: "application/json",
     headers: [
       {
-        name: "X-Destination-Resource-Mailbox-URL",
-        value: "http://127.0.0.:8181",
+        name: "X-Origin-Resource-Mailbox-URL",
+        value: "http://127.0.0.:8181/api/v1/bodies/",
       },
       {
         name: "To",
@@ -37,7 +37,7 @@ const raw = JSON.stringify({
             ],
             body: {
               contentType: "text/plain; charset=UTF-8",
-              uri: "http://127.0.0.1:8181/api/v1/bodies/2208f8b6265458ab1a05aa2094d70cba",
+              uri: "2208f8b6265458ab1a05aa2094d70cba",
               size: 56,
             },
           },
@@ -51,7 +51,7 @@ const raw = JSON.stringify({
             ],
             body: {
               contentType: "text/html; charset=UTF-8",
-              uri: "http://127.0.0.1:8181/api/v1/bodies/cceea0dc10d6cbec9f9d702da4cd1e1b",
+              uri: "cceea0dc10d6cbec9f9d702da4cd1e1b",
               size: 108,
             },
           },
@@ -65,7 +65,7 @@ const raw = JSON.stringify({
             ],
             body: {
               contentType: "application/json",
-              uri: "http://127.0.0.1:8181/api/v1/bodies/9d7289527975b42198248dc517008eea",
+              uri: "9d7289527975b42198248dc517008eea",
               size: 115,
             },
           },
