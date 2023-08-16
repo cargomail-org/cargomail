@@ -145,5 +145,5 @@ func (svc *service) routes(r *Router) {
 
 	// Messages API
 	r.Route("GET", "/api/v1/messages", svc.api.Authenticate(svc.api.Messages.List()))
-
+	r.Route("DELETE", "/api/v1/messages/delete", svc.api.Authenticate(svc.api.Messages.Delete()))
 }

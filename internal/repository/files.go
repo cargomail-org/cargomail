@@ -350,6 +350,12 @@ func (r FileRepository) Delete(user *User, idList string) error {
 	defer cancel()
 
 	if len(idList) > 0 {
+		tx, err := r.db.BeginTx(ctx, nil)
+		if err != nil {
+			return err
+		}
+		defer tx.Rollback()
+
 		query := `
 		DELETE
 			FROM "File"
@@ -358,8 +364,25 @@ func (r FileRepository) Delete(user *User, idList string) error {
 
 		args := []interface{}{user.Id, idList}
 
-		_, err := r.db.ExecContext(ctx, query, args...)
+		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
+			return err
+		}
+
+		query = `
+		UPDATE "FileDeleted"
+			SET "deviceId" = $1
+			WHERE "userId" = $2 AND
+			"id" IN (SELECT value FROM json_each($3));`
+
+		args = []interface{}{user.DeviceId, user.Id, idList}
+
+		_, err = tx.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
+		}
+
+		if err = tx.Commit(); err != nil {
 			return err
 		}
 	}

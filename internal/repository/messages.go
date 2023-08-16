@@ -184,3 +184,48 @@ func (r *MessageRepository) List(user *User) (*MessageList, error) {
 
 	return messageList, nil
 }
+
+func (r MessageRepository) Delete(user *User, idList string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if len(idList) > 0 {
+		tx, err := r.db.BeginTx(ctx, nil)
+		if err != nil {
+			return err
+		}
+		defer tx.Rollback()
+
+		query := `
+		DELETE
+			FROM "Message"
+			WHERE "userId" = $1 AND
+			"id" IN (SELECT value FROM json_each($2));`
+
+		args := []interface{}{user.Id, idList}
+
+		_, err = tx.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
+		}
+
+		query = `
+		UPDATE "MessageDeleted"
+			SET "deviceId" = $1
+			WHERE "userId" = $2 AND
+			"id" IN (SELECT value FROM json_each($3));`
+
+		args = []interface{}{user.DeviceId, user.Id, idList}
+
+		_, err = tx.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
+		}
+
+		if err = tx.Commit(); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
