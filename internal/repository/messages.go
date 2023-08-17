@@ -200,7 +200,7 @@ func (r MessageRepository) Delete(user *User, idList string) error {
 		DELETE
 			FROM "Message"
 			WHERE "userId" = $1 AND
-			"id" IN (SELECT value FROM json_each($2));`
+			"id" IN (SELECT value FROM json_each($2, '$.ids'));`
 
 		args := []interface{}{user.Id, idList}
 
@@ -213,7 +213,7 @@ func (r MessageRepository) Delete(user *User, idList string) error {
 		UPDATE "MessageDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		args = []interface{}{user.DeviceId, user.Id, idList}
 

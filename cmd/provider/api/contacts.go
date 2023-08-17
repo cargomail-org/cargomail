@@ -5,7 +5,6 @@ import (
 	"cargomail/internal/repository"
 	"encoding/json"
 	"errors"
-	"io"
 	"net/http"
 )
 
@@ -129,7 +128,15 @@ func (api *ContactsApi) Trash() http.Handler {
 			return
 		}
 
-		body, err := io.ReadAll(r.Body)
+		var ids repository.Ids
+
+		err := json.NewDecoder(r.Body).Decode(&ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -155,7 +162,15 @@ func (api *ContactsApi) Untrash() http.Handler {
 			return
 		}
 
-		body, err := io.ReadAll(r.Body)
+		var ids repository.Ids
+
+		err := json.NewDecoder(r.Body).Decode(&ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -181,7 +196,15 @@ func (api *ContactsApi) Delete() http.Handler {
 			return
 		}
 
-		body, err := io.ReadAll(r.Body)
+		var ids repository.Ids
+
+		err := json.NewDecoder(r.Body).Decode(&ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

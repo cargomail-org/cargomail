@@ -380,7 +380,7 @@ func (r *ContactRepository) Trash(user *User, idList string) error {
 			SET "lastStmt" = 2,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -405,7 +405,7 @@ func (r *ContactRepository) Untrash(user *User, idList string) error {
 			SET "lastStmt" = 0,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -435,7 +435,7 @@ func (r ContactRepository) Delete(user *User, idList string) error {
 		DELETE
 			FROM "Contact"
 			WHERE "userId" = $1 AND
-			"id" IN (SELECT value FROM json_each($2));`
+			"id" IN (SELECT value FROM json_each($2, '$.ids'));`
 
 		args := []interface{}{user.Id, idList}
 
@@ -448,7 +448,7 @@ func (r ContactRepository) Delete(user *User, idList string) error {
 		UPDATE "ContactDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		args = []interface{}{user.DeviceId, user.Id, idList}
 

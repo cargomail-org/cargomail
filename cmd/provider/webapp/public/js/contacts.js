@@ -301,7 +301,7 @@ export const deleteContacts = (e) => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(selectedIds),
+      body: JSON.stringify({ids: selectedIds}),
     });
 
     if (response === false) {

@@ -5,7 +5,6 @@ import (
 	"cargomail/internal/repository"
 	"encoding/json"
 	"errors"
-	"io"
 	"net/http"
 )
 
@@ -122,7 +121,15 @@ func (api *DraftsApi) Trash() http.Handler {
 			return
 		}
 
-		body, err := io.ReadAll(r.Body)
+		var ids repository.Ids
+
+		err := json.NewDecoder(r.Body).Decode(&ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -148,7 +155,15 @@ func (api *DraftsApi) Untrash() http.Handler {
 			return
 		}
 
-		body, err := io.ReadAll(r.Body)
+		var ids repository.Ids
+
+		err := json.NewDecoder(r.Body).Decode(&ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -174,7 +189,15 @@ func (api *DraftsApi) Delete() http.Handler {
 			return
 		}
 
-		body, err := io.ReadAll(r.Body)
+		var ids repository.Ids
+
+		err := json.NewDecoder(r.Body).Decode(&ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -200,20 +223,20 @@ func (api *DraftsApi) Send() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var id repository.Id
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&id)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		ids, err = api.drafts.Send(user, ids)
+		id, err = api.drafts.Send(user, id.Id)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, ids)
+		helper.SetJsonResponse(w, http.StatusOK, id)
 	})
 }

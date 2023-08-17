@@ -3,7 +3,7 @@ package api
 import (
 	"cargomail/cmd/provider/api/helper"
 	"cargomail/internal/repository"
-	"io"
+	"encoding/json"
 	"net/http"
 )
 
@@ -37,7 +37,15 @@ func (api *MessagesApi) Delete() http.Handler {
 			return
 		}
 
-		body, err := io.ReadAll(r.Body)
+		var ids repository.Ids
+
+		err := json.NewDecoder(r.Body).Decode(&ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

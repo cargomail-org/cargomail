@@ -397,7 +397,7 @@ func (r *DraftRepository) Trash(user *User, idList string) error {
 			SET "lastStmt" = 2,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -422,7 +422,7 @@ func (r *DraftRepository) Untrash(user *User, idList string) error {
 			SET "lastStmt" = 0,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -452,7 +452,7 @@ func (r DraftRepository) Delete(user *User, idList string) error {
 		DELETE
 			FROM "Draft"
 			WHERE "userId" = $1 AND
-			"id" IN (SELECT value FROM json_each($2));`
+			"id" IN (SELECT value FROM json_each($2, '$.ids'));`
 
 		args := []interface{}{user.Id, idList}
 
@@ -465,7 +465,7 @@ func (r DraftRepository) Delete(user *User, idList string) error {
 		UPDATE "DraftDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		args = []interface{}{user.DeviceId, user.Id, idList}
 
@@ -482,32 +482,30 @@ func (r DraftRepository) Delete(user *User, idList string) error {
 	return nil
 }
 
-func (r DraftRepository) Send(user *User, ids []string) ([]string, error) {
+func (r DraftRepository) Send(user *User, id string) (Id, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sent := []string{}
+	sent := Id{}
 
-	for id := range ids {
-		tx, err := r.db.BeginTx(ctx, nil)
-		if err != nil {
-			return nil, err
-		}
-		defer tx.Rollback()
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return sent, err
+	}
+	defer tx.Rollback()
 
-		query := `
+	query := `
 		SELECT "Hello World!";`
 
-		args := []interface{}{user.Id, id}
+	args := []interface{}{user.Id, id}
 
-		_, err = tx.ExecContext(ctx, query, args...)
-		if err != nil {
-			return sent, err
-		}
+	_, err = tx.ExecContext(ctx, query, args...)
+	if err != nil {
+		return sent, err
+	}
 
-		if err = tx.Commit(); err != nil {
-			return sent, err
-		}
+	if err = tx.Commit(); err != nil {
+		return sent, err
 	}
 
 	return sent, nil

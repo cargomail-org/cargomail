@@ -374,7 +374,7 @@ func (r *BodyRepository) Trash(user *User, idList string) error {
 			SET "lastStmt" = 2,
 				"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -399,7 +399,7 @@ func (r *BodyRepository) Untrash(user *User, idList string) error {
 			SET "lastStmt" = 0,
 				"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -429,7 +429,7 @@ func (r BodyRepository) Delete(user *User, idList string) error {
 		DELETE
 			FROM "Body"
 			WHERE "userId" = $1 AND
-			"id" IN (SELECT value FROM json_each($2));`
+			"id" IN (SELECT value FROM json_each($2, '$.ids'));`
 
 		args := []interface{}{user.Id, idList}
 
@@ -442,7 +442,7 @@ func (r BodyRepository) Delete(user *User, idList string) error {
 		UPDATE "BodyDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		args = []interface{}{user.DeviceId, user.Id, idList}
 
