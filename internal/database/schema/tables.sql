@@ -12,9 +12,9 @@ CREATE TABLE IF NOT EXISTS "User" (
 );
 
 CREATE TABLE IF NOT EXISTS "Session" (
-    "hash" 			BLOB PRIMARY KEY,
+    "uri" 			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
-    "expiry" 		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "expiry" 		TIMESTAMP NOT NULL,
     "scope" 		TEXT NOT NULL
 );
 

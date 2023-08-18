@@ -86,7 +86,7 @@ func (svc *service) routes(r *Router) {
 	// App
 	r.Route("GET", "/", http.StripPrefix("/", svc.app.Authenticate(svc.app.HomePage())))
 	r.Route("GET", "/login", svc.app.LoginPage())
-	r.Route("GET", "/logout", svc.app.Logout())
+	r.Route("GET", "/logout", svc.app.Authenticate(svc.app.Logout()))
 	r.Route("GET", "/register", svc.app.RegisterPage())
 	// r.Route("GET", "/auth/authenticate", svc.app.Session.Authenticate())
 
@@ -97,7 +97,7 @@ func (svc *service) routes(r *Router) {
 	r.Route("GET", "/api/v1/auth/info", svc.api.Auth.Info())
 	r.Route("POST", "/api/v1/auth/register", svc.api.User.Register())
 	r.Route("POST", "/api/v1/auth/authenticate", svc.api.Session.Login())
-	r.Route("POST", "/api/v1/auth/logout", svc.api.Session.Logout())
+	r.Route("POST", "/api/v1/auth/logout", svc.api.Authenticate(svc.api.Session.Logout()))
 
 	// User API
 	r.Route("PUT", "/api/v1/user/profile", svc.api.Authenticate(svc.api.User.Profile()))

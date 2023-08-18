@@ -39,7 +39,7 @@ func redirectToLoginPage(w http.ResponseWriter, r *http.Request) {
 // middleware
 func (app *App) Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sessionCookie, err := r.Cookie("session")
+		sessionCookie, err := r.Cookie("sessionUri")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
@@ -50,15 +50,15 @@ func (app *App) Authenticate(next http.Handler) http.Handler {
 			return
 		}
 
-		session := sessionCookie.Value
+		sessionUri := sessionCookie.Value
 
 		// TODO magic number!
-		if len(session) != 52 {
+		if len(sessionUri) != 32 {
 			redirectToLoginPage(w, r)
 			return
 		}
 
-		user, err := app.repository.User.GetBySession(repository.ScopeAuthentication, session)
+		user, err := app.repository.User.GetBySession(repository.ScopeAuthentication, sessionUri)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrUsernameNotFound):
@@ -94,8 +94,14 @@ func (app *App) Authenticate(next http.Handler) http.Handler {
 
 func (app *App) Logout() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
 		clearCookie := http.Cookie{
-			Name:     "session",
+			Name:     "sessionUri",
 			Value:    "",
 			MaxAge:   -1,
 			Path:     "/",
@@ -115,7 +121,7 @@ func (app *App) Logout() http.Handler {
 
 		// token := headerParts[1]
 
-		cookie, err := r.Cookie("session")
+		cookie, err := r.Cookie("sessionUri")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
@@ -126,9 +132,9 @@ func (app *App) Logout() http.Handler {
 			return
 		}
 
-		session := cookie.Value
+		sessionUri := cookie.Value
 
-		err = app.repository.Session.Remove(session)
+		err = app.repository.Session.Remove(user, sessionUri)
 		if err != nil {
 			redirectToLoginPage(w, r)
 			return

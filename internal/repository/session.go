@@ -2,10 +2,7 @@ package repository
 
 import (
 	"context"
-	"crypto/rand"
-	"crypto/sha256"
 	"database/sql"
-	"encoding/base32"
 	"time"
 )
 
@@ -19,11 +16,10 @@ type SessionRepository struct {
 }
 
 type Session struct {
-	Plaintext string    `json:"session"`
-	Hash      []byte    `json:"-"`
-	UserID    int64     `json:"-"`
-	Expiry    time.Time `json:"expiry"`
-	Scope     string    `json:"-"`
+	Uri    string    `json:"uri"`
+	UserID int64     `json:"-"`
+	Expiry time.Time `json:"expiry"`
+	Scope  string    `json:"-"`
 }
 
 func generateSession(userID int64, ttl time.Duration, scope string) (*Session, error) {
@@ -32,18 +28,6 @@ func generateSession(userID int64, ttl time.Duration, scope string) (*Session, e
 		Expiry: time.Now().Add(ttl),
 		Scope:  scope,
 	}
-
-	randomBytes := make([]byte, 32)
-
-	_, err := rand.Read(randomBytes)
-	if err != nil {
-		return nil, err
-	}
-
-	session.Plaintext = base32.StdEncoding.WithPadding(base32.NoPadding).EncodeToString(randomBytes)
-
-	hash := sha256.Sum256([]byte(session.Plaintext))
-	session.Hash = hash[:]
 
 	return session, nil
 }
@@ -63,25 +47,29 @@ func (r SessionRepository) Insert(session *Session) error {
 	defer cancel()
 
 	query := `
-		INSERT INTO "Session" ("hash", "userId", "expiry", "scope")
-			VALUES ($1, $2, $3, $4);`
+		INSERT INTO "Session" ("userId", "expiry", "scope")
+			VALUES ($1, $2, $3)
+			RETURNING uri ;`
 
-	args := []interface{}{session.Hash, session.UserID, session.Expiry, session.Scope}
+	args := []interface{}{session.UserID, session.Expiry, session.Scope}
 
-	_, err := r.db.ExecContext(ctx, query, args...)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(&session.Uri)
+	if err != nil {
+		return err
+	}
+
 	return err
 }
 
-func (r SessionRepository) Remove(session string) error {
+func (r SessionRepository) Remove(user *User, uri string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sessionHash := sha256.Sum256([]byte(session))
-
 	query := `
 		DELETE FROM "Session"
-			WHERE "hash" = $1;`
+			WHERE "userId" = $1 AND
+			"uri" = $2;`
 
-	_, err := r.db.ExecContext(ctx, query, sessionHash[:])
+	_, err := r.db.ExecContext(ctx, query, user.Id, uri)
 	return err
 }

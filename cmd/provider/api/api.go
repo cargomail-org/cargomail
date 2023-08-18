@@ -58,7 +58,7 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 
 		// token := headerParts[1]
 
-		sessionCookie, err := r.Cookie("session")
+		sessionCookie, err := r.Cookie("sessionUri")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
@@ -69,15 +69,15 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 			return
 		}
 
-		session := sessionCookie.Value
+		sessionUri := sessionCookie.Value
 
 		// TODO magic number!
-		if len(session) != 52 {
+		if len(sessionUri) != 32 {
 			helper.ReturnErr(w, repository.ErrInvalidOrMissingSession, http.StatusForbidden)
 			return
 		}
 
-		user, err := api.User.user.GetBySession(repository.ScopeAuthentication, session)
+		user, err := api.User.user.GetBySession(repository.ScopeAuthentication, sessionUri)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrUsernameNotFound):

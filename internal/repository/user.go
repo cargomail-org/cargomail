@@ -3,7 +3,6 @@ package repository
 import (
 	"cargomail/internal/config"
 	"context"
-	"crypto/sha256"
 	"database/sql"
 	"errors"
 	"time"
@@ -192,22 +191,20 @@ func (r UserRepository) GetByUsername(username string) (*User, error) {
 	return &user, nil
 }
 
-func (r UserRepository) GetBySession(sessionScope, sessionPlaintext string) (*User, error) {
+func (r UserRepository) GetBySession(sessionScope, uri string) (*User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-
-	sessionHash := sha256.Sum256([]byte(sessionPlaintext))
 
 	query := `
 		SELECT "User"."id", "User"."username", "User"."passwordHash", "User"."firstName", "User"."lastName", "User"."createdAt"
 			FROM "User"
 			INNER JOIN "Session"
 			ON "User"."id" = "Session"."userId"
-			WHERE "Session"."hash" = $1
+			WHERE "Session"."uri" = $1
 			AND "Session"."scope" = $2
 			AND "Session"."expiry" > $3;`
 
-	args := []interface{}{sessionHash[:], sessionScope, time.Now()}
+	args := []interface{}{uri, sessionScope, time.Now()}
 
 	var user User
 

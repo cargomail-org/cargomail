@@ -122,8 +122,8 @@ func (api *SessionApi) Login() http.Handler {
 		}
 
 		sessionCookie := http.Cookie{
-			Name:     "session",
-			Value:    session.Plaintext,
+			Name:     "sessionUri",
+			Value:    session.Uri,
 			Path:     "/",
 			HttpOnly: true,
 			Secure:   true,
@@ -169,8 +169,14 @@ func (api *SessionApi) Login() http.Handler {
 
 func (api *SessionApi) Logout() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
 		clearCookie := http.Cookie{
-			Name:     "session",
+			Name:     "sessionUri",
 			Value:    "",
 			MaxAge:   -1,
 			Path:     "/",
@@ -190,7 +196,7 @@ func (api *SessionApi) Logout() http.Handler {
 
 		// token := headerParts[1]
 
-		cookie, err := r.Cookie("session")
+		cookie, err := r.Cookie("sessionUri")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
@@ -201,9 +207,9 @@ func (api *SessionApi) Logout() http.Handler {
 			return
 		}
 
-		session := cookie.Value
+		sessionUri := cookie.Value
 
-		err = api.session.Remove(session)
+		err = api.session.Remove(user, sessionUri)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusNotFound)
 			return
