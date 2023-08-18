@@ -482,11 +482,11 @@ func (r DraftRepository) Delete(user *User, idList string) error {
 	return nil
 }
 
-func (r DraftRepository) Send(user *User, id string) (Id, error) {
+func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sent := Id{}
+	sent := &Message{}
 
 	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
@@ -497,7 +497,7 @@ func (r DraftRepository) Send(user *User, id string) (Id, error) {
 	query := `
 		SELECT "Hello World!";`
 
-	args := []interface{}{user.Id, id}
+	args := []interface{}{user.Id, draft.Id}
 
 	_, err = tx.ExecContext(ctx, query, args...)
 	if err != nil {

@@ -72,12 +72,14 @@ type MessageSync struct {
 type BodyResource struct {
 	ContentType string `json:"contentType"`
 	Uri         string `json:"uri"`
+	Hash        string `json:"hash,omitempty"`
 	Size        int64  `json:"size"`
 }
 
 type FileResource struct {
 	ContentType string `json:"contentType"`
 	Uri         string `json:"uri"`
+	Hash        string `json:"name,omitempty"`
 	Size        int64  `json:"size"`
 }
 

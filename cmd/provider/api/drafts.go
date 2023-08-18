@@ -223,20 +223,25 @@ func (api *DraftsApi) Send() http.Handler {
 			return
 		}
 
-		var id repository.Id
+		var draft *repository.Draft
 
-		err := json.NewDecoder(r.Body).Decode(&id)
+		err := json.NewDecoder(r.Body).Decode(&draft)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		id, err = api.drafts.Send(user, id.Id)
+		message, err := api.drafts.Send(user, draft)
 		if err != nil {
-			helper.ReturnErr(w, err, http.StatusInternalServerError)
+			switch {
+			case errors.Is(err, repository.ErrDraftNotFound):
+				helper.ReturnErr(w, err, http.StatusNotFound)
+			default:
+				helper.ReturnErr(w, err, http.StatusInternalServerError)
+			}
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, id)
+		helper.SetJsonResponse(w, http.StatusOK, message)
 	})
 }
