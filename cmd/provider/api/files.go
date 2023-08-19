@@ -74,12 +74,12 @@ func (api *FilesApi) Upload() http.Handler {
 			}
 
 			hashSum := hash.Sum(nil)
-			uri := fmt.Sprintf("%x", hashSum)
+			hashStr := fmt.Sprintf("%x", hashSum)
 
 			contentType := files[i].Header.Get("content-type")
 
 			uploadedFile := &repository.File{
-				Uri:         uri,
+				Hash:        hashStr,
 				Name:        files[i].Filename,
 				Size:        written,
 				ContentType: contentType,
@@ -91,7 +91,7 @@ func (api *FilesApi) Upload() http.Handler {
 				return
 			}
 
-			os.Rename(filepath.Join(filesPath, uuid), filepath.Join(filesPath, uploadedFile.Id))
+			os.Rename(filepath.Join(filesPath, uuid), filepath.Join(filesPath, uploadedFile.Uri))
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
@@ -118,9 +118,9 @@ func (api *FilesApi) Download() http.Handler {
 			return
 		}
 
-		id := path.Base(r.URL.Path)
+		uri := path.Base(r.URL.Path)
 
-		file, err := api.files.GetFileByName(user, id)
+		file, err := api.files.GetFileByUri(user, uri)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -148,7 +148,7 @@ func (api *FilesApi) Download() http.Handler {
 
 			filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
 
-			filePath := filepath.Join(filesPath, id)
+			filePath := filepath.Join(filesPath, uri)
 			w.Header().Set("Content-Type", "application/octet-stream")
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiFileName, urlEncodedFileName))
 
@@ -211,15 +211,20 @@ func (api *FilesApi) Trash() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -245,15 +250,20 @@ func (api *FilesApi) Untrash() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -279,15 +289,20 @@ func (api *FilesApi) Delete() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

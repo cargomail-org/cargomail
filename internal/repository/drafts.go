@@ -15,7 +15,7 @@ type DraftRepository struct {
 }
 
 type Draft struct {
-	Id         string       `json:"id"`
+	Uri        string       `json:"uri"`
 	UserId     int64        `json:"-"`
 	MessageUid string       `json:"messageUid"`
 	ParentUid  *string      `json:"parentUid"`
@@ -33,7 +33,7 @@ type Draft struct {
 }
 
 type DraftDeleted struct {
-	Id        string  `json:"id"`
+	Uri       string  `json:"uri"`
 	UserId    int64   `json:"-"`
 	HistoryId int64   `json:"-"`
 	DeviceId  *string `json:"-"`
@@ -366,13 +366,13 @@ func (r *DraftRepository) Update(user *User, draft *Draft) (*Draft, error) {
 			SET "payload" = $1,
 				"deviceId" = $2
 			WHERE "userId" = $3 AND
-			      "id" = $4 AND
+			      "uri" = $4 AND
 				  "lastStmt" <> 2
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{draft.Payload, prefixedDeviceId, user.Id, draft.Id}
+	args := []interface{}{draft.Payload, prefixedDeviceId, user.Id, draft.Uri}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
 	if err != nil {
@@ -387,21 +387,21 @@ func (r *DraftRepository) Update(user *User, draft *Draft) (*Draft, error) {
 	return draft, nil
 }
 
-func (r *DraftRepository) Trash(user *User, idList string) error {
+func (r *DraftRepository) Trash(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(idList) > 0 {
+	if len(uris) > 0 {
 		query := `
 		UPDATE Draft
 			SET "lastStmt" = 2,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, idList}
+		args := []interface{}{prefixedDeviceId, user.Id, uris}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -412,21 +412,21 @@ func (r *DraftRepository) Trash(user *User, idList string) error {
 	return nil
 }
 
-func (r *DraftRepository) Untrash(user *User, idList string) error {
+func (r *DraftRepository) Untrash(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(idList) > 0 {
+	if len(uris) > 0 {
 		query := `
 		UPDATE "Draft"
 			SET "lastStmt" = 0,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, idList}
+		args := []interface{}{prefixedDeviceId, user.Id, uris}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -437,11 +437,11 @@ func (r *DraftRepository) Untrash(user *User, idList string) error {
 	return nil
 }
 
-func (r DraftRepository) Delete(user *User, idList string) error {
+func (r DraftRepository) Delete(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(idList) > 0 {
+	if len(uris) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
 		if err != nil {
 			return err
@@ -452,9 +452,9 @@ func (r DraftRepository) Delete(user *User, idList string) error {
 		DELETE
 			FROM "Draft"
 			WHERE "userId" = $1 AND
-			"id" IN (SELECT value FROM json_each($2, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($2, '$.uris'));`
 
-		args := []interface{}{user.Id, idList}
+		args := []interface{}{user.Id, uris}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -465,9 +465,9 @@ func (r DraftRepository) Delete(user *User, idList string) error {
 		UPDATE "DraftDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
 
-		args = []interface{}{user.DeviceId, user.Id, idList}
+		args = []interface{}{user.DeviceId, user.Id, uris}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -497,7 +497,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	query := `
 		SELECT "Hello World!";`
 
-	args := []interface{}{user.Id, draft.Id}
+	args := []interface{}{user.Id, draft.Uri}
 
 	_, err = tx.ExecContext(ctx, query, args...)
 	if err != nil {

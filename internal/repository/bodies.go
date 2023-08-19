@@ -13,9 +13,9 @@ type BodyRepository struct {
 }
 
 type Body struct {
-	Id          string     `json:"id"`
+	Uri         string     `json:"uri"`
 	UserId      int64      `json:"-"`
-	Uri         string     `json:"-"`
+	Hash        string     `json:"-"`
 	Name        string     `json:"name"`
 	Snippet     string     `json:"snippet"`
 	Path        string     `json:"-"`
@@ -30,7 +30,7 @@ type Body struct {
 }
 
 type BodyDeleted struct {
-	Id        string  `json:"id"`
+	Uri       string  `json:"uri"`
 	UserId    int64   `json:"-"`
 	HistoryId int64   `json:"-"`
 	DeviceId  *string `json:"-"`
@@ -77,13 +77,13 @@ func (r BodyRepository) Create(user *User, body *Body) (*Body, error) {
 
 	query := `
 		INSERT INTO
-			"Body" ("userId", "deviceId", "uri", "name", "snippet", "path", "contentType", "size")
+			"Body" ("userId", "deviceId", "hash", "name", "snippet", "path", "contentType", "size")
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{user.Id, prefixedDeviceId, body.Uri, body.Name, body.Snippet, body.Path, body.ContentType, body.Size}
+	args := []interface{}{user.Id, prefixedDeviceId, body.Hash, body.Name, body.Snippet, body.Path, body.ContentType, body.Size}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
 	if err != nil {
@@ -338,18 +338,18 @@ func (r BodyRepository) Update(user *User, body *Body) (*Body, error) {
 
 	query := `
 		UPDATE "Body"
-			SET "uri" = $1,
+			SET "hash" = $1,
 				"snippet" = $2,
 				"size" = $3,
 				"deviceId" = $4
 			WHERE "userId" = $5 AND
-			      "id" = $6 AND
+			      "uri" = $6 AND
 				  "lastStmt" <> 2
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{body.Uri, body.Snippet, body.Size, prefixedDeviceId, user.Id, body.Id}
+	args := []interface{}{body.Hash, body.Snippet, body.Size, prefixedDeviceId, user.Id, body.Uri}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
 	if err != nil {
@@ -364,21 +364,21 @@ func (r BodyRepository) Update(user *User, body *Body) (*Body, error) {
 	return body, nil
 }
 
-func (r *BodyRepository) Trash(user *User, idList string) error {
+func (r *BodyRepository) Trash(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(idList) > 0 {
+	if len(uris) > 0 {
 		query := `
 		UPDATE "Body"
 			SET "lastStmt" = 2,
 				"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, idList}
+		args := []interface{}{prefixedDeviceId, user.Id, uris}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -389,21 +389,21 @@ func (r *BodyRepository) Trash(user *User, idList string) error {
 	return nil
 }
 
-func (r *BodyRepository) Untrash(user *User, idList string) error {
+func (r *BodyRepository) Untrash(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(idList) > 0 {
+	if len(uris) > 0 {
 		query := `
 		UPDATE "Body"
 			SET "lastStmt" = 0,
 				"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, idList}
+		args := []interface{}{prefixedDeviceId, user.Id, uris}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -414,11 +414,11 @@ func (r *BodyRepository) Untrash(user *User, idList string) error {
 	return nil
 }
 
-func (r BodyRepository) Delete(user *User, idList string) error {
+func (r BodyRepository) Delete(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(idList) > 0 {
+	if len(uris) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
 		if err != nil {
 			return err
@@ -429,9 +429,9 @@ func (r BodyRepository) Delete(user *User, idList string) error {
 		DELETE
 			FROM "Body"
 			WHERE "userId" = $1 AND
-			"id" IN (SELECT value FROM json_each($2, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($2, '$.uris'));`
 
-		args := []interface{}{user.Id, idList}
+		args := []interface{}{user.Id, uris}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -442,9 +442,9 @@ func (r BodyRepository) Delete(user *User, idList string) error {
 		UPDATE "BodyDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
 
-		args = []interface{}{user.DeviceId, user.Id, idList}
+		args = []interface{}{user.DeviceId, user.Id, uris}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -459,7 +459,7 @@ func (r BodyRepository) Delete(user *User, idList string) error {
 	return nil
 }
 
-func (r BodyRepository) GetBodyById(user *User, id string) (*Body, error) {
+func (r BodyRepository) GetBodyByUri(user *User, uri string) (*Body, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -467,12 +467,12 @@ func (r BodyRepository) GetBodyById(user *User, id string) (*Body, error) {
 		SELECT *
 			FROM "Body"
 			WHERE "userId" = $1 AND
-				"id" = $2 AND
+				"uri" = $2 AND
 				"lastStmt" < 2;`
 
 	body := &Body{}
 
-	args := []interface{}{user.Id, id}
+	args := []interface{}{user.Id, uri}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
 	if err != nil {

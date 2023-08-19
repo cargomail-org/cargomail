@@ -33,7 +33,7 @@ toInput.addEventListener("keyup", (event) => bouncer(event));
 subjectInput.addEventListener("keyup", (event) => bouncer(event));
 messageText.addEventListener("keyup", (event) => bouncer(event));
 
-let selectedIds = [];
+let selectedUris = [];
 
 const composeConfirmDialog = new bootstrap.Modal(
   document.querySelector("#composeConfirmDialog")
@@ -46,13 +46,13 @@ const composeTable = new DataTable("#composeTable", {
   },
   ordering: false,
   columns: [
-    { data: "id", visible: false, searchable: false },
+    { data: "uri", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
       data: "name",
       render: (data, type, full, meta) => {
         const link = `${window.apiHost}/api/v1/files/`;
-        return `<a href="javascript:;" onclick="downloadURI('composeForm', '${link}${full.id}', '${data}');">${data}</a>`;
+        return `<a href="javascript:;" onclick="downloadURI('composeForm', '${link}${full.uri}', '${data}');">${data}</a>`;
       },
     },
     {
@@ -109,16 +109,16 @@ const composeTable = new DataTable("#composeTable", {
       className: "files-delete",
       enabled: false,
       action: function () {
-        selectedIds = [];
+        selectedUris = [];
 
         const selectedData = composeTable
           .rows(".selected")
           .data()
-          .map((obj) => obj.id);
+          .map((obj) => obj.uri);
         if (selectedData.length > 0) {
           composeConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
-            selectedIds.push(selectedData[i]);
+            selectedUris.push(selectedData[i]);
           }
         }
       },
@@ -152,8 +152,8 @@ export const addItems = (items) => {
     let found = false;
 
     for (let j = 0; j < composeTable.rows().count(); j++) {
-      const id = composeTable.row(j).data().id;
-      if (id == items[i].id) {
+      const uri = composeTable.row(j).data().uri;
+      if (uri == items[i].uri) {
         found = true;
         break;
       }

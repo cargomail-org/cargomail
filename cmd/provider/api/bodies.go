@@ -62,13 +62,13 @@ func (api *BodiesApi) Upload() http.Handler {
 			uploadedBody := &repository.Body{}
 
 			if r.Method == "PUT" {
-				body, err := api.bodies.GetBodyById(user, files[i].Filename)
+				body, err := api.bodies.GetBodyByUri(user, files[i].Filename)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusNotFound)
 					return
 				}
 
-				if len(body.Id) > 0 {
+				if len(body.Uri) > 0 {
 					f, err := os.OpenFile(filepath.Join(bodiesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
 					if err != nil {
 						fmt.Println(err)
@@ -84,13 +84,13 @@ func (api *BodiesApi) Upload() http.Handler {
 					}
 
 					hashSum := hash.Sum(nil)
-					uri := fmt.Sprintf("%x", hashSum)
+					hashStr := fmt.Sprintf("%x", hashSum)
 
 					contentType := files[i].Header.Get("content-type")
 
 					uploadedBody = &repository.Body{
-						Id:          body.Id,
-						Uri:         uri,
+						Uri:         body.Uri,
+						Hash:        hashStr,
 						Size:        written,
 						ContentType: contentType,
 					}
@@ -106,7 +106,7 @@ func (api *BodiesApi) Upload() http.Handler {
 						return
 					}
 
-					os.Rename(filepath.Join(bodiesPath, uuid), filepath.Join(bodiesPath, uploadedBody.Id))
+					os.Rename(filepath.Join(bodiesPath, uuid), filepath.Join(bodiesPath, uploadedBody.Uri))
 					if err != nil {
 						helper.ReturnErr(w, err, http.StatusInternalServerError)
 						return
@@ -128,12 +128,12 @@ func (api *BodiesApi) Upload() http.Handler {
 				}
 
 				hashSum := hash.Sum(nil)
-				uri := fmt.Sprintf("%x", hashSum)
+				hashStr := fmt.Sprintf("%x", hashSum)
 
 				contentType := files[i].Header.Get("content-type")
 
 				uploadedBody = &repository.Body{
-					Uri:         uri,
+					Hash:        hashStr,
 					Name:        files[i].Filename,
 					Size:        written,
 					ContentType: contentType,
@@ -145,7 +145,7 @@ func (api *BodiesApi) Upload() http.Handler {
 					return
 				}
 
-				os.Rename(filepath.Join(bodiesPath, uuid), filepath.Join(bodiesPath, uploadedBody.Id))
+				os.Rename(filepath.Join(bodiesPath, uuid), filepath.Join(bodiesPath, uploadedBody.Uri))
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusInternalServerError)
 					return
@@ -173,15 +173,15 @@ func (api *BodiesApi) Download() http.Handler {
 			return
 		}
 
-		id := path.Base(r.URL.Path)
+		uri := path.Base(r.URL.Path)
 
-		body, err := api.bodies.GetBodyById(user, id)
+		body, err := api.bodies.GetBodyByUri(user, uri)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		if len(body.Id) == 0 {
+		if len(body.Uri) == 0 {
 			helper.ReturnErr(w, repository.ErrBodyNotFound, http.StatusNotFound)
 			return
 		}
@@ -189,13 +189,13 @@ func (api *BodiesApi) Download() http.Handler {
 		if r.Method == "HEAD" {
 			w.WriteHeader(http.StatusOK)
 		} else if r.Method == "GET" {
-			asciiBodyId, err := helper.ToAscii(body.Id)
+			asciiBodyUri, err := helper.ToAscii(body.Uri)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
 			}
 
-			urlEncodedBodyId, err := url.Parse(body.Id)
+			urlEncodedBodyUri, err := url.Parse(body.Uri)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
@@ -203,9 +203,9 @@ func (api *BodiesApi) Download() http.Handler {
 
 			bodiesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BodiesFolder)
 
-			bodyPath := filepath.Join(bodiesPath, id)
+			bodyPath := filepath.Join(bodiesPath, uri)
 			w.Header().Set("Content-Type", body.ContentType)
-			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiBodyId, urlEncodedBodyId))
+			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiBodyUri, urlEncodedBodyUri))
 
 			bodyPath = filepath.Clean(bodyPath)
 
@@ -266,15 +266,20 @@ func (api *BodiesApi) Trash() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -300,15 +305,20 @@ func (api *BodiesApi) Untrash() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -334,15 +344,20 @@ func (api *BodiesApi) Delete() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

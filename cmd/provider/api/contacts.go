@@ -103,6 +103,11 @@ func (api *ContactsApi) Update() http.Handler {
 			return
 		}
 
+		if contact.Uri == "" {
+			http.Error(w, repository.ErrMissingUriField.Error(), http.StatusBadRequest)
+			return
+		}
+
 		contact, err = api.contacts.Update(user, contact)
 		if err != nil {
 			switch {
@@ -128,15 +133,20 @@ func (api *ContactsApi) Trash() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -162,15 +172,20 @@ func (api *ContactsApi) Untrash() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -196,15 +211,20 @@ func (api *ContactsApi) Delete() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

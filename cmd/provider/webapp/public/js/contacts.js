@@ -10,7 +10,7 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-let selectedIds = [];
+let selectedUris = [];
 
 const contactsFormDialog = new bootstrap.Modal(
   document.querySelector("#contactsFormDialog")
@@ -48,7 +48,7 @@ const contactsTable = new DataTable("#contactsTable", {
     })();
   },
   columns: [
-    { data: "id", visible: false, searchable: false },
+    { data: "uri", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
       data: "emailAddress",
@@ -60,7 +60,7 @@ const contactsTable = new DataTable("#contactsTable", {
       data: "lastName",
     },
   ],
-  rowId: "id",
+  rowId: "uri",
   columnDefs: [
     {
       targets: 1,
@@ -124,21 +124,21 @@ const contactsTable = new DataTable("#contactsTable", {
           for (const contact of response.updated) {
             // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
             const notFound =
-              contactsTable.column(0).data().toArray().indexOf(contact.id) ===
+              contactsTable.column(0).data().toArray().indexOf(contact.uri) ===
               -1; // !!! must be
             if (notFound) {
               contactsTable.row.add(contact);
             } else {
-              contactsTable.row(`#${contact.id}`).data(contact);
+              contactsTable.row(`#${contact.uri}`).data(contact);
             }
           }
 
           for (const contact of response.trashed) {
-            contactsTable.row(`#${contact.id}`).remove();
+            contactsTable.row(`#${contact.uri}`).remove();
           }
 
           for (const contact of response.deleted) {
-            contactsTable.row(`#${contact.id}`).remove();
+            contactsTable.row(`#${contact.uri}`).remove();
           }
 
           contactsTable.draw();
@@ -170,16 +170,16 @@ const contactsTable = new DataTable("#contactsTable", {
       className: "contacts-delete",
       enabled: false,
       action: function () {
-        selectedIds = [];
+        selectedUris = [];
 
         const selectedData = contactsTable
           .rows(".selected")
           .data()
-          .map((obj) => obj.id);
+          .map((obj) => obj.uri);
         if (selectedData.length > 0) {
           contactsConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
-            selectedIds.push(selectedData[i]);
+            selectedUris.push(selectedData[i]);
           }
         }
       },
@@ -208,7 +208,7 @@ export const showContactsFormDialog = (e) => {
 
   const modalTitle = formDialog.querySelector(".modal-title");
 
-  const contactIdInput = formDialog.querySelector(".modal-body #contactIdInput");
+  const contactUriInput = formDialog.querySelector(".modal-body #contactUriInput");
   const emailInput = formDialog.querySelector(".modal-body #emailInput");
   const firstNameInput = formDialog.querySelector(
     ".modal-body #firstNameInput"
@@ -227,12 +227,12 @@ export const showContactsFormDialog = (e) => {
   }
 
   if (contact) {
-    contactIdInput.value = contact.id;
+    contactUriInput.value = contact.uri;
     emailInput.value = contact.emailAddress;
     firstNameInput.value = contact.firstName;
     lastNameInput.value = contact.lastName;
   } else {
-    contactIdInput.value = "";
+    contactUriInput.value = "";
     emailInput.value = "";
     firstNameInput.value = "";
     lastNameInput.value = "";
@@ -245,15 +245,15 @@ export const submitFormContact = async (e) => {
   const form = e.currentTarget;
 
   const formData = {
-    id: form.querySelector('input[name="contactId"]').value,
+    uri: form.querySelector('input[name="contactUri"]').value,
     emailAddress: form.querySelector('input[name="emailAddress"]').value,
     firstName: form.querySelector('input[name="firstName"]').value,
     lastName: form.querySelector('input[name="lastName"]').value,
   };
 
-  if (formData.id.length == 0) {
+  if (formData.uri.length == 0) {
     // new
-    delete formData.id;
+    delete formData.uri;
 
     const response = await api(form.id, 201, `${window.apiHost}/api/v1/contacts`, {
       method: "POST",
@@ -269,7 +269,7 @@ export const submitFormContact = async (e) => {
 
     contactsTable.row.add(response).draw();
 
-  } else if (formData.id.length == 32) {
+  } else if (formData.uri.length == 32) {
     // edit
     const response = await api(form.id, 200, `${window.apiHost}/api/v1/contacts`, {
       method: "PUT",
@@ -283,7 +283,7 @@ export const submitFormContact = async (e) => {
       return;
     }
 
-    contactsTable.row(`#${response.id}`).data(response).draw();
+    contactsTable.row(`#${response.uri}`).data(response).draw();
   }
 
   contactsFormDialog.hide();
@@ -301,7 +301,7 @@ export const deleteContacts = (e) => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ids: selectedIds}),
+      body: JSON.stringify({uris: selectedUris}),
     });
 
     if (response === false) {

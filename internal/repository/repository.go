@@ -18,18 +18,20 @@ var (
 	ErrBodyNotFound             = errors.New("body not found")
 	ErrFileNotFound             = errors.New("file not found")
 	ErrDraftNotFound            = errors.New("draft not found")
+	ErrMissingUrisField         = errors.New("missing 'uris' field")
+	ErrMissingUriField          = errors.New("missing 'uri' field")
 )
 
 type History struct {
 	Id int64 `json:"historyId"`
 }
 
-type Id struct {
-	Id string `json:"id"`
+type Uri struct {
+	Uri string `json:"uri"`
 }
 
-type Ids struct {
-	Ids []string `json:"ids"`
+type Uris struct {
+	Uris []string `json:"uris"`
 }
 
 type Repository struct {

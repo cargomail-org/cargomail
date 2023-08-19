@@ -37,15 +37,20 @@ func (api *MessagesApi) Delete() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

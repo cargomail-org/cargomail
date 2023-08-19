@@ -9,12 +9,12 @@ BEGIN
     SET "timelineId" = (SELECT "lastTimelineId" FROM "DraftTimelineSeq" WHERE "userId" = new."userId"),
         "historyId"  = (SELECT "lastHistoryId" FROM "DraftHistorySeq" WHERE "userId" = new."userId"),
         "lastStmt"   = 0
-    WHERE "id" = new."id";
+    WHERE "uri" = new."uri";
 END;
 
 CREATE TRIGGER IF NOT EXISTS "DraftBeforeUpdate"
     BEFORE UPDATE OF
-    "id",
+    "uri",
     "userId",
     "messageUid",
     "parentUid",
@@ -42,7 +42,7 @@ BEGIN
         "historyId"  = (SELECT "lastHistoryId" FROM "DraftHistorySeq" WHERE "userId" = old."userId"),
         "lastStmt"   = 1,
         "modifiedAt" = CURRENT_TIMESTAMP
-    WHERE "id" = old."id";
+    WHERE "uri" = old."uri";
 END;
 
 -- Trashed
@@ -57,7 +57,7 @@ BEGIN
         OR (old."lastStmt" = 2 AND new."lastStmt" = 1); -- Untrash = trashed (2) -> inserted (0)
     UPDATE "Draft" 
 	SET "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL)
-	WHERE "id" = new."id";
+	WHERE "uri" = new."uri";
 END;
 
 CREATE TRIGGER IF NOT EXISTS "DraftAfterTrash"
@@ -72,7 +72,7 @@ BEGIN
     UPDATE "Draft"
     SET "historyId"  = (SELECT "lastHistoryId" FROM "DraftHistorySeq" WHERE "userId" = old."userId"),
         "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL) 
-    WHERE "id" = old."id";
+    WHERE "uri" = old."uri";
 END;
 
 CREATE TRIGGER IF NOT EXISTS "DraftAfterDelete"
@@ -81,8 +81,8 @@ ON "Draft"
 FOR EACH ROW
 BEGIN
     UPDATE "DraftHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
-    INSERT INTO "DraftDeleted" ("id", "userId", "historyId")
-      VALUES (old."id",
+    INSERT INTO "DraftDeleted" ("uri", "userId", "historyId")
+      VALUES (old."uri",
               old."userId",
               (SELECT "lastHistoryId" FROM "DraftHistorySeq" WHERE "userId" = old."userId"));
 END;

@@ -28,7 +28,7 @@ type MessagePart struct {
 }
 
 type Message struct {
-	Id         string       `json:"id"`
+	Uri        string       `json:"uri"`
 	UserId     int64        `json:"-"`
 	MessageUid string       `json:"messageUid"`
 	ParentUid  *string      `json:"parentUid"`
@@ -50,7 +50,7 @@ type Message struct {
 }
 
 type MessageDeleted struct {
-	Id        string  `json:"id"`
+	Uri       string  `json:"uri"`
 	UserId    int64   `json:"-"`
 	HistoryId int64   `json:"-"`
 	DeviceId  *string `json:"-"`
@@ -79,7 +79,7 @@ type BodyResource struct {
 type FileResource struct {
 	ContentType string `json:"contentType"`
 	Uri         string `json:"uri"`
-	Hash        string `json:"name,omitempty"`
+	Hash        string `json:"hash,omitempty"`
 	Size        int64  `json:"size"`
 }
 
@@ -187,11 +187,11 @@ func (r *MessageRepository) List(user *User) (*MessageList, error) {
 	return messageList, nil
 }
 
-func (r MessageRepository) Delete(user *User, idList string) error {
+func (r MessageRepository) Delete(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(idList) > 0 {
+	if len(uris) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
 		if err != nil {
 			return err
@@ -202,9 +202,9 @@ func (r MessageRepository) Delete(user *User, idList string) error {
 		DELETE
 			FROM "Message"
 			WHERE "userId" = $1 AND
-			"id" IN (SELECT value FROM json_each($2, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($2, '$.uris'));`
 
-		args := []interface{}{user.Id, idList}
+		args := []interface{}{user.Id, uris}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -215,9 +215,9 @@ func (r MessageRepository) Delete(user *User, idList string) error {
 		UPDATE "MessageDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
 
-		args = []interface{}{user.DeviceId, user.Id, idList}
+		args = []interface{}{user.DeviceId, user.Id, uris}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {

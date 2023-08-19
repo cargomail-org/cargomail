@@ -12,9 +12,9 @@ type FileRepository struct {
 }
 
 type File struct {
-	Id          string     `json:"id"`
+	Uri         string     `json:"uri"`
 	UserId      int64      `json:"-"`
-	Uri         string     `json:"-"`
+	Hash        string     `json:"-"`
 	Name        string     `json:"name"`
 	Path        string     `json:"-"`
 	Size        int64      `json:"size"`
@@ -28,7 +28,7 @@ type File struct {
 }
 
 type FileDeleted struct {
-	Id        string  `json:"id"`
+	Uri       string  `json:"uri"`
 	UserId    int64   `json:"-"`
 	HistoryId int64   `json:"-"`
 	DeviceId  *string `json:"-"`
@@ -74,13 +74,13 @@ func (r FileRepository) Create(user *User, file *File) (*File, error) {
 
 	query := `
 		INSERT INTO
-			"File" ("userId", "deviceId", "uri", "name", "path", "contentType", "size")
+			"File" ("userId", "deviceId", "hash", "name", "path", "contentType", "size")
 			VALUES ($1, $2, $3, $4, $5, $6, $7)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{user.Id, prefixedDeviceId, file.Uri, file.Name, file.Path, file.ContentType, file.Size}
+	args := []interface{}{user.Id, prefixedDeviceId, file.Hash, file.Name, file.Path, file.ContentType, file.Size}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
 	if err != nil {
@@ -295,21 +295,21 @@ func (r *FileRepository) Sync(user *User, history *History) (*FileSync, error) {
 	return fileSync, nil
 }
 
-func (r *FileRepository) Trash(user *User, idList string) error {
+func (r *FileRepository) Trash(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(idList) > 0 {
+	if len(uris) > 0 {
 		query := `
 		UPDATE "File"
 			SET "lastStmt" = 2,
 				"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, idList}
+		args := []interface{}{prefixedDeviceId, user.Id, uris}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -320,21 +320,21 @@ func (r *FileRepository) Trash(user *User, idList string) error {
 	return nil
 }
 
-func (r *FileRepository) Untrash(user *User, idList string) error {
+func (r *FileRepository) Untrash(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(idList) > 0 {
+	if len(uris) > 0 {
 		query := `
 		UPDATE "File"
 			SET "lastStmt" = 0,
 				"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, idList}
+		args := []interface{}{prefixedDeviceId, user.Id, uris}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -345,11 +345,11 @@ func (r *FileRepository) Untrash(user *User, idList string) error {
 	return nil
 }
 
-func (r FileRepository) Delete(user *User, idList string) error {
+func (r FileRepository) Delete(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(idList) > 0 {
+	if len(uris) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
 		if err != nil {
 			return err
@@ -360,9 +360,9 @@ func (r FileRepository) Delete(user *User, idList string) error {
 		DELETE
 			FROM "File"
 			WHERE "userId" = $1 AND
-			"id" IN (SELECT value FROM json_each($2, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($2, '$.uris'));`
 
-		args := []interface{}{user.Id, idList}
+		args := []interface{}{user.Id, uris}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -373,9 +373,9 @@ func (r FileRepository) Delete(user *User, idList string) error {
 		UPDATE "FileDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
 
-		args = []interface{}{user.DeviceId, user.Id, idList}
+		args = []interface{}{user.DeviceId, user.Id, uris}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -390,7 +390,7 @@ func (r FileRepository) Delete(user *User, idList string) error {
 	return nil
 }
 
-func (r FileRepository) GetFileByName(user *User, id string) (*File, error) {
+func (r FileRepository) GetFileByUri(user *User, uri string) (*File, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -398,12 +398,12 @@ func (r FileRepository) GetFileByName(user *User, id string) (*File, error) {
 		SELECT *
 			FROM "File"
 			WHERE "userId" = $1 AND
-				"id" = $2 AND
+				"uri" = $2 AND
 				"lastStmt" < 2;`
 
 	file := &File{}
 
-	args := []interface{}{user.Id, id}
+	args := []interface{}{user.Id, uri}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
 	if err != nil {

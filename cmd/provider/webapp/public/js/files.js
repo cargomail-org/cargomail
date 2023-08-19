@@ -12,7 +12,7 @@ import "datatables.net-responsive-bs5";
 
 import { addItems as composeAddItems } from "/public/js/compose.js";
 
-let selectedIds = [];
+let selectedUris = [];
 
 const filesConfirmDialog = new bootstrap.Modal(
   document.querySelector("#filesConfirmDialog")
@@ -155,13 +155,13 @@ const filesTable = new DataTable("#filesTable", {
     })();
   },
   columns: [
-    { data: "id", visible: false, searchable: false },
+    { data: "uri", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
       data: "name",
       render: (data, type, full, meta) => {
         const link = `${window.apiHost}/api/v1/files/`;
-        return `<a href="javascript:;" onclick="downloadURI('uploadForm', '${link}${full.id}', '${data}');">${data}</a>`;
+        return `<a href="javascript:;" onclick="downloadURI('uploadForm', '${link}${full.uri}', '${data}');">${data}</a>`;
       },
     },
     {
@@ -186,9 +186,9 @@ const filesTable = new DataTable("#filesTable", {
       },
     },
   ],
-  rowId: "id",
+  rowId: "uri",
   // rowId: function(data) {
-  //   return 'id_' + data.id;
+  //   return 'uri_' + data.uri;
   // },
   columnDefs: [
     {
@@ -238,18 +238,18 @@ const filesTable = new DataTable("#filesTable", {
           for (const file of response.inserted) {
             // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
             const notFound =
-              filesTable.column(0).data().toArray().indexOf(file.id) === -1; // !!! must be
+              filesTable.column(0).data().toArray().indexOf(file.uri) === -1; // !!! must be
             if (notFound) {
               filesTable.row.add(file);
             }
           }
 
           for (const file of response.trashed) {
-            filesTable.row(`#${file.id}`).remove();
+            filesTable.row(`#${file.uri}`).remove();
           }
 
           for (const file of response.deleted) {
-            filesTable.row(`#${file.id}`).remove();
+            filesTable.row(`#${file.uri}`).remove();
           }
 
           filesTable.draw();
@@ -261,16 +261,16 @@ const filesTable = new DataTable("#filesTable", {
       className: "files-delete",
       enabled: false,
       action: function () {
-        selectedIds = [];
+        selectedUris = [];
 
         const selectedData = filesTable
           .rows(".selected")
           .data()
-          .map((obj) => obj.id);
+          .map((obj) => obj.uri);
         if (selectedData.length > 0) {
           filesConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
-            selectedIds.push(selectedData[i]);
+            selectedUris.push(selectedData[i]);
           }
         }
       },
@@ -301,7 +301,7 @@ export const deleteFiles = (e) => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ids: selectedIds}),
+      body: JSON.stringify({uris: selectedUris}),
     });
 
     if (response === false) {

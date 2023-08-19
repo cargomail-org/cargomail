@@ -9,12 +9,12 @@ BEGIN
     SET "timelineId" = (SELECT "lastTimelineId" FROM "ContactTimelineSeq" WHERE "userId" = new."userId"),
         "historyId"  = (SELECT "lastHistoryId" FROM "ContactHistorySeq" WHERE "userId" = new."userId"),
         "lastStmt"   = 0
-    WHERE "id" = new."id";
+    WHERE "uri" = new."uri";
 END;
 
 CREATE TRIGGER IF NOT EXISTS "ContactBeforeUpdate"
     BEFORE UPDATE OF
-        "id",
+        "uri",
         "userId"
     ON "Contact"
     FOR EACH ROW
@@ -37,7 +37,7 @@ BEGIN
         "historyId"  = (SELECT "lastHistoryId" FROM "ContactHistorySeq" WHERE "userId" = old."userId"),
         "lastStmt"   = 1,
         "modifiedAt" = CURRENT_TIMESTAMP
-    WHERE "id" = old."id";
+    WHERE "uri" = old."uri";
 END;
 
 -- Trashed
@@ -52,7 +52,7 @@ BEGIN
         OR (old."lastStmt" = 2 AND new."lastStmt" = 1); -- Untrash = trashed (2) -> inserted (0)
     UPDATE "Contact" 
 	SET "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL)
-	WHERE "id" = new."id";
+	WHERE "uri" = new."uri";
 END;
 
 CREATE TRIGGER IF NOT EXISTS "ContactAfterTrash"
@@ -67,7 +67,7 @@ BEGIN
     UPDATE "Contact"
     SET "historyId"  = (SELECT "lastHistoryId" FROM "ContactHistorySeq" WHERE "userId" = old."userId"),
         "deviceId" = iif(length(new."deviceId") = 39 AND substr(new."deviceId", 1, 7) = 'device:', substr(new."deviceId", 8, 32), NULL) 
-    WHERE "id" = old."id";
+    WHERE "uri" = old."uri";
 END;
 
 CREATE TRIGGER IF NOT EXISTS "ContactAfterDelete"
@@ -76,8 +76,8 @@ ON "Contact"
 FOR EACH ROW
 BEGIN
     UPDATE "ContactHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
-    INSERT INTO "ContactDeleted" ("id", "userId", "historyId")
-      VALUES (old."id",
+    INSERT INTO "ContactDeleted" ("uri", "userId", "historyId")
+      VALUES (old."uri",
               old."userId",
               (SELECT "lastHistoryId" FROM "ContactHistorySeq" WHERE "userId" = old."userId"));
 END;

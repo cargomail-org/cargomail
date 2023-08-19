@@ -98,6 +98,11 @@ func (api *DraftsApi) Update() http.Handler {
 			return
 		}
 
+		if draft.Uri == "" {
+			http.Error(w, repository.ErrMissingUriField.Error(), http.StatusBadRequest)
+			return
+		}
+
 		draft, err = api.drafts.Update(user, draft)
 		if err != nil {
 			switch {
@@ -121,15 +126,20 @@ func (api *DraftsApi) Trash() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -155,15 +165,20 @@ func (api *DraftsApi) Untrash() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -189,15 +204,20 @@ func (api *DraftsApi) Delete() http.Handler {
 			return
 		}
 
-		var ids repository.Ids
+		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&ids)
+		err := json.NewDecoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		body, err := json.Marshal(ids)
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -228,6 +248,11 @@ func (api *DraftsApi) Send() http.Handler {
 		err := json.NewDecoder(r.Body).Decode(&draft)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if draft.Uri == "" {
+			http.Error(w, repository.ErrMissingUriField.Error(), http.StatusBadRequest)
 			return
 		}
 
