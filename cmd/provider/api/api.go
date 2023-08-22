@@ -2,10 +2,12 @@ package api
 
 import (
 	"cargomail/cmd/provider/api/helper"
+	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"context"
 	"errors"
 	"net/http"
+	"time"
 )
 
 type ApiParams struct {
@@ -46,18 +48,6 @@ func (api *Api) contextSetUser(r *http.Request, user *repository.User) *http.Req
 // middleware
 func (api *Api) Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// w.Header().Add("Vary", "Authorization")
-
-		// authorizationHeader := r.Header.Get("Authorization")
-
-		// headerParts := strings.Split(authorizationHeader, " ")
-		// if len(headerParts) != 2 || headerParts[0] != "Bearer" {
-		// 	helper.ReturnErr(w, repository.ErrInvalidOrMissingAuthToken, http.StatusForbidden)
-		// 	return
-		// }
-
-		// token := headerParts[1]
-
 		sessionCookie, err := r.Cookie("sessionUri")
 		if err != nil {
 			switch {
@@ -106,6 +96,27 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 		user.DeviceId = &deviceId
 
 		r = api.contextSetUser(r, user)
+
+		ttl := config.Configuration.SessionTTL
+		sessionCookie.Expires = time.Now().Add(ttl)
+		sessionCookie.Path = "/"
+
+		updated, err := api.Session.session.UpdateIfOlderThan5Minutes(user, sessionCookie.Value, sessionCookie.Expires)
+		if err != nil {
+			helper.ReturnErr(w, err, http.StatusInternalServerError)
+			return
+		}
+
+		if updated {
+			http.SetCookie(w, sessionCookie)
+
+			if len(deviceId) > 0 {
+				deviceIdCookie.Expires = time.Now().AddDate(1, 0, 0) // 1 year
+				deviceIdCookie.Path = "/"
+
+				http.SetCookie(w, deviceIdCookie)
+			}
+		}
 
 		next.ServeHTTP(w, r)
 	})

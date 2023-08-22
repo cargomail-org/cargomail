@@ -115,7 +115,8 @@ func (api *SessionApi) Login() http.Handler {
 			return
 		}
 
-		session, err := api.session.New(user.Id, 24*time.Hour, repository.ScopeAuthentication)
+		ttl := config.Configuration.SessionTTL
+		session, err := api.session.New(user.Id, ttl, repository.ScopeAuthentication)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -185,16 +186,6 @@ func (api *SessionApi) Logout() http.Handler {
 			SameSite: config.CookieSameSite(),
 		}
 		http.SetCookie(w, &clearCookie)
-
-		// authorizationHeader := r.Header.Get("Authorization")
-
-		// headerParts := strings.Split(authorizationHeader, " ")
-		// if len(headerParts) != 2 || headerParts[0] != "Bearer" {
-		// 	helper.ReturnErr(w, repository.ErrInvalidOrMissingAuthToken, http.StatusForbidden)
-		// 	return
-		// }
-
-		// token := headerParts[1]
 
 		cookie, err := r.Cookie("sessionUri")
 		if err != nil {

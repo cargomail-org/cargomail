@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+	"time"
 
 	"gopkg.in/yaml.v2"
 )
@@ -32,12 +33,14 @@ type Config = struct {
 	TransferBind     string `yaml:"transferBind"`
 	CookieSameSite   string `yaml:"cookieSameSite"`
 	Stage            string `yaml:"stage"`
+	SessionTTL       time.Duration
 }
 
 const (
 	DefaultBodiesFolder   = "bodies"
 	DefaultFilesFolder    = "files"
 	DefaultCookieSameSite = http.SameSiteStrictMode
+	DefaultSessionTTL     = 24 * time.Hour
 )
 
 func newConfig() Config {
@@ -53,6 +56,8 @@ func newConfig() Config {
 	if len(c.FilesFolder) == 0 {
 		c.FilesFolder = DefaultFilesFolder
 	}
+
+	c.SessionTTL = DefaultSessionTTL
 
 	return c
 }

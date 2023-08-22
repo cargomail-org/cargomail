@@ -111,16 +111,6 @@ func (app *App) Logout() http.Handler {
 		}
 		http.SetCookie(w, &clearCookie)
 
-		// authorizationHeader := r.Header.Get("Authorization")
-
-		// headerParts := strings.Split(authorizationHeader, " ")
-		// if len(headerParts) != 2 || headerParts[0] != "Bearer" {
-		// 	helper.ReturnErr(w, repository.ErrInvalidOrMissingAuthToken, http.StatusForbidden)
-		// 	return
-		// }
-
-		// token := headerParts[1]
-
 		cookie, err := r.Cookie("sessionUri")
 		if err != nil {
 			switch {
