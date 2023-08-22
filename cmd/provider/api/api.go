@@ -97,6 +97,8 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 
 		r = api.contextSetUser(r, user)
 
+		// refresh sessionUri/deviceId cookies
+
 		ttl := config.Configuration.SessionTTL
 		sessionCookie.Expires = time.Now().Add(ttl)
 		sessionCookie.Path = "/"
