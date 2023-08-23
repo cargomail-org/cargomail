@@ -245,12 +245,12 @@ CREATE INDEX IF NOT EXISTS "IdxMessageTimelineId" ON "Message" ("timelineId");
 CREATE INDEX IF NOT EXISTS "IdxMessageHistoryId" ON "Message" ("historyId");
 CREATE INDEX IF NOT EXISTS "IdxMessageLastStmt" ON "Message" ("lastStmt");
 
-CREATE UNIQUE INDEX IF NOT EXISTS "IdxLabelName" ON "Label" ("name");
+CREATE UNIQUE INDEX IF NOT EXISTS "IdxLabelName" ON "Label" ("name") WHERE "lastStmt" < 2;
 CREATE INDEX IF NOT EXISTS "IdxLabelTimelineId" ON "Label" ("timelineId");
 CREATE INDEX IF NOT EXISTS "IdxLabelHistoryId" ON "Label" ("historyId");
 CREATE INDEX IF NOT EXISTS "IdxLabelLastStmt" ON "Label" ("lastStmt");
 
-CREATE UNIQUE INDEX IF NOT EXISTS "IdxContact" ON "Contact"("emailAddress", "firstName", "lastName") WHERE "lastStmt" < 2;
+CREATE UNIQUE INDEX IF NOT EXISTS "IdxContact" ON "Contact"("emailAddress") WHERE "lastStmt" < 2;
 CREATE INDEX IF NOT EXISTS "IdxContactTimelineId" ON "Contact" ("timelineId");
 CREATE INDEX IF NOT EXISTS "IdxContactHistoryId" ON "Contact" ("historyId");
 CREATE INDEX IF NOT EXISTS "IdxContactLastStmt" ON "Contact" ("lastStmt");

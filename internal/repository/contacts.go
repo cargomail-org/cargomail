@@ -85,7 +85,7 @@ func (r *ContactRepository) Create(user *User, contact *Contact) (*Contact, erro
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(contact.Scan()...)
 	if err != nil {
 		switch {
-		case err.Error() == `UNIQUE constraint failed: Contact.emailAddress, Contact.firstName, Contact.lastName`:
+		case err.Error() == `UNIQUE constraint failed: Contact.emailAddress`:
 			return nil, ErrDuplicateContact
 		case err.Error() == `CHECK constraint failed: emailAddress`:
 			return nil, ErrInvalidEmailAddress
@@ -362,7 +362,7 @@ func (r *ContactRepository) Update(user *User, contact *Contact) (*Contact, erro
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
 			return nil, ErrContactNotFound
-		case err.Error() == `UNIQUE constraint failed: Contact.emailAddress, Contact.firstName, Contact.lastName`:
+		case err.Error() == `UNIQUE constraint failed: Contact.emailAddress`:
 			return nil, ErrDuplicateContact
 		case err.Error() == `CHECK constraint failed: emailAddress`:
 			return nil, ErrInvalidEmailAddress
