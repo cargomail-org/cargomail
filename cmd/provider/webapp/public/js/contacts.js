@@ -10,6 +10,8 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
+import { setComposeContacts } from "/public/js/compose.js";
+
 let selectedUris = [];
 
 const contactsFormDialog = new bootstrap.Modal(
@@ -31,12 +33,17 @@ const contactsTable = new DataTable("#contactsTable", {
   },
   ajax: function (data, callback, settings) {
     (async () => {
-      const response = await api(contactsForm.id, 200, `${window.apiHost}/api/v1/contacts`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await api(
+        contactsForm.id,
+        200,
+        `${window.apiHost}/api/v1/contacts`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response === false) {
         return;
@@ -45,6 +52,8 @@ const contactsTable = new DataTable("#contactsTable", {
       historyId = response.lastHistoryId;
 
       callback({ data: response.contacts });
+
+      setComposeContacts(contactsTable.rows().data().toArray());
     })();
   },
   columns: [
@@ -141,6 +150,8 @@ const contactsTable = new DataTable("#contactsTable", {
             contactsTable.row(`#${contact.uri}`).remove();
           }
 
+          setComposeContacts(contactsTable.rows().data().toArray());
+
           contactsTable.draw();
         })();
       },
@@ -208,7 +219,9 @@ export const showContactsFormDialog = (e) => {
 
   const modalTitle = formDialog.querySelector(".modal-title");
 
-  const contactUriInput = formDialog.querySelector(".modal-body #contactUriInput");
+  const contactUriInput = formDialog.querySelector(
+    ".modal-body #contactUriInput"
+  );
   const emailInput = formDialog.querySelector(".modal-body #emailInput");
   const firstNameInput = formDialog.querySelector(
     ".modal-body #firstNameInput"
@@ -255,29 +268,38 @@ export const submitFormContact = async (e) => {
     // new
     delete formData.uri;
 
-    const response = await api(form.id, 201, `${window.apiHost}/api/v1/contacts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await api(
+      form.id,
+      201,
+      `${window.apiHost}/api/v1/contacts`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
     if (response === false) {
       return;
     }
 
     contactsTable.row.add(response).draw();
-
   } else if (formData.uri.length == 32) {
     // edit
-    const response = await api(form.id, 200, `${window.apiHost}/api/v1/contacts`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await api(
+      form.id,
+      200,
+      `${window.apiHost}/api/v1/contacts`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
     if (response === false) {
       return;
@@ -287,6 +309,8 @@ export const submitFormContact = async (e) => {
   }
 
   contactsFormDialog.hide();
+
+  setComposeContacts(contactsTable.rows().data().toArray());
 };
 
 export const deleteContacts = (e) => {
@@ -295,14 +319,19 @@ export const deleteContacts = (e) => {
   contactsConfirmDialog.hide();
 
   (async () => {
-    const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/contacts/trash`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({uris: selectedUris}),
-    });
+    const response = await api(
+      uploadForm.id,
+      200,
+      `${window.apiHost}/api/v1/contacts/trash`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uris: selectedUris }),
+      }
+    );
 
     if (response === false) {
       return;
@@ -311,6 +340,7 @@ export const deleteContacts = (e) => {
     contactsTable.rows(".selected").remove().draw();
     contactsTable.buttons([".contacts-edit"]).enable(false);
     contactsTable.buttons([".contacts-delete"]).enable(false);
-    console.log("Successfully trashed contact(s)");
+    
+    setComposeContacts(contactsTable.rows().data().toArray());
   })();
 };

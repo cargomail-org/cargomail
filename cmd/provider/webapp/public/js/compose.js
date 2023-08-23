@@ -10,7 +10,18 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-const toInput = document.getElementById("toInput");
+$("#toInput").selectize({
+  plugins: ["remove_button", "clear_button"],
+  delimiter: ",",
+  persist: true,
+  create: true,
+  options: [],
+  valueField: "email",
+  labelField: "name",
+  searchField: ["name", "email"],
+});
+
+// const toInput = document.getElementById("toInput");
 const subjectInput = document.getElementById("subjectInput");
 const messageText = document.getElementById("messageText");
 
@@ -29,7 +40,7 @@ const bouncer = (e) => {
   }, 2000);
 };
 
-toInput.addEventListener("keyup", (event) => bouncer(event));
+// toInput.addEventListener("keyup", (event) => bouncer(event));
 subjectInput.addEventListener("keyup", (event) => bouncer(event));
 messageText.addEventListener("keyup", (event) => bouncer(event));
 
@@ -177,4 +188,33 @@ export const addItems = (items) => {
       composeTable.page(currentPage).draw(false);
     }
   }
+};
+
+const getFullNameOrEmail = (email, firstName, lastName) => {
+  const fullName =
+    firstName?.length > 0 ? firstName + " " + lastName : lastName;
+  if (fullName.length > 0) {
+    return fullName;
+  }
+
+  return email;
+};
+
+export const setComposeContacts = (contacts) => {
+  const composeContacts = contacts.map((c) => ({
+    email: c.emailAddress,
+    name: getFullNameOrEmail(c.emailAddress, c.firstName, c.lastName),
+  }));
+
+  const selectize = $("#toInput")[0].selectize;
+
+  const selected = selectize.getValue();
+
+  selectize.clearOptions(true);
+
+  selectize.addOption(composeContacts);
+
+  selectize.setValue(selected);
+
+  selectize.refreshOptions(false);
 };

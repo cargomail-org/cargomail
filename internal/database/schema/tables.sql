@@ -108,7 +108,11 @@ CREATE TABLE IF NOT EXISTS "Label" (
 CREATE TABLE IF NOT EXISTS "Contact" (
     "uri"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
-    "emailAddress"  VARCHAR(255),
+    "emailAddress"  VARCHAR(255) NOT NULL CHECK (
+        "emailAddress" LIKE '%_@_%._%' AND
+        LENGTH("emailAddress") - LENGTH(REPLACE("emailAddress", '@', '')) = 1 AND
+        SUBSTR(LOWER("emailAddress"), 1, INSTR("emailAddress", '.') - 1) NOT GLOB '*[^@0-9a-z]*' AND
+        SUBSTR(LOWER("emailAddress"), INSTR("emailAddress", '.') + 1) NOT GLOB '*[^a-z]*'),
     "firstName"		VARCHAR(255),
     "lastName"		VARCHAR(255),
     "createdAt"		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

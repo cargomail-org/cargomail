@@ -87,6 +87,8 @@ func (r *ContactRepository) Create(user *User, contact *Contact) (*Contact, erro
 		switch {
 		case err.Error() == `UNIQUE constraint failed: Contact.emailAddress, Contact.firstName, Contact.lastName`:
 			return nil, ErrDuplicateContact
+		case err.Error() == `CHECK constraint failed: emailAddress`:
+			return nil, ErrInvalidEmailAddress
 		default:
 			return nil, err
 		}
@@ -362,6 +364,8 @@ func (r *ContactRepository) Update(user *User, contact *Contact) (*Contact, erro
 			return nil, ErrContactNotFound
 		case err.Error() == `UNIQUE constraint failed: Contact.emailAddress, Contact.firstName, Contact.lastName`:
 			return nil, ErrDuplicateContact
+		case err.Error() == `CHECK constraint failed: emailAddress`:
+			return nil, ErrInvalidEmailAddress
 		default:
 			return nil, err
 		}

@@ -15,6 +15,7 @@ var (
 	ErrFailedValidationResponse = errors.New("failed validation")
 	ErrContactNotFound          = errors.New("contact not found")
 	ErrDuplicateContact         = errors.New("contact already exists")
+	ErrInvalidEmailAddress      = errors.New("invalid email address")
 	ErrBodyNotFound             = errors.New("body not found")
 	ErrFileNotFound             = errors.New("file not found")
 	ErrDraftNotFound            = errors.New("draft not found")
