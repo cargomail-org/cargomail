@@ -33,7 +33,7 @@ type Config = struct {
 	TransferBind     string `yaml:"transferBind"`
 	CookieSameSite   string `yaml:"cookieSameSite"`
 	Stage            string `yaml:"stage"`
-	SessionTTL       time.Duration
+	// SessionTTL       time.Duration
 }
 
 const (
@@ -57,7 +57,7 @@ func newConfig() Config {
 		c.FilesFolder = DefaultFilesFolder
 	}
 
-	c.SessionTTL = DefaultSessionTTL
+	// c.SessionTTL = DefaultSessionTTL
 
 	return c
 }

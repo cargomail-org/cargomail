@@ -115,7 +115,7 @@ func (api *SessionApi) Login() http.Handler {
 			return
 		}
 
-		ttl := config.Configuration.SessionTTL
+		ttl := config.DefaultSessionTTL
 		session, err := api.session.New(user.Id, ttl, repository.ScopeAuthentication)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
