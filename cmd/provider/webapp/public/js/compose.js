@@ -10,15 +10,76 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
+const REGEX_EMAIL =
+  "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
+  "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+
 $("#toInput").selectize({
   plugins: ["remove_button", "clear_button"],
-  delimiter: ",",
-  persist: true,
-  create: true,
-  options: [],
+  // delimiter: ",",
+  // persist: false,
+  // create: false,
   valueField: "email",
   labelField: "name",
   searchField: ["name", "email"],
+  options: [],
+  render: {
+    item: function (item, escape) {
+      return (
+        "<div>" +
+        (item.name
+          ? '<span class="name">' + escape(item.name) + "</span>"
+          : "") +
+        (item.email
+          ? '<span class="email">' + escape(item.email) + "</span>"
+          : "") +
+        "</div>"
+      );
+    },
+    option: function (item, escape) {
+      var label = item.name || item.email;
+      var caption = item.name ? item.email : null;
+      return (
+        "<div>" +
+        '<span class="label">' +
+        escape(label) +
+        "</span>" +
+        (caption
+          ? '<span class="caption">' + escape(caption) + "</span>"
+          : "") +
+        "</div>"
+      );
+    },
+  },
+  createFilter: function (input) {
+    var match, regex;
+
+    // email@address.com
+    regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+    match = input.match(regex);
+    if (match) return !this.options.hasOwnProperty(match[0]);
+
+    // name <email@address.com>
+    regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+    match = input.match(regex);
+    if (match) return !this.options.hasOwnProperty(match[2]);
+
+    return false;
+  },
+  create: function (input) {
+    if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+      return { email: input };
+    }
+    var match = input.match(new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i"));
+    if (match) {
+      return {
+        email: match[2],
+        name: $.trim(match[1]),
+      };
+    }
+    alert("Invalid email address.");
+    return false;
+  },
 });
 
 // const toInput = document.getElementById("toInput");
@@ -190,31 +251,45 @@ export const addItems = (items) => {
   }
 };
 
-const getFullNameOrEmail = (email, firstName, lastName) => {
+const getFullName = (firstName, lastName) => {
   const fullName =
     firstName?.length > 0 ? firstName + " " + lastName : lastName;
-  if (fullName.length > 0) {
-    return fullName;
-  }
 
-  return email;
+  return fullName.trim();
 };
 
 export const setComposeContacts = (contacts) => {
   const composeContacts = contacts.map((c) => ({
     email: c.emailAddress,
-    name: getFullNameOrEmail(c.emailAddress, c.firstName, c.lastName),
+    name: getFullName(c.firstName, c.lastName),
   }));
 
   const selectize = $("#toInput")[0].selectize;
 
-  const selected = selectize.getValue();
+  // add or update
+  for (const composeContact of composeContacts) {
+    const item = selectize.options[composeContact.email];
 
-  selectize.clearOptions(true);
+    if (item) {
+      selectize.updateOption(composeContact.email, composeContact);
+    } else {
+      selectize.addOption(composeContact);
+    }
+  }
 
-  selectize.addOption(composeContacts);
+  // remove if not selected
+  for (const [key, value] of Object.entries(selectize.options)) {
+    const item = composeContacts.find((x) => x.email == key);
 
-  selectize.setValue(selected);
+    if (!item) {
+      const selected = selectize.getValue();
+      const selectedItem = selected.find((x) => x == key);
+
+      if (!selectedItem) {
+        selectize.removeOption(key);
+      }
+    }
+  }
 
   selectize.refreshOptions(false);
 };
