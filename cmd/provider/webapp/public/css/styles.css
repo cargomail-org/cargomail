@@ -63,6 +63,11 @@ a:not([class*="btn"]):hover {
   right: calc(50% - (30px / 2));
 }
 
+.recipients > .btn-link {
+  --bs-btn-padding-x: 0;
+  --bs-btn-padding-y: 0;
+}
+
 .selectize-control.contacts {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
@@ -70,25 +75,29 @@ a:not([class*="btn"]):hover {
 }
 
 .selectize-control.contacts .selectize-input > div:first-child {
-  margin-left: 20px;
+  margin-left: 26px !important;
 }
 
 .selectize-control.contacts .selectize-input > input:first-child {
-  left: 22px !important;
+  left: 26px !important;
 }
 
 .selectize-control.contacts .selectize-input > div .email {
   opacity: 0.8;
 }
-.selectize-control.contacts .selectize-input > div .name + .email {
+
+/* .selectize-control.contacts .selectize-input > div .name + .email {
   margin-left: 5px;
-}
+} */
+
 .selectize-control.contacts .selectize-input > div .email:before {
   content: "<";
 }
+
 .selectize-control.contacts .selectize-input > div .email:after {
   content: ">";
 }
+
 .selectize-control.contacts .selectize-dropdown .caption {
   font-size: 12px;
   display: block;

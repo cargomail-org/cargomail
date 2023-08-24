@@ -208,8 +208,10 @@
 
 <script type="module">
   // compose
-  import { deleteCargoes } from "/public/js/compose.js";
+  import { deleteCargoes, ccShow, bccShow } from "/public/js/compose.js";
   document.querySelector('#composeConfirmButton').addEventListener('click', deleteCargoes);
+  document.querySelector('#ccButton').addEventListener('click', ccShow);
+    document.querySelector('#bccButton').addEventListener('click', bccShow);
 
   // files
   import { inputUploadChanged, clearUpload, deleteFiles, copySelectedFiles } from "/public/js/files.js";

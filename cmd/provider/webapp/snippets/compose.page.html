@@ -1,15 +1,27 @@
 <div class="container">
     <!-- Compose -->
     <form class="row g-2" id="composeForm" method="" action="#" enctype="multipart/form-data">
-        <div class="form-floating mb-1">
-            <select multiple class="form-control contacts" id="toInput" type="text"></select>
-            <label for="toInput">To</label>
+        <div class="d-flex align-items-center">
+            <div class="form-floating mb-1 flex-grow-1">
+                <select multiple class="form-control contacts" id="toInput" type="text"></select>
+                <label for="toInput">To</label>
+            </div>
+            <div class="flex-grow-0">
+                <div class="recipients col d-flex flex-column">
+                    <a class="btn btn-link" id="ccButton">
+                        <small>Cc</small>
+                    </a>
+                    <a class="btn btn-link" id="bccButton">
+                        <small>Bcc</small>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div hidden class="form-floating mb-1">
+        <div hidden class="form-floating mb-1" id="ccPanel">
             <select multiple class="form-control contacts" id="ccInput" type="text"></select>
             <label for="ccInput">Cc</label>
         </div>
-        <div hidden class="form-floating mb-1">
+        <div hidden class="form-floating mb-1" id="bccPanel">
             <select multiple class="form-control contacts" id="bccInput" type="text"></select>
             <label for="bccInput">Bcc</label>
         </div>

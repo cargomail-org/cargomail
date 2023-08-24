@@ -15,7 +15,7 @@ const REGEX_EMAIL =
   "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
 
 $("#toInput").selectize({
-  plugins: ["remove_button", "clear_button"],
+  plugins: ["remove_button"],
   valueField: "email",
   labelField: "name",
   searchField: ["name", "email"],
@@ -25,7 +25,7 @@ $("#toInput").selectize({
       return (
         "<div>" +
         (item.name
-          ? '<span class="name">' + escape(item.name) + "</span>"
+          ? '<span class="name">' + escape(item.name + " ") + "</span>"
           : "") +
         (item.email
           ? '<span class="email">' + escape(item.email) + "</span>"
@@ -80,7 +80,7 @@ $("#toInput").selectize({
 });
 
 $("#ccInput").selectize({
-  plugins: ["remove_button", "clear_button"],
+  plugins: ["remove_button"],
   valueField: "email",
   labelField: "name",
   searchField: ["name", "email"],
@@ -90,7 +90,7 @@ $("#ccInput").selectize({
       return (
         "<div>" +
         (item.name
-          ? '<span class="name">' + escape(item.name) + "</span>"
+          ? '<span class="name">' + escape(item.name + " ") + "</span>"
           : "") +
         (item.email
           ? '<span class="email">' + escape(item.email) + "</span>"
@@ -145,7 +145,7 @@ $("#ccInput").selectize({
 });
 
 $("#bccInput").selectize({
-  plugins: ["remove_button", "clear_button"],
+  plugins: ["remove_button"],
   valueField: "email",
   labelField: "name",
   searchField: ["name", "email"],
@@ -155,7 +155,7 @@ $("#bccInput").selectize({
       return (
         "<div>" +
         (item.name
-          ? '<span class="name">' + escape(item.name) + "</span>"
+          ? '<span class="name">' + escape(item.name + " ") + "</span>"
           : "") +
         (item.email
           ? '<span class="email">' + escape(item.email) + "</span>"
@@ -376,6 +376,18 @@ export const addItems = (items) => {
       composeTable.page(currentPage).draw(false);
     }
   }
+};
+
+export const ccShow = (e) => {
+  e?.preventDefault();
+
+  document.getElementById("ccPanel").hidden = false;
+};
+
+export const bccShow = (e) => {
+  e?.preventDefault();
+
+  document.getElementById("bccPanel").hidden = false;
 };
 
 const getFullName = (firstName, lastName) => {
