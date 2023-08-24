@@ -2,18 +2,24 @@
     <!-- Compose -->
     <form class="row g-2" id="composeForm" method="" action="#" enctype="multipart/form-data">
         <div class="form-floating mb-1">
-            <select multiple class="form-control contacts" id="toInput" type="text" placeholder="To"
-                data-sb-validations=""></select>
-            <label for="to">To</label>
+            <select multiple class="form-control contacts" id="toInput" type="text"></select>
+            <label for="toInput">To</label>
+        </div>
+        <div hidden class="form-floating mb-1">
+            <select multiple class="form-control contacts" id="ccInput" type="text"></select>
+            <label for="ccInput">Cc</label>
+        </div>
+        <div hidden class="form-floating mb-1">
+            <select multiple class="form-control contacts" id="bccInput" type="text"></select>
+            <label for="bccInput">Bcc</label>
         </div>
         <div class="form-floating mb-1">
-            <input class="form-control" id="subjectInput" type="text" placeholder="Subject" data-sb-validations="" />
-            <label for="subject">Subject</label>
+            <input class="form-control" id="subjectInput" type="text" />
+            <label for="subjectInput">Subject</label>
         </div>
         <div class="form-floating mb-1">
-            <textarea class="form-control" id="messageText" type="text" placeholder="Message" style="height: 8rem;"
-                data-sb-validations=""></textarea>
-            <label for="message">Message</label>
+            <textarea class="form-control" id="messageText" type="text" style="height: 8rem;"></textarea>
+            <label for="messageText">Message</label>
         </div>
     </form>
 

@@ -63,6 +63,20 @@ a:not([class*="btn"]):hover {
   right: calc(50% - (30px / 2));
 }
 
+.selectize-control.contacts {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  min-height: auto !important;
+}
+
+.selectize-control.contacts .selectize-input > div:first-child {
+  margin-left: 20px;
+}
+
+.selectize-control.contacts .selectize-input > input:first-child {
+  left: 22px !important;
+}
+
 .selectize-control.contacts .selectize-input > div .email {
   opacity: 0.8;
 }

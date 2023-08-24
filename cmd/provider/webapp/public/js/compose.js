@@ -16,9 +16,136 @@ const REGEX_EMAIL =
 
 $("#toInput").selectize({
   plugins: ["remove_button", "clear_button"],
-  // delimiter: ",",
-  // persist: false,
-  // create: false,
+  valueField: "email",
+  labelField: "name",
+  searchField: ["name", "email"],
+  options: [],
+  render: {
+    item: function (item, escape) {
+      return (
+        "<div>" +
+        (item.name
+          ? '<span class="name">' + escape(item.name) + "</span>"
+          : "") +
+        (item.email
+          ? '<span class="email">' + escape(item.email) + "</span>"
+          : "") +
+        "</div>"
+      );
+    },
+    option: function (item, escape) {
+      var label = item.name || item.email;
+      var caption = item.name ? item.email : null;
+      return (
+        "<div>" +
+        '<span class="label">' +
+        escape(label) +
+        "</span>" +
+        (caption
+          ? '<span class="caption">' + escape(caption) + "</span>"
+          : "") +
+        "</div>"
+      );
+    },
+  },
+  createFilter: function (input) {
+    var match, regex;
+
+    // email@address.com
+    regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+    match = input.match(regex);
+    if (match) return !this.options.hasOwnProperty(match[0]);
+
+    // name <email@address.com>
+    regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+    match = input.match(regex);
+    if (match) return !this.options.hasOwnProperty(match[2]);
+
+    return false;
+  },
+  create: function (input) {
+    if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+      return { email: input };
+    }
+    var match = input.match(new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i"));
+    if (match) {
+      return {
+        email: match[2],
+        name: $.trim(match[1]),
+      };
+    }
+    alert("Invalid email address.");
+    return false;
+  },
+});
+
+$("#ccInput").selectize({
+  plugins: ["remove_button", "clear_button"],
+  valueField: "email",
+  labelField: "name",
+  searchField: ["name", "email"],
+  options: [],
+  render: {
+    item: function (item, escape) {
+      return (
+        "<div>" +
+        (item.name
+          ? '<span class="name">' + escape(item.name) + "</span>"
+          : "") +
+        (item.email
+          ? '<span class="email">' + escape(item.email) + "</span>"
+          : "") +
+        "</div>"
+      );
+    },
+    option: function (item, escape) {
+      var label = item.name || item.email;
+      var caption = item.name ? item.email : null;
+      return (
+        "<div>" +
+        '<span class="label">' +
+        escape(label) +
+        "</span>" +
+        (caption
+          ? '<span class="caption">' + escape(caption) + "</span>"
+          : "") +
+        "</div>"
+      );
+    },
+  },
+  createFilter: function (input) {
+    var match, regex;
+
+    // email@address.com
+    regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+    match = input.match(regex);
+    if (match) return !this.options.hasOwnProperty(match[0]);
+
+    // name <email@address.com>
+    regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+    match = input.match(regex);
+    if (match) return !this.options.hasOwnProperty(match[2]);
+
+    return false;
+  },
+  create: function (input) {
+    if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+      return { email: input };
+    }
+    var match = input.match(new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i"));
+    if (match) {
+      return {
+        email: match[2],
+        name: $.trim(match[1]),
+      };
+    }
+    alert("Invalid email address.");
+    return false;
+  },
+});
+
+$("#bccInput").selectize({
+  plugins: ["remove_button", "clear_button"],
   valueField: "email",
   labelField: "name",
   searchField: ["name", "email"],
@@ -258,14 +385,7 @@ const getFullName = (firstName, lastName) => {
   return fullName.trim();
 };
 
-export const setComposeContacts = (contacts) => {
-  const composeContacts = contacts.map((c) => ({
-    email: c.emailAddress,
-    name: getFullName(c.firstName, c.lastName),
-  }));
-
-  const selectize = $("#toInput")[0].selectize;
-
+const setSelectizeComposeContacts = (selectize, composeContacts) => {
   // add or update
   for (const composeContact of composeContacts) {
     const item = selectize.options[composeContact.email];
@@ -292,4 +412,20 @@ export const setComposeContacts = (contacts) => {
   }
 
   selectize.refreshOptions(false);
+};
+
+export const setComposeContacts = (contacts) => {
+  const composeContacts = contacts.map((c) => ({
+    email: c.emailAddress,
+    name: getFullName(c.firstName, c.lastName),
+  }));
+
+  const selectizeTo = $("#toInput")[0].selectize;
+  setSelectizeComposeContacts(selectizeTo, composeContacts);
+
+  const selectizeCc = $("#ccInput")[0].selectize;
+  setSelectizeComposeContacts(selectizeCc, composeContacts);
+
+  const selectizeBcc = $("#bccInput")[0].selectize;
+  setSelectizeComposeContacts(selectizeBcc, composeContacts);
 };
