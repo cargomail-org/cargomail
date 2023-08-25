@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -98,21 +99,22 @@
                 </a> -->
                 <a href="#" class="nav-link dropdown-toggle px-sm-0 px-1" id="messagesLink" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <i class="bi bi-envelope h4" id="messagesIcon"></i><span class="ms-1 d-none d-sm-inline">Messages</span>
+                  <i class="bi bi-envelope h4" id="messagesIcon"></i><span
+                    class="ms-1 d-none d-sm-inline">Messages</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownMessage">
                   <li class="dropdown-item">
-                    <a id="inboxLink" class="btn px-sm-0 px-2" onclick='messagesContent(this);return false;'>
+                    <a id="inboxLink" class="btn px-2" onclick='messagesContent(this);return false;'>
                       <i class="bi bi-envelope h4"></i>
                       <span class="ms-1 d-sm-inline">Inbox</span></a>
                   </li>
                   <li class="dropdown-item">
-                    <a id="sentLink" class="btn px-sm-0 px-2" onclick='messagesContent(this);return false;'>
+                    <a id="sentLink" class="btn px-2" onclick='messagesContent(this);return false;'>
                       <i class="bi bi-envelope-check h4"></i>
                       <span class="ms-1 d-sm-inline">Sent</span></a>
                   </li>
                   <li class="dropdown-item">
-                    <a id="draftsLink" class="btn px-sm-0 px-2" onclick='messagesContent(this);return false;'>
+                    <a id="draftsLink" class="btn px-2" onclick='messagesContent(this);return false;'>
                       <i class="bi bi-envelope-slash h4"></i>
                       <span class="ms-1 d-sm-inline">Drafts</span></a>
                   </li>
@@ -134,12 +136,12 @@
               </a>
               <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownUser">
                 <li class="dropdown-item">
-                  <a id="contactsLink" class="btn px-sm-0 px-2" onclick='contactsContent();return false;'>
+                  <a id="contactsLink" class="btn px-2" onclick='contactsContent();return false;'>
                     <i class="bi bi-people h4"></i>
                     <span class="ms-1 d-sm-inline">Contacts</span></a>
                 </li>
                 <li class="dropdown-item">
-                  <a id="profileLink" class="btn px-sm-0 px-2" onclick='profileContent();return false;'>
+                  <a id="profileLink" class="btn px-2" onclick='profileContent();return false;'>
                     <i class="bi bi-person h4"></i>
                     <span class="ms-1 d-sm-inline">Profile</span></a>
                 </li>
@@ -234,6 +236,10 @@
   document.querySelector('#composeConfirmButton').addEventListener('click', deleteCargoes);
   document.querySelector('#ccButton').addEventListener('click', ccShow);
   document.querySelector('#bccButton').addEventListener('click', bccShow);
+
+  // messages
+  import { deleteMessages } from "/public/js/messages.js";
+  document.querySelector('#messagesConfirmButton').addEventListener('click', deleteMessages);
 
   // files
   import { inputUploadChanged, clearUpload, deleteFiles, copySelectedFiles } from "/public/js/files.js";

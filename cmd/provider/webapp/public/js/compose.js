@@ -343,7 +343,6 @@ export const deleteCargoes = (e) => {
 
   composeTable.rows(".selected").remove().draw();
   composeTable.buttons([".files-delete"]).enable(false);
-  console.log("Successfully deleted file(s)");
 };
 
 export const addItems = (items) => {
