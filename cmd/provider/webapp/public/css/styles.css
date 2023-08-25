@@ -64,6 +64,8 @@ a:not([class*="btn"]):hover {
 }
 
 .recipients > .btn-link {
+  margin-top: -6px;
+  margin-left: 2px;
   --bs-btn-padding-x: 0;
   --bs-btn-padding-y: 0;
 }
