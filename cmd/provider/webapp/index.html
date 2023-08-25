@@ -51,7 +51,8 @@
   <script src='https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js'></script>
 
   <!-- selectize CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.bootstrap5.min.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.bootstrap5.min.css" />
 
   <!-- api.js-->
   <script src='/public/js/api.js'></script>
@@ -75,11 +76,11 @@
                 <a href="/compose" id="composeLink" class="nav-link my-2 px-sm-0 px-2"
                   onclick='composeContent();return false;'>
                   <div class="d-flex d-sm-none d-sm-inline">
-                    <i class="bi bi-postcard h2"></i>
+                    <i class="bi bi-envelope-plus h2"></i>
                     <span class="ms-2 mt-1 fs-7"><small class="subject-heading"></small></span>
                   </div>
                   <div class="d-none d-sm-inline">
-                    <i class="bi bi-postcard h2"></i>
+                    <i class="bi bi-envelope-plus h2"></i>
                     <span class="ms-1 fs-5">Compose</span>
                     <br />
                     <span class="fs-7"><small class="subject-heading"></small></span>
@@ -90,11 +91,32 @@
             <ul
               class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto me-2 justify-content-end align-items-center align-items-sm-start"
               id="menu">
-              <li class="nav-item">
-                <a href="/" id="messagesLink" class="nav-link px-sm-0 px-2" onclick='messagesContent();return false;'>
-                  <i class="bi bi-grid-1x2 h5"></i>
+              <li class="dropdown">
+                <!-- <a href="/" id="messagesLink" class="nav-link px-sm-0 px-2" onclick='messagesContent();return false;'>
+                  <i class="bi bi-envelope h4"></i>
                   <span class="ms-1 d-none d-sm-inline">Messages</span>
+                </a> -->
+                <a href="#" class="nav-link dropdown-toggle px-sm-0 px-1" id="messagesLink" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="bi bi-envelope h4" id="messagesIcon"></i><span class="ms-1 d-none d-sm-inline">Messages</span>
                 </a>
+                <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownMessage">
+                  <li class="dropdown-item">
+                    <a id="inboxLink" class="btn px-sm-0 px-2" onclick='messagesContent(this);return false;'>
+                      <i class="bi bi-envelope h4"></i>
+                      <span class="ms-1 d-sm-inline">Inbox</span></a>
+                  </li>
+                  <li class="dropdown-item">
+                    <a id="sentLink" class="btn px-sm-0 px-2" onclick='messagesContent(this);return false;'>
+                      <i class="bi bi-envelope-check h4"></i>
+                      <span class="ms-1 d-sm-inline">Sent</span></a>
+                  </li>
+                  <li class="dropdown-item">
+                    <a id="draftsLink" class="btn px-sm-0 px-2" onclick='messagesContent(this);return false;'>
+                      <i class="bi bi-envelope-slash h4"></i>
+                      <span class="ms-1 d-sm-inline">Drafts</span></a>
+                  </li>
+                </ul>
               </li>
               <li class="nav-item">
                 <a href="/files" id="filesLink" class="nav-link px-sm-0 px-2" onclick='filesContent();return false;'>
@@ -211,7 +233,7 @@
   import { deleteCargoes, ccShow, bccShow } from "/public/js/compose.js";
   document.querySelector('#composeConfirmButton').addEventListener('click', deleteCargoes);
   document.querySelector('#ccButton').addEventListener('click', ccShow);
-    document.querySelector('#bccButton').addEventListener('click', bccShow);
+  document.querySelector('#bccButton').addEventListener('click', bccShow);
 
   // files
   import { inputUploadChanged, clearUpload, deleteFiles, copySelectedFiles } from "/public/js/files.js";
@@ -233,7 +255,8 @@
   profileForm = document.getElementById("profileForm");
   loadProfile(profileForm);
 
-  filesContent();
+  // default page
+  messagesContent(document.getElementById("inboxLink"));
 </script>
 
 </html>

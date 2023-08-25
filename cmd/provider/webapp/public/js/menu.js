@@ -26,7 +26,17 @@ function composeContent(e) {
 }
 
 function messagesContent(e) {
-  e?.preventDefault();
+  const messagesIcon = document.getElementById("messagesIcon");
+
+  const selectedClassName = e.getElementsByTagName("i")[0].className;
+
+  messagesIcon.className = selectedClassName;
+
+  document.getElementById("inboxLink").classList.remove("active");
+  document.getElementById("sentLink").classList.remove("active");
+  document.getElementById("draftsLink").classList.remove("active");
+
+  e.classList.add("active");
 
   document.getElementById("composeContainer").hidden = true;
   document.getElementById("composeLink").classList.remove("active");
@@ -140,12 +150,17 @@ const formatBytes = (bytes, decimals = 2) => {
 };
 
 const loadProfile = async (form) => {
-  const response = await api(form.id, 200, `${window.apiHost}/api/v1/user/profile`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await api(
+    form.id,
+    200,
+    `${window.apiHost}/api/v1/user/profile`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   if (response === false) {
     return;
@@ -161,9 +176,12 @@ const loadProfile = async (form) => {
     document.getElementById("loggedUsername").innerHTML = loggedUsername;
   }
 
-  const profileDomainName = document.getElementById("profileDomainName").innerHTML;
+  const profileDomainName =
+    document.getElementById("profileDomainName").innerHTML;
 
-  document.getElementById("profileUsername").innerHTML = `${response.username}@${profileDomainName}`;
+  document.getElementById(
+    "profileUsername"
+  ).innerHTML = `${response.username}@${profileDomainName}`;
 
   form.querySelector('input[name="firstName"]').value = response.firstName;
   form.querySelector('input[name="lastName"]').value = response.lastName;
