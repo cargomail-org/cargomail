@@ -22,7 +22,7 @@ type Draft struct {
 	ThreadUid  string       `json:"threadUid"`
 	Unread     bool         `json:"unread"`
 	Starred    bool         `json:"starred"`
-	Payload    *MessagePart `json:"payload"`
+	Payload    *MessagePart `json:"payload,omitempty"`
 	LabelIds   *string      `json:"labelIds"`
 	CreatedAt  Timestamp    `json:"createdAt"`
 	ModifiedAt *Timestamp   `json:"modifiedAt"`

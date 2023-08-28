@@ -21,7 +21,7 @@ type Header struct {
 
 type MessagePart struct {
 	OrderId int64          `json:"orderId,omitempty"`
-	Headers []*Header      `json:"headers"`
+	Headers []*Header      `json:"headers,omitempty"`
 	Bodies  []*Body        `json:"bodies,omitempty"`
 	Parts   []*MessagePart `json:"parts,omitempty"`
 }
@@ -35,7 +35,7 @@ type Message struct {
 	Unread     bool         `json:"unread"`
 	Starred    bool         `json:"starred"`
 	Folder     int16        `json:"folder"`
-	Payload    *MessagePart `json:"payload"`
+	Payload    *MessagePart `json:"payload,omitempty"`
 	LabelIds   *string      `json:"labelIds"`
 	SentAt     *Timestamp   `json:"sentAt"`
 	ReceivedAt *Timestamp   `json:"receivedAt"`

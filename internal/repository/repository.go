@@ -21,6 +21,8 @@ var (
 	ErrDraftNotFound            = errors.New("draft not found")
 	ErrMissingUrisField         = errors.New("missing 'uris' field")
 	ErrMissingUriField          = errors.New("missing 'uri' field")
+	ErrMissingPayloadField      = errors.New("missing 'payload' field")
+	ErrMissingHeadersField      = errors.New("missing 'headers' field")
 )
 
 type History struct {

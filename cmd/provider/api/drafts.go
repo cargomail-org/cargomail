@@ -20,9 +20,14 @@ func (api *DraftsApi) Create() http.Handler {
 			return
 		}
 
+		r.Body = http.MaxBytesReader(w, r.Body, 1048576)
+
+		dec := json.NewDecoder(r.Body)
+		dec.DisallowUnknownFields()
+
 		var draft *repository.Draft
 
-		err := json.NewDecoder(r.Body).Decode(&draft)
+		err := dec.Decode(&draft)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -64,9 +69,14 @@ func (api *DraftsApi) Sync() http.Handler {
 			return
 		}
 
+		r.Body = http.MaxBytesReader(w, r.Body, 1024)
+
+		dec := json.NewDecoder(r.Body)
+		dec.DisallowUnknownFields()
+
 		var history *repository.History
 
-		err := json.NewDecoder(r.Body).Decode(&history)
+		err := dec.Decode(&history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -90,9 +100,14 @@ func (api *DraftsApi) Update() http.Handler {
 			return
 		}
 
+		r.Body = http.MaxBytesReader(w, r.Body, 1048576)
+
+		dec := json.NewDecoder(r.Body)
+		dec.DisallowUnknownFields()
+
 		var draft *repository.Draft
 
-		err := json.NewDecoder(r.Body).Decode(&draft)
+		err := dec.Decode(&draft)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -100,6 +115,16 @@ func (api *DraftsApi) Update() http.Handler {
 
 		if draft.Uri == "" {
 			http.Error(w, repository.ErrMissingUriField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if draft.Payload == nil {
+			http.Error(w, repository.ErrMissingPayloadField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if draft.Payload.Headers == nil {
+			http.Error(w, repository.ErrMissingHeadersField.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -126,9 +151,14 @@ func (api *DraftsApi) Trash() http.Handler {
 			return
 		}
 
+		r.Body = http.MaxBytesReader(w, r.Body, 1048576)
+
+		dec := json.NewDecoder(r.Body)
+		dec.DisallowUnknownFields()
+
 		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&uris)
+		err := dec.Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -166,9 +196,14 @@ func (api *DraftsApi) Untrash() http.Handler {
 			return
 		}
 
+		r.Body = http.MaxBytesReader(w, r.Body, 1048576)
+
+		dec := json.NewDecoder(r.Body)
+		dec.DisallowUnknownFields()
+
 		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&uris)
+		err := dec.Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -206,9 +241,14 @@ func (api *DraftsApi) Delete() http.Handler {
 			return
 		}
 
+		r.Body = http.MaxBytesReader(w, r.Body, 1048576)
+
+		dec := json.NewDecoder(r.Body)
+		dec.DisallowUnknownFields()
+
 		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&uris)
+		err := dec.Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -246,9 +286,14 @@ func (api *DraftsApi) Send() http.Handler {
 			return
 		}
 
+		r.Body = http.MaxBytesReader(w, r.Body, 1048576)
+
+		dec := json.NewDecoder(r.Body)
+		dec.DisallowUnknownFields()
+
 		var draft *repository.Draft
 
-		err := json.NewDecoder(r.Body).Decode(&draft)
+		err := dec.Decode(&draft)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
