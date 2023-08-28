@@ -189,6 +189,7 @@ func (r *BlobRepository) Sync(user *User, history *History) (*BlobSync, error) {
 
 	blobSync := &BlobSync{
 		BlobsInserted: []*Blob{},
+		BlobsUpdated:  []*Blob{},
 		BlobsTrashed:  []*Blob{},
 		BlobsDeleted:  []*BlobDeleted{},
 	}
