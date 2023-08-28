@@ -61,7 +61,7 @@ const raw = JSON.stringify({
           },
           {
             name: "Origin-Resource-Mailbox-URL",
-            value: "http://127.0.0.:8181/api/v1/blobs/",
+            value: "http://127.0.0.:8181/api/v1/files/",
           },
         ],
         bodies: [

@@ -25,21 +25,9 @@ const blobHtml = new Blob(
   { type: "text/html; charset=UTF-8" }
 );
 
-const blobFiles = new Blob(
-  [
-    JSON.stringify([
-      { contentType: "application/pdf", uri: "abc", size: 25100 },
-      { contentType: "video/mp4", uri: "efg", size: 195700 },
-    ]),
-  ],
-  { type: "application/json" }
-);
-
 formdata.append("blobs", blobPlain, "dc8c8ff247cf8829415cd1ec5d023eea");
 
 formdata.append("blobs", blobHtml, "cb6dae8bbd7a557a5fa795a32a48c972");
-
-formdata.append("blobs", blobFiles, "dc8c8ff247cf8829415cd1ec5d023eea");
 
 const headers = new Headers();
 headers.append(

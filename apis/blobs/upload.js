@@ -25,21 +25,9 @@ const blobHtml = new Blob(
   { type: "text/html; charset=UTF-8" }
 );
 
-const blobFiles = new Blob(
-  [
-    JSON.stringify([
-      { contentType: "application/pdf", uri: "123", size: 25100 },
-      { contentType: "video/mp4", uri: "456", size: 195700 },
-    ]),
-  ],
-  { type: "application/json" }
-);
-
 formdata.append("blobs", blobPlain);
 
 formdata.append("blobs", blobHtml);
-
-formdata.append("blobs", blobFiles);
 
 const headers = new Headers();
 headers.append(
