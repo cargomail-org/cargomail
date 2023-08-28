@@ -146,15 +146,16 @@ func (api *ContactsApi) Trash() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.contacts.Trash(user, bodyString)
+		err = api.contacts.Trash(user, urisString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -185,15 +186,16 @@ func (api *ContactsApi) Untrash() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.contacts.Untrash(user, bodyString)
+		err = api.contacts.Untrash(user, urisString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -224,15 +226,16 @@ func (api *ContactsApi) Delete() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.contacts.Delete(user, bodyString)
+		err = api.contacts.Delete(user, urisString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

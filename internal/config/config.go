@@ -25,7 +25,7 @@ type Config = struct {
 	StoragePath      string `yaml:"storagePath"`
 	DatabasePath     string `yaml:"databasePath"`
 	ResourcesPath    string `yaml:"resources_path"`
-	BodiesFolder     string `yaml:"bodiesFolder"`
+	BlobsFolder      string `yaml:"blobsFolder"`
 	FilesFolder      string `yaml:"filesFolder"`
 	TransferCertPath string `yaml:"transferCertPath"`
 	TransferKeyPath  string `yaml:"transferKeyPath"`
@@ -37,7 +37,7 @@ type Config = struct {
 }
 
 const (
-	DefaultBodiesFolder   = "bodies"
+	DefaultBlobsFolder    = "blobs"
 	DefaultFilesFolder    = "files"
 	DefaultCookieSameSite = http.SameSiteStrictMode
 	DefaultSessionTTL     = 24 * time.Hour
@@ -49,8 +49,8 @@ func newConfig() Config {
 	setDefaults(&c)
 	loadConfig(&c)
 
-	if len(c.BodiesFolder) == 0 {
-		c.BodiesFolder = DefaultBodiesFolder
+	if len(c.BlobsFolder) == 0 {
+		c.BlobsFolder = DefaultBlobsFolder
 	}
 
 	if len(c.FilesFolder) == 0 {

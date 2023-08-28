@@ -16,7 +16,7 @@ var (
 	ErrContactNotFound          = errors.New("contact not found")
 	ErrDuplicateContact         = errors.New("contact already exists")
 	ErrInvalidEmailAddress      = errors.New("invalid email address")
-	ErrBodyNotFound             = errors.New("body not found")
+	ErrBlobNotFound             = errors.New("blob not found")
 	ErrFileNotFound             = errors.New("file not found")
 	ErrDraftNotFound            = errors.New("draft not found")
 	ErrMissingUrisField         = errors.New("missing 'uris' field")
@@ -36,7 +36,7 @@ type Uris struct {
 }
 
 type Repository struct {
-	Bodies   BodyRepository
+	Blobs    BlobRepository
 	Files    FileRepository
 	Session  SessionRepository
 	User     UserRepository
@@ -47,7 +47,7 @@ type Repository struct {
 
 func NewRepository(db *sql.DB) Repository {
 	return Repository{
-		Bodies:   BodyRepository{db: db},
+		Blobs:    BlobRepository{db: db},
 		Files:    FileRepository{db: db},
 		Session:  SessionRepository{db: db},
 		User:     UserRepository{db: db},

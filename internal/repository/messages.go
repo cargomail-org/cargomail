@@ -20,11 +20,10 @@ type Header struct {
 }
 
 type MessagePart struct {
-	PartId      string         `json:"partId"`
-	ContentType string         `json:"contentType"`
-	Headers     []*Header      `json:"headers"`
-	Body        *BodyResource  `json:"body"`
-	Parts       []*MessagePart `json:"parts"`
+	OrderId int64          `json:"orderId,omitempty"`
+	Headers []*Header      `json:"headers"`
+	Bodies  []*Body        `json:"bodies,omitempty"`
+	Parts   []*MessagePart `json:"parts,omitempty"`
 }
 
 type Message struct {
@@ -69,21 +68,14 @@ type MessageSync struct {
 	MessagesDeleted  []*MessageDeleted `json:"deleted"`
 }
 
-type BodyResource struct {
-	ContentType string `json:"contentType"`
-	Uri         string `json:"uri"`
+type Body struct {
+	OrderId     int64  `json:"orderId,omitempty"`
+	ContentType string `json:"contentType,omitempty"`
+	Uri         string `json:"uri,omitempty"`
 	Hash        string `json:"hash,omitempty"`
-	Size        int64  `json:"size"`
+	Size        int64  `json:"size,omitempty"`
+	Data        int64  `json:"data,omitempty"`
 }
-
-type FileResource struct {
-	ContentType string `json:"contentType"`
-	Uri         string `json:"uri"`
-	Hash        string `json:"hash,omitempty"`
-	Size        int64  `json:"size"`
-}
-
-type FilesResource []FileResource
 
 func (v MessagePart) Value() (driver.Value, error) {
 	return json.Marshal(v)

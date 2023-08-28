@@ -5,10 +5,10 @@ CREATE TRIGGER IF NOT EXISTS "UserAfterInsert"
 BEGIN
 
     INSERT
-        INTO "BodyTimelineSeq" ("userId", "lastTimelineId")
+        INTO "BlobTimelineSeq" ("userId", "lastTimelineId")
         VALUES (new."id", 0);
     INSERT
-        INTO "BodyHistorySeq" ("userId", "lastHistoryId")
+        INTO "BlobHistorySeq" ("userId", "lastHistoryId")
         VALUES (new."id", 0);
 
     INSERT

@@ -50,15 +50,16 @@ func (api *MessagesApi) Delete() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.messages.Delete(user, bodyString)
+		err = api.messages.Delete(user, urisString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

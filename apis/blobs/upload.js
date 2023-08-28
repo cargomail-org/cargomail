@@ -35,11 +35,11 @@ const blobFiles = new Blob(
   { type: "application/json" }
 );
 
-formdata.append("bodies", blobPlain);
+formdata.append("blobs", blobPlain);
 
-formdata.append("bodies", blobHtml);
+formdata.append("blobs", blobHtml);
 
-formdata.append("bodies", blobFiles);
+formdata.append("blobs", blobFiles);
 
 const headers = new Headers();
 headers.append(
@@ -55,7 +55,7 @@ const requestOptions = {
   redirect: "follow",
 };
 
-fetch("http://127.0.0.1:8181/api/v1/bodies/upload", requestOptions)
+fetch("http://127.0.0.1:8181/api/v1/blobs/upload", requestOptions)
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.log("error", error));

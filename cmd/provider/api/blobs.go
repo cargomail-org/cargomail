@@ -18,11 +18,11 @@ import (
 	"github.com/google/uuid"
 )
 
-type BodiesApi struct {
-	bodies repository.BodyRepository
+type BlobsApi struct {
+	blobs repository.BlobRepository
 }
 
-func (api *BodiesApi) Upload() http.Handler {
+func (api *BlobsApi) Upload() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -36,9 +36,9 @@ func (api *BodiesApi) Upload() http.Handler {
 			return
 		}
 
-		uploadedBodies := []*repository.Body{}
+		uploadedBlobs := []*repository.Blob{}
 
-		files := r.MultipartForm.File["bodies"]
+		files := r.MultipartForm.File["blobs"]
 		for i := range files {
 			file, err := files[i].Open()
 			if err != nil {
@@ -47,10 +47,10 @@ func (api *BodiesApi) Upload() http.Handler {
 			}
 			defer file.Close()
 
-			bodiesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BodiesFolder)
+			blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
 
-			if _, err := os.Stat(bodiesPath); errors.Is(err, os.ErrNotExist) {
-				err := os.MkdirAll(bodiesPath, os.ModePerm)
+			if _, err := os.Stat(blobsPath); errors.Is(err, os.ErrNotExist) {
+				err := os.MkdirAll(blobsPath, os.ModePerm)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusInternalServerError)
 					return
@@ -59,17 +59,17 @@ func (api *BodiesApi) Upload() http.Handler {
 
 			uuid := uuid.NewString()
 
-			uploadedBody := &repository.Body{}
+			uploadedBlob := &repository.Blob{}
 
 			if r.Method == "PUT" {
-				body, err := api.bodies.GetBodyByUri(user, files[i].Filename)
+				blob, err := api.blobs.GetBlobByUri(user, files[i].Filename)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusNotFound)
 					return
 				}
 
-				if len(body.Uri) > 0 {
-					f, err := os.OpenFile(filepath.Join(bodiesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
+				if len(blob.Uri) > 0 {
+					f, err := os.OpenFile(filepath.Join(blobsPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
 					if err != nil {
 						fmt.Println(err)
 						return
@@ -88,17 +88,17 @@ func (api *BodiesApi) Upload() http.Handler {
 
 					contentType := files[i].Header.Get("content-type")
 
-					uploadedBody = &repository.Body{
-						Uri:         body.Uri,
+					uploadedBlob = &repository.Blob{
+						Uri:         blob.Uri,
 						Hash:        hashStr,
 						Size:        written,
 						ContentType: contentType,
 					}
 
-					uploadedBody, err = api.bodies.Update(user, uploadedBody)
+					uploadedBlob, err = api.blobs.Update(user, uploadedBlob)
 					if err != nil {
 						switch {
-						case errors.Is(err, repository.ErrBodyNotFound):
+						case errors.Is(err, repository.ErrBlobNotFound):
 							helper.ReturnErr(w, err, http.StatusNotFound)
 						default:
 							helper.ReturnErr(w, err, http.StatusInternalServerError)
@@ -106,14 +106,14 @@ func (api *BodiesApi) Upload() http.Handler {
 						return
 					}
 
-					os.Rename(filepath.Join(bodiesPath, uuid), filepath.Join(bodiesPath, uploadedBody.Uri))
+					os.Rename(filepath.Join(blobsPath, uuid), filepath.Join(blobsPath, uploadedBlob.Uri))
 					if err != nil {
 						helper.ReturnErr(w, err, http.StatusInternalServerError)
 						return
 					}
 				}
 			} else {
-				f, err := os.OpenFile(filepath.Join(bodiesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
+				f, err := os.OpenFile(filepath.Join(blobsPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
 				if err != nil {
 					fmt.Println(err)
 					return
@@ -132,40 +132,40 @@ func (api *BodiesApi) Upload() http.Handler {
 
 				contentType := files[i].Header.Get("content-type")
 
-				uploadedBody = &repository.Body{
+				uploadedBlob = &repository.Blob{
 					Hash:        hashStr,
 					Name:        files[i].Filename,
 					Size:        written,
 					ContentType: contentType,
 				}
 
-				uploadedBody, err = api.bodies.Create(user, uploadedBody)
+				uploadedBlob, err = api.blobs.Create(user, uploadedBlob)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusInternalServerError)
 					return
 				}
 
-				os.Rename(filepath.Join(bodiesPath, uuid), filepath.Join(bodiesPath, uploadedBody.Uri))
+				os.Rename(filepath.Join(blobsPath, uuid), filepath.Join(blobsPath, uploadedBlob.Uri))
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusInternalServerError)
 					return
 				}
 			}
 
-			if uploadedBody != nil && (repository.Body{}) != *uploadedBody {
-				uploadedBodies = append(uploadedBodies, uploadedBody)
+			if uploadedBlob != nil && (repository.Blob{}) != *uploadedBlob {
+				uploadedBlobs = append(uploadedBlobs, uploadedBlob)
 			}
 		}
 
-		if len(uploadedBodies) > 0 {
-			helper.SetJsonResponse(w, http.StatusCreated, uploadedBodies)
+		if len(uploadedBlobs) > 0 {
+			helper.SetJsonResponse(w, http.StatusCreated, uploadedBlobs)
 		} else {
-			helper.SetJsonResponse(w, http.StatusOK, uploadedBodies)
+			helper.SetJsonResponse(w, http.StatusOK, uploadedBlobs)
 		}
 	})
 }
 
-func (api *BodiesApi) Download() http.Handler {
+func (api *BlobsApi) Download() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -175,46 +175,46 @@ func (api *BodiesApi) Download() http.Handler {
 
 		uri := path.Base(r.URL.Path)
 
-		body, err := api.bodies.GetBodyByUri(user, uri)
+		blob, err := api.blobs.GetBlobByUri(user, uri)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		if len(body.Uri) == 0 {
-			helper.ReturnErr(w, repository.ErrBodyNotFound, http.StatusNotFound)
+		if len(blob.Uri) == 0 {
+			helper.ReturnErr(w, repository.ErrBlobNotFound, http.StatusNotFound)
 			return
 		}
 
 		if r.Method == "HEAD" {
 			w.WriteHeader(http.StatusOK)
 		} else if r.Method == "GET" {
-			asciiBodyUri, err := helper.ToAscii(body.Uri)
+			asciiBlobUri, err := helper.ToAscii(blob.Uri)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
 			}
 
-			urlEncodedBodyUri, err := url.Parse(body.Uri)
+			urlEncodedBlobUri, err := url.Parse(blob.Uri)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
 			}
 
-			bodiesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BodiesFolder)
+			blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
 
-			bodyPath := filepath.Join(bodiesPath, uri)
-			w.Header().Set("Content-Type", body.ContentType)
-			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiBodyUri, urlEncodedBodyUri))
+			blobPath := filepath.Join(blobsPath, uri)
+			w.Header().Set("Content-Type", blob.ContentType)
+			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiBlobUri, urlEncodedBlobUri))
 
-			bodyPath = filepath.Clean(bodyPath)
+			blobPath = filepath.Clean(blobPath)
 
-			http.ServeFile(w, r, bodyPath)
+			http.ServeFile(w, r, blobPath)
 		}
 	})
 }
 
-func (api *BodiesApi) List() http.Handler {
+func (api *BlobsApi) List() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -222,17 +222,17 @@ func (api *BodiesApi) List() http.Handler {
 			return
 		}
 
-		bodyList, err := api.bodies.List(user)
+		blobList, err := api.blobs.List(user)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, bodyList)
+		helper.SetJsonResponse(w, http.StatusOK, blobList)
 	})
 }
 
-func (api *BodiesApi) Sync() http.Handler {
+func (api *BlobsApi) Sync() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -248,17 +248,17 @@ func (api *BodiesApi) Sync() http.Handler {
 			return
 		}
 
-		bodySync, err := api.bodies.Sync(user, history)
+		blobSync, err := api.blobs.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, bodySync)
+		helper.SetJsonResponse(w, http.StatusOK, blobSync)
 	})
 }
 
-func (api *BodiesApi) Trash() http.Handler {
+func (api *BlobsApi) Trash() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -279,54 +279,16 @@ func (api *BodiesApi) Trash() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.bodies.Trash(user, bodyString)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
-	})
-}
-
-func (api *BodiesApi) Untrash() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
-		if !ok {
-			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
-			return
-		}
-
-		var uris repository.Uris
-
-		err := json.NewDecoder(r.Body).Decode(&uris)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
-			return
-		}
-
-		body, err := json.Marshal(uris)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		bodyString := string(body)
-
-		err = api.bodies.Untrash(user, bodyString)
+		err = api.blobs.Trash(user, urisString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -336,7 +298,7 @@ func (api *BodiesApi) Untrash() http.Handler {
 	})
 }
 
-func (api *BodiesApi) Delete() http.Handler {
+func (api *BlobsApi) Untrash() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -357,32 +319,73 @@ func (api *BodiesApi) Delete() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.bodies.Delete(user, bodyString)
+		err = api.blobs.Untrash(user, urisString)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
+	})
+}
+
+func (api *BlobsApi) Delete() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
+		var uris repository.Uris
+
+		err := json.NewDecoder(r.Body).Decode(&uris)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		// back to body
+		body, err := json.Marshal(uris)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		urisString := string(body)
+
+		err = api.blobs.Delete(user, urisString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		bodiesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BodiesFolder)
+		blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
 
-		var bodyList []string
+		var blobList []string
 
-		err = json.Unmarshal(body, &bodyList)
+		err = json.Unmarshal(body, &blobList)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		for _, uuid := range bodyList {
-			_ = os.Remove(filepath.Join(bodiesPath, uuid))
+		for _, uuid := range blobList {
+			_ = os.Remove(filepath.Join(blobsPath, uuid))
 		}
 
 		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})

@@ -224,15 +224,16 @@ func (api *FilesApi) Trash() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.files.Trash(user, bodyString)
+		err = api.files.Trash(user, urisString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -263,15 +264,16 @@ func (api *FilesApi) Untrash() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.files.Untrash(user, bodyString)
+		err = api.files.Untrash(user, urisString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -302,15 +304,16 @@ func (api *FilesApi) Delete() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.files.Delete(user, bodyString)
+		err = api.files.Delete(user, urisString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

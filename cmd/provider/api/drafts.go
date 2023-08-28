@@ -139,15 +139,16 @@ func (api *DraftsApi) Trash() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.drafts.Trash(user, bodyString)
+		err = api.drafts.Trash(user, urisString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -178,15 +179,16 @@ func (api *DraftsApi) Untrash() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.drafts.Untrash(user, bodyString)
+		err = api.drafts.Untrash(user, urisString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -217,15 +219,16 @@ func (api *DraftsApi) Delete() http.Handler {
 			return
 		}
 
+		// back to body
 		body, err := json.Marshal(uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		bodyString := string(body)
+		urisString := string(body)
 
-		err = api.drafts.Delete(user, bodyString)
+		err = api.drafts.Delete(user, urisString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

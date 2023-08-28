@@ -14,8 +14,8 @@ var (
 	tables string
 	//go:embed schema/user_triggers.sql
 	userTriggers string
-	//go:embed schema/body_triggers.sql
-	bodyTriggers string
+	//go:embed schema/blob_triggers.sql
+	blobTriggers string
 	//go:embed schema/file_triggers.sql
 	fileTriggers string
 	//go:embed schema/draft_triggers.sql
@@ -42,9 +42,9 @@ func Init(db *sql.DB) {
 		log.Fatal("sql user triggers: ", err)
 	}
 
-	_, err = db.ExecContext(ctx, bodyTriggers)
+	_, err = db.ExecContext(ctx, blobTriggers)
 	if err != nil {
-		log.Fatal("sql body triggers: ", err)
+		log.Fatal("sql blob triggers: ", err)
 	}
 
 	_, err = db.ExecContext(ctx, fileTriggers)

@@ -122,16 +122,16 @@ func (svc *service) routes(r *Router) {
 	r.Route("POST", "/api/v1/files/untrash", svc.api.Authenticate(svc.api.Files.Untrash()))
 	r.Route("DELETE", "/api/v1/files/delete", svc.api.Authenticate(svc.api.Files.Delete()))
 
-	// Bodies API
-	r.Route("POST", "/api/v1/bodies/upload", svc.api.Authenticate(svc.api.Bodies.Upload()))
-	r.Route("GET", "/api/v1/bodies", svc.api.Authenticate(svc.api.Bodies.List()))
-	r.Route("POST", "/api/v1/bodies/sync", svc.api.Authenticate(svc.api.Bodies.Sync()))
-	r.Route("PUT", "/api/v1/bodies/upload", svc.api.Authenticate(svc.api.Bodies.Upload()))
-	r.Route("HEAD", "/api/v1/bodies/", svc.api.Authenticate(svc.api.Bodies.Download()))
-	r.Route("GET", "/api/v1/bodies/", svc.api.Authenticate(svc.api.Bodies.Download()))
-	r.Route("POST", "/api/v1/bodies/trash", svc.api.Authenticate(svc.api.Bodies.Trash()))
-	r.Route("POST", "/api/v1/bodies/untrash", svc.api.Authenticate(svc.api.Bodies.Untrash()))
-	r.Route("DELETE", "/api/v1/bodies/delete", svc.api.Authenticate(svc.api.Bodies.Delete()))
+	// Blobs API
+	r.Route("POST", "/api/v1/blobs/upload", svc.api.Authenticate(svc.api.Blobs.Upload()))
+	r.Route("GET", "/api/v1/blobs", svc.api.Authenticate(svc.api.Blobs.List()))
+	r.Route("POST", "/api/v1/blobs/sync", svc.api.Authenticate(svc.api.Blobs.Sync()))
+	r.Route("PUT", "/api/v1/blobs/upload", svc.api.Authenticate(svc.api.Blobs.Upload()))
+	r.Route("HEAD", "/api/v1/blobs/", svc.api.Authenticate(svc.api.Blobs.Download()))
+	r.Route("GET", "/api/v1/blobs/", svc.api.Authenticate(svc.api.Blobs.Download()))
+	r.Route("POST", "/api/v1/blobs/trash", svc.api.Authenticate(svc.api.Blobs.Trash()))
+	r.Route("POST", "/api/v1/blobs/untrash", svc.api.Authenticate(svc.api.Blobs.Untrash()))
+	r.Route("DELETE", "/api/v1/blobs/delete", svc.api.Authenticate(svc.api.Blobs.Delete()))
 
 	// Drafts API
 	r.Route("POST", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.Create()))

@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS "Session" (
     "scope" 		TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "Body" (
+CREATE TABLE IF NOT EXISTS "Blob" (
     "uri"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "hash" 	    	VARCHAR(32) NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS "Contact" (
     "deviceId"      VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS "BodyDeleted" (
+CREATE TABLE IF NOT EXISTS "BlobDeleted" (
     "uri"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
@@ -165,12 +165,12 @@ CREATE TABLE IF NOT EXISTS "ContactDeleted" (
     "deviceId"      VARCHAR(32)
 );
 
-CREATE TABLE IF NOT EXISTS "BodyTimelineSeq" (
+CREATE TABLE IF NOT EXISTS "BlobTimelineSeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastTimelineId" INTEGER(8) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "BodyHistorySeq" (
+CREATE TABLE IF NOT EXISTS "BlobHistorySeq" (
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "lastHistoryId" INTEGER(8) NOT NULL
 );
@@ -227,10 +227,10 @@ CREATE TABLE IF NOT EXISTS "ContactHistorySeq" (
 
 ------------------------------indexes----------------------------
 
-CREATE INDEX IF NOT EXISTS "IdxBodyHash" ON "Body" ("hash");
-CREATE INDEX IF NOT EXISTS "IdxBodyTimelineId" ON "Body" ("timelineId");
-CREATE INDEX IF NOT EXISTS "IdxBodyHistoryId" ON "Body" ("historyId");
-CREATE INDEX IF NOT EXISTS "IdxBodyLastStmt" ON "Body" ("lastStmt");
+CREATE INDEX IF NOT EXISTS "IdxBlobHash" ON "Blob" ("hash");
+CREATE INDEX IF NOT EXISTS "IdxBlobTimelineId" ON "Blob" ("timelineId");
+CREATE INDEX IF NOT EXISTS "IdxBlobHistoryId" ON "Blob" ("historyId");
+CREATE INDEX IF NOT EXISTS "IdxBlobLastStmt" ON "Blob" ("lastStmt");
 
 CREATE INDEX IF NOT EXISTS "IdxFileHash" ON "File" ("hash");
 CREATE INDEX IF NOT EXISTS "IdxFileTimelineId" ON "File" ("timelineId");
@@ -255,8 +255,8 @@ CREATE INDEX IF NOT EXISTS "IdxContactTimelineId" ON "Contact" ("timelineId");
 CREATE INDEX IF NOT EXISTS "IdxContactHistoryId" ON "Contact" ("historyId");
 CREATE INDEX IF NOT EXISTS "IdxContactLastStmt" ON "Contact" ("lastStmt");
 
-CREATE UNIQUE INDEX IF NOT EXISTS "IdxBodyTimelineSeq" ON "BodyTimelineSeq" ("userId");
-CREATE UNIQUE INDEX IF NOT EXISTS "IdxBodyHistorySeq" ON "BodyHistorySeq" ("userId");
+CREATE UNIQUE INDEX IF NOT EXISTS "IdxBlobTimelineSeq" ON "BlobTimelineSeq" ("userId");
+CREATE UNIQUE INDEX IF NOT EXISTS "IdxBlobHistorySeq" ON "BlobHistorySeq" ("userId");
 
 CREATE UNIQUE INDEX IF NOT EXISTS "IdxFileTimelineSeq" ON "FileTimelineSeq" ("userId");
 CREATE UNIQUE INDEX IF NOT EXISTS "IdxFileHistorySeq" ON "FileHistorySeq" ("userId");

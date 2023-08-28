@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-type BodyRepository struct {
+type BlobRepository struct {
 	db *sql.DB
 }
 
-type Body struct {
+type Blob struct {
 	Uri         string     `json:"uri"`
 	UserId      int64      `json:"-"`
 	Hash        string     `json:"-"`
@@ -29,27 +29,27 @@ type Body struct {
 	DeviceId    *string    `json:"-"`
 }
 
-type BodyDeleted struct {
+type BlobDeleted struct {
 	Uri       string  `json:"uri"`
 	UserId    int64   `json:"-"`
 	HistoryId int64   `json:"-"`
 	DeviceId  *string `json:"-"`
 }
 
-type BodyList struct {
+type BlobList struct {
 	History int64   `json:"lastHistoryId"`
-	Bodies  []*Body `json:"bodies"`
+	Blobs   []*Blob `json:"blobs"`
 }
 
-type BodySync struct {
-	History        int64          `json:"lastHistoryId"`
-	BodiesInserted []*Body        `json:"inserted"`
-	BodiesUpdated  []*Body        `json:"updated"`
-	BodiesTrashed  []*Body        `json:"trashed"`
-	BodiesDeleted  []*BodyDeleted `json:"deleted"`
+type BlobSync struct {
+	History       int64          `json:"lastHistoryId"`
+	BlobsInserted []*Blob        `json:"inserted"`
+	BlobsUpdated  []*Blob        `json:"updated"`
+	BlobsTrashed  []*Blob        `json:"trashed"`
+	BlobsDeleted  []*BlobDeleted `json:"deleted"`
 }
 
-func (b *Body) Scan() []interface{} {
+func (b *Blob) Scan() []interface{} {
 	s := reflect.ValueOf(b).Elem()
 	numCols := s.NumField()
 	columns := make([]interface{}, numCols)
@@ -60,7 +60,7 @@ func (b *Body) Scan() []interface{} {
 	return columns
 }
 
-func (b *BodyDeleted) Scan() []interface{} {
+func (b *BlobDeleted) Scan() []interface{} {
 	s := reflect.ValueOf(b).Elem()
 	numCols := s.NumField()
 	columns := make([]interface{}, numCols)
@@ -71,29 +71,29 @@ func (b *BodyDeleted) Scan() []interface{} {
 	return columns
 }
 
-func (r BodyRepository) Create(user *User, body *Body) (*Body, error) {
+func (r BlobRepository) Create(user *User, blob *Blob) (*Blob, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	query := `
 		INSERT INTO
-			"Body" ("userId", "deviceId", "hash", "name", "snippet", "path", "contentType", "size")
+			"Blob" ("userId", "deviceId", "hash", "name", "snippet", "path", "contentType", "size")
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{user.Id, prefixedDeviceId, body.Hash, body.Name, body.Snippet, body.Path, body.ContentType, body.Size}
+	args := []interface{}{user.Id, prefixedDeviceId, blob.Hash, blob.Name, blob.Snippet, blob.Path, blob.ContentType, blob.Size}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 	if err != nil {
 		return nil, err
 	}
 
-	return body, nil
+	return blob, nil
 }
 
-func (r BodyRepository) List(user *User) (*BodyList, error) {
+func (r BlobRepository) List(user *User) (*BlobList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -103,10 +103,10 @@ func (r BodyRepository) List(user *User) (*BodyList, error) {
 	}
 	defer tx.Rollback()
 
-	// body
+	// blob
 	query := `
 		SELECT *
-			FROM "Body"
+			FROM "Blob"
 			WHERE "userId" = $1 AND
 			"lastStmt" < 2;`
 
@@ -119,19 +119,19 @@ func (r BodyRepository) List(user *User) (*BodyList, error) {
 
 	defer rows.Close()
 
-	bodyList := &BodyList{
-		Bodies: []*Body{},
+	blobList := &BlobList{
+		Blobs: []*Blob{},
 	}
 
 	for rows.Next() {
-		var body Body
+		var blob Blob
 
-		err := rows.Scan(body.Scan()...)
+		err := rows.Scan(blob.Scan()...)
 		if err != nil {
 			return nil, err
 		}
 
-		bodyList.Bodies = append(bodyList.Bodies, &body)
+		blobList.Blobs = append(blobList.Blobs, &blob)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -141,12 +141,12 @@ func (r BodyRepository) List(user *User) (*BodyList, error) {
 	// history
 	query = `
 		SELECT "lastHistoryId"
-			FROM "BodyHistorySeq"
+			FROM "BlobHistorySeq"
 			WHERE "userId" = $1 ;`
 
 	args = []interface{}{user.Id}
 
-	err = tx.QueryRowContext(ctx, query, args...).Scan(&bodyList.History)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&blobList.History)
 	if err != nil {
 		return nil, err
 	}
@@ -155,10 +155,10 @@ func (r BodyRepository) List(user *User) (*BodyList, error) {
 		return nil, err
 	}
 
-	return bodyList, nil
+	return blobList, nil
 }
 
-func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
+func (r *BlobRepository) Sync(user *User, history *History) (*BlobSync, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -171,7 +171,7 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 	// inserted rows
 	query := `
 		SELECT *
-			FROM "Body"
+			FROM "Blob"
 			WHERE "userId" = $1 AND
 				("deviceId" <> $2 OR "deviceId" IS NULL) AND
 				"lastStmt" = 0 AND
@@ -187,22 +187,22 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 
 	defer rows.Close()
 
-	bodySync := &BodySync{
-		BodiesInserted: []*Body{},
-		BodiesTrashed:  []*Body{},
-		BodiesDeleted:  []*BodyDeleted{},
+	blobSync := &BlobSync{
+		BlobsInserted: []*Blob{},
+		BlobsTrashed:  []*Blob{},
+		BlobsDeleted:  []*BlobDeleted{},
 	}
 
 	for rows.Next() {
-		var body Body
+		var blob Blob
 
-		err := rows.Scan(body.Scan()...)
+		err := rows.Scan(blob.Scan()...)
 
 		if err != nil {
 			return nil, err
 		}
 
-		bodySync.BodiesInserted = append(bodySync.BodiesInserted, &body)
+		blobSync.BlobsInserted = append(blobSync.BlobsInserted, &blob)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -212,7 +212,7 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 	// updated rows
 	query = `
 		SELECT *
-			FROM "Body"
+			FROM "Blob"
 			WHERE "userId" = $1 AND
 				"lastStmt" = 1 AND
 				("deviceId" <> $2 OR "deviceId" IS NULL) AND
@@ -229,15 +229,15 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var body Body
+		var blob Blob
 
-		err := rows.Scan(body.Scan()...)
+		err := rows.Scan(blob.Scan()...)
 
 		if err != nil {
 			return nil, err
 		}
 
-		bodySync.BodiesUpdated = append(bodySync.BodiesUpdated, &body)
+		blobSync.BlobsUpdated = append(blobSync.BlobsUpdated, &blob)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -247,7 +247,7 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 	// trashed rows
 	query = `
 		SELECT *
-			FROM "Body"
+			FROM "Blob"
 			WHERE "userId" = $1 AND
 			("deviceId" <> $2 OR "deviceId" IS NULL) AND
 			"lastStmt" = 2 AND
@@ -264,15 +264,15 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var body Body
+		var blob Blob
 
-		err := rows.Scan(body.Scan()...)
+		err := rows.Scan(blob.Scan()...)
 
 		if err != nil {
 			return nil, err
 		}
 
-		bodySync.BodiesTrashed = append(bodySync.BodiesTrashed, &body)
+		blobSync.BlobsTrashed = append(blobSync.BlobsTrashed, &blob)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -282,7 +282,7 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 	// deleted rows
 	query = `
 		SELECT *
-			FROM "BodyDeleted"
+			FROM "BlobDeleted"
 			WHERE "userId" = $1 AND
 			    ("deviceId" <> $2 OR "deviceId" IS NULL) AND
 				"historyId" > $3;`
@@ -297,15 +297,15 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var bodyDeleted BodyDeleted
+		var blobDeleted BlobDeleted
 
-		err := rows.Scan(bodyDeleted.Scan()...)
+		err := rows.Scan(blobDeleted.Scan()...)
 
 		if err != nil {
 			return nil, err
 		}
 
-		bodySync.BodiesDeleted = append(bodySync.BodiesDeleted, &bodyDeleted)
+		blobSync.BlobsDeleted = append(blobSync.BlobsDeleted, &blobDeleted)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -315,12 +315,12 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 	// history
 	query = `
 	SELECT "lastHistoryId"
-	   FROM "BodyHistorySeq"
+	   FROM "BlobHistorySeq"
 	   WHERE "userId" = $1 ;`
 
 	args = []interface{}{user.Id}
 
-	err = tx.QueryRowContext(ctx, query, args...).Scan(&bodySync.History)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&blobSync.History)
 	if err != nil {
 		return nil, err
 	}
@@ -329,15 +329,15 @@ func (r *BodyRepository) Sync(user *User, history *History) (*BodySync, error) {
 		return nil, err
 	}
 
-	return bodySync, nil
+	return blobSync, nil
 }
 
-func (r BodyRepository) Update(user *User, body *Body) (*Body, error) {
+func (r BlobRepository) Update(user *User, blob *Blob) (*Blob, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	query := `
-		UPDATE "Body"
+		UPDATE "Blob"
 			SET "hash" = $1,
 				"snippet" = $2,
 				"size" = $3,
@@ -349,28 +349,28 @@ func (r BodyRepository) Update(user *User, body *Body) (*Body, error) {
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{body.Hash, body.Snippet, body.Size, prefixedDeviceId, user.Id, body.Uri}
+	args := []interface{}{blob.Hash, blob.Snippet, blob.Size, prefixedDeviceId, user.Id, blob.Uri}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
-			return nil, ErrBodyNotFound
+			return nil, ErrBlobNotFound
 		default:
 			return nil, err
 		}
 	}
 
-	return body, nil
+	return blob, nil
 }
 
-func (r *BodyRepository) Trash(user *User, uris string) error {
+func (r *BlobRepository) Trash(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if len(uris) > 0 {
 		query := `
-		UPDATE "Body"
+		UPDATE "Blob"
 			SET "lastStmt" = 2,
 				"deviceId" = $1
 			WHERE "userId" = $2 AND
@@ -389,13 +389,13 @@ func (r *BodyRepository) Trash(user *User, uris string) error {
 	return nil
 }
 
-func (r *BodyRepository) Untrash(user *User, uris string) error {
+func (r *BlobRepository) Untrash(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if len(uris) > 0 {
 		query := `
-		UPDATE "Body"
+		UPDATE "Blob"
 			SET "lastStmt" = 0,
 				"deviceId" = $1
 			WHERE "userId" = $2 AND
@@ -414,7 +414,7 @@ func (r *BodyRepository) Untrash(user *User, uris string) error {
 	return nil
 }
 
-func (r BodyRepository) Delete(user *User, uris string) error {
+func (r BlobRepository) Delete(user *User, uris string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -427,7 +427,7 @@ func (r BodyRepository) Delete(user *User, uris string) error {
 
 		query := `
 		DELETE
-			FROM "Body"
+			FROM "Blob"
 			WHERE "userId" = $1 AND
 			"uri" IN (SELECT value FROM json_each($2, '$.uris'));`
 
@@ -439,7 +439,7 @@ func (r BodyRepository) Delete(user *User, uris string) error {
 		}
 
 		query = `
-		UPDATE "BodyDeleted"
+		UPDATE "BlobDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
 			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
@@ -459,28 +459,28 @@ func (r BodyRepository) Delete(user *User, uris string) error {
 	return nil
 }
 
-func (r BodyRepository) GetBodyByUri(user *User, uri string) (*Body, error) {
+func (r BlobRepository) GetBlobByUri(user *User, uri string) (*Blob, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	query := `
 		SELECT *
-			FROM "Body"
+			FROM "Blob"
 			WHERE "userId" = $1 AND
 				"uri" = $2 AND
 				"lastStmt" < 2;`
 
-	body := &Body{}
+	blob := &Blob{}
 
 	args := []interface{}{user.Id, uri}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(body.Scan()...)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 	if err != nil {
 		if err.Error() == "sql: no rows in result set" {
-			return &Body{}, nil
+			return &Blob{}, nil
 		}
-		return &Body{}, err
+		return &Blob{}, err
 	}
 
-	return body, nil
+	return blob, nil
 }
