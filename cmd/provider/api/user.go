@@ -3,7 +3,6 @@ package api
 import (
 	"cargomail/cmd/provider/api/helper"
 	"cargomail/internal/repository"
-	"encoding/json"
 	"errors"
 	"net/http"
 )
@@ -20,7 +19,7 @@ func (api *UserApi) Profile() http.Handler {
 			return
 		}
 		if r.Method == "PUT" {
-			err := json.NewDecoder(r.Body).Decode(&user)
+			err := helper.Decoder(r.Body).Decode(&user)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return

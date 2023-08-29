@@ -22,7 +22,7 @@ func (api *ContactsApi) Create() http.Handler {
 
 		var contact *repository.Contact
 
-		err := json.NewDecoder(r.Body).Decode(&contact)
+		err := helper.Decoder(r.Body).Decode(&contact)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -71,7 +71,7 @@ func (api *ContactsApi) Sync() http.Handler {
 
 		var history *repository.History
 
-		err := json.NewDecoder(r.Body).Decode(&history)
+		err := helper.Decoder(r.Body).Decode(&history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -97,7 +97,7 @@ func (api *ContactsApi) Update() http.Handler {
 
 		var contact *repository.Contact
 
-		err := json.NewDecoder(r.Body).Decode(&contact)
+		err := helper.Decoder(r.Body).Decode(&contact)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -135,7 +135,7 @@ func (api *ContactsApi) Trash() http.Handler {
 
 		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -175,7 +175,7 @@ func (api *ContactsApi) Untrash() http.Handler {
 
 		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -215,7 +215,7 @@ func (api *ContactsApi) Delete() http.Handler {
 
 		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

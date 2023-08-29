@@ -187,7 +187,7 @@ func (api *FilesApi) Sync() http.Handler {
 
 		var history *repository.History
 
-		err := json.NewDecoder(r.Body).Decode(&history)
+		err := helper.Decoder(r.Body).Decode(&history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -213,7 +213,7 @@ func (api *FilesApi) Trash() http.Handler {
 
 		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -253,7 +253,7 @@ func (api *FilesApi) Untrash() http.Handler {
 
 		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -293,7 +293,7 @@ func (api *FilesApi) Delete() http.Handler {
 
 		var uris repository.Uris
 
-		err := json.NewDecoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
