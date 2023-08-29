@@ -71,8 +71,10 @@ func (t *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		urlPath := r.URL.Path
 
-		if !strings.HasSuffix(urlPath, "/upload") {
-			r.Body = http.MaxBytesReader(w, r.Body, 1 << 20)
+		if strings.HasSuffix(urlPath, "/upload") {
+			r.Body = http.MaxBytesReader(w, r.Body, config.DefaultMaxUploadSize<<20)
+		} else {
+			r.Body = http.MaxBytesReader(w, r.Body, 1<<20)
 		}
 
 		if !config.DevStage() {

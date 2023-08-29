@@ -20,27 +20,45 @@ const filesConfirmDialog = new bootstrap.Modal(
 
 const uploadForm = document.getElementById("uploadForm");
 
+const uploads = [];
+
+const abortAllUploads = () => {
+  uploads.forEach(function (upload, index) {
+    upload.abort();
+  });
+
+  uploads.length = 0;
+};
+
 const uploadFile = (url, file, onProgress) =>
   new Promise((resolve, reject) => {
     let lastLoaded = 0;
+
     const xhr = new XMLHttpRequest();
+    uploads.push(xhr);
+
     xhr.upload.addEventListener("progress", (e) => {
       onProgress(e.loaded - lastLoaded, e.loaded, e.total, lastLoaded == 0);
       lastLoaded = e.loaded;
     });
+
     xhr.addEventListener("load", () =>
       resolve({ status: xhr.status, body: xhr.response })
     );
+
     xhr.addEventListener("error", () =>
       reject(new Error("File upload failed"))
     );
-    xhr.addEventListener("abort", () =>
-      reject(new Error("File upload aborted"))
-    );
+
+    // xhr.addEventListener("abort", () =>
+    //   reject(new Error("File upload aborted"))
+    // );
+
     // cross domain !!!
     xhr.withCredentials = true;
     xhr.open("POST", url, true);
     xhr.responseType = "json";
+
     const formData = new FormData();
     formData.append(`files`, file);
     xhr.send(formData);
@@ -60,6 +78,19 @@ const uploadProgressBar = document.getElementById("uploadProgressBar");
 uploadProgressBar.classList.add("notransition");
 uploadProgressBar.setAttribute("style", "width: 0%");
 uploadProgressBar.innerText = "";
+
+uploads.length = 0;
+
+const resetProgressBar = () => {
+  filesCnt = 0;
+  estimatedTotal = 0;
+  realTotal = 0;
+  uploadedTotal = 0;
+
+  uploadProgressBar.classList.add("notransition");
+  uploadProgressBar.setAttribute("style", "width: 0%");
+  uploadProgressBar.innerText = "";
+};
 
 uploadForm.onsubmit = async (e) => {
   e?.preventDefault();
@@ -87,6 +118,9 @@ uploadForm.onsubmit = async (e) => {
       estimatedTotal = 0;
       realTotal = 0;
       uploadedTotal = 0;
+
+      uploads.length = 0;
+
       uploadProgressBar.innerText = `${progress}%`;
       sleep(10000).then(() => {
         if (filesCnt == 0) {
@@ -97,6 +131,17 @@ uploadForm.onsubmit = async (e) => {
       });
     }
   };
+
+  const alert = uploadForm.querySelector('div[name="alert"]');
+  if (alert) {
+    alert.remove();
+  }
+
+  const uploadAlert = uploadForm.querySelector('div[name="uploadAlert"]');
+  if (uploadAlert) {
+    resetProgressBar();
+    uploadAlert.remove();
+  }
 
   uploadProgressBar.classList.remove("notransition");
   uploadProgressBar.innerText = "";
@@ -113,18 +158,36 @@ uploadForm.onsubmit = async (e) => {
   clearUpload();
 
   for (let i = 0; i < files.length; i++) {
-    const response = await uploadFile(url, files[i], onProgress);
+    try {
+      const response = await uploadFile(url, files[i], onProgress);
+      if (response.status != 201) {
+        const errMessage = `File upload failed - Status code: ${response.status}`;
 
-    if (response.status != 201) {
-      throw new Error(`File upload failed - Status code: ${response.status}`);
-    }
-
-    if (response.status == 201) {
-      const uploadedMultipartFiles = response.body;
-      for (let j = 0; j < uploadedMultipartFiles.length; j++) {
-        filesTable.row.add(uploadedMultipartFiles[j]);
+        throw new Error(errMessage);
       }
-      filesTable.draw();
+
+      if (response.status == 201) {
+        const uploadedMultipartFiles = response.body;
+        for (let j = 0; j < uploadedMultipartFiles.length; j++) {
+          filesTable.row.add(uploadedMultipartFiles[j]);
+        }
+        filesTable.draw();
+      }
+    } catch (error) {
+      abortAllUploads();
+
+      uploadForm.insertAdjacentHTML(
+        "beforeend",
+        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="uploadAlert">
+              ${error}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+           </div>`
+      );
+
+      const uploadAlert = uploadForm.querySelector('div[name="uploadAlert"]');
+      uploadAlert.addEventListener("closed.bs.alert", function () {
+        resetProgressBar();
+      });
     }
   }
 };
@@ -138,12 +201,17 @@ const filesTable = new DataTable("#filesTable", {
   },
   ajax: function (data, callback, settings) {
     (async () => {
-      const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/files`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await api(
+        uploadForm.id,
+        200,
+        `${window.apiHost}/api/v1/files`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response === false) {
         return;
@@ -221,13 +289,18 @@ const filesTable = new DataTable("#filesTable", {
       text: "Refresh",
       action: function () {
         (async () => {
-          const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/files/sync`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ historyId: historyId }),
-          });
+          const response = await api(
+            uploadForm.id,
+            200,
+            `${window.apiHost}/api/v1/files/sync`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ historyId: historyId }),
+            }
+          );
 
           if (response === false) {
             return;
@@ -295,14 +368,19 @@ export const deleteFiles = (e) => {
   filesConfirmDialog.hide();
 
   (async () => {
-    const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/files/trash`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({uris: selectedUris}),
-    });
+    const response = await api(
+      uploadForm.id,
+      200,
+      `${window.apiHost}/api/v1/files/trash`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uris: selectedUris }),
+      }
+    );
 
     if (response === false) {
       return;

@@ -41,6 +41,7 @@ const (
 	DefaultFilesFolder    = "files"
 	DefaultCookieSameSite = http.SameSiteStrictMode
 	DefaultSessionTTL     = 24 * time.Hour
+	DefaultMaxUploadSize  = 1024 // MB
 )
 
 func newConfig() Config {
