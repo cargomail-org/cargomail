@@ -22,6 +22,7 @@ const contactsConfirmDialog = new bootstrap.Modal(
   document.querySelector("#contactsConfirmDialog")
 );
 
+const contactsFormAlert = document.getElementById("contactsFormAlert");
 const contactsForm = document.getElementById("contactsForm");
 
 let historyId = 0;
@@ -102,7 +103,7 @@ const contactsTable = new DataTable("#contactsTable", {
       action: function () {
         (async () => {
           const response = await api(
-            uploadForm.id,
+            contactsFormAlert.id,
             200,
             `${window.apiHost}/api/v1/contacts/sync`,
             {
@@ -320,7 +321,7 @@ export const deleteContacts = (e) => {
 
   (async () => {
     const response = await api(
-      uploadForm.id,
+      contactsFormAlert.id,
       200,
       `${window.apiHost}/api/v1/contacts/trash`,
       {
