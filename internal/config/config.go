@@ -42,6 +42,7 @@ const (
 	DefaultCookieSameSite = http.SameSiteStrictMode
 	DefaultSessionTTL     = 24 * time.Hour
 	DefaultMaxUploadSize  = 1024 // MB
+	DefaultMaxBodySize    = 1    // MB
 )
 
 func newConfig() Config {
