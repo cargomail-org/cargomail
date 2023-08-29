@@ -69,6 +69,12 @@ func (t *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		urlPath := r.URL.Path
+
+		if !strings.HasSuffix(urlPath, "/upload") {
+			r.Body = http.MaxBytesReader(w, r.Body, 1 << 20)
+		}
+
 		if !config.DevStage() {
 			if strings.HasPrefix(r.URL.Path, "/public/") || strings.HasPrefix(r.URL.Path, "/snippets/") {
 				r.URL.Path = "/webapp" + r.URL.Path

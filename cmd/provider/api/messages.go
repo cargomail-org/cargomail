@@ -37,14 +37,9 @@ func (api *MessagesApi) Delete() http.Handler {
 			return
 		}
 
-		r.Body = http.MaxBytesReader(w, r.Body, 1048576)
-
-		dec := json.NewDecoder(r.Body)
-		dec.DisallowUnknownFields()
-
 		var uris repository.Uris
 
-		err := dec.Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&uris)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

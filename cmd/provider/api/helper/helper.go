@@ -50,3 +50,10 @@ func SetJsonResponse(w http.ResponseWriter, statusCode int, data interface{}) {
 		json.NewEncoder(w).Encode(data)
 	}
 }
+
+func Decoder(body io.ReadCloser) *json.Decoder {
+	dec := json.NewDecoder(body)
+	dec.DisallowUnknownFields()
+
+	return dec
+}
