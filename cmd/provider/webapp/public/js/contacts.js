@@ -124,7 +124,7 @@ const contactsTable = new DataTable("#contactsTable", {
           for (const contact of response.inserted) {
             // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
             const notFound =
-              contactsTable.column(0).data().toArray().indexOf(contact.id) ===
+              contactsTable.column(0).data().toArray().indexOf(contact.uri) ===
               -1; // !!! must be
             if (notFound) {
               contactsTable.row.add(contact);

@@ -5,7 +5,7 @@ CREATE TRIGGER IF NOT EXISTS "MessageAfterInsert"
 BEGIN
     UPDATE "MessageTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = new."userId";
     UPDATE "MessageHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = new."userId";
-    UPDATE message
+    UPDATE "Message"
     SET "timelineId" = (SELECT "lastTimelineId" FROM "MessageTimelineSeq" WHERE "userId" = new."userId"),
         "historyId"  = (SELECT "lastHistoryId" FROM "MessageHistorySeq" WHERE "userId" = new."userId"),
         "lastStmt"   = 0

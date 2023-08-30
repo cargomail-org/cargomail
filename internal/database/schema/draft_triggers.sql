@@ -5,7 +5,7 @@ CREATE TRIGGER IF NOT EXISTS "DraftAfterInsert"
 BEGIN
     UPDATE "DraftTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = new."userId";
     UPDATE "DraftHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = new."userId";
-    UPDATE message
+    UPDATE "Draft"
     SET "timelineId" = (SELECT "lastTimelineId" FROM "DraftTimelineSeq" WHERE "userId" = new."userId"),
         "historyId"  = (SELECT "lastHistoryId" FROM "DraftHistorySeq" WHERE "userId" = new."userId"),
         "lastStmt"   = 0

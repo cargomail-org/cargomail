@@ -128,7 +128,7 @@ func (r *MessageRepository) List(user *User) (*MessageList, error) {
 			WHERE "userId" = $1 AND
 			"folder" > 0 AND
 			"lastStmt" < 2
-			ORDER BY "createdAt" DESC;`
+			ORDER BY CASE WHEN "modifiedAt" IS NOT NULL THEN "modifiedAt" ELSE "createdAt" END DESC;`
 
 	args := []interface{}{user.Id}
 
