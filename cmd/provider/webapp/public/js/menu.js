@@ -3,11 +3,20 @@ let profileForm;
 function composeContent(e) {
   e?.preventDefault();
 
+  document.getElementById("messagesLink").classList.remove("active");
+  document.getElementById("userLink").classList.remove("active");
+
   document.getElementById("composeContainer").hidden = false;
   document.getElementById("composeLink").classList.add("active");
 
-  document.getElementById("messagesContainer").hidden = true;
-  document.getElementById("messagesLink").classList.remove("active");
+  document.getElementById("inboxContainer").hidden = true;
+  document.getElementById("inboxLink").classList.remove("active");
+
+  document.getElementById("sentContainer").hidden = true;
+  document.getElementById("sentLink").classList.remove("active");
+
+  document.getElementById("draftsContainer").hidden = true;
+  document.getElementById("draftsLink").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -19,13 +28,18 @@ function composeContent(e) {
   document.getElementById("profileLink").classList.remove("active");
 
   document.getElementById("composePanel").hidden = false;
-  document.getElementById("messagesPanel").hidden = true;
+  document.getElementById("inboxPanel").hidden = true;
+  document.getElementById("sentPanel").hidden = true;
+  document.getElementById("draftsPanel").hidden = true;
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = true;
 }
 
-function messagesContent(e) {
+function inboxContent(e) {
+  document.getElementById("messagesLink").classList.add("active");
+  document.getElementById("userLink").classList.remove("active");
+
   const messagesIcon = document.getElementById("messagesIcon");
 
   const selectedClassName = e.getElementsByTagName("i")[0].className;
@@ -41,8 +55,14 @@ function messagesContent(e) {
   document.getElementById("composeContainer").hidden = true;
   document.getElementById("composeLink").classList.remove("active");
 
-  document.getElementById("messagesContainer").hidden = false;
-  document.getElementById("messagesLink").classList.add("active");
+  document.getElementById("inboxContainer").hidden = false;
+  document.getElementById("inboxLink").classList.add("active");
+
+  document.getElementById("sentContainer").hidden = true;
+  document.getElementById("sentLink").classList.remove("active");
+
+  document.getElementById("draftsContainer").hidden = true;
+  document.getElementById("draftsLink").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -54,7 +74,101 @@ function messagesContent(e) {
   document.getElementById("profileLink").classList.remove("active");
 
   document.getElementById("composePanel").hidden = true;
-  document.getElementById("messagesPanel").hidden = false;
+  document.getElementById("inboxPanel").hidden = false;
+  document.getElementById("sentPanel").hidden = true;
+  document.getElementById("draftsPanel").hidden = true;
+  document.getElementById("filesPanel").hidden = true;
+  document.getElementById("contactsPanel").hidden = true;
+  document.getElementById("profilePanel").hidden = true;
+}
+
+function sentContent(e) {
+  document.getElementById("messagesLink").classList.add("active");
+  document.getElementById("userLink").classList.remove("active");
+
+  const messagesIcon = document.getElementById("messagesIcon");
+
+  const selectedClassName = e.getElementsByTagName("i")[0].className;
+
+  messagesIcon.className = selectedClassName;
+
+  document.getElementById("inboxLink").classList.remove("active");
+  document.getElementById("sentLink").classList.remove("active");
+  document.getElementById("draftsLink").classList.remove("active");
+
+  e.classList.add("active");
+
+  document.getElementById("composeContainer").hidden = true;
+  document.getElementById("composeLink").classList.remove("active");
+
+  document.getElementById("inboxContainer").hidden = true;
+  document.getElementById("inboxLink").classList.remove("active");
+
+  document.getElementById("sentContainer").hidden = false;
+  document.getElementById("sentLink").classList.add("active");
+
+  document.getElementById("draftsContainer").hidden = true;
+  document.getElementById("draftsLink").classList.remove("active");
+
+  document.getElementById("filesContainer").hidden = true;
+  document.getElementById("filesLink").classList.remove("active");
+
+  document.getElementById("contactsContainer").hidden = true;
+  document.getElementById("contactsLink").classList.remove("active");
+
+  document.getElementById("profileContainer").hidden = true;
+  document.getElementById("profileLink").classList.remove("active");
+
+  document.getElementById("composePanel").hidden = true;
+  document.getElementById("inboxPanel").hidden = true;
+  document.getElementById("sentPanel").hidden = false;
+  document.getElementById("draftsPanel").hidden = true;
+  document.getElementById("filesPanel").hidden = true;
+  document.getElementById("contactsPanel").hidden = true;
+  document.getElementById("profilePanel").hidden = true;
+}
+
+function draftsContent(e) {
+  document.getElementById("messagesLink").classList.add("active");
+  document.getElementById("userLink").classList.remove("active");
+
+  const messagesIcon = document.getElementById("messagesIcon");
+
+  const selectedClassName = e.getElementsByTagName("i")[0].className;
+
+  messagesIcon.className = selectedClassName;
+
+  document.getElementById("inboxLink").classList.remove("active");
+  document.getElementById("sentLink").classList.remove("active");
+  document.getElementById("draftsLink").classList.remove("active");
+
+  e.classList.add("active");
+
+  document.getElementById("composeContainer").hidden = true;
+  document.getElementById("composeLink").classList.remove("active");
+
+  document.getElementById("inboxContainer").hidden = true;
+  document.getElementById("inboxLink").classList.remove("active");
+
+  document.getElementById("sentContainer").hidden = true;
+  document.getElementById("sentLink").classList.remove("active");
+
+  document.getElementById("draftsContainer").hidden = false;
+  document.getElementById("draftsLink").classList.add("active");
+
+  document.getElementById("filesContainer").hidden = true;
+  document.getElementById("filesLink").classList.remove("active");
+
+  document.getElementById("contactsContainer").hidden = true;
+  document.getElementById("contactsLink").classList.remove("active");
+
+  document.getElementById("profileContainer").hidden = true;
+  document.getElementById("profileLink").classList.remove("active");
+
+  document.getElementById("composePanel").hidden = true;
+  document.getElementById("inboxPanel").hidden = true;
+  document.getElementById("sentPanel").hidden = true;
+  document.getElementById("draftsPanel").hidden = false;
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = true;
@@ -63,11 +177,20 @@ function messagesContent(e) {
 function filesContent(e) {
   e?.preventDefault();
 
+  document.getElementById("messagesLink").classList.remove("active");
+  document.getElementById("userLink").classList.remove("active");
+
   document.getElementById("composeContainer").hidden = true;
   document.getElementById("composeLink").classList.remove("active");
 
-  document.getElementById("messagesContainer").hidden = true;
-  document.getElementById("messagesLink").classList.remove("active");
+  document.getElementById("inboxContainer").hidden = true;
+  document.getElementById("inboxLink").classList.remove("active");
+
+  document.getElementById("sentContainer").hidden = true;
+  document.getElementById("sentLink").classList.remove("active");
+
+  document.getElementById("draftsContainer").hidden = true;
+  document.getElementById("draftsLink").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = false;
   document.getElementById("filesLink").classList.add("active");
@@ -79,7 +202,9 @@ function filesContent(e) {
   document.getElementById("profileLink").classList.remove("active");
 
   document.getElementById("composePanel").hidden = true;
-  document.getElementById("messagesPanel").hidden = true;
+  document.getElementById("inboxPanel").hidden = true;
+  document.getElementById("sentPanel").hidden = true;
+  document.getElementById("draftsPanel").hidden = true;
   document.getElementById("filesPanel").hidden = false;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = true;
@@ -88,11 +213,21 @@ function filesContent(e) {
 function contactsContent(e) {
   e?.preventDefault();
 
+  document.getElementById("userLink").classList.add("active");
+
+  document.getElementById("messagesLink").classList.remove("active");
+
   document.getElementById("composeContainer").hidden = true;
   document.getElementById("composeLink").classList.remove("active");
 
-  document.getElementById("messagesContainer").hidden = true;
-  document.getElementById("messagesLink").classList.remove("active");
+  document.getElementById("inboxContainer").hidden = true;
+  document.getElementById("inboxLink").classList.remove("active");
+
+  document.getElementById("sentContainer").hidden = true;
+  document.getElementById("sentLink").classList.remove("active");
+
+  document.getElementById("draftsContainer").hidden = true;
+  document.getElementById("draftsLink").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -104,7 +239,9 @@ function contactsContent(e) {
   document.getElementById("profileLink").classList.remove("active");
 
   document.getElementById("composePanel").hidden = true;
-  document.getElementById("messagesPanel").hidden = true;
+  document.getElementById("inboxPanel").hidden = true;
+  document.getElementById("sentPanel").hidden = true;
+  document.getElementById("draftsPanel").hidden = true;
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = false;
   document.getElementById("profilePanel").hidden = true;
@@ -113,11 +250,21 @@ function contactsContent(e) {
 function profileContent(e) {
   e?.preventDefault();
 
+  document.getElementById("userLink").classList.add("active");
+
+  document.getElementById("messagesLink").classList.remove("active");
+
   document.getElementById("composeContainer").hidden = true;
   document.getElementById("composeLink").classList.remove("active");
 
-  document.getElementById("messagesContainer").hidden = true;
-  document.getElementById("messagesLink").classList.remove("active");
+  document.getElementById("inboxContainer").hidden = true;
+  document.getElementById("inboxLink").classList.remove("active");
+
+  document.getElementById("sentContainer").hidden = true;
+  document.getElementById("sentLink").classList.remove("active");
+
+  document.getElementById("draftsContainer").hidden = true;
+  document.getElementById("draftsLink").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -129,7 +276,9 @@ function profileContent(e) {
   document.getElementById("profileLink").classList.add("active");
 
   document.getElementById("composePanel").hidden = true;
-  document.getElementById("messagesPanel").hidden = true;
+  document.getElementById("inboxPanel").hidden = true;
+  document.getElementById("sentPanel").hidden = true;
+  document.getElementById("draftsPanel").hidden = true;
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = false;

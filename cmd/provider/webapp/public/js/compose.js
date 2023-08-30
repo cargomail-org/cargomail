@@ -10,6 +10,15 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
+const composeForm = document.getElementById("composeForm");
+
+let draft = {};
+let lastDraftUri = localStorage.getItem("lastDraftUri");
+
+if (lastDraftUri && lastDraftUri.length > 0) {
+  console.log(lastDraftUri.length);
+}
+
 const REGEX_EMAIL =
   "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
   "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
@@ -77,6 +86,10 @@ $("#toInput").selectize({
     alert("Invalid email address.");
     return false;
   },
+  onChange: function (e) {
+    console.log(e);
+    // Save Draft
+  },
 });
 
 $("#ccInput").selectize({
@@ -141,6 +154,10 @@ $("#ccInput").selectize({
     }
     alert("Invalid email address.");
     return false;
+  },
+  onChange: function (e) {
+    console.log(e);
+    // Save Draft
   },
 });
 
@@ -207,13 +224,14 @@ $("#bccInput").selectize({
     alert("Invalid email address.");
     return false;
   },
+  onChange: function (e) {
+    console.log(e);
+    // Save Draft
+  },
 });
 
-// const toInput = document.getElementById("toInput");
 const subjectInput = document.getElementById("subjectInput");
 const messageText = document.getElementById("messageText");
-
-const composeForm = document.getElementById("composeForm");
 
 const subjectHeadings = document.getElementsByClassName("subject-heading");
 let bouncerTimeout = null;
@@ -224,11 +242,11 @@ const bouncer = (e) => {
     [...subjectHeadings].forEach((heading) => {
       heading.textContent = subjectInput.value;
     });
-    //TODO save data to server
+    // Save Body
+    console.log("save body");
   }, 2000);
 };
 
-// toInput.addEventListener("keyup", (event) => bouncer(event));
 subjectInput.addEventListener("keyup", (event) => bouncer(event));
 messageText.addEventListener("keyup", (event) => bouncer(event));
 

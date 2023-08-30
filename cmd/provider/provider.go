@@ -67,7 +67,9 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 	router.Route("GET", "/snippets/compose.page.html", http.StripPrefix("/", fs))
 	router.Route("GET", "/snippets/contacts.page.html", http.StripPrefix("/", fs))
 	router.Route("GET", "/snippets/files.page.html", http.StripPrefix("/", fs))
-	router.Route("GET", "/snippets/messages.page.html", http.StripPrefix("/", fs))
+	router.Route("GET", "/snippets/inbox.page.html", http.StripPrefix("/", fs))
+	router.Route("GET", "/snippets/sent.page.html", http.StripPrefix("/", fs))
+	router.Route("GET", "/snippets/drafts.page.html", http.StripPrefix("/", fs))
 	router.Route("GET", "/snippets/profile.page.html", http.StripPrefix("/", fs))
 
 	http1Server := &http.Server{Handler: router, Addr: config.Configuration.ProviderBind}

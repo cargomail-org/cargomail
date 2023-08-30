@@ -93,28 +93,24 @@
               class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto me-2 justify-content-end align-items-center align-items-sm-start"
               id="menu">
               <li class="dropdown">
-                <!-- <a href="/" id="messagesLink" class="nav-link px-sm-0 px-2" onclick='messagesContent();return false;'>
-                  <i class="bi bi-envelope h4"></i>
-                  <span class="ms-1 d-none d-sm-inline">Messages</span>
-                </a> -->
                 <a href="#" class="nav-link dropdown-toggle px-sm-0 px-1" id="messagesLink" data-bs-toggle="dropdown"
                   aria-expanded="false">
                   <i class="bi bi-envelope h4" id="messagesIcon"></i><span
                     class="ms-1 d-none d-sm-inline">Messages</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownMessage">
+                <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="messagesLink">
                   <li class="dropdown-item">
-                    <a id="inboxLink" class="btn px-2" onclick='messagesContent(this);return false;'>
+                    <a id="inboxLink" class="btn px-2" onclick='inboxContent(this);return false;'>
                       <i class="bi bi-envelope h4"></i>
                       <span class="ms-1 d-sm-inline">Inbox</span></a>
                   </li>
                   <li class="dropdown-item">
-                    <a id="sentLink" class="btn px-2" onclick='messagesContent(this);return false;'>
+                    <a id="sentLink" class="btn px-2" onclick='sentContent(this);return false;'>
                       <i class="bi bi-envelope-check h4"></i>
                       <span class="ms-1 d-sm-inline">Sent</span></a>
                   </li>
                   <li class="dropdown-item">
-                    <a id="draftsLink" class="btn px-2" onclick='messagesContent(this);return false;'>
+                    <a id="draftsLink" class="btn px-2" onclick='draftsContent(this);return false;'>
                       <i class="bi bi-envelope-slash h4"></i>
                       <span class="ms-1 d-sm-inline">Drafts</span></a>
                   </li>
@@ -127,33 +123,39 @@
               </li>
             </ul>
             <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
-              <a href="#" class="nav-link d-flex align-items-center text-decoration-none dropdown-toggle"
-                id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                <div class="rounded-circle border d-flex justify-content-center align-items-center"
-                  id="loggedUsernameLetter" style="width:28px;height:28px" alt="Avatar">
-                </div>
-                <span class="mx-2" id="loggedUsername"></span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownUser">
-                <li class="dropdown-item">
-                  <a id="contactsLink" class="btn px-2" onclick='contactsContent();return false;'>
-                    <i class="bi bi-people h4"></i>
-                    <span class="ms-1 d-sm-inline">Contacts</span></a>
+              <ul
+                class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto me-2 justify-content-end align-items-center align-items-sm-start"
+                id="menu">
+                <li class="dropdown">
+                  <a href="#" class="nav-link d-flex align-items-center text-decoration-none dropdown-toggle"
+                    id="userLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="rounded-circle border d-flex justify-content-center align-items-center"
+                      id="loggedUsernameLetter" style="width:28px;height:28px" alt="Avatar">
+                    </div>
+                    <span class="mx-2" id="loggedUsername"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="userLink">
+                    <li class="dropdown-item">
+                      <a id="contactsLink" class="btn px-2" onclick='contactsContent();return false;'>
+                        <i class="bi bi-people h4"></i>
+                        <span class="ms-1 d-sm-inline">Contacts</span></a>
+                    </li>
+                    <li class="dropdown-item">
+                      <a id="profileLink" class="btn px-2" onclick='profileContent();return false;'>
+                        <i class="bi bi-person h4"></i>
+                        <span class="ms-1 d-sm-inline">Profile</span></a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li class="dropdown-item">
+                      <a href="/logout.html" id="logoutLink" class="btn px-sm-0 px-2">
+                        <i class="bi bi-box-arrow-right h4"></i>
+                        <span class="ms-1 d-sm-inline">Sign out</span></a>
+                    </li>
+                    <!-- <li><a class="dropdown-item" href="/logout.html">Sign out</a></li> -->
+                  </ul>
                 </li>
-                <li class="dropdown-item">
-                  <a id="profileLink" class="btn px-2" onclick='profileContent();return false;'>
-                    <i class="bi bi-person h4"></i>
-                    <span class="ms-1 d-sm-inline">Profile</span></a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li class="dropdown-item">
-                  <a href="/logout.html" id="logoutLink" class="btn px-sm-0 px-2">
-                    <i class="bi bi-box-arrow-right h4"></i>
-                    <span class="ms-1 d-sm-inline">Sign out</span></a>
-                </li>
-                <!-- <li><a class="dropdown-item" href="/logout.html">Sign out</a></li> -->
               </ul>
             </div>
           </div>
@@ -168,8 +170,14 @@
               <div hidden class="container" id="composeContainer">
                 <ui-include src="/snippets/compose.page.html"></ui-include>
               </div>
-              <div hidden class="messages" id="messagesContainer">
-                <ui-include src="/snippets/messages.page.html"></ui-include>
+              <div hidden class="inbox" id="inboxContainer">
+                <ui-include src="/snippets/inbox.page.html"></ui-include>
+              </div>
+              <div hidden class="sent" id="sentContainer">
+                <ui-include src="/snippets/sent.page.html"></ui-include>
+              </div>
+              <div hidden class="drafts" id="draftsContainer">
+                <ui-include src="/snippets/drafts.page.html"></ui-include>
               </div>
               <div hidden class="files" id="filesContainer">
                 <ui-include src="/snippets/files.page.html"></ui-include>
@@ -198,9 +206,25 @@
                 </a>
               </div>
             </div>
-            <div hidden class="container" id="messagesPanel">
+            <div hidden class="container" id="inboxPanel">
               <div class="d-flex justify-content-evenly">
-                <a class="btn disabled btn-light px-sm-0 px-2" id="copySelectedMessages">
+                <a class="btn disabled btn-light px-sm-0 px-2" id="copySelectedInbox">
+                  <i class="fs-5 bi-box-arrow-in-up"></i>
+                  <span class="ms-1 d-none d-sm-inline">Copy selected to Compose Form</span>
+                </a>
+              </div>
+            </div>
+            <div hidden class="container" id="sentPanel">
+              <div class="d-flex justify-content-evenly">
+                <a class="btn disabled btn-light px-sm-0 px-2" id="copySelectedSent">
+                  <i class="fs-5 bi-box-arrow-in-up"></i>
+                  <span class="ms-1 d-none d-sm-inline">Copy selected to Compose Form</span>
+                </a>
+              </div>
+            </div>
+            <div hidden class="container" id="draftsPanel">
+              <div class="d-flex justify-content-evenly">
+                <a class="btn disabled btn-light px-sm-0 px-2" id="copySelectedDrafts">
                   <i class="fs-5 bi-box-arrow-in-up"></i>
                   <span class="ms-1 d-none d-sm-inline">Copy selected to Compose Form</span>
                 </a>
@@ -237,9 +261,17 @@
   document.querySelector('#ccButton').addEventListener('click', ccShow);
   document.querySelector('#bccButton').addEventListener('click', bccShow);
 
-  // messages
-  import { deleteMessages } from "/public/js/messages.js";
-  document.querySelector('#messagesConfirmButton').addEventListener('click', deleteMessages);
+  // inbox
+  import { deleteInboxMessages } from "/public/js/inbox.js";
+  document.querySelector('#inboxConfirmButton').addEventListener('click', deleteInboxMessages);
+
+  // sent
+  import { deleteSentMessages } from "/public/js/sent.js";
+  document.querySelector('#sentConfirmButton').addEventListener('click', deleteSentMessages);
+
+  // drafts
+  import { deleteDraftsMessages } from "/public/js/drafts.js";
+  document.querySelector('#draftsConfirmButton').addEventListener('click', deleteDraftsMessages);
 
   // files
   import { inputUploadChanged, clearUpload, deleteFiles, copySelectedFiles } from "/public/js/files.js";
@@ -262,7 +294,7 @@
   loadProfile(profileForm);
 
   // default page
-  messagesContent(document.getElementById("inboxLink"));
+  draftsContent(document.getElementById("draftsLink"));
 </script>
 
 </html>

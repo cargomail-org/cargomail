@@ -12,11 +12,11 @@ import "datatables.net-responsive-bs5";
 
 let selectedUris = [];
 
-const messagesConfirmDialog = new bootstrap.Modal(
-  document.querySelector("#messagesConfirmDialog")
+const sentConfirmDialog = new bootstrap.Modal(
+  document.querySelector("#sentConfirmDialog")
 );
 
-const messagesTable = new DataTable("#messagesTable", {
+const sentTable = new DataTable("#sentTable", {
   paging: true,
   responsive: {
     details: false,
@@ -29,7 +29,7 @@ const messagesTable = new DataTable("#messagesTable", {
       data: "name",
       render: (data, type, full, meta) => {
         const link = `${window.apiHost}/api/v1/files/`;
-        return `<a href="javascript:;" onclick="downloadURI('messagesForm', '${link}${full.uri}', '${data}');">${data}</a>`;
+        return `<a href="javascript:;" onclick="downloadURI('sentForm', '${link}${full.uri}', '${data}');">${data}</a>`;
       },
     },
     {
@@ -88,12 +88,12 @@ const messagesTable = new DataTable("#messagesTable", {
       action: function () {
         selectedUris = [];
 
-        const selectedData = messagesTable
+        const selectedData = sentTable
           .rows(".selected")
           .data()
           .map((obj) => obj.uri);
         if (selectedData.length > 0) {
-          messagesConfirmDialog.show();
+          sentConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
             selectedUris.push(selectedData[i]);
           }
@@ -103,12 +103,12 @@ const messagesTable = new DataTable("#messagesTable", {
   ],
 });
 
-export const deleteMessages = (e) => {
+export const deleteSentMessages = (e) => {
   e?.preventDefault();
 
-  messagesConfirmDialog.hide();
+  sentConfirmDialog.hide();
 
-  messagesTable.rows(".selected").remove().draw();
-  messagesTable.buttons([".files-delete"]).enable(false);
+  sentTable.rows(".selected").remove().draw();
+  sentTable.buttons([".files-delete"]).enable(false);
 };
 
