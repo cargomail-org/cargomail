@@ -22,7 +22,7 @@ type Header struct {
 type MessagePart struct {
 	OrderId int64          `json:"orderId,omitempty"`
 	Headers []*Header      `json:"headers,omitempty"`
-	Bodies  []*Body        `json:"bodies,omitempty"`
+	Body    []*Body        `json:"body,omitempty"`
 	Parts   []*MessagePart `json:"parts,omitempty"`
 }
 

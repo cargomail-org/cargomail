@@ -53,12 +53,84 @@ const draftsTable = new DataTable("#draftsTable", {
     { data: "uri", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
-      data: "payload", orderable: false,
+      data: "payload",
+      orderable: false,
       render: (data, type, full, meta) => {
         const subject = full.payload?.headers?.find(
           (header) => header.name == "Subject"
         )?.value;
-        return `<span>${subject || "Draft"}</span>`;
+
+        let plainText;
+        let snippet;
+
+        let bodies = [];
+
+        const contentType = full.payload?.headers?.find(
+          (header) => header.name == "Content-Type"
+        )?.value;
+
+        const contentDisposition = full.payload?.headers?.find(
+          (header) => header.name == "Content-Disposition"
+        )?.value;
+
+        if (
+          contentType?.startsWith("text/plain") &&
+          contentDisposition != "attachment" &&
+          full.payload?.body
+        ) {
+          bodies = [...bodies, ...full.payload.body];
+        } else if (
+          contentType?.startsWith("multipart/") &&
+          contentDisposition != "attachment"
+        ) {
+          const parts = full.payload?.parts;
+
+          if (parts) {
+            for (const part of parts) {
+              const contentType = part.headers?.find(
+                (header) => header.name == "Content-Type"
+              )?.value;
+
+              const contentDisposition = part.headers?.find(
+                (header) => header.name == "Content-Disposition"
+              )?.value;
+
+              if (
+                contentType?.startsWith("text/plain") &&
+                contentDisposition != "attachment" &&
+                part.body
+              ) {
+                bodies = [...bodies, ...part.body];
+              } else if (
+                contentType?.startsWith("multipart/") &&
+                contentDisposition != "attachment" &&
+                part.bodies
+              ) {
+                bodies = [...bodies, ...part.body];
+              }
+            }
+          }
+        }
+
+        if (bodies) {
+          for (const body of bodies) {
+            if (body.contentType?.startsWith("text/plain")) {
+              plainText = atob(body?.raw);
+              break;
+            }
+          }
+        }
+
+        if (subject?.length > 0) {
+          snippet = subject;
+          if (plainText?.length > 0) {
+            snippet = snippet + " - " + plainText;
+          }
+        } else {
+          snippet = plainText;
+        }
+
+        return `<span>${snippet || "Draft"}</span>`;
       },
     },
     {
@@ -86,9 +158,7 @@ const draftsTable = new DataTable("#draftsTable", {
     selector: "td:first-child",
     info: true,
   },
-  order: [
-    [3, "desc"],
-  ],
+  order: [[3, "desc"]],
   dom: "Bfrtip",
   language: {
     buttons: {
