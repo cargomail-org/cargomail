@@ -72,9 +72,9 @@ type Body struct {
 	OrderId     int64  `json:"orderId,omitempty"`
 	ContentType string `json:"contentType,omitempty"`
 	Uri         string `json:"uri,omitempty"`
+	Raw         string `json:"raw,omitempty"`
 	Hash        string `json:"hash,omitempty"`
 	Size        int64  `json:"size,omitempty"`
-	Data        int64  `json:"data,omitempty"`
 }
 
 func (v MessagePart) Value() (driver.Value, error) {
