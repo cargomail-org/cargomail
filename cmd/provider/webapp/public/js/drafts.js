@@ -96,7 +96,6 @@ const draftsTable = new DataTable("#draftsTable", {
         let subject;
         let plainText;
         let snippet;
-        let attachments;
 
         if (full.payload?.headers) {
           subject = full.payload.headers["Subject"];
@@ -108,6 +107,22 @@ const draftsTable = new DataTable("#draftsTable", {
         const plainBodyPart = bodyParts.find((bodyPart) =>
           bodyPart["Content-Type"].startsWith("text/plain")
         );
+
+        const attachments = bodyParts.filter((bodyPart) =>
+          bodyPart["Content-Disposition"]?.startsWith("attachment")
+        );
+
+        const link = `${window.apiHost}/api/v1/files/`;
+        const attachmentLinks = [];
+
+        for (const attachment of attachments) {
+          let fileName = attachment["Content-Disposition"].split("filename=").pop();
+          if (fileName?.length > 0) {
+            fileName = fileName.replace(/^"(.+(?="$))"$/, '$1');
+          }
+          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadURI('draftsFormAlert', '${link}${attachment.body.uri}', '${fileName}');">${fileName}</a>`;
+          attachmentLinks.push(attachmentAnchor);
+        }
 
         plainText = plainBodyPart?.body?.raw
           ? atob(plainBodyPart.body.raw)
@@ -122,7 +137,15 @@ const draftsTable = new DataTable("#draftsTable", {
           snippet = plainText;
         }
 
-        return `<span>${snippet || "Draft"}</span>`;
+        let renderHtml = `<span>${snippet || "Draft"}</span>`;
+        if (attachmentLinks.length > 0) {
+          renderHtml += `<br/>`;
+          for (const item of attachmentLinks) {
+            renderHtml += `<span>${item}  </span>`;
+          }
+        }
+        
+        return renderHtml
       },
     },
     {
