@@ -14,16 +14,10 @@ type MessageRepository struct {
 	db *sql.DB
 }
 
-type Header struct {
-	Name string      `json:"name"`
-	Data interface{} `json:"value"`
-}
-
 type MessagePart struct {
-	OrderId int64          `json:"orderId,omitempty"`
-	Headers []*Header      `json:"headers,omitempty"`
-	Body    []*Body        `json:"body,omitempty"`
-	Parts   []*MessagePart `json:"parts,omitempty"`
+	Headers map[string]interface{} `json:"headers"`
+	Body    *Body                  `json:"body,omitempty"`
+	Parts   []*MessagePart         `json:"parts,omitempty"`
 }
 
 type Message struct {
@@ -69,7 +63,6 @@ type MessageSync struct {
 }
 
 type Body struct {
-	OrderId     int64  `json:"orderId,omitempty"`
 	ContentType string `json:"contentType,omitempty"`
 	Uri         string `json:"uri,omitempty"`
 	Raw         string `json:"raw,omitempty"`

@@ -1,38 +1,16 @@
 const raw = JSON.stringify({
   payload: {
-    headers: [
-      //   {
-      //     name: "Message-ID",
-      //     value: "950124.162336@127.0.0.1:8181>",
-      //   },
-      {
-        name: "Date",
-        value: "Tue, 11 Apr 2023 09:19:22 +0200",
-      },
-      {
-        name: "From",
-        value: [
-          { fullname: "Alice Sanders", emailAddress: "alice@cargomail.org" },
-        ],
-      },
-      {
-        name: "To",
-        value: [{ fullname: "Bob Sanders", emailAddress: "bob@cargomail.org" }],
-      },
-      {
-        name: "Subject",
-        value: "A simple test message",
-      },
-      {
-        name: "Content-Type",
-        value: "text/plain; charset=UTF-8",
-      },
-    ],
-    body: [
-      {
-        raw: "SGkgdGhlcmUhCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKUmVnYXJkcw==",
-      },
-    ],
+    headers: {
+      // "Message-ID": "950124.162336@127.0.0.1:8181",
+      Date: "Tue, 11 Apr 2023 09:19:22 +0200",
+      From: "Alice Sanders <alice@cargomail.org>",
+      To: "Bob Sanders <bob@cargomail.org>",
+      Subject: "A simple test message",
+      "Content-Type": "text/plain; charset=UTF-8",
+    },
+    body: {
+      raw: "SGkgdGhlcmUhCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKQmVzdA==",
+    },
   },
 });
 

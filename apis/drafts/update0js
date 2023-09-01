@@ -5,12 +5,9 @@ const raw = JSON.stringify({
       Date: "Tue, 11 Apr 2023 09:19:22 +0200",
       From: "Alice Sanders <alice@cargomail.org>",
       To: "Bob Sanders <bob@cargomail.org>",
-      Subject: "A simple test message",
+      Subject: "Without a body",
       "Content-Type": "text/plain; charset=UTF-8",
-    },
-    body: {
-      raw: "SGkgdGhlcmUhCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKQmVzdA==",
-    },
+    }
   },
 });
 

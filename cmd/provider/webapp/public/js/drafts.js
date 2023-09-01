@@ -20,6 +20,43 @@ const draftsFormAlert = document.getElementById("draftsFormAlert");
 
 let historyId = 0;
 
+const getBodyPart = (part) => {
+  if (part?.body) {
+    const contentType = part.headers["Content-Type"];
+    const contentDisposition = part.headers["Content-Disposition"];
+    if (contentType && !contentType.startsWith("multipart/")) {
+      const bodyPart = { "Content-Type": contentType, body: part.body };
+
+      if (contentDisposition) {
+        bodyPart["Content-Disposition"] = contentDisposition;
+      }
+
+      return bodyPart;
+    }
+  }
+};
+
+const getBodyParts = (payload) => {
+  const result = [];
+
+  if (!payload) {
+    return result;
+  }
+
+  const bodyPart = getBodyPart(payload);
+  if (bodyPart) {
+    result.push(bodyPart);
+  }
+
+  if (payload.parts) {
+    payload.parts.filter((part) => {
+      result.push(...getBodyParts(part));
+    });
+  }
+
+  return result;
+};
+
 const draftsTable = new DataTable("#draftsTable", {
   paging: true,
   responsive: {
@@ -56,70 +93,25 @@ const draftsTable = new DataTable("#draftsTable", {
       data: "payload",
       orderable: false,
       render: (data, type, full, meta) => {
-        const subject = full.payload?.headers?.find(
-          (header) => header.name == "Subject"
-        )?.value;
-
+        let subject;
         let plainText;
         let snippet;
+        let attachments;
 
-        let bodies = [];
-
-        const contentType = full.payload?.headers?.find(
-          (header) => header.name == "Content-Type"
-        )?.value;
-
-        const contentDisposition = full.payload?.headers?.find(
-          (header) => header.name == "Content-Disposition"
-        )?.value;
-
-        if (
-          contentType?.startsWith("text/plain") &&
-          contentDisposition != "attachment" &&
-          full.payload?.body
-        ) {
-          bodies = [...bodies, ...full.payload.body];
-        } else if (
-          contentType?.startsWith("multipart/") &&
-          contentDisposition != "attachment"
-        ) {
-          const parts = full.payload?.parts;
-
-          if (parts) {
-            for (const part of parts) {
-              const contentType = part.headers?.find(
-                (header) => header.name == "Content-Type"
-              )?.value;
-
-              const contentDisposition = part.headers?.find(
-                (header) => header.name == "Content-Disposition"
-              )?.value;
-
-              if (
-                contentType?.startsWith("text/plain") &&
-                contentDisposition != "attachment" &&
-                part.body
-              ) {
-                bodies = [...bodies, ...part.body];
-              } else if (
-                contentType?.startsWith("multipart/") &&
-                contentDisposition != "attachment" &&
-                part.bodies
-              ) {
-                bodies = [...bodies, ...part.body];
-              }
-            }
-          }
+        if (full.payload?.headers) {
+          subject = full.payload.headers["Subject"];
         }
 
-        if (bodies) {
-          for (const body of bodies) {
-            if (body.contentType?.startsWith("text/plain")) {
-              plainText = atob(body?.raw);
-              break;
-            }
-          }
-        }
+        const bodyParts = [];
+        bodyParts.push(...getBodyParts(full.payload));
+
+        const plainBodyPart = bodyParts.find((bodyPart) =>
+          bodyPart["Content-Type"].startsWith("text/plain")
+        );
+
+        plainText = plainBodyPart?.body?.raw
+          ? atob(plainBodyPart.body.raw)
+          : undefined;
 
         if (subject?.length > 0) {
           snippet = subject;
