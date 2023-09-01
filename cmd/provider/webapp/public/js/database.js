@@ -31,7 +31,7 @@ export const getLastDraftUri = () => {
     .transaction("compose")
     .objectStore("compose")
     .get("lastDraftUri").onsuccess = (event) => {
-    console.log(`lastDraftUri is ${event.target.result?.uri}`);
+    // console.log(`lastDraftUri is ${event.target.result?.uri}`);
   };
 };
 
@@ -68,7 +68,7 @@ export const setLastDraftUri = (uri) => {
       const transaction = userDatabase.transaction(["compose"], "readwrite");
 
       transaction.oncomplete = (event) => {
-        console.log("All done!");
+        // console.log("All done!");
       };
 
       transaction.onerror = (event) => {

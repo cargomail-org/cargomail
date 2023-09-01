@@ -10,6 +10,8 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
+import { addItems as composeAddItems, populateForm as composePopulateForm } from "/public/js/compose.js";
+
 let selectedUris = [];
 
 const draftsConfirmDialog = new bootstrap.Modal(
@@ -116,9 +118,11 @@ const draftsTable = new DataTable("#draftsTable", {
         const attachmentLinks = [];
 
         for (const attachment of attachments) {
-          let fileName = attachment["Content-Disposition"].split("filename=").pop();
+          let fileName = attachment["Content-Disposition"]
+            .split("filename=")
+            .pop();
           if (fileName?.length > 0) {
-            fileName = fileName.replace(/^"(.+(?="$))"$/, '$1');
+            fileName = fileName.replace(/^"(.+(?="$))"$/, "$1");
           }
           const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadURI('draftsFormAlert', '${link}${attachment.body.uri}', '${fileName}');">${fileName}</a>`;
           attachmentLinks.push(attachmentAnchor);
@@ -144,8 +148,8 @@ const draftsTable = new DataTable("#draftsTable", {
             renderHtml += `<span>${item}  </span>`;
           }
         }
-        
-        return renderHtml
+
+        return renderHtml;
       },
     },
     {
@@ -256,9 +260,8 @@ const draftsTable = new DataTable("#draftsTable", {
       className: "drafts-edit",
       enabled: false,
       action: function (e) {
-        // const button = e.currentTarget;
-        // button.setAttribute("data-mode", "@edit");
-        // draftsFormDialog.show(e);
+        composePopulateForm(draftsTable.rows(".selected").data()[0]);
+        composeContent(e);
       },
     },
     {

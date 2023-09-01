@@ -365,6 +365,15 @@ export const deleteCargoes = (e) => {
   composeTable.buttons([".files-delete"]).enable(false);
 };
 
+export const populateForm = (data) => {
+  const subject = data?.payload?.headers?.Subject || "";
+  
+  subjectInput.value = subject;
+  [...subjectHeadings].forEach((heading) => {
+    heading.textContent = subjectInput.value;
+  });
+};
+
 export const addItems = (items) => {
   for (let i = items.length - 1; i >= 0; i--) {
     let found = false;
