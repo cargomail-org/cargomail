@@ -334,6 +334,8 @@ const loadProfile = async (form) => {
 
   form.querySelector('input[name="firstName"]').value = response.firstName;
   form.querySelector('input[name="lastName"]').value = response.lastName;
+
+  return response.username;
 };
 
 const downloadURI = (formId, uri, name) => {

@@ -291,7 +291,14 @@
   import * as profile from "/public/js/profile.js";
 
   profileForm = document.getElementById("profileForm");
-  loadProfile(profileForm);
+  const loggedUsername = await loadProfile(profileForm);
+
+  // database
+  import * as database from "/public/js/database.js";
+
+  if (!database.db) {
+    database.openDatabase(loggedUsername);
+  }
 
   // default page
   draftsContent(document.getElementById("draftsLink"));

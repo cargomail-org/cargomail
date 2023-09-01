@@ -10,14 +10,16 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
+// import * as database from "/public/js/database.js";
+
 const composeForm = document.getElementById("composeForm");
 
 let draft = {};
-let lastDraftUri = localStorage.getItem("lastDraftUri");
+// let lastDraftUri = database.getLastDraftUri(); // localStorage.getItem("lastDraftUri");
 
-if (lastDraftUri && lastDraftUri.length > 0) {
-  console.log(lastDraftUri.length);
-}
+// if (lastDraftUri && lastDraftUri.length > 0) {
+//   console.log(lastDraftUri.length);
+// }
 
 const REGEX_EMAIL =
   "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
