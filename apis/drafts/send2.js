@@ -19,7 +19,7 @@ const raw = JSON.stringify({
               "Content-Type": "text/plain; charset=UTF-8",
             },
             body: {
-              raw: "SGkgdGhlcmUhCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKUmVnYXJkcw==",
+              "data:asBase64": "SGkgdGhlcmUhCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKUmVnYXJkcw==",
             },
           },
           {
@@ -27,7 +27,7 @@ const raw = JSON.stringify({
               "Content-Type": "text/html; charset=UTF-8",
             },
             body: {
-              raw: "PGh0bWw+CjxoMj5IaSB0aGVyZSE8L2gyPgo8aT5JJ2QgbGlrZSB0byBjb250cmlidXRlLjwvaT48L2JyPgo8L2JyPgpSZWdhcmRzCjwvaHRtbD4=",
+              "data:asBase64": "PGh0bWw+CjxoMj5IaSB0aGVyZSE8L2gyPgo8aT5JJ2QgbGlrZSB0byBjb250cmlidXRlLjwvaT48L2JyPgo8L2JyPgpSZWdhcmRzCjwvaHRtbD4=",
             },
           },
         ],

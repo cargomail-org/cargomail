@@ -9,10 +9,10 @@ const raw = JSON.stringify({
       "Content-Type": "text/plain; charset=UTF-8",
     },
     body: {
-      raw: "SGkgdGhlcmUhCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKQmVzdA==",
+      "data:asBase64": "SGkgdGhlcmUhCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKQmVzdA==",
     },
     // body: {
-    //   raw: "SGVsbG8hCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKQmVzdA==",
+    //   blob64: "SGVsbG8hCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKQmVzdA==",
     // },
   },
 });

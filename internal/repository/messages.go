@@ -65,7 +65,7 @@ type MessageSync struct {
 type Body struct {
 	ContentType string `json:"contentType,omitempty"`
 	Uri         string `json:"uri,omitempty"`
-	Raw         string `json:"raw,omitempty"`
+	Data64      string `json:"data:asBase64,omitempty"`
 	Hash        string `json:"hash,omitempty"`
 	Size        int64  `json:"size,omitempty"`
 }

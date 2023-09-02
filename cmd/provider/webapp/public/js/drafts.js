@@ -128,8 +128,8 @@ const draftsTable = new DataTable("#draftsTable", {
           attachmentLinks.push(attachmentAnchor);
         }
 
-        plainText = plainBodyPart?.body?.raw
-          ? atob(plainBodyPart.body.raw)
+        plainText = plainBodyPart?.body?.["data:asBase64"]
+          ? atob(plainBodyPart.body["data:asBase64"])
           : undefined;
 
         if (subject?.length > 0) {
