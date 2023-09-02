@@ -68,7 +68,7 @@ const getPartIfNotContainer = (part) => {
   }
 };
 
-const getPartsWithoutContainers = (payload) => {
+const getPartsWithContainersExcluded = (payload) => {
   const result = [];
 
   if (!payload) {
@@ -82,7 +82,7 @@ const getPartsWithoutContainers = (payload) => {
 
   if (payload.parts) {
     payload.parts.filter((part) => {
-      result.push(...getPartsWithoutContainers(part));
+      result.push(...getPartsWithContainersExcluded(part));
     });
   }
 
@@ -133,9 +133,9 @@ const draftsTable = new DataTable("#draftsTable", {
           subject = full.payload.headers["Subject"];
         }
 
-        const partsWithoutContainers = getPartsWithoutContainers(data);
+        const partsWithContainersExcluded = getPartsWithContainersExcluded(data);
 
-        const plainPart = partsWithoutContainers.find((part) => {
+        const plainPart = partsWithContainersExcluded.find((part) => {
           return (
             !Array.isArray(part["Content-Type"]) &&
             part["Content-Type"] &&
@@ -143,7 +143,7 @@ const draftsTable = new DataTable("#draftsTable", {
           );
         });
 
-        const attachments = partsWithoutContainers.filter((part) =>
+        const attachments = partsWithContainersExcluded.filter((part) =>
           part["Content-Disposition"]?.startsWith("attachment")
         );
 
