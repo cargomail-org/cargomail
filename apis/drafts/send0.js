@@ -6,7 +6,6 @@ const raw = JSON.stringify({
         From: "Alice Sanders <alice@cargomail.org>",
         To: "Bob Sanders <bob@cargomail.org>",
         Subject: "Without a body",
-        "Content-Type": "text/plain; charset=UTF-8",
       },
     },
   });

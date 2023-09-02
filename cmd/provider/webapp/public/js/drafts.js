@@ -10,7 +10,10 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-import { addItems as composeAddItems, populateForm as composePopulateForm } from "/public/js/compose.js";
+import {
+  addItems as composeAddItems,
+  populateForm as composePopulateForm,
+} from "/public/js/compose.js";
 
 let selectedUris = [];
 
@@ -22,37 +25,64 @@ const draftsFormAlert = document.getElementById("draftsFormAlert");
 
 let historyId = 0;
 
-const getBodyPart = (part) => {
-  if (part?.body) {
+const getPartIfNotContainer = (part) => {
+  if (part?.headers) {
     const contentType = part.headers["Content-Type"];
+    const contentTransferEnconding = part.headers["Content-Transfer-Encoding"];
     const contentDisposition = part.headers["Content-Disposition"];
-    if (contentType && !contentType.startsWith("multipart/")) {
-      const bodyPart = { "Content-Type": contentType, body: part.body };
 
-      if (contentDisposition) {
-        bodyPart["Content-Disposition"] = contentDisposition;
+    let isContainer;
+
+    if (Array.isArray(contentType)) {
+      const items = contentType.filter((item) =>
+        item["Content-Type"]?.startsWith("multipart/")
+      );
+      isContainer = items.length > 0;
+    } else {
+      isContainer = contentType && contentType.startsWith("multipart/");
+    }
+
+    if (!isContainer) {
+      const result = {};
+
+      if (part.body) {
+        result.body = part.body;
       }
 
-      return bodyPart;
+      if (contentType) {
+        result["Content-Type"] = contentType;
+      }
+
+      if (contentTransferEnconding) {
+        result["Content-Transfer-Encoding"] = contentTransferEnconding;
+      }
+
+      if (contentDisposition) {
+        result["Content-Disposition"] = contentDisposition;
+      }
+
+      if (Object.keys(result).length > 0) {
+        return result;
+      }
     }
   }
 };
 
-const getBodyParts = (payload) => {
+const getPartsWithoutContainers = (payload) => {
   const result = [];
 
   if (!payload) {
     return result;
   }
 
-  const bodyPart = getBodyPart(payload);
-  if (bodyPart) {
-    result.push(bodyPart);
+  const part = getPartIfNotContainer(payload);
+  if (part) {
+    result.push(part);
   }
 
   if (payload.parts) {
     payload.parts.filter((part) => {
-      result.push(...getBodyParts(part));
+      result.push(...getPartsWithoutContainers(part));
     });
   }
 
@@ -103,15 +133,18 @@ const draftsTable = new DataTable("#draftsTable", {
           subject = full.payload.headers["Subject"];
         }
 
-        const bodyParts = [];
-        bodyParts.push(...getBodyParts(full.payload));
+        const partsWithoutContainers = getPartsWithoutContainers(data);
 
-        const plainBodyPart = bodyParts.find((bodyPart) =>
-          bodyPart["Content-Type"].startsWith("text/plain")
-        );
+        const plainPart = partsWithoutContainers.find((part) => {
+          return (
+            !Array.isArray(part["Content-Type"]) &&
+            part["Content-Type"] &&
+            part["Content-Type"].startsWith("text/plain")
+          );
+        });
 
-        const attachments = bodyParts.filter((bodyPart) =>
-          bodyPart["Content-Disposition"]?.startsWith("attachment")
+        const attachments = partsWithoutContainers.filter((part) =>
+          part["Content-Disposition"]?.startsWith("attachment")
         );
 
         const link = `${window.apiHost}/api/v1/files/`;
@@ -124,13 +157,36 @@ const draftsTable = new DataTable("#draftsTable", {
           if (fileName?.length > 0) {
             fileName = fileName.replace(/^"(.+(?="$))"$/, "$1");
           }
-          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadURI('draftsFormAlert', '${link}${attachment.body.uri}', '${fileName}');">${fileName}</a>`;
+
+          const externalContent = attachment["Content-Type"].find((item) =>
+            item.startsWith("message/external-body")
+          );
+
+          let attachmentUri = "#";
+
+          if (externalContent) {
+            attachmentUri = externalContent.split("uri=").pop();
+
+            const quotedStrings = attachmentUri.split('"');
+            if (quotedStrings?.length > 0) {
+              attachmentUri = quotedStrings[1];
+            } else {
+              attachmentUri = "#";
+            }
+          }
+
+          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadURI('draftsFormAlert', '${link}${attachmentUri}', '${fileName}');">${fileName}</a>`;
+
           attachmentLinks.push(attachmentAnchor);
         }
 
-        plainText = plainBodyPart?.body?.["data:asBase64"]
-          ? atob(plainBodyPart.body["data:asBase64"])
-          : undefined;
+        if (plainPart?.["Content-Transfer-Encoding"] == "base64") {
+          plainText = plainPart?.body?.data
+            ? atob(plainPart.body.data)
+            : undefined;
+        } else {
+          plainText = plainPart?.body?.data ? plainPart.body.data : undefined;
+        }
 
         if (subject?.length > 0) {
           snippet = subject;

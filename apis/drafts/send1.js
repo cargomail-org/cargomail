@@ -9,22 +9,23 @@ const raw = JSON.stringify({
       "Content-Type": "text/plain; charset=UTF-8",
     },
     body: {
-      "data:asBase64": "SGkgdGhlcmUhCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKQmVzdA==",
+      data: `Hi there!
+
+I'd like to contribute.
+
+Best`,
     },
-    // body: {
-    //   blob64: "SGVsbG8hCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKQmVzdA==",
-    // },
   },
 });
 
 const requestOptions = {
-  method: "POST",
+  method: "PUT",
   credentials: "include",
   body: raw,
   redirect: "follow",
 };
 
-fetch("http://127.0.0.1:8181/api/v1/drafts/send", requestOptions)
+fetch("http://127.0.0.1:8181/api/v1/drafts", requestOptions)
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.log("error", error));

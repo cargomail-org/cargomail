@@ -63,11 +63,7 @@ type MessageSync struct {
 }
 
 type Body struct {
-	ContentType string `json:"contentType,omitempty"`
-	Uri         string `json:"uri,omitempty"`
-	Data64      string `json:"data:asBase64,omitempty"`
-	Hash        string `json:"hash,omitempty"`
-	Size        int64  `json:"size,omitempty"`
+	Data string `json:"data"`
 }
 
 func (v MessagePart) Value() (driver.Value, error) {

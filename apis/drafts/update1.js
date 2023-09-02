@@ -9,11 +9,12 @@ const raw = JSON.stringify({
       "Content-Type": "text/plain; charset=UTF-8",
     },
     body: {
-      "data:asBase64": "SGkgdGhlcmUhCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKQmVzdA==",
+      data: `Hi there!
+
+I'd like to contribute.
+
+Best`,
     },
-    // body: {
-    //   "data:asBase64": "SGVsbG8hCgpJJ2QgbGlrZSB0byBjb250cmlidXRlLgoKQmVzdA==",
-    // },
   },
 });
 
