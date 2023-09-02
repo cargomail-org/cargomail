@@ -264,7 +264,7 @@ const composeTable = new DataTable("#composeTable", {
     details: false,
   },
   ordering: false,
-  searching: true,
+  searching: false,
   columns: [
     { data: "uri", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
