@@ -264,6 +264,7 @@ const composeTable = new DataTable("#composeTable", {
     details: false,
   },
   ordering: false,
+  searching: true,
   columns: [
     { data: "uri", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
@@ -324,7 +325,7 @@ const composeTable = new DataTable("#composeTable", {
   buttons: [
     // "pageLength",
     {
-      text: "Delete",
+      text: "Remove",
       className: "files-delete",
       enabled: false,
       action: function () {
