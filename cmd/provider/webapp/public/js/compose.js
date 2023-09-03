@@ -367,12 +367,12 @@ export const removeAttachments = (e) => {
 };
 
 export const populateForm = (parsed) => {
-  const subject = parsed.subject;
-  
-  subjectInput.value = subject;
+  subjectInput.value = parsed.subject;
   [...subjectHeadings].forEach((heading) => {
     heading.textContent = subjectInput.value;
   });
+
+  messageText.value = parsed.plainContent;
 };
 
 export const addItems = (items) => {

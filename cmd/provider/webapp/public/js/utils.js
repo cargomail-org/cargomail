@@ -165,11 +165,11 @@ const parseParts = (payload) => {
 };
 
 export const parsePayload = (uri, payload) => {
-  const from = payload?.headers?.["From"];
-  const to = payload?.headers?.["To"];
-  const cc = payload?.headers?.["Cc"];
-  const bcc = payload?.headers?.["Bcc"];
-  const subject = payload?.headers?.["Subject"];
+  const from = payload?.headers?.["From"] || "";
+  const to = payload?.headers?.["To"] || "";
+  const cc = payload?.headers?.["Cc"] || "";
+  const bcc = payload?.headers?.["Bcc"] || "";
+  const subject = payload?.headers?.["Subject"] || "";
 
   try {
     const {
