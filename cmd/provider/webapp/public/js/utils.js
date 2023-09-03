@@ -92,11 +92,11 @@ const parseParts = (payload) => {
   const attachments = [];
 
   for (const attachmentDisposition of attachmentsDisposition) {
-    let fileName = attachmentDisposition["Content-Disposition"]
+    let attachmentFileName = attachmentDisposition["Content-Disposition"]
       .split("filename=")
       .pop();
-    if (fileName?.length > 0) {
-      fileName = fileName.replace(/^"(.+(?="$))"$/, "$1");
+    if (attachmentFileName?.length > 0) {
+      attachmentFileName = attachmentFileName.replace(/^"(.+(?="$))"$/, "$1");
     }
 
     const externalContent = attachmentDisposition["Content-Type"].find((item) =>
@@ -142,7 +142,9 @@ const parseParts = (payload) => {
       }
     }
 
-    attachments.push({uri: attachmentUri, fileName, size: attachmentSize, digestSha256: attachmentDigestSha256});
+    if (attachmentUri?.length > 0 && attachmentFileName?.length > 0 && attachmentSize?.length > 0) {
+      attachments.push({uri: attachmentUri, fileName: attachmentFileName, size: attachmentSize, digestSha256: attachmentDigestSha256 || ""});
+    }
   }
 
   if (plainPart?.["Content-Transfer-Encoding"] == "base64") {
@@ -188,7 +190,7 @@ export const parsePayload = (uri, payload) => {
       attachments,
     };
   } catch (e) {
-    console.log(`message uri: ${id}`);
+    console.log(`message uri: ${uri}`);
     console.log(e);
     return {
       from,
