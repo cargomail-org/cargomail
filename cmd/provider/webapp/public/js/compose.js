@@ -357,7 +357,7 @@ composeTable.on("select.dt deselect.dt", () => {
   }
 });
 
-export const deleteCargoes = (e) => {
+export const removeAttachments = (e) => {
   e?.preventDefault();
 
   composeConfirmDialog.hide();
@@ -366,8 +366,8 @@ export const deleteCargoes = (e) => {
   composeTable.buttons([".files-delete"]).enable(false);
 };
 
-export const populateForm = (data) => {
-  const subject = data?.payload?.headers?.Subject || "";
+export const populateForm = (parsed) => {
+  const subject = parsed.subject;
   
   subjectInput.value = subject;
   [...subjectHeadings].forEach((heading) => {

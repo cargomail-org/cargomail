@@ -256,8 +256,8 @@
 
 <script type="module">
   // compose
-  import { deleteCargoes, ccShow, bccShow } from "/public/js/compose.js";
-  document.querySelector('#composeConfirmButton').addEventListener('click', deleteCargoes);
+  import { removeAttachments, ccShow, bccShow } from "/public/js/compose.js";
+  document.querySelector('#composeConfirmButton').addEventListener('click', removeAttachments);
   document.querySelector('#ccButton').addEventListener('click', ccShow);
   document.querySelector('#bccButton').addEventListener('click', bccShow);
 

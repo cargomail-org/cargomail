@@ -15,6 +15,8 @@ import {
   populateForm as composePopulateForm,
 } from "/public/js/compose.js";
 
+import { parsePayload } from "/public/js/utils.js";
+
 let selectedUris = [];
 
 const draftsConfirmDialog = new bootstrap.Modal(
@@ -24,70 +26,6 @@ const draftsConfirmDialog = new bootstrap.Modal(
 const draftsFormAlert = document.getElementById("draftsFormAlert");
 
 let historyId = 0;
-
-const getPartIfNotContainer = (part) => {
-  if (part?.headers) {
-    const contentType = part.headers["Content-Type"];
-    const contentTransferEnconding = part.headers["Content-Transfer-Encoding"];
-    const contentDisposition = part.headers["Content-Disposition"];
-
-    let isContainer;
-
-    if (Array.isArray(contentType)) {
-      const items = contentType.filter((item) =>
-        item["Content-Type"]?.startsWith("multipart/")
-      );
-      isContainer = items.length > 0;
-    } else {
-      isContainer = contentType && contentType.startsWith("multipart/");
-    }
-
-    if (!isContainer) {
-      const result = {};
-
-      if (part.body) {
-        result.body = part.body;
-      }
-
-      if (contentType) {
-        result["Content-Type"] = contentType;
-      }
-
-      if (contentTransferEnconding) {
-        result["Content-Transfer-Encoding"] = contentTransferEnconding;
-      }
-
-      if (contentDisposition) {
-        result["Content-Disposition"] = contentDisposition;
-      }
-
-      if (Object.keys(result).length > 0) {
-        return result;
-      }
-    }
-  }
-};
-
-const getPartsWithContainersExcluded = (payload) => {
-  const result = [];
-
-  if (!payload) {
-    return result;
-  }
-
-  const part = getPartIfNotContainer(payload);
-  if (part) {
-    result.push(part);
-  }
-
-  if (payload.parts) {
-    payload.parts.filter((part) => {
-      result.push(...getPartsWithContainersExcluded(part));
-    });
-  }
-
-  return result;
-};
 
 const draftsTable = new DataTable("#draftsTable", {
   paging: true,
@@ -125,76 +63,25 @@ const draftsTable = new DataTable("#draftsTable", {
       data: "payload",
       orderable: false,
       render: (data, type, full, meta) => {
-        let subject;
-        let plainText;
-        let snippet;
-
-        if (full.payload?.headers) {
-          subject = full.payload.headers["Subject"];
-        }
-
-        const partsWithContainersExcluded = getPartsWithContainersExcluded(data);
-
-        const plainPart = partsWithContainersExcluded.find((part) => {
-          return (
-            !Array.isArray(part["Content-Type"]) &&
-            part["Content-Type"] &&
-            part["Content-Type"].startsWith("text/plain")
-          );
-        });
-
-        const attachments = partsWithContainersExcluded.filter((part) =>
-          part["Content-Disposition"]?.startsWith("attachment")
-        );
+        const parsed = parsePayload(full.uri, full.payload);
 
         const link = `${window.apiHost}/api/v1/files/`;
         const attachmentLinks = [];
 
-        for (const attachment of attachments) {
-          let fileName = attachment["Content-Disposition"]
-            .split("filename=")
-            .pop();
-          if (fileName?.length > 0) {
-            fileName = fileName.replace(/^"(.+(?="$))"$/, "$1");
-          }
-
-          const externalContent = attachment["Content-Type"].find((item) =>
-            item.startsWith("message/external-body")
-          );
-
-          let attachmentUri = "#";
-
-          if (externalContent) {
-            attachmentUri = externalContent.split("uri=").pop();
-
-            const quotedStrings = attachmentUri.split('"');
-            if (quotedStrings?.length > 0) {
-              attachmentUri = quotedStrings[1];
-            } else {
-              attachmentUri = "#";
-            }
-          }
-
-          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadURI('draftsFormAlert', '${link}${attachmentUri}', '${fileName}');">${fileName}</a>`;
-
+        for (const attachment of parsed.attachments) {
+          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadURI('draftsFormAlert', '${link}${attachment.uri}', '${attachment.fileName}');">${attachment.fileName}</a>`;
           attachmentLinks.push(attachmentAnchor);
         }
 
-        if (plainPart?.["Content-Transfer-Encoding"] == "base64") {
-          plainText = plainPart?.body?.data
-            ? atob(plainPart.body.data)
-            : undefined;
-        } else {
-          plainText = plainPart?.body?.data ? plainPart.body.data : undefined;
-        }
+        let snippet;
 
-        if (subject?.length > 0) {
-          snippet = subject;
-          if (plainText?.length > 0) {
-            snippet = snippet + " - " + plainText;
+        if (parsed.subject?.length > 0) {
+          snippet = parsed.subject;
+          if (parsed.plainContent?.length > 0) {
+            snippet = snippet + " - " + parsed.plainContent;
           }
         } else {
-          snippet = plainText;
+          snippet = parsed.plainContent;
         }
 
         let renderHtml = `<span>${snippet || "Draft"}</span>`;
@@ -316,7 +203,11 @@ const draftsTable = new DataTable("#draftsTable", {
       className: "drafts-edit",
       enabled: false,
       action: function (e) {
-        composePopulateForm(draftsTable.rows(".selected").data()[0]);
+        const data = draftsTable.rows(".selected").data()[0];
+
+        const parsed = parsePayload(data.uri, data.payload);
+
+        composePopulateForm(parsed);
         composeContent(e);
       },
     },
