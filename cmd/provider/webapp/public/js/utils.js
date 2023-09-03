@@ -119,7 +119,7 @@ const parseParts = (payload) => {
     let attachmentSize;
 
     if (externalContent) {
-        attachmentSize = externalContent.split("size=").pop();
+      attachmentSize = externalContent.split("size=").pop();
 
       const quotedStrings = attachmentSize.split('"');
       if (quotedStrings?.length > 0) {
@@ -132,7 +132,7 @@ const parseParts = (payload) => {
     let attachmentDigestSha256;
 
     if (externalContent) {
-        attachmentDigestSha256 = externalContent.split("digest:sha-256=").pop();
+      attachmentDigestSha256 = externalContent.split("digest:sha-256=").pop();
 
       const quotedStrings = attachmentDigestSha256.split('"');
       if (quotedStrings?.length > 0) {
@@ -142,8 +142,25 @@ const parseParts = (payload) => {
       }
     }
 
-    if (attachmentUri?.length > 0 && attachmentFileName?.length > 0 && attachmentSize?.length > 0) {
-      attachments.push({uri: attachmentUri, fileName: attachmentFileName, size: attachmentSize, digestSha256: attachmentDigestSha256 || ""});
+    if (
+      attachmentUri?.length > 0 &&
+      attachmentFileName?.length > 0 &&
+      attachmentSize?.length > 0
+    ) {
+      if (attachmentDigestSha256?.length > 0) {
+        attachments.push({
+          uri: attachmentUri,
+          fileName: attachmentFileName,
+          size: attachmentSize,
+          digestSha256: attachmentDigestSha256,
+        });
+      } else {
+        attachments.push({
+          uri: attachmentUri,
+          fileName: attachmentFileName,
+          size: attachmentSize,
+        });
+      }
     }
   }
 
@@ -156,14 +173,12 @@ const parseParts = (payload) => {
   }
 
   if (htmlPart?.["Content-Transfer-Encoding"] == "base64") {
-    htmlContent = htmlPart?.body?.data
-      ? atob(htmlPart.body.data)
-      : undefined;
+    htmlContent = htmlPart?.body?.data ? atob(htmlPart.body.data) : undefined;
   } else {
     htmlContent = htmlPart?.body?.data ? htmlPart.body.data : undefined;
   }
 
-  return {plainContent, htmlContent, attachments};
+  return { plainContent, htmlContent, attachments };
 };
 
 export const parsePayload = (uri, payload) => {
