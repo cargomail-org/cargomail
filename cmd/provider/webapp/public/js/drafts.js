@@ -11,7 +11,7 @@ import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
 import {
-  addItems as composeAddItems,
+  composeAddItems,
   populateForm as composePopulateForm,
 } from "/public/js/compose.js";
 
@@ -207,7 +207,7 @@ const draftsTable = new DataTable("#draftsTable", {
 
         const parsed = parsePayload(data.uri, data.payload);
 
-        composePopulateForm(parsed);
+        composePopulateForm(data.uri, parsed);
         composeContent(e);
       },
     },

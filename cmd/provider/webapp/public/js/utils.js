@@ -99,6 +99,10 @@ const parseParts = (payload) => {
       attachmentFileName = attachmentFileName.replace(/^"(.+(?="$))"$/, "$1");
     }
 
+    const attachmentContentType = attachmentDisposition["Content-Type"].find((item) =>
+      !item.startsWith("message/external-body")
+    );
+
     const externalContent = attachmentDisposition["Content-Type"].find((item) =>
       item.startsWith("message/external-body")
     );
@@ -150,15 +154,17 @@ const parseParts = (payload) => {
       if (attachmentDigestSha256?.length > 0) {
         attachments.push({
           uri: attachmentUri,
+          contentType: attachmentContentType,
           fileName: attachmentFileName,
-          size: attachmentSize,
+          size: parseInt(attachmentSize),
           digestSha256: attachmentDigestSha256,
         });
       } else {
         attachments.push({
           uri: attachmentUri,
+          contentType: attachmentContentType,
           fileName: attachmentFileName,
-          size: attachmentSize,
+          size: parseInt(attachmentSize),
         });
       }
     }

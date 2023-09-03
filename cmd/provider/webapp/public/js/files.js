@@ -10,7 +10,7 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-import { addItems as composeAddItems } from "/public/js/compose.js";
+import { composeAddItems } from "/public/js/compose.js";
 
 let selectedUris = [];
 
@@ -388,7 +388,6 @@ export const deleteFiles = (e) => {
 
     filesTable.rows(".selected").remove().draw();
     filesTable.buttons([".files-delete"]).enable(false);
-    console.log("Successfully trashed file(s)");
   })();
 };
 

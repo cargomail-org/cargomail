@@ -269,7 +269,7 @@ const composeTable = new DataTable("#composeTable", {
     { data: "uri", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
-      data: "name",
+      data: "fileName",
       render: (data, type, full, meta) => {
         const link = `${window.apiHost}/api/v1/files/`;
         return `<a class="attachmentLink" href="javascript:;" onclick="downloadURI('composeForm', '${link}${full.uri}', '${data}');">${data}</a>`;
@@ -280,17 +280,6 @@ const composeTable = new DataTable("#composeTable", {
       render: function (data, type) {
         if (type === "display" || type === "filter") {
           return formatBytes(data, 0);
-        } else {
-          return data;
-        }
-      },
-    },
-    {
-      data: "createdAt",
-      render: function (data, type) {
-        if (type === "display" || type === "filter") {
-          var d = new Date(data);
-          return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
         } else {
           return data;
         }
@@ -366,16 +355,22 @@ export const removeAttachments = (e) => {
   composeTable.buttons([".files-delete"]).enable(false);
 };
 
-export const populateForm = (parsed) => {
+export const populateForm = (uri, parsed) => {
   subjectInput.value = parsed.subject;
   [...subjectHeadings].forEach((heading) => {
     heading.textContent = subjectInput.value;
   });
 
   messageText.value = parsed.plainContent;
+
+  composeTable.clear();
+
+  composeAddItems(parsed.attachments);
+
+  composeTable.draw();
 };
 
-export const addItems = (items) => {
+export const composeAddItems = (items) => {
   for (let i = items.length - 1; i >= 0; i--) {
     let found = false;
 
@@ -388,7 +383,14 @@ export const addItems = (items) => {
     }
 
     if (!found) {
-      composeTable.row.add(items[i]);
+      const item = {
+        uri: items[i].uri,
+        contentType: items[i].contentType,
+        fileName: items[i]?.name ? items[i]?.name : items[i]?.fileName, // file or attachment
+        size: items[i].size,
+      };
+
+      composeTable.row.add(item);
 
       var currentPage = composeTable.page();
 
