@@ -386,7 +386,7 @@ export const composeAddItems = (items) => {
       const item = {
         uri: items[i].uri,
         contentType: items[i].contentType,
-        fileName: items[i]?.name ? items[i]?.name : items[i]?.fileName, // file or attachment
+        fileName: items[i]?.name ? items[i]?.name : items[i]?.fileName, // file name or attachment fileName
         size: items[i].size,
       };
 
