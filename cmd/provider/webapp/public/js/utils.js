@@ -1,4 +1,4 @@
-const getNameAndEmail = (value) => {
+const parseNameAndEmail = (value) => {
   if (!value) return { name: "", email: "" };
 
   const delimiterIndex = value.lastIndexOf(" ");
@@ -216,15 +216,15 @@ export const parsePayload = (uri, payload) => {
   const from = payload?.headers?.["From"] || "";
 
   const to = (payload?.headers?.["To"]?.split(",") || []).map((recipient) => {
-    return getNameAndEmail(recipient.trim());
+    return parseNameAndEmail(recipient.trim());
   });
 
   const cc = (payload?.headers?.["Cc"]?.split(",") || []).map((recipient) => {
-    return getNameAndEmail(recipient.trim());
+    return parseNameAndEmail(recipient.trim());
   });
 
   const bcc = (payload?.headers?.["Bcc"]?.split(",") || []).map((recipient) => {
-    return getNameAndEmail(recipient.trim());
+    return parseNameAndEmail(recipient.trim());
   });
 
   const subject = payload?.headers?.["Subject"] || "";
@@ -261,9 +261,40 @@ export const parsePayload = (uri, payload) => {
   }
 };
 
+const composeNameAndEmail = (recipients) => {
+  let result = "";
+
+  recipients.forEach((recipient, i) => {
+    if (recipient.name?.length > 0) {
+      result += `${recipient.name} <${recipient.email}>`;
+    } else {
+      result += `<${recipient.email}>`;
+    }
+
+    if (i < recipients.length - 1) {
+      result = `${result}, `;
+    }
+  });
+
+  return result;
+};
+
 export const composePayload = (payload, parsed) => {
+  if (!payload.headers) payload.headers = {};
+
+  if (parsed.to) {
+    payload.headers["To"] = composeNameAndEmail(parsed.to);
+  }
+
+  if (parsed.cc) {
+    payload.headers["Cc"] = composeNameAndEmail(parsed.cc);
+  }
+
+  if (parsed.bcc) {
+    payload.headers["Bcc"] = composeNameAndEmail(parsed.bcc);
+  }
+
   if (parsed.subject) {
-    if (!payload.headers) payload.headers = {};
     payload.headers["Subject"] = parsed.subject;
   }
 

@@ -97,7 +97,12 @@ $("#toInput").selectize({
 
     for (const item of e) {
       const recipient = this.options[item];
-      recipients.push({ email: recipient.email, name: recipient.name });
+
+      if (recipient.name?.length > 0) {
+        recipients.push({ email: recipient.email, name: recipient.name });
+      } else {
+        recipients.push({ email: recipient.email });
+      }
     }
 
     updateDraftsPage(composeUriInput.value, { to: recipients });
@@ -174,7 +179,12 @@ $("#ccInput").selectize({
 
     for (const item of e) {
       const recipient = this.options[item];
-      recipients.push({ email: recipient.email, name: recipient.name });
+
+      if (recipient.name?.length > 0) {
+        recipients.push({ email: recipient.email, name: recipient.name });
+      } else {
+        recipients.push({ email: recipient.email });
+      }
     }
 
     updateDraftsPage(composeUriInput.value, { cc: recipients });
@@ -251,7 +261,12 @@ $("#bccInput").selectize({
 
     for (const item of e) {
       const recipient = this.options[item];
-      recipients.push({ email: recipient.email, name: recipient.name });
+
+      if (recipient.name?.length > 0) {
+        recipients.push({ email: recipient.email, name: recipient.name });
+      } else {
+        recipients.push({ email: recipient.email });
+      }
     }
 
     updateDraftsPage(composeUriInput.value, { bcc: recipients });
@@ -271,7 +286,10 @@ const bouncer = (e) => {
       heading.textContent = subjectInput.value;
     });
     // Save Body
-    updateDraftsPage(composeUriInput.value, { subject: subjectInput.value, plainContent: messageText.value });
+    updateDraftsPage(composeUriInput.value, {
+      subject: subjectInput.value,
+      plainContent: messageText.value,
+    });
   }, 2000);
 };
 
