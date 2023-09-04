@@ -26,6 +26,7 @@ const REGEX_EMAIL =
   "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
 
 $("#toInput").selectize({
+  openOnFocus: false,
   closeAfterSelect: false,
   plugins: ["remove_button"],
   valueField: "email",
@@ -96,6 +97,7 @@ $("#toInput").selectize({
 });
 
 $("#ccInput").selectize({
+  openOnFocus: false,
   closeAfterSelect: false,
   plugins: ["remove_button"],
   valueField: "email",
@@ -166,6 +168,7 @@ $("#ccInput").selectize({
 });
 
 $("#bccInput").selectize({
+  openOnFocus: false,
   closeAfterSelect: false,
   plugins: ["remove_button"],
   valueField: "email",
