@@ -11,8 +11,10 @@ import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
 // import * as database from "/public/js/database.js";
+import { updateDraftsPage } from "/public/js/drafts.js";
 
 const composeForm = document.getElementById("composeForm");
+const composeUriInput = document.getElementById("composeUriInput");
 
 let draft = {};
 // let lastDraftUri = database.getLastDraftUri(); // localStorage.getItem("lastDraftUri");
@@ -91,8 +93,14 @@ $("#toInput").selectize({
     return false;
   },
   onChange: function (e) {
-    console.log(e);
-    // Save Draft
+    const recipients = [];
+
+    for (const item of e) {
+      const recipient = this.options[item];
+      recipients.push({ email: recipient.email, name: recipient.name });
+    }
+
+    updateDraftsPage(composeUriInput.value, { to: recipients });
   },
 });
 
@@ -162,8 +170,14 @@ $("#ccInput").selectize({
     return false;
   },
   onChange: function (e) {
-    console.log(e);
-    // Save Draft
+    const recipients = [];
+
+    for (const item of e) {
+      const recipient = this.options[item];
+      recipients.push({ email: recipient.email, name: recipient.name });
+    }
+
+    updateDraftsPage(composeUriInput.value, { cc: recipients });
   },
 });
 
@@ -233,8 +247,14 @@ $("#bccInput").selectize({
     return false;
   },
   onChange: function (e) {
-    console.log(e);
-    // Save Draft
+    const recipients = [];
+
+    for (const item of e) {
+      const recipient = this.options[item];
+      recipients.push({ email: recipient.email, name: recipient.name });
+    }
+
+    updateDraftsPage(composeUriInput.value, { bcc: recipients });
   },
 });
 
@@ -251,7 +271,7 @@ const bouncer = (e) => {
       heading.textContent = subjectInput.value;
     });
     // Save Body
-    console.log("save body");
+    updateDraftsPage(composeUriInput.value, { subject: subjectInput.value, plainContent: messageText.value });
   }, 2000);
 };
 
@@ -362,6 +382,8 @@ export const removeAttachments = (e) => {
 };
 
 export const populateForm = (uri, parsed) => {
+  composeUriInput.value = uri;
+
   const selectizeTo = $("#toInput")[0].selectize;
   const selectizeCc = $("#ccInput")[0].selectize;
   const selectizeBcc = $("#bccInput")[0].selectize;

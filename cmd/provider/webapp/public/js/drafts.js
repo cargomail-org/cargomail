@@ -25,6 +25,8 @@ const draftsConfirmDialog = new bootstrap.Modal(
 
 const draftsFormAlert = document.getElementById("draftsFormAlert");
 
+let formIsPopulated = false;
+
 let historyId = 0;
 
 const draftsTable = new DataTable("#draftsTable", {
@@ -207,7 +209,13 @@ const draftsTable = new DataTable("#draftsTable", {
 
         const parsed = parsePayload(data.uri, data.payload);
 
-        composePopulateForm(data.uri, parsed);
+        try {
+          formIsPopulated = true;
+          composePopulateForm(data.uri, parsed);
+        } finally {
+          formIsPopulated = false;
+        }
+
         composeContent(e);
       },
     },
@@ -270,4 +278,15 @@ export const deleteDraftsMessages = (e) => {
     draftsTable.buttons([".drafts-edit"]).enable(false);
     draftsTable.buttons([".drafts-delete"]).enable(false);
   })();
+};
+
+export const updateDraftsPage = (uri, parsed) => {
+  if (!formIsPopulated) {
+    const index = draftsTable.column(0).data().toArray().indexOf(uri);
+
+    if (index >= 0) {
+      // const draft = { uri, payload: { headers: { Subject: parsed.subject } } };
+      // console.log(draftsTable.row(`#${uri}`).data(draft));
+    }
+  }
 };
