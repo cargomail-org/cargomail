@@ -77,9 +77,9 @@ const draftsTable = new DataTable("#draftsTable", {
 
         let snippet;
 
-        if (parsed.subject?.length > 0) {
+        if (parsed?.subject) {
           snippet = parsed.subject;
-          if (parsed.plainContent?.length > 0) {
+          if (parsed?.plainContent) {
             snippet = snippet + " - " + parsed.plainContent;
           }
         } else {

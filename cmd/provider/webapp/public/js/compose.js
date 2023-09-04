@@ -98,7 +98,7 @@ $("#toInput").selectize({
     for (const item of e) {
       const recipient = this.options[item];
 
-      if (recipient.name?.length > 0) {
+      if (recipient?.name) {
         recipients.push({ email: recipient.email, name: recipient.name });
       } else {
         recipients.push({ email: recipient.email });
@@ -180,7 +180,7 @@ $("#ccInput").selectize({
     for (const item of e) {
       const recipient = this.options[item];
 
-      if (recipient.name?.length > 0) {
+      if (recipient?.name) {
         recipients.push({ email: recipient.email, name: recipient.name });
       } else {
         recipients.push({ email: recipient.email });
@@ -262,7 +262,7 @@ $("#bccInput").selectize({
     for (const item of e) {
       const recipient = this.options[item];
 
-      if (recipient.name?.length > 0) {
+      if (recipient?.name) {
         recipients.push({ email: recipient.email, name: recipient.name });
       } else {
         recipients.push({ email: recipient.email });

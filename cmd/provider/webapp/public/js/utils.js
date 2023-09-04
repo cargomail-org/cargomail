@@ -120,7 +120,7 @@ const parseParts = (payload) => {
     let attachmentFileName = attachmentDisposition["Content-Disposition"]
       .split("filename=")
       .pop();
-    if (attachmentFileName?.length > 0) {
+    if (attachmentFileName) {
       attachmentFileName = attachmentFileName.replace(/^"(.+(?="$))"$/, "$1");
     }
 
@@ -138,7 +138,7 @@ const parseParts = (payload) => {
       attachmentUri = externalContent.split("uri=").pop();
 
       const quotedStrings = attachmentUri.split('"');
-      if (quotedStrings?.length > 0) {
+      if (quotedStrings) {
         attachmentUri = quotedStrings[1];
       } else {
         attachmentUri = "#";
@@ -151,7 +151,7 @@ const parseParts = (payload) => {
       attachmentSize = externalContent.split("size=").pop();
 
       const quotedStrings = attachmentSize.split('"');
-      if (quotedStrings?.length > 0) {
+      if (quotedStrings) {
         attachmentSize = quotedStrings[1];
       } else {
         attachmentSize = undefined;
@@ -164,7 +164,7 @@ const parseParts = (payload) => {
       attachmentDigestSha256 = externalContent.split("digest:sha-256=").pop();
 
       const quotedStrings = attachmentDigestSha256.split('"');
-      if (quotedStrings?.length > 0) {
+      if (quotedStrings) {
         attachmentDigestSha256 = quotedStrings[1];
       } else {
         attachmentDigestSha256 = undefined;
@@ -172,11 +172,11 @@ const parseParts = (payload) => {
     }
 
     if (
-      attachmentUri?.length > 0 &&
-      attachmentFileName?.length > 0 &&
-      attachmentSize?.length > 0
+      attachmentUri &&
+      attachmentFileName &&
+      attachmentSize
     ) {
-      if (attachmentDigestSha256?.length > 0) {
+      if (attachmentDigestSha256 > 0) {
         attachments.push({
           uri: attachmentUri,
           contentType: attachmentContentType,
@@ -265,7 +265,7 @@ const composeNameAndEmail = (recipients) => {
   let result = "";
 
   recipients.forEach((recipient, i) => {
-    if (recipient.name?.length > 0) {
+    if (recipient?.name) {
       result += `${recipient.name} <${recipient.email}>`;
     } else {
       result += `<${recipient.email}>`;
@@ -294,7 +294,7 @@ export const composePayload = (payload, parsed) => {
     payload.headers["Bcc"] = composeNameAndEmail(parsed.bcc);
   }
 
-  if (parsed.subject) {
+  if (parsed.subject !== undefined) {
     payload.headers["Subject"] = parsed.subject;
   }
 

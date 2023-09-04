@@ -318,7 +318,7 @@ const loadProfile = async (form) => {
   const loggedUsername =
     response.firstName.length > 0 ? response.firstName : response.username;
 
-  if (loggedUsername?.length) {
+  if (loggedUsername) {
     document.getElementById("loggedUsernameLetter").innerHTML = loggedUsername
       .charAt(0)
       .toUpperCase();
