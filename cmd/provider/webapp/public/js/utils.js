@@ -1,3 +1,28 @@
+const getNameAndEmail = (value) => {
+  if (!value) return { name: "", email: "" };
+
+  const delimiterIndex = value.lastIndexOf(" ");
+
+  let name;
+  let email;
+
+  if (delimiterIndex === -1) {
+    email =
+      value[0] === "<"
+        ? value.slice(1, value.length - 1)
+        : value.slice(0, value.length);
+    name = email.split("@")[0] || email;
+  } else {
+    name =
+      value[0] === '"'
+        ? value.slice(1, delimiterIndex - 1)
+        : value.slice(0, delimiterIndex);
+    email = value.slice(delimiterIndex + 2, value.length - 1);
+  }
+
+  return { name, email };
+};
+
 const getPartIfNotContainer = (part) => {
   if (part?.headers) {
     const contentType = part.headers["Content-Type"];
@@ -99,8 +124,8 @@ const parseParts = (payload) => {
       attachmentFileName = attachmentFileName.replace(/^"(.+(?="$))"$/, "$1");
     }
 
-    const attachmentContentType = attachmentDisposition["Content-Type"].find((item) =>
-      !item.startsWith("message/external-body")
+    const attachmentContentType = attachmentDisposition["Content-Type"].find(
+      (item) => !item.startsWith("message/external-body")
     );
 
     const externalContent = attachmentDisposition["Content-Type"].find((item) =>
@@ -189,9 +214,19 @@ const parseParts = (payload) => {
 
 export const parsePayload = (uri, payload) => {
   const from = payload?.headers?.["From"] || "";
-  const to = payload?.headers?.["To"] || "";
-  const cc = payload?.headers?.["Cc"] || "";
-  const bcc = payload?.headers?.["Bcc"] || "";
+
+  const to = (payload?.headers?.["To"]?.split(",") || []).map((recipient) => {
+    return getNameAndEmail(recipient.trim());
+  });
+
+  const cc = (payload?.headers?.["Cc"]?.split(",") || []).map((recipient) => {
+    return getNameAndEmail(recipient.trim());
+  });
+
+  const bcc = (payload?.headers?.["Bcc"]?.split(",") || []).map((recipient) => {
+    return getNameAndEmail(recipient.trim());
+  });
+
   const subject = payload?.headers?.["Subject"] || "";
 
   try {

@@ -356,6 +356,50 @@ export const removeAttachments = (e) => {
 };
 
 export const populateForm = (uri, parsed) => {
+  const selectizeTo = $("#toInput")[0].selectize;
+  const selectizeCc = $("#ccInput")[0].selectize;
+  const selectizeBcc = $("#bccInput")[0].selectize;
+
+  selectizeTo.addOption(parsed.to);
+  selectizeCc.addOption(parsed.to);
+  selectizeBcc.addOption(parsed.to);
+
+  selectizeTo.addOption(parsed.cc);
+  selectizeCc.addOption(parsed.cc);
+  selectizeBcc.addOption(parsed.cc);
+
+  selectizeTo.addOption(parsed.bcc);
+  selectizeCc.addOption(parsed.bcc);
+  selectizeBcc.addOption(parsed.bcc);
+
+  let values = [];
+  for (const item of parsed.to) {
+    values.push(item.email);
+  }
+  selectizeTo.setValue(values);
+
+  values = [];
+  for (const item of parsed.cc) {
+    values.push(item.email);
+  }
+  selectizeCc.setValue(values);
+  if (values.length > 0) {
+    document.getElementById("ccPanel").hidden = false;
+  }
+
+  values = [];
+  for (const item of parsed.bcc) {
+    values.push(item.email);
+  }
+  selectizeBcc.setValue(values);
+  if (values.length > 0) {
+    document.getElementById("bccPanel").hidden = false;
+  }
+
+  selectizeTo.refreshOptions(false);
+  selectizeCc.refreshOptions(false);
+  selectizeBcc.refreshOptions(false);
+
   subjectInput.value = parsed.subject;
   [...subjectHeadings].forEach((heading) => {
     heading.textContent = subjectInput.value;
@@ -409,16 +453,32 @@ export const composeAddItems = (items) => {
   }
 };
 
-export const ccShow = (e) => {
+export const ccToggle = (e) => {
   e?.preventDefault();
 
-  document.getElementById("ccPanel").hidden = false;
+  const selectize = $("#ccInput")[0].selectize;
+  const selected = selectize.getValue();
+
+  if (selected.length > 0) {
+    document.getElementById("ccPanel").hidden = false;
+  } else {
+    document.getElementById("ccPanel").hidden =
+      !document.getElementById("ccPanel").hidden;
+  }
 };
 
-export const bccShow = (e) => {
+export const bccToggle = (e) => {
   e?.preventDefault();
 
-  document.getElementById("bccPanel").hidden = false;
+  const selectize = $("#bccInput")[0].selectize;
+  const selected = selectize.getValue();
+
+  if (selected.length > 0) {
+    document.getElementById("bccPanel").hidden = false;
+  } else {
+    document.getElementById("bccPanel").hidden =
+      !document.getElementById("bccPanel").hidden;
+  }
 };
 
 const getFullName = (firstName, lastName) => {
