@@ -11,7 +11,6 @@ const parseNameAndEmail = (value) => {
       value[0] === "<"
         ? value.slice(1, value.length - 1)
         : value.slice(0, value.length);
-    name = email.split("@")[0] || email;
   } else {
     name =
       value[0] === '"'
@@ -20,7 +19,11 @@ const parseNameAndEmail = (value) => {
     email = value.slice(delimiterIndex + 2, value.length - 1);
   }
 
-  return { name, email };
+  if (name) {
+    return { name, email };
+  } else {
+    return { email };
+  }
 };
 
 const getPartIfNotContainer = (part) => {
