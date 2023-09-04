@@ -15,7 +15,7 @@ import {
   populateForm as composePopulateForm,
 } from "/public/js/compose.js";
 
-import { parsePayload } from "/public/js/utils.js";
+import { parsePayload, composePayload } from "/public/js/utils.js";
 
 let selectedUris = [];
 
@@ -285,8 +285,13 @@ export const updateDraftsPage = (uri, parsed) => {
     const index = draftsTable.column(0).data().toArray().indexOf(uri);
 
     if (index >= 0) {
-      // const draft = { uri, payload: { headers: { Subject: parsed.subject } } };
-      // console.log(draftsTable.row(`#${uri}`).data(draft));
+      const draft = draftsTable.row(`#${uri}`).data();
+
+      draft.payload = composePayload(draft.payload, parsed);
+
+      console.log(draft.payload);
+
+      draftsTable.row(`#${uri}`).data(draft)
     }
   }
 };

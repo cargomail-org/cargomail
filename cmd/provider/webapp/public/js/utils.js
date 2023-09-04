@@ -260,3 +260,12 @@ export const parsePayload = (uri, payload) => {
     };
   }
 };
+
+export const composePayload = (payload, parsed) => {
+  if (parsed.subject) {
+    if (!payload.headers) payload.headers = {};
+    payload.headers["Subject"] = parsed.subject;
+  }
+
+  return payload;
+};

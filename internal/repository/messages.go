@@ -15,9 +15,9 @@ type MessageRepository struct {
 }
 
 type MessagePart struct {
-	Headers map[string]interface{} `json:"headers"`
-	Body    *Body                  `json:"body,omitempty"`
-	Parts   []*MessagePart         `json:"parts,omitempty"`
+	Headers map[string]interface{} `json:"headers,omitempty"`
+	Body    *Body                   `json:"body,omitempty"`
+	Parts   []*MessagePart          `json:"parts,omitempty"`
 }
 
 type Message struct {
