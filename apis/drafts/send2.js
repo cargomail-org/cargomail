@@ -5,6 +5,7 @@ const raw = JSON.stringify({
       Date: "Tue, 11 Apr 2023 09:19:22 +0200",
       From: "Alice Sanders <alice@cargomail.org>",
       To: "Bob Sanders <bob@cargomail.org>",
+      Cc: "Carol Sanders <carol@cargomail.org>, Dan Sanders <dan@cargomail.org>",
       Subject: "A test message",
       "Content-Type": "multipart/mixed",
     },
