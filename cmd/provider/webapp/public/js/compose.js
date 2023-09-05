@@ -24,6 +24,8 @@ const recipientsTo = [];
 const recipientsCc = [];
 const recipientsBcc = [];
 
+const attachments = [];
+
 let draft = {};
 // let lastDraftUri = database.getLastDraftUri(); // localStorage.getItem("lastDraftUri");
 
@@ -113,16 +115,7 @@ $("#toInput").selectize({
       }
     }
 
-    formPopulated(composeUriInput.value, {
-      date: composeDateInput.value,
-      from: composeFromInput.value,
-      to: recipientsTo,
-      cc: recipientsCc,
-      bcc: recipientsBcc,
-      subject: subjectInput.value,
-      plainContent: messageText.value,
-      htmlContent: `<pre>${messageText.value}</pre>`,
-    });
+    formPopulated();
   },
 });
 
@@ -204,16 +197,7 @@ $("#ccInput").selectize({
       }
     }
 
-    formPopulated(composeUriInput.value, {
-      date: composeDateInput.value,
-      from: composeFromInput.value,
-      to: recipientsTo,
-      cc: recipientsCc,
-      bcc: recipientsBcc,
-      subject: subjectInput.value,
-      plainContent: messageText.value,
-      htmlContent: `<pre>${messageText.value}</pre>`,
-    });
+    formPopulated();
   },
 });
 
@@ -295,16 +279,7 @@ $("#bccInput").selectize({
       }
     }
 
-    formPopulated(composeUriInput.value, {
-      date: composeDateInput.value,
-      from: composeFromInput.value,
-      to: recipientsTo,
-      cc: recipientsCc,
-      bcc: recipientsBcc,
-      subject: subjectInput.value,
-      plainContent: messageText.value,
-      htmlContent: `<pre>${messageText.value}</pre>`,
-    });
+    formPopulated();
   },
 });
 
@@ -321,16 +296,7 @@ const bouncer = (e) => {
       heading.textContent = subjectInput.value;
     });
     // Save Body
-    formPopulated(composeUriInput.value, {
-      date: composeDateInput.value,
-      from: composeFromInput.value,
-      to: recipientsTo,
-      cc: recipientsCc,
-      bcc: recipientsBcc,
-      subject: subjectInput.value,
-      plainContent: messageText.value,
-      htmlContent: `<pre>${messageText.value}</pre>`,
-    });
+    formPopulated();
   }, 2000);
 };
 
@@ -438,9 +404,27 @@ export const removeAttachments = (e) => {
 
   composeTable.rows(".selected").remove().draw();
   composeTable.buttons([".files-delete"]).enable(false);
+
+  attachments.length = 0;
+
+  for (let i = 0; i < composeTable.rows().count(); i++) {
+    const data = composeTable.row(i).data();
+    const attachment = {
+      uri: data.uri,
+      contentType: data.contentType,
+      fileName: data?.name ? data?.name : data?.fileName, // file name or attachment fileName
+      size: data.size,
+    };
+
+    attachments.push(attachment);
+  }
+
+  formPopulated();
 };
 
 export const populateForm = (uri, parsed) => {
+  attachments.length = 0;
+
   composeUriInput.value = uri;
 
   composeDateInput.value = new Date();
@@ -507,7 +491,19 @@ export const populateForm = (uri, parsed) => {
   composeTable.draw();
 };
 
-const formPopulated = (uri, parsed) => {
+const formPopulated = () => {
+  const parsed = {
+    date: composeDateInput.value,
+    from: composeFromInput.value,
+    to: recipientsTo,
+    cc: recipientsCc,
+    bcc: recipientsBcc,
+    subject: subjectInput.value,
+    plainContent: messageText.value,
+    htmlContent: `<pre>${messageText.value}</pre>`,
+    attachments: attachments,
+  };
+
   const ccButton = document.querySelector("#ccButton");
   const bccButton = document.querySelector("#bccButton");
 
@@ -531,7 +527,7 @@ const formPopulated = (uri, parsed) => {
     bccButton.style.color = "#0d6efd";
   }
 
-  updateDraftsPage(uri, parsed);
+  updateDraftsPage(composeUriInput.value, parsed);
 };
 
 export const composeAddItems = (items) => {
@@ -569,7 +565,13 @@ export const composeAddItems = (items) => {
         composeTable.row(k - 1).data(insertedRow);
       }
       composeTable.page(currentPage).draw(false);
+
+      attachments.push(item);
     }
+  }
+
+  if (items.length > 0) {
+    formPopulated();
   }
 };
 

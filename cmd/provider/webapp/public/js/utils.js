@@ -339,29 +339,98 @@ export const composePayload = (parsed) => {
     payload.headers["Subject"] = parsed.subject;
   }
 
-  if (parsed.plainContent !== undefined && parsed.htmlContent !== undefined) {
-    payload.headers["Content-Type"] = "multipart/mixed";
-    payload.parts = [
-      {
+  if (
+    parsed.plainContent !== undefined ||
+    parsed.htmlContent !== undefined ||
+    parsed.attachments?.length > 0
+  ) {
+    let plainTextPart;
+    let htmlTextPart;
+    const attachmentParts = [];
+
+    if (parsed.plainContent) {
+      plainTextPart = {
+        headers: {
+          "Content-Type": "text/plain; charset=UTF-8",
+          "Content-Transfer-Encoding": "base64",
+        },
+        body: { data: b64EncodeUtf8(parsed.plainContent) },
+      };
+    }
+
+    if (parsed.htmlContent) {
+      htmlTextPart = {
+        headers: {
+          "Content-Type": "text/html; charset=UTF-8",
+          "Content-Transfer-Encoding": "base64",
+        },
+        body: { data: b64EncodeUtf8(parsed.htmlContent) },
+      };
+    }
+
+    if (parsed.attachments?.length > 0) {
+      for (const attachment of parsed.attachments) {
+        const attachmentPart = {
+          headers: {
+            "Content-Type": [
+              `message/external-body; uri="${attachment.uri}"; size="${attachment.size}"`,
+              attachment.contentType,
+            ],
+            "Content-Disposition": `attachment; filename="${attachment.fileName}"`,
+          },
+        };
+        attachmentParts.push(attachmentPart);
+      }
+    }
+
+    let alternativeTextPart;
+
+    if (plainTextPart && htmlTextPart) {
+      alternativeTextPart = {
         headers: { "Content-Type": "multipart/alternative" },
-        parts: [
-          {
-            headers: {
-              "Content-Type": "text/plain; charset=UTF-8",
-              "Content-Transfer-Encoding": "base64",
-            },
-            body: { data: b64EncodeUtf8(parsed.plainContent) },
-          },
-          {
-            headers: {
-              "Content-Type": "text/html; charset=UTF-8",
-              "Content-Transfer-Encoding": "base64",
-            },
-            body: { data: b64EncodeUtf8(parsed.htmlContent) },
-          },
-        ],
-      },
-    ];
+        parts: [],
+      };
+      alternativeTextPart.parts.push(plainTextPart);
+      alternativeTextPart.parts.push(htmlTextPart);
+    }
+
+    let mixedAttachmentsPart;
+
+    if (attachmentParts.length > 0) {
+      mixedAttachmentsPart = {
+        headers: { "Content-Type": "multipart/mixed" },
+        parts: attachmentParts,
+      };
+    }
+
+    if (
+      (plainTextPart || htmlTextPart || alternativeTextPart) &&
+      mixedAttachmentsPart
+    ) {
+      payload.headers["Content-Type"] = "multipart/mixed";
+      payload.parts = [];
+
+      if (alternativeTextPart) {
+        payload.parts.push(alternativeTextPart);
+      } else if (plainTextPart) {
+        payload.parts.push(plainTextPart);
+      } else if (htmlTextPart) {
+        payload.parts.push(htmlTextPart);
+      }
+
+      payload.parts.push(mixedAttachmentsPart);
+    } else if (plainTextPart || htmlTextPart || alternativeTextPart) {
+      if (alternativeTextPart) {
+        payload.headers = {...payload.headers, ...alternativeTextPart.headers};
+        payload.parts = alternativeTextPart.parts;
+      } else if (plainTextPart) {
+        payload.headers = {...payload.headers, ...plainTextPart.headers};
+        payload.body = plainTextPart.body;
+      } else if (htmlTextPart) {
+        payload.headers = {...payload.headers, ...htmlTextPart.headers};
+        payload.body = htmlTextPart.body;
+      }
+    }
   }
 
   return payload;

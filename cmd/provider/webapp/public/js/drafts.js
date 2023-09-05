@@ -298,7 +298,7 @@ export const updateDraftsPage = (uri, parsed) => {
       if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
 
       // console.log(draftsTable.row(`#${uri}`).data());
-      console.log(draft.payload);
+      // console.log(draft.payload);
 
       draftsTable.row(`#${uri}`).data(draft);
     }
