@@ -141,7 +141,7 @@ const parseParts = (payload) => {
       attachmentUri = externalContent.split("uri=").pop();
 
       const quotedStrings = attachmentUri.split('"');
-      if (quotedStrings) {
+      if (quotedStrings?.length > 1) {
         attachmentUri = quotedStrings[1];
       } else {
         attachmentUri = "#";
@@ -154,7 +154,7 @@ const parseParts = (payload) => {
       attachmentSize = externalContent.split("size=").pop();
 
       const quotedStrings = attachmentSize.split('"');
-      if (quotedStrings) {
+      if (quotedStrings?.length > 1) {
         attachmentSize = quotedStrings[1];
       } else {
         attachmentSize = undefined;
@@ -167,7 +167,7 @@ const parseParts = (payload) => {
       attachmentDigestSha256 = externalContent.split("digest:sha-256=").pop();
 
       const quotedStrings = attachmentDigestSha256.split('"');
-      if (quotedStrings) {
+      if (quotedStrings?.length > 1) {
         attachmentDigestSha256 = quotedStrings[1];
       } else {
         attachmentDigestSha256 = undefined;
