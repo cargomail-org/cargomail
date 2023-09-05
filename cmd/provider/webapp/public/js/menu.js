@@ -1,8 +1,6 @@
-let profileForm;
+import { setProfileUsername } from "/public/js/profile.js";
 
-function composeContent(e) {
-  e?.preventDefault();
-
+export function composeContentPage(e) {
   document.getElementById("messagesLink").classList.remove("active");
   document.getElementById("userLink").classList.remove("active");
 
@@ -36,7 +34,7 @@ function composeContent(e) {
   document.getElementById("profilePanel").hidden = true;
 }
 
-function inboxContent(e) {
+export function inboxContentPage(e) {
   document.getElementById("messagesLink").classList.add("active");
   document.getElementById("userLink").classList.remove("active");
 
@@ -82,7 +80,7 @@ function inboxContent(e) {
   document.getElementById("profilePanel").hidden = true;
 }
 
-function sentContent(e) {
+export function sentContentPage(e) {
   document.getElementById("messagesLink").classList.add("active");
   document.getElementById("userLink").classList.remove("active");
 
@@ -128,7 +126,7 @@ function sentContent(e) {
   document.getElementById("profilePanel").hidden = true;
 }
 
-function draftsContent(e) {
+export function draftsContentPage(e) {
   document.getElementById("messagesLink").classList.add("active");
   document.getElementById("userLink").classList.remove("active");
 
@@ -174,9 +172,7 @@ function draftsContent(e) {
   document.getElementById("profilePanel").hidden = true;
 }
 
-function filesContent(e) {
-  e?.preventDefault();
-
+export function filesContentPage(e) {
   document.getElementById("messagesLink").classList.remove("active");
   document.getElementById("userLink").classList.remove("active");
 
@@ -210,9 +206,7 @@ function filesContent(e) {
   document.getElementById("profilePanel").hidden = true;
 }
 
-function contactsContent(e) {
-  e?.preventDefault();
-
+export function contactsContentPage(e) {
   document.getElementById("userLink").classList.add("active");
 
   document.getElementById("messagesLink").classList.remove("active");
@@ -247,9 +241,7 @@ function contactsContent(e) {
   document.getElementById("profilePanel").hidden = true;
 }
 
-function profileContent(e) {
-  e?.preventDefault();
-
+export function profileContentPage(e) {
   document.getElementById("userLink").classList.add("active");
 
   document.getElementById("messagesLink").classList.remove("active");
@@ -283,10 +275,12 @@ function profileContent(e) {
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = false;
 
+  const profileForm = document.getElementById("profileForm");
+
   loadProfile(profileForm);
 }
 
-const formatBytes = (bytes, decimals = 2) => {
+export const formatBytes = (bytes, decimals = 2) => {
   if (!+bytes) return "0 Bytes";
 
   const k = 1024;
@@ -298,7 +292,7 @@ const formatBytes = (bytes, decimals = 2) => {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 };
 
-const loadProfile = async (form) => {
+export const loadProfile = async (form) => {
   const response = await api(
     form.id,
     200,
@@ -328,32 +322,17 @@ const loadProfile = async (form) => {
   const profileDomainName =
     document.getElementById("profileDomainName").innerHTML;
 
-  document.getElementById(
-    "profileUsername"
-  ).innerHTML = `${response.username}@${profileDomainName}`;
+  const username = `${response.username}@${profileDomainName}`;
 
-  form.querySelector('input[name="firstName"]').value = response.firstName;
-  form.querySelector('input[name="lastName"]').value = response.lastName;
+  document.getElementById("profileUsername").innerHTML = username;
+
+  setProfileUsername(username);
+
+  const profileForm = document.getElementById("profileForm");
+
+  profileForm.querySelector('input[name="firstName"]').value =
+    response.firstName;
+  profileForm.querySelector('input[name="lastName"]').value = response.lastName;
 
   return response.username;
-};
-
-const downloadURI = (formId, uri, name) => {
-  (async () => {
-    const response = await api(formId, 200, uri, {
-      method: "HEAD",
-      headers: {
-        Accept: "application/json",
-      },
-    });
-
-    if (response === false) {
-      return;
-    }
-
-    const link = document.createElement("a");
-    link.download = name;
-    link.href = uri;
-    link.click();
-  })();
 };

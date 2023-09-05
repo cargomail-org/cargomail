@@ -74,8 +74,7 @@
           <div class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-1">
             <ul class="nav nav-pills">
               <li class="nav-item">
-                <a href="#" id="composeLink" class="nav-link my-0 px-sm-0 px-2"
-                  onclick='composeContent();return false;'>
+                <a href="#" id="composeLink" class="nav-link my-0 px-sm-0 px-2">
                   <div class="d-flex d-sm-none d-sm-inline">
                     <i class="bi bi-envelope-plus h2"></i>
                     <span class="ms-2 mt-1 fs-7"><small class="subject-heading"></small></span>
@@ -100,24 +99,24 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="messagesLink">
                   <li class="dropdown-item">
-                    <a id="inboxLink" class="btn px-2" onclick='inboxContent(this);return false;'>
+                    <a id="inboxLink" class="btn px-2">
                       <i class="bi bi-envelope h4"></i>
                       <span class="ms-1 d-sm-inline">Inbox</span></a>
                   </li>
                   <li class="dropdown-item">
-                    <a id="sentLink" class="btn px-2" onclick='sentContent(this);return false;'>
+                    <a id="sentLink" class="btn px-2">
                       <i class="bi bi-envelope-check h4"></i>
                       <span class="ms-1 d-sm-inline">Sent</span></a>
                   </li>
                   <li class="dropdown-item">
-                    <a id="draftsLink" class="btn px-2" onclick='draftsContent(this);return false;'>
+                    <a id="draftsLink" class="btn px-2">
                       <i class="bi bi-envelope-slash h4"></i>
                       <span class="ms-1 d-sm-inline">Drafts</span></a>
                   </li>
                 </ul>
               </li>
               <li class="nav-item">
-                <a href="/files" id="filesLink" class="nav-link px-sm-0 px-2" onclick='filesContent();return false;'>
+                <a href="#" id="filesLink" class="nav-link px-sm-0 px-2">
                   <i class="bi bi-file-earmark-diff h4"></i>
                   <span class="ms-1 d-none d-sm-inline">Files</span></a>
               </li>
@@ -136,12 +135,12 @@
                   </a>
                   <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="userLink">
                     <li class="dropdown-item">
-                      <a id="contactsLink" class="btn px-2" onclick='contactsContent();return false;'>
+                      <a id="contactsLink" class="btn px-2">
                         <i class="bi bi-people h4"></i>
                         <span class="ms-1 d-sm-inline">Contacts</span></a>
                     </li>
                     <li class="dropdown-item">
-                      <a id="profileLink" class="btn px-2" onclick='profileContent();return false;'>
+                      <a id="profileLink" class="btn px-2">
                         <i class="bi bi-person h4"></i>
                         <span class="ms-1 d-sm-inline">Profile</span></a>
                     </li>
@@ -232,8 +231,7 @@
             </div>
             <div hidden class="container" id="filesPanel">
               <div class="d-flex justify-content-evenly">
-                <a class="btn disabled btn-light px-2" id="copySelectedFiles" role="button"
-                  aria-disabled="true">
+                <a class="btn disabled btn-light px-2" id="copySelectedFiles" role="button" aria-disabled="true">
                   <i class="fs-5 bi-box-arrow-in-up"></i>
                   <span class="ms-1 d-none d-sm-inline">Copy selected to Compose Form</span>
                 </a>
@@ -252,9 +250,28 @@
 </body>
 
 <script src='/public/js/index.js'></script>
-<script src='/public/js/menu.js'></script>
+<!-- <script src='/public/js/menu.js'></script> -->
 
 <script type="module">
+  // menu
+  import {
+    composeContentPage,
+    inboxContentPage,
+    sentContentPage,
+    draftsContentPage,
+    filesContentPage,
+    contactsContentPage,
+    profileContentPage,
+    loadProfile,
+  } from "/public/js/menu.js";
+  document.querySelector('#composeLink').addEventListener('click', () => composeContentPage(document.querySelector('#composeLink')))
+  document.querySelector('#inboxLink').addEventListener('click', () => inboxContentPage(document.querySelector('#inboxLink')))
+  document.querySelector('#sentLink').addEventListener('click', () => sentContentPage(document.querySelector('#sentLink')))
+  document.querySelector('#draftsLink').addEventListener('click', () => draftsContentPage(document.querySelector('#draftsLink')))
+  document.querySelector('#filesLink').addEventListener('click', () => filesContentPage(document.querySelector('#filesLink')))
+  document.querySelector('#contactsLink').addEventListener('click', () => contactsContentPage(document.querySelector('#contactsLink')))
+  document.querySelector('#profileLink').addEventListener('click', () => profileContentPage(document.querySelector('#profileLink')))
+
   // compose
   import { removeAttachments, ccToggle, bccToggle } from "/public/js/compose.js";
   document.querySelector('#composeConfirmButton').addEventListener('click', removeAttachments);
@@ -290,8 +307,10 @@
   // profile 
   import * as profile from "/public/js/profile.js";
 
-  profileForm = document.getElementById("profileForm");
-  const loggedUsername = await loadProfile(profileForm);
+  // default page
+  const draftsFormAlert = document.getElementById("draftsFormAlert");
+  const loggedUsername = await loadProfile(draftsFormAlert);
+  draftsContentPage(document.getElementById("draftsLink"));
 
   // database
   import * as database from "/public/js/database.js";
@@ -299,9 +318,6 @@
   if (!database.db) {
     database.openDatabase(loggedUsername);
   }
-
-  // default page
-  draftsContent(document.getElementById("draftsLink"));
 </script>
 
 </html>

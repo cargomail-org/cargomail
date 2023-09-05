@@ -236,6 +236,8 @@ const parseParts = (payload) => {
 };
 
 export const parsePayload = (uri, payload) => {
+  const date = payload?.headers?.["Date"] || "";
+
   const from = payload?.headers?.["From"] || "";
 
   const to = (payload?.headers?.["To"]?.split(",") || []).map((recipient) => {
@@ -259,6 +261,7 @@ export const parsePayload = (uri, payload) => {
       attachments = [],
     } = payload ? parseParts(payload) : {};
     return {
+      date,
       from,
       to,
       cc,
@@ -272,6 +275,7 @@ export const parsePayload = (uri, payload) => {
     console.log(`message uri: ${uri}`);
     console.log(e);
     return {
+      date,
       from,
       to,
       cc,
@@ -302,23 +306,62 @@ const composeNameAndEmail = (recipients) => {
   return result;
 };
 
-export const composePayload = (payload, parsed) => {
-  if (!payload.headers) payload.headers = {};
+export const composePayload = (parsed) => {
+  const payload = { headers: {} };
 
-  if (parsed.to) {
+  if (parsed.date !== undefined) {
+    payload.headers["Date"] = parsed.date;
+  }
+
+  if (parsed.from !== undefined) {
+    payload.headers["From"] = parsed.from;
+  }
+
+  if (parsed.to?.length > 0) {
     payload.headers["To"] = composeNameAndEmail(parsed.to);
+  } else {
+    delete payload.headers["To"];
   }
 
-  if (parsed.cc) {
+  if (parsed.cc?.length > 0) {
     payload.headers["Cc"] = composeNameAndEmail(parsed.cc);
+  } else {
+    delete payload.headers["Cc"];
   }
 
-  if (parsed.bcc) {
+  if (parsed.bcc?.length > 0) {
     payload.headers["Bcc"] = composeNameAndEmail(parsed.bcc);
+  } else {
+    delete payload.headers["Bcc"];
   }
 
   if (parsed.subject !== undefined) {
     payload.headers["Subject"] = parsed.subject;
+  }
+
+  if (parsed.plainContent !== undefined && parsed.htmlContent !== undefined) {
+    payload.headers["Content-Type"] = "multipart/mixed";
+    payload.parts = [
+      {
+        headers: { "Content-Type": "multipart/alternative" },
+        parts: [
+          {
+            headers: {
+              "Content-Type": "text/plain; charset=UTF-8",
+              "Content-Transfer-Encoding": "base64",
+            },
+            body: { data: b64EncodeUtf8(parsed.plainContent) },
+          },
+          {
+            headers: {
+              "Content-Type": "text/html; charset=UTF-8",
+              "Content-Transfer-Encoding": "base64",
+            },
+            body: { data: b64EncodeUtf8(parsed.htmlContent) },
+          },
+        ],
+      },
+    ];
   }
 
   return payload;

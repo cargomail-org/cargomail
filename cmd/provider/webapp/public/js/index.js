@@ -63,17 +63,22 @@ window.apiHost = "";
   })();
 })();
 
-// (() => {
-//   (async () => {
-//     const dummyUrl = "/logoutx.html";
+const downloadUri = (formId, uri, name) => {
+  (async () => {
+    const response = await api(formId, 200, uri, {
+      method: "HEAD",
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
-//     const response = await fetch(dummyUrl);
+    if (response === false) {
+      return;
+    }
 
-//     // const apiHost = response.headers.get("api-host");
-
-//     // if (apiHost && window.apiHost.length == 0) {
-//     //   // dangerous!!! use only in dev stage
-//     //   window.apiHost = apiHost;
-//     // }
-//   })();
-// })();
+    const link = document.createElement("a");
+    link.download = name;
+    link.href = uri;
+    link.click();
+  })();
+};

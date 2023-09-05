@@ -11,6 +11,7 @@ import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
 import { composeAddItems } from "/public/js/compose.js";
+import { formatBytes } from "/public/js/menu.js";
 
 let selectedUris = [];
 
@@ -229,7 +230,7 @@ const filesTable = new DataTable("#filesTable", {
       data: "name",
       render: (data, type, full, meta) => {
         const link = `${window.apiHost}/api/v1/files/`;
-        return `<a class="attachmentLink" href="javascript:;" onclick="downloadURI('uploadForm', '${link}${full.uri}', '${data}');">${data}</a>`;
+        return `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('uploadForm', '${link}${full.uri}', '${data}');">${data}</a>`;
       },
     },
     {

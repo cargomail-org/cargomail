@@ -10,11 +10,11 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
+import { composeContentPage } from "/public/js/menu.js";
 import {
   composeAddItems,
   populateForm as composePopulateForm,
 } from "/public/js/compose.js";
-
 import { parsePayload, composePayload } from "/public/js/utils.js";
 
 let selectedUris = [];
@@ -71,7 +71,7 @@ const draftsTable = new DataTable("#draftsTable", {
         const attachmentLinks = [];
 
         for (const attachment of parsed.attachments) {
-          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadURI('draftsFormAlert', '${link}${attachment.uri}', '${attachment.fileName}');">${attachment.fileName}</a>`;
+          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('draftsFormAlert', '${link}${attachment.uri}', '${attachment.fileName}');">${attachment.fileName}</a>`;
           attachmentLinks.push(attachmentAnchor);
         }
 
@@ -216,7 +216,7 @@ const draftsTable = new DataTable("#draftsTable", {
           formIsPopulated = false;
         }
 
-        composeContent(e);
+        composeContentPage(e);
       },
     },
     {
@@ -285,13 +285,22 @@ export const updateDraftsPage = (uri, parsed) => {
     const index = draftsTable.column(0).data().toArray().indexOf(uri);
 
     if (index >= 0) {
-      const draft = draftsTable.row(`#${uri}`).data();
+      const data = draftsTable.row(`#${uri}`).data();
+      const draft = { uri, payload: composePayload(parsed) };
 
-      draft.payload = composePayload(draft.payload, parsed);
+      if (data.messageUid) draft.messageUid = data.messageUid;
+      if (data.parentUid) draft.parentUid = data.parentUid;
+      if (data.threadUid) draft.threadUid = data.threadUid;
+      if (data.labelIds) draft.labelIds = data.labelIds;
+      if (data.unread) draft.unread = data.unread;
+      if (data.starred) draft.starred = data.starred;
+      if (data.createdAt) draft.createdAt = data.createdAt;
+      if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
 
+      // console.log(draftsTable.row(`#${uri}`).data());
       console.log(draft.payload);
 
-      draftsTable.row(`#${uri}`).data(draft)
+      draftsTable.row(`#${uri}`).data(draft);
     }
   }
 };

@@ -11,10 +11,18 @@ import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
 // import * as database from "/public/js/database.js";
+import { formatBytes } from "/public/js/menu.js";
+import { getProfileUsername } from "/public/js/profile.js";
 import { updateDraftsPage } from "/public/js/drafts.js";
 
 const composeForm = document.getElementById("composeForm");
 const composeUriInput = document.getElementById("composeUriInput");
+const composeDateInput = document.getElementById("composeDateInput");
+const composeFromInput = document.getElementById("composeFromInput");
+
+const recipientsTo = [];
+const recipientsCc = [];
+const recipientsBcc = [];
 
 let draft = {};
 // let lastDraftUri = database.getLastDraftUri(); // localStorage.getItem("lastDraftUri");
@@ -93,19 +101,28 @@ $("#toInput").selectize({
     return false;
   },
   onChange: function (e) {
-    const recipients = [];
+    recipientsTo.length = 0;
 
     for (const item of e) {
       const recipient = this.options[item];
 
       if (recipient?.name) {
-        recipients.push({ email: recipient.email, name: recipient.name });
+        recipientsTo.push({ email: recipient.email, name: recipient.name });
       } else {
-        recipients.push({ email: recipient.email });
+        recipientsTo.push({ email: recipient.email });
       }
     }
 
-    updateDraftsPage(composeUriInput.value, { to: recipients });
+    formPopulated(composeUriInput.value, {
+      date: composeDateInput.value,
+      from: composeFromInput.value,
+      to: recipientsTo,
+      cc: recipientsCc,
+      bcc: recipientsBcc,
+      subject: subjectInput.value,
+      plainContent: messageText.value,
+      htmlContent: `<pre>${messageText.value}</pre>`,
+    });
   },
 });
 
@@ -175,19 +192,28 @@ $("#ccInput").selectize({
     return false;
   },
   onChange: function (e) {
-    const recipients = [];
+    recipientsCc.length = 0;
 
     for (const item of e) {
       const recipient = this.options[item];
 
       if (recipient?.name) {
-        recipients.push({ email: recipient.email, name: recipient.name });
+        recipientsCc.push({ email: recipient.email, name: recipient.name });
       } else {
-        recipients.push({ email: recipient.email });
+        recipientsCc.push({ email: recipient.email });
       }
     }
 
-    updateDraftsPage(composeUriInput.value, { cc: recipients });
+    formPopulated(composeUriInput.value, {
+      date: composeDateInput.value,
+      from: composeFromInput.value,
+      to: recipientsTo,
+      cc: recipientsCc,
+      bcc: recipientsBcc,
+      subject: subjectInput.value,
+      plainContent: messageText.value,
+      htmlContent: `<pre>${messageText.value}</pre>`,
+    });
   },
 });
 
@@ -257,19 +283,28 @@ $("#bccInput").selectize({
     return false;
   },
   onChange: function (e) {
-    const recipients = [];
+    recipientsBcc.length = 0;
 
     for (const item of e) {
       const recipient = this.options[item];
 
       if (recipient?.name) {
-        recipients.push({ email: recipient.email, name: recipient.name });
+        recipientsBcc.push({ email: recipient.email, name: recipient.name });
       } else {
-        recipients.push({ email: recipient.email });
+        recipientsBcc.push({ email: recipient.email });
       }
     }
 
-    updateDraftsPage(composeUriInput.value, { bcc: recipients });
+    formPopulated(composeUriInput.value, {
+      date: composeDateInput.value,
+      from: composeFromInput.value,
+      to: recipientsTo,
+      cc: recipientsCc,
+      bcc: recipientsBcc,
+      subject: subjectInput.value,
+      plainContent: messageText.value,
+      htmlContent: `<pre>${messageText.value}</pre>`,
+    });
   },
 });
 
@@ -286,9 +321,15 @@ const bouncer = (e) => {
       heading.textContent = subjectInput.value;
     });
     // Save Body
-    updateDraftsPage(composeUriInput.value, {
+    formPopulated(composeUriInput.value, {
+      date: composeDateInput.value,
+      from: composeFromInput.value,
+      to: recipientsTo,
+      cc: recipientsCc,
+      bcc: recipientsBcc,
       subject: subjectInput.value,
       plainContent: messageText.value,
+      htmlContent: `<pre>${messageText.value}</pre>`,
     });
   }, 2000);
 };
@@ -316,7 +357,7 @@ const composeTable = new DataTable("#composeTable", {
       data: "fileName",
       render: (data, type, full, meta) => {
         const link = `${window.apiHost}/api/v1/files/`;
-        return `<a class="attachmentLink" href="javascript:;" onclick="downloadURI('composeForm', '${link}${full.uri}', '${data}');">${data}</a>`;
+        return `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('composeForm', '${link}${full.uri}', '${data}');">${data}</a>`;
       },
     },
     {
@@ -402,6 +443,9 @@ export const removeAttachments = (e) => {
 export const populateForm = (uri, parsed) => {
   composeUriInput.value = uri;
 
+  composeDateInput.value = new Date();
+  composeFromInput.value = getProfileUsername();
+
   const selectizeTo = $("#toInput")[0].selectize;
   const selectizeCc = $("#ccInput")[0].selectize;
   const selectizeBcc = $("#bccInput")[0].selectize;
@@ -446,6 +490,9 @@ export const populateForm = (uri, parsed) => {
   selectizeCc.refreshOptions(false);
   selectizeBcc.refreshOptions(false);
 
+  document.getElementById("ccPanel").hidden = !parsed.cc?.length > 0;
+  document.getElementById("bccPanel").hidden = !parsed.bcc?.length > 0;
+
   subjectInput.value = parsed.subject;
   [...subjectHeadings].forEach((heading) => {
     heading.textContent = subjectInput.value;
@@ -458,6 +505,33 @@ export const populateForm = (uri, parsed) => {
   composeAddItems(parsed.attachments);
 
   composeTable.draw();
+};
+
+const formPopulated = (uri, parsed) => {
+  const ccButton = document.querySelector("#ccButton");
+  const bccButton = document.querySelector("#bccButton");
+
+  if (parsed.cc?.length > 0) {
+    ccButton.style.pointerEvents = "none";
+    ccButton.style.cursor = "default";
+    ccButton.style.color = "silver";
+  } else {
+    ccButton.style.pointerEvents = "auto";
+    ccButton.style.cursor = "pointer";
+    ccButton.style.color = "#0d6efd";
+  }
+
+  if (parsed.bcc?.length > 0) {
+    bccButton.style.pointerEvents = "none";
+    bccButton.style.cursor = "default";
+    bccButton.style.color = "silver";
+  } else {
+    bccButton.style.pointerEvents = "auto";
+    bccButton.style.cursor = "pointer";
+    bccButton.style.color = "#0d6efd";
+  }
+
+  updateDraftsPage(uri, parsed);
 };
 
 export const composeAddItems = (items) => {

@@ -1,5 +1,7 @@
 const profileForm = document.getElementById("profileForm");
 
+let profileUsername = "";
+
 profileForm.onsubmit = async (e) => {
   e.preventDefault();
 
@@ -27,8 +29,9 @@ profileForm.onsubmit = async (e) => {
     return;
   }
 
-  const loggedUsername =
-    response?.firstName ? response.firstName : response.username;
+  const loggedUsername = response?.firstName
+    ? response.firstName
+    : response.username;
 
   if (loggedUsername) {
     document.getElementById("loggedUsernameLetter").innerHTML = loggedUsername
@@ -36,4 +39,12 @@ profileForm.onsubmit = async (e) => {
       .toUpperCase();
     document.getElementById("loggedUsername").innerHTML = loggedUsername;
   }
+};
+
+export const getProfileUsername = () => {
+  return profileUsername;
+};
+
+export const setProfileUsername = (username) => {
+  profileUsername = username;
 };
