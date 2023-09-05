@@ -1,3 +1,25 @@
+const b64EncodeUtf8 = (str) => {
+  return btoa(
+    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+      return String.fromCharCode(parseInt(p1, 16));
+    })
+  );
+};
+
+const b64DecodeUtf8 = (base64) => {
+  const text = atob(base64);
+  const length = text.length;
+  const bytes = new Uint8Array(length);
+
+  for (let i = 0; i < length; i++) {
+    bytes[i] = text.charCodeAt(i);
+  }
+
+  const decoder = new TextDecoder(); // default is utf-8
+
+  return decoder.decode(bytes);
+};
+
 const parseNameAndEmail = (value) => {
   if (!value) return { name: "", email: "" };
 
@@ -174,11 +196,7 @@ const parseParts = (payload) => {
       }
     }
 
-    if (
-      attachmentUri &&
-      attachmentFileName &&
-      attachmentSize
-    ) {
+    if (attachmentUri && attachmentFileName && attachmentSize) {
       if (attachmentDigestSha256 > 0) {
         attachments.push({
           uri: attachmentUri,
@@ -200,14 +218,16 @@ const parseParts = (payload) => {
 
   if (plainPart?.["Content-Transfer-Encoding"] == "base64") {
     plainContent = plainPart?.body?.data
-      ? atob(plainPart.body.data)
+      ? b64DecodeUtf8(plainPart.body.data)
       : undefined;
   } else {
     plainContent = plainPart?.body?.data ? plainPart.body.data : undefined;
   }
 
   if (htmlPart?.["Content-Transfer-Encoding"] == "base64") {
-    htmlContent = htmlPart?.body?.data ? atob(htmlPart.body.data) : undefined;
+    htmlContent = htmlPart?.body?.data
+      ? b64DecodeUtf8(htmlPart.body.data)
+      : undefined;
   } else {
     htmlContent = htmlPart?.body?.data ? htmlPart.body.data : undefined;
   }
