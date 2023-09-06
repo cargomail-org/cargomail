@@ -320,15 +320,9 @@ export const deleteDraftsMessages = (e) => {
       }
     }
 
-    console.log(draftsTable.row(`#${uri}`).data());
-
-    draftsTable.rows(`#${uri}`).remove().draw();
-    draftsTable
-      .buttons([".drafts-edit"])
-      .enable(draftsTable.rows().count() > 0);
-    draftsTable
-      .buttons([".drafts-delete"])
-      .enable(draftsTable.rows().count() > 0);
+    draftsTable.rows(".selected").remove().draw();
+    draftsTable.buttons([".drafts-edit"]).enable(false);
+    draftsTable.buttons([".drafts-delete"]).enable(false);
   })();
 };
 
@@ -351,9 +345,11 @@ export const deleteDraft = async (composeForm, uri) => {
     return;
   }
 
-  draftsTable.rows(".selected").remove().draw();
-  draftsTable.buttons([".drafts-edit"]).enable(false);
-  draftsTable.buttons([".drafts-delete"]).enable(false);
+  draftsTable.rows(`#${uri}`).remove().draw();
+  draftsTable.buttons([".drafts-edit"]).enable(draftsTable.rows().count() > 0);
+  draftsTable
+    .buttons([".drafts-delete"])
+    .enable(draftsTable.rows().count() > 0);
 
   try {
     formIsPopulated = true;
