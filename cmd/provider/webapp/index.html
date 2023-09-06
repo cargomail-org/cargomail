@@ -192,14 +192,14 @@
           <footer class="row bg-light py-1 mt-auto">
             <div hidden class="container" id="composePanel">
               <div class="d-flex justify-content-evenly">
-                <a class="btn btn-light px-2">
+                <a class="btn btn-light px-2" id="composePanelNew">
                   <i class="fs-5 bi-file-earmark-plus"></i>
                   <span class="ms-1 d-none d-sm-inline">New</span>
                 </a>
-                <a class="btn btn-light px-2">
+                <a class="btn btn-light px-2" id="composePanelSend">
                   <i class="fs-5 bi-send"></i>
                   <span class="ms-1 d-none d-sm-inline">Send</span></a>
-                <a class="btn btn-light px-2">
+                <a class="btn btn-light px-2" id="composePanelDiscard">
                   <i class="fs-5 bi-trash3"></i>
                   <span class="ms-1 d-none d-sm-inline">Delete</span>
                 </a>
@@ -273,10 +273,14 @@
   document.querySelector('#profileLink').addEventListener('click', () => profileContentPage(document.querySelector('#profileLink')))
 
   // compose
-  import { removeAttachments, ccToggle, bccToggle } from "/public/js/compose.js";
-  document.querySelector('#composeConfirmButton').addEventListener('click', removeAttachments);
+  import { removeAttachments, ccToggle, bccToggle, newDraft, sendDraft, discardDraft, deleteDraft } from "/public/js/compose.js";
+  document.querySelector('#composeRemoveConfirmButton').addEventListener('click', removeAttachments);
+  document.querySelector('#composeDiscardConfirmButton').addEventListener('click', deleteDraft);
   document.querySelector('#ccButton').addEventListener('click', ccToggle);
   document.querySelector('#bccButton').addEventListener('click', bccToggle);
+  document.querySelector('#composePanelNew').addEventListener('click', newDraft);
+  document.querySelector('#composePanelSend').addEventListener('click', sendDraft);
+  document.querySelector('#composePanelDiscard').addEventListener('click', discardDraft);
 
   // inbox
   import { deleteInboxMessages } from "/public/js/inbox.js";

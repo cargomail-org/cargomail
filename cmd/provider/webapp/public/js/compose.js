@@ -13,7 +13,10 @@ import "datatables.net-responsive-bs5";
 // import * as database from "/public/js/database.js";
 import { formatBytes } from "/public/js/menu.js";
 import { getProfileUsername } from "/public/js/profile.js";
-import { updateDraftsPage } from "/public/js/drafts.js";
+import {
+  updateDraftsPage,
+  deleteDraft as draftsDeleteDraft,
+} from "/public/js/drafts.js";
 
 const composeForm = document.getElementById("composeForm");
 const composeUriInput = document.getElementById("composeUriInput");
@@ -25,6 +28,14 @@ const recipientsCc = [];
 const recipientsBcc = [];
 
 const attachments = [];
+
+const composeRemoveConfirmDialog = new bootstrap.Modal(
+  document.querySelector("#composeRemoveConfirmDialog")
+);
+
+const composeDiscardConfirmDialog = new bootstrap.Modal(
+  document.querySelector("#composeDiscardConfirmDialog")
+);
 
 let draft = {};
 // let lastDraftUri = database.getLastDraftUri(); // localStorage.getItem("lastDraftUri");
@@ -305,10 +316,6 @@ messageText.addEventListener("keyup", (event) => bouncer(event));
 
 let selectedUris = [];
 
-const composeConfirmDialog = new bootstrap.Modal(
-  document.querySelector("#composeConfirmDialog")
-);
-
 const composeTable = new DataTable("#composeTable", {
   paging: true,
   responsive: {
@@ -376,7 +383,7 @@ const composeTable = new DataTable("#composeTable", {
           .data()
           .map((obj) => obj.uri);
         if (selectedData.length > 0) {
-          composeConfirmDialog.show();
+          composeRemoveConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
             selectedUris.push(selectedData[i]);
           }
@@ -400,7 +407,7 @@ composeTable.on("select.dt deselect.dt", () => {
 export const removeAttachments = (e) => {
   e?.preventDefault();
 
-  composeConfirmDialog.hide();
+  composeRemoveConfirmDialog.hide();
 
   composeTable.rows(".selected").remove().draw();
   composeTable.buttons([".files-delete"]).enable(false);
@@ -420,6 +427,23 @@ export const removeAttachments = (e) => {
   }
 
   formPopulated();
+};
+
+export const clearForm = () => {
+  $("#toInput")[0].selectize.clear();
+  $("#ccInput")[0].selectize.clear();
+  $("#bccInput")[0].selectize.clear();
+
+  document.getElementById("ccPanel").hidden = true;
+  document.getElementById("bccPanel").hidden = true;
+
+  composeForm.reset();
+  [...subjectHeadings].forEach((heading) => {
+    heading.textContent = subjectInput.value;
+  });
+
+  composeTable.clear();
+  composeTable.draw();
 };
 
 export const populateForm = (uri, parsed) => {
@@ -492,42 +516,44 @@ export const populateForm = (uri, parsed) => {
 };
 
 const formPopulated = () => {
-  const parsed = {
-    date: composeDateInput.value,
-    from: composeFromInput.value,
-    to: recipientsTo,
-    cc: recipientsCc,
-    bcc: recipientsBcc,
-    subject: subjectInput.value,
-    plainContent: messageText.value,
-    htmlContent: `<pre>${messageText.value}</pre>`,
-    attachments: attachments,
-  };
+  (async () => {
+    const parsed = {
+      date: composeDateInput.value,
+      from: composeFromInput.value,
+      to: recipientsTo,
+      cc: recipientsCc,
+      bcc: recipientsBcc,
+      subject: subjectInput.value,
+      plainContent: messageText.value,
+      htmlContent: `<pre>${messageText.value}</pre>`,
+      attachments: attachments,
+    };
 
-  const ccButton = document.querySelector("#ccButton");
-  const bccButton = document.querySelector("#bccButton");
+    const ccButton = document.querySelector("#ccButton");
+    const bccButton = document.querySelector("#bccButton");
 
-  if (parsed.cc?.length > 0) {
-    ccButton.style.pointerEvents = "none";
-    ccButton.style.cursor = "default";
-    ccButton.style.color = "silver";
-  } else {
-    ccButton.style.pointerEvents = "auto";
-    ccButton.style.cursor = "pointer";
-    ccButton.style.color = "#0d6efd";
-  }
+    if (parsed.cc?.length > 0) {
+      ccButton.style.pointerEvents = "none";
+      ccButton.style.cursor = "default";
+      ccButton.style.color = "silver";
+    } else {
+      ccButton.style.pointerEvents = "auto";
+      ccButton.style.cursor = "pointer";
+      ccButton.style.color = "#0d6efd";
+    }
 
-  if (parsed.bcc?.length > 0) {
-    bccButton.style.pointerEvents = "none";
-    bccButton.style.cursor = "default";
-    bccButton.style.color = "silver";
-  } else {
-    bccButton.style.pointerEvents = "auto";
-    bccButton.style.cursor = "pointer";
-    bccButton.style.color = "#0d6efd";
-  }
+    if (parsed.bcc?.length > 0) {
+      bccButton.style.pointerEvents = "none";
+      bccButton.style.cursor = "default";
+      bccButton.style.color = "silver";
+    } else {
+      bccButton.style.pointerEvents = "auto";
+      bccButton.style.cursor = "pointer";
+      bccButton.style.color = "#0d6efd";
+    }
 
-  updateDraftsPage(composeUriInput.value, parsed);
+    await updateDraftsPage(composeForm, composeUriInput.value, parsed);
+  })();
 };
 
 export const composeAddItems = (items) => {
@@ -653,4 +679,26 @@ export const setComposeContacts = (contacts) => {
 
   const selectizeBcc = $("#bccInput")[0].selectize;
   setSelectizeComposeContacts(selectizeBcc, composeContacts);
+};
+
+export const newDraft = (e) => {
+  console.log(e);
+};
+
+export const sendDraft = (e) => {
+  console.log(e);
+};
+
+export const discardDraft = (e) => {
+  composeDiscardConfirmDialog.show();
+};
+
+export const deleteDraft = (e) => {
+  composeDiscardConfirmDialog.hide();
+
+  if (composeUriInput.value) {
+    (async () => {
+      await draftsDeleteDraft(composeForm, composeUriInput.value);
+    })();
+  }
 };

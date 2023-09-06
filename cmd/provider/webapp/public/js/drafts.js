@@ -12,7 +12,7 @@ import "datatables.net-responsive-bs5";
 
 import { composeContentPage } from "/public/js/menu.js";
 import {
-  composeAddItems,
+  clearForm as composeClearForm,
   populateForm as composePopulateForm,
 } from "/public/js/compose.js";
 import {
@@ -29,6 +29,8 @@ const draftsConfirmDialog = new bootstrap.Modal(
 );
 
 const draftsFormAlert = document.getElementById("draftsFormAlert");
+
+const composeUriInput = document.getElementById("composeUriInput");
 
 let formIsPopulated = false;
 
@@ -191,15 +193,44 @@ const draftsTable = new DataTable("#draftsTable", {
               draftsTable.row.add(draft);
             } else {
               draftsTable.row(`#${draft.uri}`).data(draft);
+
+              if (draft.uri == composeUriInput.value) {
+                try {
+                  const parsed = parsePayload(draft.uri, draft.payload);
+
+                  formIsPopulated = true;
+                  composePopulateForm(draft.uri, parsed);
+                } finally {
+                  formIsPopulated = false;
+                }
+              }
             }
           }
 
           for (const draft of response.trashed) {
             draftsTable.row(`#${draft.uri}`).remove();
+
+            if (draft.uri == composeUriInput.value) {
+              try {
+                formIsPopulated = true;
+                composeClearForm();
+              } finally {
+                formIsPopulated = false;
+              }
+            }
           }
 
           for (const draft of response.deleted) {
             draftsTable.row(`#${draft.uri}`).remove();
+
+            if (draft.uri == composeUriInput.value) {
+              try {
+                formIsPopulated = true;
+                composeClearForm();
+              } finally {
+                formIsPopulated = false;
+              }
+            }
           }
 
           draftsTable.draw();
@@ -290,14 +321,65 @@ export const deleteDraftsMessages = (e) => {
       return;
     }
 
-    draftsTable.rows(".selected").remove().draw();
-    draftsTable.buttons([".drafts-edit"]).enable(false);
-    draftsTable.buttons([".drafts-delete"]).enable(false);
+    if (selectedUris.includes(composeUriInput.value)) {
+      try {
+        formIsPopulated = true;
+        composeClearForm();
+      } finally {
+        formIsPopulated = false;
+      }
+    }
+
+    console.log(draftsTable.row(`#${uri}`).data());
+
+    draftsTable.rows(`#${uri}`).remove().draw();
+    draftsTable
+      .buttons([".drafts-edit"])
+      .enable(draftsTable.rows().count() > 0);
+    draftsTable
+      .buttons([".drafts-delete"])
+      .enable(draftsTable.rows().count() > 0);
   })();
 };
 
-export const updateDraftsPage = (uri, parsed) => {
+export const deleteDraft = async (composeForm, uri) => {
+  const response = await api(
+    composeForm.id,
+    200,
+    `${window.apiHost}/api/v1/drafts/trash`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ uris: [uri] }),
+    }
+  );
+
+  if (response === false) {
+    return;
+  }
+
+  draftsTable.rows(".selected").remove().draw();
+  draftsTable.buttons([".drafts-edit"]).enable(false);
+  draftsTable.buttons([".drafts-delete"]).enable(false);
+
+  try {
+    formIsPopulated = true;
+    composeClearForm();
+  } finally {
+    formIsPopulated = false;
+  }
+};
+
+export const updateDraftsPage = async (composeForm, uri, parsed) => {
   if (!formIsPopulated) {
+    const alert = composeForm.querySelector(
+      'div[name="updateDraftsPageAlert"]'
+    );
+    if (alert) alert.remove();
+
     const index = draftsTable.column(0).data().toArray().indexOf(uri);
 
     if (index >= 0) {
@@ -313,10 +395,34 @@ export const updateDraftsPage = (uri, parsed) => {
       if (data.createdAt) draft.createdAt = data.createdAt;
       if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
 
-      // console.log(draftsTable.row(`#${uri}`).data());
-      // console.log(draft.payload);
+      const response = await api(
+        composeForm.id,
+        200,
+        `${window.apiHost}/api/v1/drafts`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(draft),
+        }
+      );
 
-      draftsTable.row(`#${uri}`).data(draft);
+      if (response === false) {
+        return;
+      }
+
+      draftsTable.row(`#${response.uri}`).data(response).draw();
+    } else {
+      const error = "record not found";
+
+      composeForm.insertAdjacentHTML(
+        "beforeend",
+        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="updateDraftsPageAlert">
+              ${error}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`
+      );
     }
   }
 };

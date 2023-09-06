@@ -1,6 +1,6 @@
 <div class="container">
     <!-- Compose -->
-    <form class="row g-2" id="composeForm" method="" action="#" enctype="multipart/form-data">
+    <form class="row g-2" id="composeForm" method="" action="#" enctype="multipart/form-data" autocomplete="off">
         <input class="form-control" id="composeUriInput" type="hidden" name="composeUri" />
         <input class="form-control" id="composeDateInput" type="hidden" name="composeDate" />
         <input class="form-control" id="composeFromInput" type="hidden" name="composeFrom" />
@@ -29,7 +29,7 @@
             <label for="bccInput">Bcc</label>
         </div>
         <div class="form-floating mb-1">
-            <input class="form-control" id="subjectInput" type="text" maxlength="100"/>
+            <input class="form-control" id="subjectInput" type="text" maxlength="100" />
             <label for="subjectInput">Subject</label>
         </div>
         <div class="form-floating mb-3">
@@ -39,12 +39,12 @@
     </form>
 
     <!-- Modal -->
-    <div class="modal fade" id="composeConfirmDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="composeStaticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="composeRemoveConfirmDialog" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="composeRemoveStaticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="composeStaticBackdropLabel">Confirmation</h5>
+                    <h5 class="modal-title" id="composeRemoveStaticBackdropLabel">Confirmation</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -52,7 +52,26 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" id="composeConfirmButton" class="btn btn-primary">Delete</button>
+                    <button type="button" id="composeRemoveConfirmButton" class="btn btn-primary">Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="composeDiscardConfirmDialog" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="composeDiscardStaticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="composeDiscardStaticBackdropLabel">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Draft will be discarded!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="composeDiscardConfirmButton" class="btn btn-primary">Discard</button>
                 </div>
             </div>
         </div>
