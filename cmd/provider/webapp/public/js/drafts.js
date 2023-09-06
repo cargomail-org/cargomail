@@ -418,8 +418,6 @@ export const updateDraftsPage = async (composeForm, uri, parsed) => {
     } else {
       const draft = { payload: composePayload(parsed) };
 
-      console.log(draft);
-
       const response = await api(
         composeForm.id,
         201,
