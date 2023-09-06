@@ -15,7 +15,12 @@ import {
   composeAddItems,
   populateForm as composePopulateForm,
 } from "/public/js/compose.js";
-import { parsePayload, composePayload } from "/public/js/utils.js";
+import {
+  parsePayload,
+  composePayload,
+  createSubjectSnippet,
+  createPlainContentSnippet,
+} from "/public/js/utils.js";
 
 let selectedUris = [];
 
@@ -75,18 +80,29 @@ const draftsTable = new DataTable("#draftsTable", {
           attachmentLinks.push(attachmentAnchor);
         }
 
-        let snippet;
+        const subject =
+          type === "display"
+            ? createSubjectSnippet(parsed.subject)
+            : parsed.subject;
+        const plainContent =
+          type === "display"
+            ? createPlainContentSnippet(parsed.plainContent)
+            : parsed.plainContent;
 
-        if (parsed?.subject) {
-          snippet = parsed.subject;
-          if (parsed?.plainContent) {
-            snippet = snippet + " - " + parsed.plainContent;
+        let content;
+
+        if (subject) {
+          content = subject;
+          if (plainContent) {
+            content = subject + " - " + plainContent;
           }
         } else {
-          snippet = parsed.plainContent;
+          if (plainContent) {
+            content = plainContent;
+          }
         }
 
-        let renderHtml = `<span>${snippet || "Draft"}</span>`;
+        let renderHtml = `<span>${content || "Draft"}</span>`;
         if (attachmentLinks.length > 0) {
           renderHtml += `<br/>`;
           for (const item of attachmentLinks) {

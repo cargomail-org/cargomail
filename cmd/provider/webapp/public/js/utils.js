@@ -421,17 +421,37 @@ export const composePayload = (parsed) => {
       payload.parts.push(mixedAttachmentsPart);
     } else if (plainTextPart || htmlTextPart || alternativeTextPart) {
       if (alternativeTextPart) {
-        payload.headers = {...payload.headers, ...alternativeTextPart.headers};
+        payload.headers = {
+          ...payload.headers,
+          ...alternativeTextPart.headers,
+        };
         payload.parts = alternativeTextPart.parts;
       } else if (plainTextPart) {
-        payload.headers = {...payload.headers, ...plainTextPart.headers};
+        payload.headers = { ...payload.headers, ...plainTextPart.headers };
         payload.body = plainTextPart.body;
       } else if (htmlTextPart) {
-        payload.headers = {...payload.headers, ...htmlTextPart.headers};
+        payload.headers = { ...payload.headers, ...htmlTextPart.headers };
         payload.body = htmlTextPart.body;
       }
     }
   }
 
   return payload;
+};
+
+const subjectSnippetMaxLength = 100;
+const plainTextSnippetMaxLength = 160;
+
+export const createSubjectSnippet = (str) => {
+  if (str?.length > subjectSnippetMaxLength) {
+    return str.slice(0, subjectSnippetMaxLength) + "...";
+  }
+  return str;
+};
+
+export const createPlainContentSnippet = (str) => {
+  if (str?.length > plainTextSnippetMaxLength) {
+    return str.slice(0, plainTextSnippetMaxLength) + "...";
+  }
+  return str;
 };
