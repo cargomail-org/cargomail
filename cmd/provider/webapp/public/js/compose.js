@@ -682,7 +682,7 @@ export const setComposeContacts = (contacts) => {
 };
 
 export const newDraft = (e) => {
-  console.log(e);
+  clearForm();
 };
 
 export const sendDraft = (e) => {

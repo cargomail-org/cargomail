@@ -1,8 +1,10 @@
 <div class="container">
     <!-- Compose -->
     <form class="row g-2" id="composeForm" method="" action="#" enctype="multipart/form-data" autocomplete="off">
-        <input class="form-control" id="composeUriInput" type="hidden" name="composeUri" />
-        <input class="form-control" id="composeDateInput" type="hidden" name="composeDate" />
+        <!-- resetable by form.reset() -->
+        <input class="form-control" id="composeUriInput" style="display: none" name="composeUri" />
+        <input class="form-control" id="composeDateInput" style="display: none" name="composeDate" />
+        <!-- not resetable by form.reset() -->
         <input class="form-control" id="composeFromInput" type="hidden" name="composeFrom" />
         <div class="d-flex align-items-center">
             <div class="form-floating mb-1 flex-grow-1">

@@ -238,16 +238,6 @@ const draftsTable = new DataTable("#draftsTable", {
       },
     },
     {
-      text: "New",
-      className: "drafts-new",
-      enabled: true,
-      action: function (e) {
-        // const button = e.currentTarget;
-        // button.setAttribute("data-mode", "@new");
-        // draftsFormDialog.show(e);
-      },
-    },
-    {
       text: "Edit",
       className: "drafts-edit",
       enabled: false,
@@ -380,27 +370,62 @@ export const updateDraftsPage = async (composeForm, uri, parsed) => {
     );
     if (alert) alert.remove();
 
-    const index = draftsTable.column(0).data().toArray().indexOf(uri);
+    if (uri) {
+      const index = draftsTable.column(0).data().toArray().indexOf(uri);
 
-    if (index >= 0) {
-      const data = draftsTable.row(`#${uri}`).data();
-      const draft = { uri, payload: composePayload(parsed) };
+      if (index >= 0) {
+        const data = draftsTable.row(`#${uri}`).data();
+        const draft = { uri, payload: composePayload(parsed) };
 
-      if (data.messageUid) draft.messageUid = data.messageUid;
-      if (data.parentUid) draft.parentUid = data.parentUid;
-      if (data.threadUid) draft.threadUid = data.threadUid;
-      if (data.labelIds) draft.labelIds = data.labelIds;
-      if (data.unread) draft.unread = data.unread;
-      if (data.starred) draft.starred = data.starred;
-      if (data.createdAt) draft.createdAt = data.createdAt;
-      if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
+        if (data.messageUid) draft.messageUid = data.messageUid;
+        if (data.parentUid) draft.parentUid = data.parentUid;
+        if (data.threadUid) draft.threadUid = data.threadUid;
+        if (data.labelIds) draft.labelIds = data.labelIds;
+        if (data.unread) draft.unread = data.unread;
+        if (data.starred) draft.starred = data.starred;
+        if (data.createdAt) draft.createdAt = data.createdAt;
+        if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
+
+        const response = await api(
+          composeForm.id,
+          200,
+          `${window.apiHost}/api/v1/drafts`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(draft),
+          }
+        );
+
+        if (response === false) {
+          return;
+        }
+
+        draftsTable.row(`#${response.uri}`).data(response).draw();
+      } else {
+        const error = "record not found";
+
+        composeForm.insertAdjacentHTML(
+          "beforeend",
+          `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="updateDraftsPageAlert">
+                ${error}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`
+        );
+      }
+    } else {
+      const draft = { payload: composePayload(parsed) };
+
+      console.log(draft);
 
       const response = await api(
         composeForm.id,
-        200,
+        201,
         `${window.apiHost}/api/v1/drafts`,
         {
-          method: "PUT",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -412,17 +437,12 @@ export const updateDraftsPage = async (composeForm, uri, parsed) => {
         return;
       }
 
-      draftsTable.row(`#${response.uri}`).data(response).draw();
-    } else {
-      const error = "record not found";
+      const composeUriInput = document.getElementById("composeUriInput");
 
-      composeForm.insertAdjacentHTML(
-        "beforeend",
-        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="updateDraftsPageAlert">
-              ${error}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>`
-      );
+      composeUriInput.value = response.uri;
+
+      draftsTable.row.add(response);
+      draftsTable.draw();
     }
   }
 };
