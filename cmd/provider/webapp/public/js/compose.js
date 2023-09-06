@@ -404,6 +404,16 @@ composeTable.on("select.dt deselect.dt", () => {
   }
 });
 
+export const uriChanged = (e) => {
+  if (e.target.value) {
+    document.querySelector("#composePanelSend").classList.remove("disabled");
+    document.querySelector("#composePanelDiscard").classList.remove("disabled");
+  } else {
+    document.getElementById("composePanelSend").classList.add("disabled");
+    document.getElementById("composePanelDiscard").classList.add("disabled");
+  }
+};
+
 export const removeAttachments = (e) => {
   e?.preventDefault();
 
@@ -438,6 +448,9 @@ export const clearForm = () => {
   document.getElementById("bccPanel").hidden = true;
 
   composeForm.reset();
+  composeUriInput.dispatchEvent(new Event("input"));
+  composeUriInput.dispatchEvent(new Event("change"));
+
   [...subjectHeadings].forEach((heading) => {
     heading.textContent = subjectInput.value;
   });
@@ -450,6 +463,8 @@ export const populateForm = (uri, parsed) => {
   attachments.length = 0;
 
   composeUriInput.value = uri;
+  composeUriInput.dispatchEvent(new Event("input"));
+  composeUriInput.dispatchEvent(new Event("change"));
 
   composeDateInput.value = new Date();
   composeFromInput.value = getProfileUsername();

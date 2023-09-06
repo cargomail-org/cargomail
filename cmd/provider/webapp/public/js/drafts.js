@@ -434,6 +434,8 @@ export const updateDraftsPage = async (composeForm, uri, parsed) => {
       const composeUriInput = document.getElementById("composeUriInput");
 
       composeUriInput.value = response.uri;
+      composeUriInput.dispatchEvent(new Event('input'));
+      composeUriInput.dispatchEvent(new Event('change'));
 
       draftsTable.row.add(response);
       draftsTable.draw();
