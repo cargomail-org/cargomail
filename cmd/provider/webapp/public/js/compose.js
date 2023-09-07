@@ -29,6 +29,8 @@ const recipientsBcc = [];
 
 const attachments = [];
 
+let formIsCleared = false;
+
 const composeRemoveConfirmDialog = new bootstrap.Modal(
   document.querySelector("#composeRemoveConfirmDialog")
 );
@@ -126,7 +128,11 @@ $("#toInput").selectize({
       }
     }
 
-    formPopulated();
+    if (!formIsCleared) {
+      (async () => {
+        await formPopulated();
+      })();
+    }
   },
 });
 
@@ -208,7 +214,11 @@ $("#ccInput").selectize({
       }
     }
 
-    formPopulated();
+    if (!formIsCleared) {
+      (async () => {
+        await formPopulated();
+      })();
+    }
   },
 });
 
@@ -290,7 +300,11 @@ $("#bccInput").selectize({
       }
     }
 
-    formPopulated();
+    if (!formIsCleared) {
+      (async () => {
+        await formPopulated();
+      })();
+    }
   },
 });
 
@@ -298,16 +312,27 @@ const subjectInput = document.getElementById("subjectInput");
 const messageText = document.getElementById("messageText");
 
 const subjectHeadings = document.getElementsByClassName("subject-heading");
+
 let bouncerTimeout = null;
+let bouncerHasQueue = false;
 
 const bouncer = (e) => {
   clearTimeout(bouncerTimeout);
+  bouncerHasQueue = true;
+
   bouncerTimeout = setTimeout(() => {
-    [...subjectHeadings].forEach((heading) => {
-      heading.textContent = subjectInput.value;
-    });
-    // Save Body
-    formPopulated();
+    if (bouncerHasQueue) {
+      bouncerHasQueue = false;
+
+      [...subjectHeadings].forEach((heading) => {
+        heading.textContent = subjectInput.value;
+      });
+
+      // Save form
+      (async () => {
+        await formPopulated();
+      })();
+    }
   }, 2000);
 };
 
@@ -436,10 +461,14 @@ export const removeAttachments = (e) => {
     attachments.push(attachment);
   }
 
-  formPopulated();
+  (async () => {
+    await formPopulated();
+  })();
 };
 
 export const clearForm = () => {
+  formIsCleared = true;
+
   $("#toInput")[0].selectize.clear();
   $("#ccInput")[0].selectize.clear();
   $("#bccInput")[0].selectize.clear();
@@ -458,6 +487,8 @@ export const clearForm = () => {
   attachments.length = 0;
   composeTable.clear();
   composeTable.draw();
+
+  formIsCleared = false;
 };
 
 export const populateForm = (uri, parsed) => {
@@ -531,45 +562,45 @@ export const populateForm = (uri, parsed) => {
   composeTable.draw();
 };
 
-const formPopulated = () => {
-  (async () => {
-    const parsed = {
-      date: composeDateInput.value,
-      from: composeFromInput.value,
-      to: recipientsTo,
-      cc: recipientsCc,
-      bcc: recipientsBcc,
-      subject: subjectInput.value,
-      plainContent: messageText.value,
-      htmlContent: `<pre>${messageText.value}</pre>`,
-      attachments: attachments,
-    };
+const formPopulated = async () => {
+  // (async () => {
+  const parsed = {
+    date: composeDateInput.value,
+    from: composeFromInput.value,
+    to: recipientsTo,
+    cc: recipientsCc,
+    bcc: recipientsBcc,
+    subject: subjectInput.value,
+    plainContent: messageText.value,
+    htmlContent: `<pre>${messageText.value}</pre>`,
+    attachments: attachments,
+  };
 
-    const ccButton = document.querySelector("#ccButton");
-    const bccButton = document.querySelector("#bccButton");
+  const ccButton = document.querySelector("#ccButton");
+  const bccButton = document.querySelector("#bccButton");
 
-    if (parsed.cc?.length > 0) {
-      ccButton.style.pointerEvents = "none";
-      ccButton.style.cursor = "default";
-      ccButton.style.color = "silver";
-    } else {
-      ccButton.style.pointerEvents = "auto";
-      ccButton.style.cursor = "pointer";
-      ccButton.style.color = "#0d6efd";
-    }
+  if (parsed.cc?.length > 0) {
+    ccButton.style.pointerEvents = "none";
+    ccButton.style.cursor = "default";
+    ccButton.style.color = "silver";
+  } else {
+    ccButton.style.pointerEvents = "auto";
+    ccButton.style.cursor = "pointer";
+    ccButton.style.color = "#0d6efd";
+  }
 
-    if (parsed.bcc?.length > 0) {
-      bccButton.style.pointerEvents = "none";
-      bccButton.style.cursor = "default";
-      bccButton.style.color = "silver";
-    } else {
-      bccButton.style.pointerEvents = "auto";
-      bccButton.style.cursor = "pointer";
-      bccButton.style.color = "#0d6efd";
-    }
+  if (parsed.bcc?.length > 0) {
+    bccButton.style.pointerEvents = "none";
+    bccButton.style.cursor = "default";
+    bccButton.style.color = "silver";
+  } else {
+    bccButton.style.pointerEvents = "auto";
+    bccButton.style.cursor = "pointer";
+    bccButton.style.color = "#0d6efd";
+  }
 
-    await updateDraftsPage(composeForm, composeUriInput.value, parsed);
-  })();
+  await updateDraftsPage(composeForm, composeUriInput.value, parsed);
+  // })();
 };
 
 export const composeAddItems = (items) => {
@@ -613,7 +644,9 @@ export const composeAddItems = (items) => {
   }
 
   if (items.length > 0) {
-    formPopulated();
+    (async () => {
+      await formPopulated();
+    })();
   }
 };
 
@@ -698,11 +731,26 @@ export const setComposeContacts = (contacts) => {
 };
 
 export const newDraft = (e) => {
-  clearForm();
+  clearTimeout(bouncerTimeout);
+
+  if (bouncerHasQueue) {
+    bouncerHasQueue = false;
+
+    // Save form
+    (async () => {
+      await formPopulated();
+      clearForm();
+    })();
+  } else {
+    clearForm();
+  }
 };
 
 export const sendDraft = (e) => {
-  console.log(e);
+  clearTimeout(bouncerTimeout);
+  bouncerHasQueue = false;
+
+  // sendMessage();
 };
 
 export const discardDraft = (e) => {
@@ -713,6 +761,9 @@ export const deleteDraft = (e) => {
   composeDiscardConfirmDialog.hide();
 
   if (composeUriInput.value) {
+    clearTimeout(bouncerTimeout);
+    bouncerHasQueue = false;
+
     (async () => {
       await draftsDeleteDraft(composeForm, composeUriInput.value);
     })();
