@@ -91,7 +91,7 @@
             <ul
               class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto me-2 justify-content-end align-items-center align-items-sm-start"
               id="menu">
-              <li class="dropdown">
+              <li class="dropdown" id="messageDropdownMenu">
                 <a href="#" class="nav-link dropdown-toggle px-sm-0 px-1" id="messagesLink" data-bs-toggle="dropdown"
                   aria-expanded="false">
                   <i class="bi bi-envelope h4" id="messagesIcon"></i><span
@@ -99,22 +99,41 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="messagesLink">
                   <li class="dropdown-item">
-                    <a id="inboxLink" class="btn px-2">
+                    <a class="btn px-2" id="inboxLinkSm">
                       <i class="bi bi-envelope h4"></i>
                       <span class="ms-1 d-sm-inline">Inbox</span></a>
                   </li>
                   <li class="dropdown-item">
-                    <a id="sentLink" class="btn px-2">
+                    <a class="btn px-2" id="sentLinkSm" >
                       <i class="bi bi-envelope-check h4"></i>
                       <span class="ms-1 d-sm-inline">Sent</span></a>
                   </li>
                   <li class="dropdown-item">
-                    <a id="draftsLink" class="btn px-2">
+                    <a class="btn px-2" id="draftsLinkSm">
                       <i class="bi bi-envelope-slash h4"></i>
                       <span class="ms-1 d-sm-inline">Drafts</span></a>
                   </li>
                 </ul>
               </li>
+
+              <div id="messageClassicMenu">
+                <li class="nav-item">
+                  <a href="#" class="nav-link px-sm-0 px-2" id="inboxLinkLg">
+                    <i class="bi bi-envelope h4"></i>
+                    <span class="ms-1 d-none d-sm-inline">Inbox</span></a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link px-sm-0 px-2" id="sentLinkLg" >
+                    <i class="bi bi-envelope-check h4"></i>
+                    <span class="ms-1 d-none d-sm-inline">Sent</span></a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link px-sm-0 px-2" id="draftsLinkLg">
+                    <i class="bi bi-envelope-slash h4"></i>
+                    <span class="ms-1 d-none d-sm-inline">Drafts</span></a>
+                </li>
+              </div>
+
               <li class="nav-item">
                 <a href="#" id="filesLink" class="nav-link px-sm-0 px-2">
                   <i class="bi bi-file-earmark-diff h4"></i>
@@ -252,6 +271,22 @@
 <script src='/public/js/index.js'></script>
 <!-- <script src='/public/js/menu.js'></script> -->
 
+<script>
+  function modifyMenu(media) {
+    if (media.matches) {
+      document.getElementById("messageDropdownMenu").hidden = false;
+      document.getElementById("messageClassicMenu").hidden = true;
+    } else {
+      document.getElementById("messageDropdownMenu").hidden = true;
+      document.getElementById("messageClassicMenu").hidden = false;
+    }
+  }
+
+  const media = window.matchMedia("(max-width: 575px)")
+  modifyMenu(media)
+  media.addListener(modifyMenu)
+</script>
+
 <script type="module">
   // menu
   import {
@@ -265,9 +300,12 @@
     loadProfile,
   } from "/public/js/menu.js";
   document.querySelector('#composeLink').addEventListener('click', () => composeContentPage(document.querySelector('#composeLink')))
-  document.querySelector('#inboxLink').addEventListener('click', () => inboxContentPage(document.querySelector('#inboxLink')))
-  document.querySelector('#sentLink').addEventListener('click', () => sentContentPage(document.querySelector('#sentLink')))
-  document.querySelector('#draftsLink').addEventListener('click', () => draftsContentPage(document.querySelector('#draftsLink')))
+  document.querySelector('#inboxLinkSm').addEventListener('click', () => inboxContentPage(document.querySelector('#inboxLinkSm')))
+  document.querySelector('#inboxLinkLg').addEventListener('click', () => inboxContentPage(document.querySelector('#inboxLinkLg')))
+  document.querySelector('#sentLinkSm').addEventListener('click', () => sentContentPage(document.querySelector('#sentLinkSm')))
+  document.querySelector('#sentLinkLg').addEventListener('click', () => sentContentPage(document.querySelector('#sentLinkLg')))
+  document.querySelector('#draftsLinkSm').addEventListener('click', () => draftsContentPage(document.querySelector('#draftsLinkSm')))
+  document.querySelector('#draftsLinkLg').addEventListener('click', () => draftsContentPage(document.querySelector('#draftsLinkLg')))
   document.querySelector('#filesLink').addEventListener('click', () => filesContentPage(document.querySelector('#filesLink')))
   document.querySelector('#contactsLink').addEventListener('click', () => contactsContentPage(document.querySelector('#contactsLink')))
   document.querySelector('#profileLink').addEventListener('click', () => profileContentPage(document.querySelector('#profileLink')))
@@ -315,7 +353,7 @@
   // default page
   const draftsFormAlert = document.getElementById("draftsFormAlert");
   const loggedUsername = await loadProfile(draftsFormAlert);
-  draftsContentPage(document.getElementById("draftsLink"));
+  draftsContentPage(document.getElementById("draftsLinkSm"));
 
   // database
   import * as database from "/public/js/database.js";

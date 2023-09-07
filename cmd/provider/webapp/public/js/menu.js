@@ -8,13 +8,16 @@ export function composeContentPage(e) {
   document.getElementById("composeLink").classList.add("active");
 
   document.getElementById("inboxContainer").hidden = true;
-  document.getElementById("inboxLink").classList.remove("active");
+  document.getElementById("inboxLinkSm").classList.remove("active");
+  document.getElementById("inboxLinkLg").classList.remove("active");
 
   document.getElementById("sentContainer").hidden = true;
-  document.getElementById("sentLink").classList.remove("active");
+  document.getElementById("sentLinkSm").classList.remove("active");
+  document.getElementById("sentLinkLg").classList.remove("active");
 
   document.getElementById("draftsContainer").hidden = true;
-  document.getElementById("draftsLink").classList.remove("active");
+  document.getElementById("draftsLinkSm").classList.remove("active");
+  document.getElementById("draftsLinkLg").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -44,9 +47,12 @@ export function inboxContentPage(e) {
 
   messagesIcon.className = selectedClassName;
 
-  document.getElementById("inboxLink").classList.remove("active");
-  document.getElementById("sentLink").classList.remove("active");
-  document.getElementById("draftsLink").classList.remove("active");
+  document.getElementById("inboxLinkSm").classList.remove("active");
+  document.getElementById("inboxLinkLg").classList.remove("active");
+  document.getElementById("sentLinkSm").classList.remove("active");
+  document.getElementById("sentLinkLg").classList.remove("active");
+  document.getElementById("draftsLinkSm").classList.remove("active");
+  document.getElementById("draftsLinkLg").classList.remove("active");
 
   e.classList.add("active");
 
@@ -54,13 +60,16 @@ export function inboxContentPage(e) {
   document.getElementById("composeLink").classList.remove("active");
 
   document.getElementById("inboxContainer").hidden = false;
-  document.getElementById("inboxLink").classList.add("active");
+  document.getElementById("inboxLinkSm").classList.add("active");
+  document.getElementById("inboxLinkLg").classList.add("active");
 
   document.getElementById("sentContainer").hidden = true;
-  document.getElementById("sentLink").classList.remove("active");
+  document.getElementById("sentLinkSm").classList.remove("active");
+  document.getElementById("sentLinkLg").classList.remove("active");
 
   document.getElementById("draftsContainer").hidden = true;
-  document.getElementById("draftsLink").classList.remove("active");
+  document.getElementById("draftsLinkSm").classList.remove("active");
+  document.getElementById("draftsLinkLg").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -90,9 +99,12 @@ export function sentContentPage(e) {
 
   messagesIcon.className = selectedClassName;
 
-  document.getElementById("inboxLink").classList.remove("active");
-  document.getElementById("sentLink").classList.remove("active");
-  document.getElementById("draftsLink").classList.remove("active");
+  document.getElementById("inboxLinkSm").classList.remove("active");
+  document.getElementById("inboxLinkLg").classList.remove("active");
+  document.getElementById("sentLinkSm").classList.remove("active");
+  document.getElementById("sentLinkLg").classList.remove("active");
+  document.getElementById("draftsLinkSm").classList.remove("active");
+  document.getElementById("draftsLinkLg").classList.remove("active");
 
   e.classList.add("active");
 
@@ -100,13 +112,16 @@ export function sentContentPage(e) {
   document.getElementById("composeLink").classList.remove("active");
 
   document.getElementById("inboxContainer").hidden = true;
-  document.getElementById("inboxLink").classList.remove("active");
+  document.getElementById("inboxLinkSm").classList.remove("active");
+  document.getElementById("inboxLinkLg").classList.remove("active");
 
   document.getElementById("sentContainer").hidden = false;
-  document.getElementById("sentLink").classList.add("active");
+  document.getElementById("sentLinkSm").classList.add("active");
+  document.getElementById("sentLinkLg").classList.add("active");
 
   document.getElementById("draftsContainer").hidden = true;
-  document.getElementById("draftsLink").classList.remove("active");
+  document.getElementById("draftsLinkSm").classList.remove("active");
+  document.getElementById("draftsLinkLg").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -136,9 +151,12 @@ export function draftsContentPage(e) {
 
   messagesIcon.className = selectedClassName;
 
-  document.getElementById("inboxLink").classList.remove("active");
-  document.getElementById("sentLink").classList.remove("active");
-  document.getElementById("draftsLink").classList.remove("active");
+  document.getElementById("inboxLinkSm").classList.remove("active");
+  document.getElementById("inboxLinkLg").classList.remove("active");
+  document.getElementById("sentLinkSm").classList.remove("active");
+  document.getElementById("sentLinkLg").classList.remove("active");
+  document.getElementById("draftsLinkSm").classList.remove("active");
+  document.getElementById("draftsLinkLg").classList.remove("active");
 
   e.classList.add("active");
 
@@ -146,13 +164,16 @@ export function draftsContentPage(e) {
   document.getElementById("composeLink").classList.remove("active");
 
   document.getElementById("inboxContainer").hidden = true;
-  document.getElementById("inboxLink").classList.remove("active");
+  document.getElementById("inboxLinkSm").classList.remove("active");
+  document.getElementById("inboxLinkLg").classList.remove("active");
 
   document.getElementById("sentContainer").hidden = true;
-  document.getElementById("sentLink").classList.remove("active");
+  document.getElementById("sentLinkSm").classList.remove("active");
+  document.getElementById("sentLinkLg").classList.remove("active");
 
   document.getElementById("draftsContainer").hidden = false;
-  document.getElementById("draftsLink").classList.add("active");
+  document.getElementById("draftsLinkSm").classList.add("active");
+  document.getElementById("draftsLinkLg").classList.add("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -180,13 +201,16 @@ export function filesContentPage(e) {
   document.getElementById("composeLink").classList.remove("active");
 
   document.getElementById("inboxContainer").hidden = true;
-  document.getElementById("inboxLink").classList.remove("active");
+  document.getElementById("inboxLinkSm").classList.remove("active");
+  document.getElementById("inboxLinkLg").classList.remove("active");
 
   document.getElementById("sentContainer").hidden = true;
-  document.getElementById("sentLink").classList.remove("active");
+  document.getElementById("sentLinkSm").classList.remove("active");
+  document.getElementById("sentLinkLg").classList.remove("active");
 
   document.getElementById("draftsContainer").hidden = true;
-  document.getElementById("draftsLink").classList.remove("active");
+  document.getElementById("draftsLinkSm").classList.remove("active");
+  document.getElementById("draftsLinkLg").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = false;
   document.getElementById("filesLink").classList.add("active");
@@ -215,13 +239,16 @@ export function contactsContentPage(e) {
   document.getElementById("composeLink").classList.remove("active");
 
   document.getElementById("inboxContainer").hidden = true;
-  document.getElementById("inboxLink").classList.remove("active");
+  document.getElementById("inboxLinkSm").classList.remove("active");
+  document.getElementById("inboxLinkLg").classList.remove("active");
 
   document.getElementById("sentContainer").hidden = true;
-  document.getElementById("sentLink").classList.remove("active");
+  document.getElementById("sentLinkSm").classList.remove("active");
+  document.getElementById("sentLinkLg").classList.remove("active");
 
   document.getElementById("draftsContainer").hidden = true;
-  document.getElementById("draftsLink").classList.remove("active");
+  document.getElementById("draftsLinkSm").classList.remove("active");
+  document.getElementById("draftsLinkLg").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
@@ -250,13 +277,16 @@ export function profileContentPage(e) {
   document.getElementById("composeLink").classList.remove("active");
 
   document.getElementById("inboxContainer").hidden = true;
-  document.getElementById("inboxLink").classList.remove("active");
+  document.getElementById("inboxLinkSm").classList.remove("active");
+  document.getElementById("inboxLinkLg").classList.remove("active");
 
   document.getElementById("sentContainer").hidden = true;
-  document.getElementById("sentLink").classList.remove("active");
+  document.getElementById("sentLinkSm").classList.remove("active");
+  document.getElementById("sentLinkLg").classList.remove("active");
 
   document.getElementById("draftsContainer").hidden = true;
-  document.getElementById("draftsLink").classList.remove("active");
+  document.getElementById("draftsLinkSm").classList.remove("active");
+  document.getElementById("draftsLinkLg").classList.remove("active");
 
   document.getElementById("filesContainer").hidden = true;
   document.getElementById("filesLink").classList.remove("active");
