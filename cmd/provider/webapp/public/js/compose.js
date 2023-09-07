@@ -455,6 +455,7 @@ export const clearForm = () => {
     heading.textContent = subjectInput.value;
   });
 
+  attachments.length = 0;
   composeTable.clear();
   composeTable.draw();
 };
