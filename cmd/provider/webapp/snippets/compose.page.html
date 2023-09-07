@@ -34,9 +34,13 @@
             <input class="form-control" id="subjectInput" type="text" maxlength="100" />
             <label for="subjectInput">Subject</label>
         </div>
-        <div class="form-floating mb-3">
+        <div hidden class="form-floating mb-3">
             <textarea class="form-control" id="messageText" type="text" style="height: 8rem;"></textarea>
             <label for="messageText">Message</label>
+        </div>
+        <div class="form-floating mb-3" contenteditable="false" id="formFloatingMessageHtml">
+            <span contenteditable="true" class="form-control" id="messageHtml" spellcheck="false"></span>
+            <label for="messageHtml">Message</label>
         </div>
     </form>
 

@@ -113,6 +113,24 @@ a:not([class*="btn"]):hover {
   border-radius: 4px;
 }
 
+#formFloatingMessageHtml {
+  width: 0px;
+  min-width: 100%;
+}
+
+#messageHtml {
+  min-height: 8.2em;
+  max-height: 30em;
+  /* padding: 1.6em 0.5em 0 0.5em;
+  background-color: white;
+  font-size: initial;
+  text-align: left;
+  border: 1px solid #e0e0e0;*/
+  border-radius: 5px;
+  resize: vertical;
+  overflow: auto;
+}
+
 @media screen and (max-width: 575px) {
   .responsive-menu {
     flex-direction: column;

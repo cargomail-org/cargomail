@@ -56,8 +56,7 @@ window.apiHost = "";
       }
 
       if (profileForm) {
-        profileForm.querySelector("#profileDomainName").innerHTML =
-          domainName;
+        profileForm.querySelector("#profileDomainName").innerHTML = domainName;
       }
     }
   })();

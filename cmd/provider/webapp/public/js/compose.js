@@ -23,6 +23,12 @@ const composeUriInput = document.getElementById("composeUriInput");
 const composeDateInput = document.getElementById("composeDateInput");
 const composeFromInput = document.getElementById("composeFromInput");
 
+const messageText = document.getElementById("messageText");
+const messageHtml = document.getElementById("messageHtml");
+
+const subjectInput = document.getElementById("subjectInput");
+const subjectHeadings = document.getElementsByClassName("subject-heading");
+
 const recipientsTo = [];
 const recipientsCc = [];
 const recipientsBcc = [];
@@ -308,11 +314,6 @@ $("#bccInput").selectize({
   },
 });
 
-const subjectInput = document.getElementById("subjectInput");
-const messageText = document.getElementById("messageText");
-
-const subjectHeadings = document.getElementsByClassName("subject-heading");
-
 let bouncerTimeout = null;
 let bouncerHasQueue = false;
 
@@ -479,6 +480,7 @@ export const clearForm = () => {
   composeForm.reset();
   composeUriInput.dispatchEvent(new Event("input"));
   composeUriInput.dispatchEvent(new Event("change"));
+  messageHtml.innerHTML = "";
 
   [...subjectHeadings].forEach((heading) => {
     heading.textContent = subjectInput.value;
@@ -554,6 +556,7 @@ export const populateForm = (uri, parsed) => {
   });
 
   messageText.value = parsed.plainContent;
+  messageHtml.innerHTML = parsed.htmlContent;
 
   composeTable.clear();
 
@@ -563,7 +566,6 @@ export const populateForm = (uri, parsed) => {
 };
 
 const formPopulated = async () => {
-  // (async () => {
   const parsed = {
     date: composeDateInput.value,
     from: composeFromInput.value,
@@ -572,7 +574,7 @@ const formPopulated = async () => {
     bcc: recipientsBcc,
     subject: subjectInput.value,
     plainContent: messageText.value,
-    htmlContent: `<pre>${messageText.value}</pre>`,
+    htmlContent: messageHtml.innerHTML,
     attachments: attachments,
   };
 
@@ -600,7 +602,6 @@ const formPopulated = async () => {
   }
 
   await updateDraftsPage(composeForm, composeUriInput.value, parsed);
-  // })();
 };
 
 export const composeAddItems = (items) => {
@@ -768,4 +769,9 @@ export const deleteDraft = (e) => {
       await draftsDeleteDraft(composeForm, composeUriInput.value);
     })();
   }
+};
+
+export const messageHtmlChanged = (e) => {
+  messageText.value = messageHtml.innerText;
+  bouncer(e);
 };

@@ -311,8 +311,9 @@
   document.querySelector('#profileLink').addEventListener('click', () => profileContentPage(document.querySelector('#profileLink')))
 
   // compose
-  import { uriChanged, removeAttachments, ccToggle, bccToggle, newDraft, sendDraft, discardDraft, deleteDraft } from "/public/js/compose.js";
+  import { uriChanged, messageHtmlChanged, removeAttachments, ccToggle, bccToggle, newDraft, sendDraft, discardDraft, deleteDraft } from "/public/js/compose.js";
   document.querySelector('#composeUriInput').addEventListener('change', uriChanged);
+  document.querySelector('#messageHtml').addEventListener('input', messageHtmlChanged);
   document.querySelector('#composeRemoveConfirmButton').addEventListener('click', removeAttachments);
   document.querySelector('#composeDiscardConfirmButton').addEventListener('click', deleteDraft);
   document.querySelector('#ccButton').addEventListener('click', ccToggle);
