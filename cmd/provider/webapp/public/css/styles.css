@@ -131,6 +131,10 @@ a:not([class*="btn"]):hover {
   overflow: auto;
 }
 
+#messageHtml > p {
+  line-height: inherit !important;
+}
+
 @media screen and (max-width: 575px) {
   .responsive-menu {
     flex-direction: column;

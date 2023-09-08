@@ -779,8 +779,8 @@ export const deleteDraft = (e) => {
   }
 };
 
-const TEXT_MAX_SIZE = 10000;
-const HTML_MAX_SIZE = 20000;
+const TEXT_MAX_SIZE = 50000;
+const HTML_MAX_SIZE = 100000;
 
 export const messageHtmlChanged = (e) => {
   const alert = composeForm.querySelector(
@@ -829,6 +829,11 @@ export const messageHtmlChanged = (e) => {
 
     return;
   }
+
+  // const sanitizer = new Sanitizer();
+  // messageHtml.setHTML(messageHtml.innerHTML, sanitizer);
+
+  // console.log(messageHtml.innerHTML);
 
   messageHtmlLastValidContent = messageHtml.innerHTML;
   messageHtmlLastValidCaretPosition = getCaretPosition(messageHtml);
