@@ -116,6 +116,8 @@ a:not([class*="btn"]):hover {
 #formFloatingMessageHtml {
   width: 0px;
   min-width: 100%;
+  overflow: clip;
+  overflow-clip-margin: 4px;
 }
 
 #messageHtml {
