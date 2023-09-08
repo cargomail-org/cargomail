@@ -14,6 +14,11 @@ import "datatables.net-responsive-bs5";
 import { formatBytes } from "/public/js/menu.js";
 import { getProfileUsername } from "/public/js/profile.js";
 import {
+  b64EncodeUtf8,
+  getCaretPosition,
+  setCaretPosition,
+} from "/public/js/utils.js";
+import {
   updateDraftsPage,
   deleteDraft as draftsDeleteDraft,
 } from "/public/js/drafts.js";
@@ -36,6 +41,9 @@ const recipientsBcc = [];
 const attachments = [];
 
 let formIsCleared = false;
+
+let messageHtmlLastValidContent = "";
+let messageHtmlLastValidCaretPosition;
 
 const composeRemoveConfirmDialog = new bootstrap.Modal(
   document.querySelector("#composeRemoveConfirmDialog")
@@ -771,7 +779,61 @@ export const deleteDraft = (e) => {
   }
 };
 
+const TEXT_MAX_SIZE = 10000;
+const HTML_MAX_SIZE = 20000;
+
 export const messageHtmlChanged = (e) => {
+  const alert = composeForm.querySelector(
+    'div[name="messageHtmlChangedAlert"]'
+  );
+  if (alert) alert.remove();
+
+  const encodedMessageHtml = b64EncodeUtf8(messageHtml.innerHTML);
+
+  if (encodedMessageHtml.length > HTML_MAX_SIZE) {
+    const error = "html text too long";
+
+    composeForm.insertAdjacentHTML(
+      "beforeend",
+      `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="messageHtmlChangedAlert">
+                ${error}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`
+    );
+
+    messageHtml.innerHTML = messageHtmlLastValidContent;
+
+    if (messageHtmlLastValidCaretPosition) {
+      setCaretPosition(messageHtml, messageHtmlLastValidCaretPosition);
+    }
+
+    return;
+  }
+
+  if (messageHtml.innerText.length > TEXT_MAX_SIZE) {
+    const error = "text too long";
+
+    composeForm.insertAdjacentHTML(
+      "beforeend",
+      `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="messageHtmlChangedAlert">
+                ${error}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`
+    );
+
+    messageHtml.innerHTML = messageHtmlLastValidContent;
+
+    if (messageHtmlLastValidCaretPosition) {
+      setCaretPosition(messageHtml, messageHtmlLastValidCaretPosition);
+    }
+
+    return;
+  }
+
+  messageHtmlLastValidContent = messageHtml.innerHTML;
+  messageHtmlLastValidCaretPosition = getCaretPosition(messageHtml);
+
   messageText.value = messageHtml.innerText;
+
   bouncer(e);
 };

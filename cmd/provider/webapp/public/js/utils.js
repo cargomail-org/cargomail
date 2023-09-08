@@ -1,4 +1,4 @@
-const b64EncodeUtf8 = (str) => {
+export const b64EncodeUtf8 = (str) => {
   return btoa(
     encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
       return String.fromCharCode(parseInt(p1, 16));
@@ -6,7 +6,7 @@ const b64EncodeUtf8 = (str) => {
   );
 };
 
-const b64DecodeUtf8 = (base64) => {
+export const b64DecodeUtf8 = (base64) => {
   const text = atob(base64);
   const length = text.length;
   const bytes = new Uint8Array(length);
@@ -454,4 +454,87 @@ export const createPlainContentSnippet = (str) => {
     return str.slice(0, plainTextSnippetMaxLength) + "...";
   }
   return str;
+};
+
+// https://stackoverflow.com/questions/6249095/how-to-set-the-caret-cursor-position-in-a-contenteditable-element-div
+// https://codepen.io/jeffward/pen/OJjPKYo?editors=1010
+export const setCaretPosition = (container, position) => {
+  if (position >= 0) {
+    const selection = window.getSelection();
+    const range = createRange(container, { count: position });
+
+    if (range) {
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  }
+};
+
+export const getCaretPosition = (container) => {
+  var selection = window.getSelection();
+  var charCount = -1;
+  var node;
+  if (selection.focusNode != null) {
+    if (isDescendantOf(selection.focusNode, container)) {
+      node = selection.focusNode;
+      charCount = selection.focusOffset;
+      while (node != null) {
+        if (node == container) {
+          break;
+        }
+        if (node.previousSibling != null) {
+          node = node.previousSibling;
+          charCount += node.textContent.length;
+        } else {
+          node = node.parentNode;
+          if (node == null) {
+            break;
+          }
+        }
+      }
+    }
+  }
+  return charCount;
+};
+
+const isDescendantOf = (node, parent) => {
+  while (node != null) {
+    if (node == parent) {
+      return true;
+    }
+    node = node.parentNode;
+  }
+  return false;
+};
+
+const createRange = (node, chars, range) => {
+  if (range == null) {
+    range = window.document.createRange();
+    range.selectNode(node);
+    range.setStart(node, 0);
+  }
+  if (chars.count == 0) {
+    range.setEnd(node, chars.count);
+  } else if (node != null && chars.count > 0) {
+    if (node.nodeType == 3) {
+      if (node.textContent.length < chars.count) {
+        chars.count -= node.textContent.length;
+      } else {
+        range.setEnd(node, chars.count);
+        chars.count = 0;
+      }
+    } else {
+      var _g = 0;
+      var _g1 = node.childNodes.length;
+      while (_g < _g1) {
+        var lp = _g++;
+        range = createRange(node.childNodes[lp], chars, range);
+        if (chars.count == 0) {
+          break;
+        }
+      }
+    }
+  }
+  return range;
 };
