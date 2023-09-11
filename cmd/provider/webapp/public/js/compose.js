@@ -836,9 +836,25 @@ export const messageHtmlChanged = (e) => {
   // console.log(messageHtml.innerHTML);
 
   messageHtmlLastValidContent = messageHtml.innerHTML;
-  messageHtmlLastValidCaretPosition = getCaretPosition(messageHtml);
+  // messageHtmlLastValidCaretPosition = getCaretPosition(messageHtml);
 
   messageText.value = messageHtml.innerText;
 
   bouncer(e);
+};
+
+export const messageHtmlOnFocusIn = (e) => {
+  if (e.relatedTarget?.id == "subjectInput") {
+    if (messageHtmlLastValidCaretPosition) {
+      setCaretPosition(messageHtml, messageHtmlLastValidCaretPosition);
+    }
+  }
+};
+
+export const messageHtmlOnMouseUp = (e) => {
+  messageHtmlLastValidCaretPosition = getCaretPosition(messageHtml);
+};
+
+export const messageHtmlOnKeyUp = (e) => {
+  messageHtmlLastValidCaretPosition = getCaretPosition(messageHtml);
 };
