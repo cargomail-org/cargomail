@@ -486,27 +486,103 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	sent := &Message{}
+	message := &Message{}
 
 	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
-		return sent, err
+		return message, err
 	}
 	defer tx.Rollback()
 
 	query := `
-		SELECT "Hello World!";`
+	UPDATE "Draft"
+		SET "payload" = $1,
+			"deviceId" = $2
+		WHERE "userId" = $3 AND
+			  "uri" = $4 AND
+			  "lastStmt" <> 2
+		RETURNING * ;`
 
-	args := []interface{}{user.Id, draft.Uri}
+	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
+
+	args := []interface{}{draft.Payload, prefixedDeviceId, user.Id, draft.Uri}
+
+	err = tx.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, ErrDraftNotFound
+		default:
+			return nil, err
+		}
+	}
+
+	query = `
+	INSERT
+		INTO "Message" ("userId",
+			 "deviceId",
+			 "messageUid",
+			 "threadUid",
+			 "unread",
+			 "folder",
+			 "payload")
+		VALUES ($1,
+				$2,
+				$3,
+				$4,
+				$5,
+				$6,
+				$7)
+		RETURNING * ;`
+
+	// from := user.FullnameAndAddress()
+	messageUid := uuid.NewString() // ???
+	threadUid := draft.ThreadUid
+	unread := false
+	folder := 1 // sent
+
+	args = []interface{}{user.Id,
+		prefixedDeviceId,
+		messageUid,
+		threadUid,
+		unread,
+		folder,
+		draft.Payload}
+
+	err = tx.QueryRowContext(ctx, query, args...).Scan(message.Scan()...)
+	if err != nil {
+		return nil, err
+	}
+
+	query = `
+	DELETE
+		FROM "Draft"
+		WHERE "userId" = $1 AND
+		"uri" = $2;`
+
+	args = []interface{}{user.Id, draft.Uri}
 
 	_, err = tx.ExecContext(ctx, query, args...)
 	if err != nil {
-		return sent, err
+		return nil, err
+	}
+
+	query = `
+	UPDATE "DraftDeleted"
+		SET "deviceId" = $1
+		WHERE "userId" = $2 AND
+		"uri" = $3;`
+
+	args = []interface{}{user.DeviceId, user.Id, draft.Uri}
+
+	_, err = tx.ExecContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
 	}
 
 	if err = tx.Commit(); err != nil {
-		return sent, err
+		return message, err
 	}
 
-	return sent, nil
+	return message, nil
 }

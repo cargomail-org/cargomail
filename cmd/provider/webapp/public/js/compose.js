@@ -19,8 +19,9 @@ import {
   setCaretPosition,
 } from "/public/js/utils.js";
 import {
-  updateDraftsPage,
+  upsertDraftsPage,
   deleteDraft as draftsDeleteDraft,
+  sendDraft as draftsSendDraft,
 } from "/public/js/drafts.js";
 
 const composeForm = document.getElementById("composeForm");
@@ -144,7 +145,7 @@ $("#toInput").selectize({
 
     if (!formIsCleared) {
       (async () => {
-        await formPopulated();
+        await formPopulated("update");
       })();
     }
   },
@@ -230,7 +231,7 @@ $("#ccInput").selectize({
 
     if (!formIsCleared) {
       (async () => {
-        await formPopulated();
+        await formPopulated("update");
       })();
     }
   },
@@ -316,7 +317,7 @@ $("#bccInput").selectize({
 
     if (!formIsCleared) {
       (async () => {
-        await formPopulated();
+        await formPopulated("update");
       })();
     }
   },
@@ -339,7 +340,7 @@ const bouncer = (e) => {
 
       // Save form
       (async () => {
-        await formPopulated();
+        await formPopulated("update");
       })();
     }
   }, 2000);
@@ -471,7 +472,7 @@ export const removeAttachments = (e) => {
   }
 
   (async () => {
-    await formPopulated();
+    await formPopulated("update");
   })();
 };
 
@@ -573,7 +574,7 @@ export const populateForm = (uri, parsed) => {
   composeTable.draw();
 };
 
-const formPopulated = async () => {
+const formPopulated = async (cmd) => {
   const parsed = {
     date: composeDateInput.value,
     from: composeFromInput.value,
@@ -609,7 +610,13 @@ const formPopulated = async () => {
     bccButton.style.color = "#0d6efd";
   }
 
-  await updateDraftsPage(composeForm, composeUriInput.value, parsed);
+  if ((cmd == "new" || cmd == "update")) {
+    await upsertDraftsPage(composeForm, composeUriInput.value, parsed);
+  } else if ((cmd == "send")) {
+    await draftsSendDraft(composeForm, composeUriInput.value, parsed);
+  } else {
+    throw new Error(`Unknown command ${cmd} (should be 'update or 'send'`);
+  }
 };
 
 export const composeAddItems = (items) => {
@@ -654,7 +661,7 @@ export const composeAddItems = (items) => {
 
   if (items.length > 0) {
     (async () => {
-      await formPopulated();
+      await formPopulated("update");
     })();
   }
 };
@@ -747,19 +754,12 @@ export const newDraft = (e) => {
 
     // Save form
     (async () => {
-      await formPopulated();
+      await formPopulated("new");
       clearForm();
     })();
   } else {
     clearForm();
   }
-};
-
-export const sendDraft = (e) => {
-  clearTimeout(bouncerTimeout);
-  bouncerHasQueue = false;
-
-  // sendMessage();
 };
 
 export const discardDraft = (e) => {
@@ -777,6 +777,15 @@ export const deleteDraft = (e) => {
       await draftsDeleteDraft(composeForm, composeUriInput.value);
     })();
   }
+};
+
+export const sendDraft = (e) => {
+  clearTimeout(bouncerTimeout);
+  bouncerHasQueue = false;
+
+  (async () => {
+    await formPopulated("send");
+  })();
 };
 
 const TEXT_MAX_SIZE = 50000;

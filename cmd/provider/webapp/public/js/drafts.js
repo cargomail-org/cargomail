@@ -359,14 +359,15 @@ export const deleteDraft = async (composeForm, uri) => {
   }
 };
 
-export const updateDraftsPage = async (composeForm, uri, parsed) => {
+export const upsertDraftsPage = async (composeForm, uri, parsed) => {
   if (!formIsPopulated) {
     const alert = composeForm.querySelector(
-      'div[name="updateDraftsPageAlert"]'
+      'div[name="upsertDraftsPageAlert"]'
     );
     if (alert) alert.remove();
 
     if (uri) {
+      // update
       const index = draftsTable.column(0).data().toArray().indexOf(uri);
 
       if (index >= 0) {
@@ -405,13 +406,14 @@ export const updateDraftsPage = async (composeForm, uri, parsed) => {
 
         composeForm.insertAdjacentHTML(
           "beforeend",
-          `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="updateDraftsPageAlert">
+          `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="upsertDraftsPageAlert">
                 ${error}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>`
         );
       }
     } else {
+      // insert
       const draft = { payload: composePayload(parsed) };
 
       const response = await api(
@@ -434,11 +436,92 @@ export const updateDraftsPage = async (composeForm, uri, parsed) => {
       const composeUriInput = document.getElementById("composeUriInput");
 
       composeUriInput.value = response.uri;
-      composeUriInput.dispatchEvent(new Event('input'));
-      composeUriInput.dispatchEvent(new Event('change'));
+      composeUriInput.dispatchEvent(new Event("input"));
+      composeUriInput.dispatchEvent(new Event("change"));
 
       draftsTable.row.add(response);
       draftsTable.draw();
+    }
+  }
+};
+
+export const sendDraft = async (composeForm, uri, parsed) => {
+  if (!formIsPopulated) {
+    const alert = composeForm.querySelector(
+      'div[name="sendDraftsPageAlert"]'
+    );
+    if (alert) alert.remove();
+
+    if (uri) {
+      // update & send
+      const index = draftsTable.column(0).data().toArray().indexOf(uri);
+
+      if (index >= 0) {
+        const data = draftsTable.row(`#${uri}`).data();
+        const draft = { uri, payload: composePayload(parsed) };
+
+        if (data.messageUid) draft.messageUid = data.messageUid;
+        if (data.parentUid) draft.parentUid = data.parentUid;
+        if (data.threadUid) draft.threadUid = data.threadUid;
+        if (data.labelIds) draft.labelIds = data.labelIds;
+        if (data.unread) draft.unread = data.unread;
+        if (data.starred) draft.starred = data.starred;
+        if (data.createdAt) draft.createdAt = data.createdAt;
+        if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
+
+        const response = await api(
+          composeForm.id,
+          200,
+          `${window.apiHost}/api/v1/drafts/send`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(draft),
+          }
+        );
+
+        if (response === false) {
+          return;
+        }
+
+        draftsTable.rows(`#${uri}`).remove().draw();
+        draftsTable
+          .buttons([".drafts-edit"])
+          .enable(draftsTable.rows().count() > 0);
+        draftsTable
+          .buttons([".drafts-delete"])
+          .enable(draftsTable.rows().count() > 0);
+
+        try {
+          formIsPopulated = true;
+          composeClearForm();
+        } finally {
+          formIsPopulated = false;
+        }
+      } else {
+        const error = "record not found";
+
+        composeForm.insertAdjacentHTML(
+          "beforeend",
+          `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="sendDraftsPageAlert">
+                ${error}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`
+        );
+      }
+    } else {
+      const error = "empty uri";
+
+      composeForm.insertAdjacentHTML(
+        "beforeend",
+        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="sendDraftsPageAlert">
+              ${error}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`
+      );
     }
   }
 };
