@@ -16,6 +16,9 @@ import {
   populateForm as composePopulateForm,
 } from "/public/js/compose.js";
 import {
+  sentTable,
+} from "/public/js/sent.js";
+import {
   parsePayload,
   composePayload,
   createSubjectSnippet,
@@ -447,9 +450,7 @@ export const upsertDraftsPage = async (composeForm, uri, parsed) => {
 
 export const sendDraft = async (composeForm, uri, parsed) => {
   if (!formIsPopulated) {
-    const alert = composeForm.querySelector(
-      'div[name="sendDraftsPageAlert"]'
-    );
+    const alert = composeForm.querySelector('div[name="sendDraftsPageAlert"]');
     if (alert) alert.remove();
 
     if (uri) {
@@ -494,6 +495,9 @@ export const sendDraft = async (composeForm, uri, parsed) => {
         draftsTable
           .buttons([".drafts-delete"])
           .enable(draftsTable.rows().count() > 0);
+
+        sentTable.row.add(response);
+        sentTable.draw();
 
         try {
           formIsPopulated = true;

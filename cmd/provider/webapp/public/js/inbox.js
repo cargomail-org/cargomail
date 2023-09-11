@@ -16,7 +16,7 @@ const inboxConfirmDialog = new bootstrap.Modal(
   document.querySelector("#inboxConfirmDialog")
 );
 
-const inboxTable = new DataTable("#inboxTable", {
+/*const inboxTable = new DataTable("#inboxTable", {
   paging: true,
   responsive: {
     details: false,
@@ -101,7 +101,7 @@ const inboxTable = new DataTable("#inboxTable", {
       },
     },
   ],
-});
+});*/
 
 export const deleteInboxMessages = (e) => {
   e?.preventDefault();

@@ -16,8 +16,8 @@ type MessageRepository struct {
 
 type MessagePart struct {
 	Headers map[string]interface{} `json:"headers,omitempty"`
-	Body    *Body                   `json:"body,omitempty"`
-	Parts   []*MessagePart          `json:"parts,omitempty"`
+	Body    *Body                  `json:"body,omitempty"`
+	Parts   []*MessagePart         `json:"parts,omitempty"`
 }
 
 type Message struct {
@@ -166,6 +166,261 @@ func (r *MessageRepository) List(user *User) (*MessageList, error) {
 	}
 
 	return messageList, nil
+}
+
+func (r *MessageRepository) Sync(user *User, history *History) (*MessageSync, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	// inserted rows
+	query := `
+		SELECT *
+			FROM "Message"
+			WHERE "userId" = $1 AND
+				"lastStmt" = 0 AND
+				("deviceId" <> $2 OR "deviceId" IS NULL) AND
+				"historyId" > $3
+			ORDER BY "createdAt" DESC;`
+
+	args := []interface{}{user.Id, user.DeviceId, history.Id}
+
+	rows, err := tx.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	messageSync := &MessageSync{
+		MessagesInserted: []*Message{},
+		MessagesUpdated:  []*Message{},
+		MessagesTrashed:  []*Message{},
+		MessagesDeleted:  []*MessageDeleted{},
+	}
+
+	for rows.Next() {
+		var message Message
+
+		err := rows.Scan(message.Scan()...)
+
+		if err != nil {
+			return nil, err
+		}
+
+		messageSync.MessagesInserted = append(messageSync.MessagesInserted, &message)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	// updated rows
+	query = `
+		SELECT *
+			FROM "Message"
+			WHERE "userId" = $1 AND
+				"lastStmt" = 1 AND
+				("deviceId" <> $2 OR "deviceId" IS NULL) AND
+				"historyId" > $3
+			ORDER BY "createdAt" DESC;`
+
+	args = []interface{}{user.Id, user.DeviceId, history.Id}
+
+	rows, err = tx.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var message Message
+
+		err := rows.Scan(message.Scan()...)
+
+		if err != nil {
+			return nil, err
+		}
+
+		messageSync.MessagesUpdated = append(messageSync.MessagesUpdated, &message)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	// trashed rows
+	query = `
+		SELECT *
+			FROM "Message"
+			WHERE "userId" = $1 AND
+				"lastStmt" = 2 AND
+				("deviceId" <> $2 OR "deviceId" IS NULL) AND
+				"historyId" > $3
+			ORDER BY "createdAt" DESC;`
+
+	args = []interface{}{user.Id, user.DeviceId, history.Id}
+
+	rows, err = tx.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var message Message
+
+		err := rows.Scan(message.Scan()...)
+
+		if err != nil {
+			return nil, err
+		}
+
+		messageSync.MessagesTrashed = append(messageSync.MessagesTrashed, &message)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	// deleted rows
+	query = `
+		SELECT *
+			FROM "MessageDeleted"
+			WHERE "userId" = $1 AND
+			("deviceId" <> $2 OR "deviceId" IS NULL) AND
+			"historyId" > $3;`
+
+	args = []interface{}{user.Id, user.DeviceId, history.Id}
+
+	rows, err = tx.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var messageDeleted MessageDeleted
+
+		err := rows.Scan(messageDeleted.Scan()...)
+
+		if err != nil {
+			return nil, err
+		}
+
+		messageSync.MessagesDeleted = append(messageSync.MessagesDeleted, &messageDeleted)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	// history
+	query = `
+	SELECT "LastHistoryId"
+	   FROM "MessageHistorySeq"
+	   WHERE "userId" = $1 ;`
+
+	args = []interface{}{user.Id}
+
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&messageSync.History)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return messageSync, nil
+}
+
+func (r *MessageRepository) Update(user *User, message *Message) (*Message, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	query := `
+		UPDATE "Message"
+			SET "payload" = $1,
+				"deviceId" = $2
+			WHERE "userId" = $3 AND
+			      "uri" = $4 AND
+				  "lastStmt" <> 2
+			RETURNING * ;`
+
+	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
+
+	args := []interface{}{message.Payload, prefixedDeviceId, user.Id, message.Uri}
+
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(message.Scan()...)
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, ErrMessageNotFound
+		default:
+			return nil, err
+		}
+	}
+
+	return message, nil
+}
+
+func (r *MessageRepository) Trash(user *User, uris string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if len(uris) > 0 {
+		query := `
+		UPDATE Message
+			SET "lastStmt" = 2,
+			"deviceId" = $1
+			WHERE "userId" = $2 AND
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+
+		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
+
+		args := []interface{}{prefixedDeviceId, user.Id, uris}
+
+		_, err := r.db.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (r *MessageRepository) Untrash(user *User, uris string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if len(uris) > 0 {
+		query := `
+		UPDATE "Message"
+			SET "lastStmt" = 0,
+			"deviceId" = $1
+			WHERE "userId" = $2 AND
+			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+
+		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
+
+		args := []interface{}{prefixedDeviceId, user.Id, uris}
+
+		_, err := r.db.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (r MessageRepository) Delete(user *User, uris string) error {

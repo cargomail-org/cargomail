@@ -19,6 +19,7 @@ var (
 	ErrBlobNotFound             = errors.New("blob not found")
 	ErrFileNotFound             = errors.New("file not found")
 	ErrDraftNotFound            = errors.New("draft not found")
+	ErrMessageNotFound          = errors.New("message not found")
 	ErrMissingUrisField         = errors.New("missing 'uris' field")
 	ErrMissingUriField          = errors.New("missing 'uri' field")
 	ErrMissingPayloadField      = errors.New("missing 'payload' field")

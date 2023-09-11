@@ -4,6 +4,7 @@ import (
 	"cargomail/cmd/provider/api/helper"
 	"cargomail/internal/repository"
 	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -26,6 +27,158 @@ func (api *MessagesApi) List() http.Handler {
 		}
 
 		helper.SetJsonResponse(w, http.StatusOK, messageHistory)
+	})
+}
+
+func (api *MessagesApi) Sync() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
+		var history *repository.History
+
+		err := helper.Decoder(r.Body).Decode(&history)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		messageHistory, err := api.messages.Sync(user, history)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		helper.SetJsonResponse(w, http.StatusOK, messageHistory)
+	})
+}
+
+func (api *MessagesApi) Update() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
+		var message *repository.Message
+
+		err := helper.Decoder(r.Body).Decode(&message)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if message.Uri == "" {
+			http.Error(w, repository.ErrMissingUriField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if message.Payload == nil {
+			http.Error(w, repository.ErrMissingPayloadField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if message.Payload.Headers == nil {
+			http.Error(w, repository.ErrMissingHeadersField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		message, err = api.messages.Update(user, message)
+		if err != nil {
+			switch {
+			case errors.Is(err, repository.ErrMessageNotFound):
+				helper.ReturnErr(w, err, http.StatusNotFound)
+			default:
+				helper.ReturnErr(w, err, http.StatusInternalServerError)
+			}
+			return
+		}
+
+		helper.SetJsonResponse(w, http.StatusOK, message)
+	})
+}
+
+func (api *MessagesApi) Trash() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
+		var uris repository.Uris
+
+		err := helper.Decoder(r.Body).Decode(&uris)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		// back to body
+		body, err := json.Marshal(uris)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		urisString := string(body)
+
+		err = api.messages.Trash(user, urisString)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
+	})
+}
+
+func (api *MessagesApi) Untrash() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
+		var uris repository.Uris
+
+		err := helper.Decoder(r.Body).Decode(&uris)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if uris.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		// back to body
+		body, err := json.Marshal(uris)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		urisString := string(body)
+
+		err = api.messages.Untrash(user, urisString)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
 	})
 }
 
