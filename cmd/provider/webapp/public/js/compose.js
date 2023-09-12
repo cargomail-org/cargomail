@@ -501,6 +501,17 @@ export const clearForm = () => {
   document.getElementById("ccPanel").hidden = true;
   document.getElementById("bccPanel").hidden = true;
 
+  const ccButton = document.querySelector("#ccButton");
+  const bccButton = document.querySelector("#bccButton");
+
+  ccButton.style.pointerEvents = "auto";
+  ccButton.style.cursor = "pointer";
+  ccButton.style.color = "#0d6efd";
+
+  bccButton.style.pointerEvents = "auto";
+  bccButton.style.cursor = "pointer";
+  bccButton.style.color = "#0d6efd";
+
   composeForm.reset();
   composeUriInput.dispatchEvent(new Event("input"));
   composeUriInput.dispatchEvent(new Event("change"));

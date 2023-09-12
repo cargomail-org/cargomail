@@ -539,6 +539,8 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		if !validSender(user, sender) {
 			return nil, ErrInvalidSender
 		}
+	} else {
+		return nil, ErrMissingSender
 	}
 
 	if val, ok := draft.Payload.Headers["To"]; ok {
@@ -551,6 +553,8 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		if len(recipients) > 0 && !validRecipients(recipients) {
 			return nil, ErrInvalidRecipients
 		}
+	} else {
+		return nil, ErrMissingRecipients
 	}
 
 	if val, ok := draft.Payload.Headers["Cc"]; ok {
