@@ -1,4 +1,4 @@
-import { setProfileUsername } from "/public/js/profile.js";
+import { getProfileUsername, setProfileUsername, getProfileFullName, setProfileFullName } from "/public/js/profile.js";
 
 export function composeContentPage(e) {
   document.getElementById("messagesLink").classList.remove("active");
@@ -357,6 +357,12 @@ export const loadProfile = async (form) => {
   document.getElementById("profileUsername").innerHTML = username;
 
   setProfileUsername(username);
+  setProfileFullName(response.firstName, response.lastName);
+
+  const composeFromInput = document.getElementById("composeFromInput");
+
+  composeFromInput.value = `${getProfileFullName()} <${getProfileUsername()}>`.trim();
+
 
   const profileForm = document.getElementById("profileForm");
 

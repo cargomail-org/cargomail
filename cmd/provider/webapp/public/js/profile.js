@@ -1,6 +1,7 @@
 const profileForm = document.getElementById("profileForm");
 
 let profileUsername = "";
+let profileFullName = "";
 
 profileForm.onsubmit = async (e) => {
   e.preventDefault();
@@ -47,4 +48,18 @@ export const getProfileUsername = () => {
 
 export const setProfileUsername = (username) => {
   profileUsername = username;
+};
+
+export const getProfileFullName = () => {
+  return profileFullName;
+};
+
+export const setProfileFullName = (firstName, lastName) => {
+  if (firstName && lastName) {
+    profileFullName = firstName + " " + lastName;
+  } else if (firstName) {
+    profileFullName = firstName;
+  } else if (lastName) {
+    profileFullName = lastName;
+  }
 };

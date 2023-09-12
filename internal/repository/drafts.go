@@ -1,10 +1,14 @@
 package repository
 
 import (
+	"cargomail/internal/config"
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
+	"net/mail"
 	"reflect"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -482,9 +486,86 @@ func (r DraftRepository) Delete(user *User, uris string) error {
 	return nil
 }
 
+func validSender(user *User, sender string) bool {
+	s := strings.SplitAfter(sender, "<")
+	for k, v := range s {
+		if k > 0 {
+			sender := strings.TrimRight(v, ">")
+
+			_, err := mail.ParseAddress(sender)
+			if err != nil {
+				return false
+			}
+
+			if !strings.EqualFold(sender, user.Username+"@"+config.Configuration.DomainName) {
+				return false
+			}
+		}
+	}
+
+	return len(s) == 2
+}
+
+func validRecipients(recipients string) bool {
+	s := strings.SplitAfter(recipients, "<")
+	for k, v := range s {
+		if k > 0 {
+			recipient := strings.Split(v, ">")
+
+			_, err := mail.ParseAddress(recipient[0])
+			if err != nil {
+				return false
+			}
+		}
+	}
+
+	return len(s) > 1
+}
+
 func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+
+	t := time.Now()
+	draft.Payload.Headers["Date"] = t.Format(time.UnixDate)
+
+	from := fmt.Sprintf("%v", draft.Payload.Headers["From"])
+	to := fmt.Sprintf("%v", draft.Payload.Headers["To"])
+	
+	var cc string
+	var bcc string
+
+	if val, ok := draft.Payload.Headers["Cc"]; ok {
+		cc = fmt.Sprintf("%v", val)
+	}
+
+	if val, ok := draft.Payload.Headers["Bcc"]; ok {
+		bcc = fmt.Sprintf("%v", val)
+	}
+
+	if len(from) == 0 {
+		return nil, ErrMissingSender
+	}
+
+	if !validSender(user, from) {
+		return nil, ErrInvalidSender
+	}
+
+	if len(to) == 0 {
+		return nil, ErrMissingRecipients
+	}
+
+	if !validRecipients(to) {
+		return nil, ErrInvalidRecipients
+	}
+
+	if len(cc) > 0 && !validRecipients(cc) {
+		return nil, ErrInvalidRecipients
+	}
+
+	if len(bcc) > 0 && !validRecipients(bcc) {
+		return nil, ErrInvalidRecipients
+	}
 
 	message := &Message{}
 

@@ -12,7 +12,7 @@ import "datatables.net-responsive-bs5";
 
 // import * as database from "/public/js/database.js";
 import { formatBytes } from "/public/js/menu.js";
-import { getProfileUsername } from "/public/js/profile.js";
+import { getProfileUsername, getProfileFullName } from "/public/js/profile.js";
 import {
   b64EncodeUtf8,
   getCaretPosition,
@@ -524,8 +524,7 @@ export const populateForm = (uri, parsed) => {
   composeUriInput.dispatchEvent(new Event("input"));
   composeUriInput.dispatchEvent(new Event("change"));
 
-  composeDateInput.value = new Date();
-  composeFromInput.value = getProfileUsername();
+  // composeDateInput.value = new Date(); should be set at backend
 
   const selectizeTo = $("#toInput")[0].selectize;
   const selectizeCc = $("#ccInput")[0].selectize;
