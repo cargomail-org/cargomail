@@ -335,7 +335,22 @@ const bouncer = (e) => {
       bouncerHasQueue = false;
 
       [...subjectHeadings].forEach((heading) => {
-        heading.textContent = subjectInput.value;
+        const subject = subjectInput.value;
+        const plainContent = messageText.value;
+        let content;
+
+        if (subject) {
+          content = subject;
+          if (plainContent) {
+            content = subject + " - " + plainContent;
+          }
+        } else {
+          if (plainContent) {
+            content = plainContent;
+          }
+        }
+
+        heading.textContent = content;
       });
 
       // Save form
@@ -492,7 +507,7 @@ export const clearForm = () => {
   messageHtml.innerHTML = "";
 
   [...subjectHeadings].forEach((heading) => {
-    heading.textContent = subjectInput.value;
+    heading.textContent = "";
   });
 
   attachments.length = 0;
@@ -559,13 +574,28 @@ export const populateForm = (uri, parsed) => {
   document.getElementById("ccPanel").hidden = !parsed.cc?.length > 0;
   document.getElementById("bccPanel").hidden = !parsed.bcc?.length > 0;
 
-  subjectInput.value = parsed.subject;
-  [...subjectHeadings].forEach((heading) => {
-    heading.textContent = subjectInput.value;
-  });
-
   messageText.value = parsed.plainContent;
   messageHtml.innerHTML = parsed.htmlContent;
+
+  subjectInput.value = parsed.subject;
+  [...subjectHeadings].forEach((heading) => {
+    const subject = subjectInput.value;
+    const plainContent = messageText.value;
+    let content;
+
+    if (subject) {
+      content = subject;
+      if (plainContent) {
+        content = subject + " - " + plainContent;
+      }
+    } else {
+      if (plainContent) {
+        content = plainContent;
+      }
+    }
+
+    heading.textContent = content;
+  });
 
   composeTable.clear();
 
@@ -610,9 +640,9 @@ const formPopulated = async (cmd) => {
     bccButton.style.color = "#0d6efd";
   }
 
-  if ((cmd == "new" || cmd == "update")) {
+  if (cmd == "new" || cmd == "update") {
     await upsertDraftsPage(composeForm, composeUriInput.value, parsed);
-  } else if ((cmd == "send")) {
+  } else if (cmd == "send") {
     await draftsSendDraft(composeForm, composeUriInput.value, parsed);
   } else {
     throw new Error(`Unknown command ${cmd} (should be 'update or 'send'`);
