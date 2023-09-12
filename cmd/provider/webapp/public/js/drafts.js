@@ -15,9 +15,7 @@ import {
   clearForm as composeClearForm,
   populateForm as composePopulateForm,
 } from "/public/js/compose.js";
-import {
-  sentTable,
-} from "/public/js/sent.js";
+import { sentTable } from "/public/js/sent.js";
 import {
   parsePayload,
   composePayload,
@@ -73,6 +71,7 @@ const draftsTable = new DataTable("#draftsTable", {
     { data: null, visible: true, orderable: false, width: "15px" },
     {
       data: "payload",
+      className: "payload",
       orderable: false,
       render: (data, type, full, meta) => {
         const parsed = parsePayload(full.uri, full.payload);
@@ -241,25 +240,6 @@ const draftsTable = new DataTable("#draftsTable", {
       },
     },
     {
-      text: "Edit",
-      className: "drafts-edit",
-      enabled: false,
-      action: function (e) {
-        const data = draftsTable.rows(".selected").data()[0];
-
-        const parsed = parsePayload(data.uri, data.payload);
-
-        try {
-          formIsPopulated = true;
-          composePopulateForm(data.uri, parsed);
-        } finally {
-          formIsPopulated = false;
-        }
-
-        composeContentPage(e);
-      },
-    },
-    {
       text: "Delete",
       className: "drafts-delete",
       enabled: false,
@@ -281,12 +261,23 @@ const draftsTable = new DataTable("#draftsTable", {
   ],
 });
 
+draftsTable.on("click", "td.payload", (e) => {
+  const data = draftsTable.row(e.currentTarget).data();
+  const parsed = parsePayload(data.uri, data.payload);
+
+  try {
+    formIsPopulated = true;
+    composePopulateForm(data.uri, parsed);
+  } finally {
+    formIsPopulated = false;
+  }
+
+  composeContentPage(e);
+});
+
 draftsTable.on("select.dt deselect.dt", () => {
   const selectedRows = draftsTable.rows({ selected: true }).indexes().length;
   const selected = selectedRows > 0;
-  draftsTable
-    .buttons([".drafts-edit"])
-    .enable(selectedRows == 1 ? true : false);
   draftsTable.buttons([".drafts-delete"]).enable(selected ? true : false);
 });
 
@@ -324,7 +315,6 @@ export const deleteDraftsMessages = (e) => {
     }
 
     draftsTable.rows(".selected").remove().draw();
-    draftsTable.buttons([".drafts-edit"]).enable(false);
     draftsTable.buttons([".drafts-delete"]).enable(false);
   })();
 };
@@ -349,7 +339,6 @@ export const deleteDraft = async (composeForm, uri) => {
   }
 
   draftsTable.rows(`#${uri}`).remove().draw();
-  draftsTable.buttons([".drafts-edit"]).enable(draftsTable.rows().count() > 0);
   draftsTable
     .buttons([".drafts-delete"])
     .enable(draftsTable.rows().count() > 0);
@@ -489,9 +478,6 @@ export const sendDraft = async (composeForm, uri, parsed) => {
         }
 
         draftsTable.rows(`#${uri}`).remove().draw();
-        draftsTable
-          .buttons([".drafts-edit"])
-          .enable(draftsTable.rows().count() > 0);
         draftsTable
           .buttons([".drafts-delete"])
           .enable(draftsTable.rows().count() > 0);
