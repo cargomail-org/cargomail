@@ -529,42 +529,44 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	t := time.Now()
 	draft.Payload.Headers["Date"] = t.Format(time.UnixDate)
 
-	from := fmt.Sprintf("%v", draft.Payload.Headers["From"])
-	to := fmt.Sprintf("%v", draft.Payload.Headers["To"])
-	
-	var cc string
-	var bcc string
+	if val, ok := draft.Payload.Headers["From"]; ok {
+		sender := fmt.Sprintf("%v", val)
+
+		if len(sender) == 0 {
+			return nil, ErrMissingSender
+		}
+
+		if !validSender(user, sender) {
+			return nil, ErrInvalidSender
+		}
+	}
+
+	if val, ok := draft.Payload.Headers["To"]; ok {
+		recipients := fmt.Sprintf("%v", val)
+
+		if len(recipients) == 0 {
+			return nil, ErrMissingRecipients
+		}
+
+		if len(recipients) > 0 && !validRecipients(recipients) {
+			return nil, ErrInvalidRecipients
+		}
+	}
 
 	if val, ok := draft.Payload.Headers["Cc"]; ok {
-		cc = fmt.Sprintf("%v", val)
+		recipients := fmt.Sprintf("%v", val)
+
+		if len(recipients) > 0 && !validRecipients(recipients) {
+			return nil, ErrInvalidRecipients
+		}
 	}
 
 	if val, ok := draft.Payload.Headers["Bcc"]; ok {
-		bcc = fmt.Sprintf("%v", val)
-	}
+		recipients := fmt.Sprintf("%v", val)
 
-	if len(from) == 0 {
-		return nil, ErrMissingSender
-	}
-
-	if !validSender(user, from) {
-		return nil, ErrInvalidSender
-	}
-
-	if len(to) == 0 {
-		return nil, ErrMissingRecipients
-	}
-
-	if !validRecipients(to) {
-		return nil, ErrInvalidRecipients
-	}
-
-	if len(cc) > 0 && !validRecipients(cc) {
-		return nil, ErrInvalidRecipients
-	}
-
-	if len(bcc) > 0 && !validRecipients(bcc) {
-		return nil, ErrInvalidRecipients
+		if len(recipients) > 0 && !validRecipients(recipients) {
+			return nil, ErrInvalidRecipients
+		}
 	}
 
 	message := &Message{}
