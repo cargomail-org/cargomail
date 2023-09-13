@@ -623,10 +623,12 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		RETURNING * ;`
 
 	// from := user.FullnameAndAddress()
-	messageUid := uuid.NewString() // ???
+	messageUid := uuid.NewString() + "@" + config.Configuration.DomainName
 	threadUid := draft.ThreadUid
 	unread := false
 	folder := 1 // sent
+
+	draft.Payload.Headers["Message-ID"] = messageUid
 
 	args = []interface{}{user.Id,
 		prefixedDeviceId,
