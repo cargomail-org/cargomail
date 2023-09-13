@@ -535,8 +535,6 @@ export const populateForm = (uri, parsed) => {
   composeUriInput.dispatchEvent(new Event("input"));
   composeUriInput.dispatchEvent(new Event("change"));
 
-  // composeDateInput.value = new Date(); should be set at backend
-
   const selectizeTo = $("#toInput")[0].selectize;
   const selectizeCc = $("#ccInput")[0].selectize;
   const selectizeBcc = $("#bccInput")[0].selectize;
@@ -616,7 +614,7 @@ export const populateForm = (uri, parsed) => {
 
 const formPopulated = async (cmd) => {
   const parsed = {
-    date: composeDateInput.value,
+    // date: composeDateInput.value, // will be set on the backend to the "send" action
     from: composeFromInput.value,
     to: recipientsTo,
     cc: recipientsCc,
