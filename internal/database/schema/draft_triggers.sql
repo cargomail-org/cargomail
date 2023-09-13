@@ -15,10 +15,7 @@ END;
 CREATE TRIGGER IF NOT EXISTS "DraftBeforeUpdate"
     BEFORE UPDATE OF
     "uri",
-    "userId",
-    "messageUid",
-    "parentUid",
-    "threadUid"
+    "userId"
     -- "unread", 
     -- "starred", 
     -- "payload",

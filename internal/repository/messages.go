@@ -23,9 +23,6 @@ type MessagePart struct {
 type Message struct {
 	Uri        string       `json:"uri"`
 	UserId     int64        `json:"-"`
-	MessageUid string       `json:"messageUid"`
-	ParentUid  *string      `json:"parentUid"`
-	ThreadUid  string       `json:"threadUid"`
 	Unread     bool         `json:"unread"`
 	Starred    bool         `json:"starred"`
 	Folder     int16        `json:"folder"`

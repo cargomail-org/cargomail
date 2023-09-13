@@ -55,9 +55,6 @@ CREATE TABLE IF NOT EXISTS "Draft"
 (
     "uri"           VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
-    "messageUid"    VARCHAR(32) NOT NULL,
-    "parentUid"     VARCHAR(32),
-    "threadUid"     VARCHAR(32) NOT NULL,
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
     "payload"       TEXT,                 -- json 'MessagePart' object
@@ -74,9 +71,6 @@ CREATE TABLE IF NOT EXISTS "Message"
 (
     "uri"           VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
-    "messageUid"    VARCHAR(32) NOT NULL,
-    "parentUid"     VARCHAR(32),
-    "threadUid"     VARCHAR(32) NOT NULL,
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
     "folder"        INTEGER(2) NOT NULL,  -- (0 reserverd) 1-sent, 2-inbox, 3-spam

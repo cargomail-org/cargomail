@@ -366,9 +366,6 @@ export const upsertDraftsPage = async (composeForm, uri, parsed) => {
         const data = draftsTable.row(`#${uri}`).data();
         const draft = { uri, payload: composePayload(parsed) };
 
-        if (data.messageUid) draft.messageUid = data.messageUid;
-        if (data.parentUid) draft.parentUid = data.parentUid;
-        if (data.threadUid) draft.threadUid = data.threadUid;
         if (data.labelIds) draft.labelIds = data.labelIds;
         if (data.unread) draft.unread = data.unread;
         if (data.starred) draft.starred = data.starred;
@@ -450,9 +447,6 @@ export const sendDraft = async (composeForm, uri, parsed) => {
         const data = draftsTable.row(`#${uri}`).data();
         const draft = { uri, payload: composePayload(parsed) };
 
-        if (data.messageUid) draft.messageUid = data.messageUid;
-        if (data.parentUid) draft.parentUid = data.parentUid;
-        if (data.threadUid) draft.threadUid = data.threadUid;
         if (data.labelIds) draft.labelIds = data.labelIds;
         if (data.unread) draft.unread = data.unread;
         if (data.starred) draft.starred = data.starred;

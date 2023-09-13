@@ -21,9 +21,6 @@ type DraftRepository struct {
 type Draft struct {
 	Uri        string       `json:"uri"`
 	UserId     int64        `json:"-"`
-	MessageUid string       `json:"messageUid"`
-	ParentUid  *string      `json:"parentUid"`
-	ThreadUid  string       `json:"threadUid"`
 	Unread     bool         `json:"unread"`
 	Starred    bool         `json:"starred"`
 	Payload    *MessagePart `json:"payload,omitempty"`
@@ -86,29 +83,20 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 		INSERT
 			INTO "Draft" ("userId",
 				 "deviceId",
-				 "messageUid",
-				 "threadUid",
 				 "unread",
 				 "payload")
 			VALUES ($1,
 					$2,
 					$3,
-					$4,
-					$5,
-					$6)
+					$4)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	// from := user.FullnameAndAddress()
-	messageUid := uuid.NewString()
-	threadUid := uuid.NewString()
 	unread := false
 
 	args := []interface{}{user.Id,
 		prefixedDeviceId,
-		messageUid,
-		threadUid,
 		unread,
 		draft.Payload}
 
@@ -608,8 +596,6 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	INSERT
 		INTO "Message" ("userId",
 			 "deviceId",
-			 "messageUid",
-			 "threadUid",
 			 "unread",
 			 "folder",
 			 "payload")
@@ -617,23 +603,17 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 				$2,
 				$3,
 				$4,
-				$5,
-				$6,
-				$7)
+				$5)
 		RETURNING * ;`
 
-	// from := user.FullnameAndAddress()
-	messageUid := uuid.NewString() + "@" + config.Configuration.DomainName
-	threadUid := draft.ThreadUid
+	messageId := uuid.NewString() + "@" + config.Configuration.DomainName
 	unread := false
 	folder := 1 // sent
 
-	draft.Payload.Headers["Message-ID"] = messageUid
+	draft.Payload.Headers["Message-ID"] = messageId
 
 	args = []interface{}{user.Id,
 		prefixedDeviceId,
-		messageUid,
-		threadUid,
 		unread,
 		folder,
 		draft.Payload}

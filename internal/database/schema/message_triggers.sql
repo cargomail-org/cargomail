@@ -16,9 +16,6 @@ CREATE TRIGGER IF NOT EXISTS "MessageBeforeUpdate"
     BEFORE UPDATE OF
     "uri",
     "userId",
-    "messageUid",
-    "parentUid",
-    "threadUid",
     -- "unread", 
     -- "starred", 
     "folder",
