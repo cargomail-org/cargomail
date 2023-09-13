@@ -23,6 +23,7 @@ var (
 	ErrInvalidSender            = errors.New("invalid sender")
 	ErrMissingRecipients        = errors.New("missing recipient(s)")
 	ErrInvalidRecipients        = errors.New("invalid recipient(s)")
+	ErrRecipientNotFound        = errors.New("recipient not found")
 	ErrMessageNotFound          = errors.New("message not found")
 	ErrMissingUrisField         = errors.New("missing 'uris' field")
 	ErrMissingUriField          = errors.New("missing 'uri' field")

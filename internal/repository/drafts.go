@@ -474,8 +474,8 @@ func (r DraftRepository) Delete(user *User, uris string) error {
 	return nil
 }
 
-func validSender(user *User, sender string) bool {
-	s := strings.SplitAfter(sender, "<")
+func validSender(user *User, str string) bool {
+	s := strings.SplitAfter(str, "<")
 	for k, v := range s {
 		if k > 0 {
 			sender := strings.TrimRight(v, ">")
@@ -494,20 +494,24 @@ func validSender(user *User, sender string) bool {
 	return len(s) == 2
 }
 
-func validRecipients(recipients string) bool {
-	s := strings.SplitAfter(recipients, "<")
+func validRecipients(str string) (recipients []string, ok bool) {
+	recipients = []string{}
+
+	s := strings.SplitAfter(str, "<")
 	for k, v := range s {
 		if k > 0 {
 			recipient := strings.Split(v, ">")
 
-			_, err := mail.ParseAddress(recipient[0])
+			address, err := mail.ParseAddress(recipient[0])
 			if err != nil {
-				return false
+				return []string{}, false
 			}
+
+			recipients = append(recipients, address.Address)
 		}
 	}
 
-	return len(s) > 1
+	return recipients, len(s) > 1
 }
 
 func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
@@ -531,33 +535,47 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		return nil, ErrMissingSender
 	}
 
-	if val, ok := draft.Payload.Headers["To"]; ok {
-		recipients := fmt.Sprintf("%v", val)
+	var recipients []string
 
-		if len(recipients) == 0 {
+	if val, ok := draft.Payload.Headers["To"]; ok {
+		s := fmt.Sprintf("%v", val)
+
+		if len(s) == 0 {
 			return nil, ErrMissingRecipients
 		}
 
-		if len(recipients) > 0 && !validRecipients(recipients) {
-			return nil, ErrInvalidRecipients
+		if val, ok := validRecipients(s); ok {
+			if ok {
+				recipients = append(recipients, val...)
+			} else {
+				return nil, ErrInvalidRecipients
+			}
 		}
 	} else {
 		return nil, ErrMissingRecipients
 	}
 
 	if val, ok := draft.Payload.Headers["Cc"]; ok {
-		recipients := fmt.Sprintf("%v", val)
+		s := fmt.Sprintf("%v", val)
 
-		if len(recipients) > 0 && !validRecipients(recipients) {
-			return nil, ErrInvalidRecipients
+		if val, ok := validRecipients(s); ok {
+			if ok {
+				recipients = append(recipients, val...)
+			} else {
+				return nil, ErrInvalidRecipients
+			}
 		}
 	}
 
 	if val, ok := draft.Payload.Headers["Bcc"]; ok {
-		recipients := fmt.Sprintf("%v", val)
+		s := fmt.Sprintf("%v", val)
 
-		if len(recipients) > 0 && !validRecipients(recipients) {
-			return nil, ErrInvalidRecipients
+		if val, ok := validRecipients(s); ok {
+			if ok {
+				recipients = append(recipients, val...)
+			} else {
+				return nil, ErrInvalidRecipients
+			}
 		}
 	}
 
@@ -621,6 +639,50 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	err = tx.QueryRowContext(ctx, query, args...).Scan(message.Scan()...)
 	if err != nil {
 		return nil, err
+	}
+
+	// simple send
+	for _, recipient := range recipients {
+		query = `
+		INSERT
+			INTO "Message" ("userId",
+				 "deviceId",
+				 "unread",
+				 "folder",
+				 "payload")
+			VALUES ((SELECT id FROM User WHERE username = $1),
+					$2,
+					$3,
+					$4,
+					$5)
+			RETURNING * ;`
+
+		var username string
+		emailAddress := strings.Split(recipient, "@")
+		if strings.EqualFold(emailAddress[1], config.Configuration.DomainName) {
+			username = emailAddress[0]
+		}
+		messageId := uuid.NewString() + "@" + config.Configuration.DomainName
+		unread := false
+		folder := 2 // inbox
+
+		draft.Payload.Headers["Message-ID"] = messageId
+
+		args = []interface{}{username,
+			prefixedDeviceId,
+			unread,
+			folder,
+			draft.Payload}
+
+		err = tx.QueryRowContext(ctx, query, args...).Scan(message.Scan()...)
+		if err != nil {
+			switch {
+			case err.Error() == `NOT NULL constraint failed: Message.userId`:
+				return nil, ErrRecipientNotFound
+			default:
+				return nil, err
+			}
+		}
 	}
 
 	query = `
