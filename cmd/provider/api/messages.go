@@ -20,7 +20,17 @@ func (api *MessagesApi) List() http.Handler {
 			return
 		}
 
-		messageHistory, err := api.messages.List(user)
+		var folder repository.Folder
+
+		err := helper.Decoder(r.Body).Decode(&folder)
+		if err != nil {
+			if err.Error() != "EOF" {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+		}
+
+		messageHistory, err := api.messages.List(user, folder.FolderId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

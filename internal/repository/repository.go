@@ -53,6 +53,10 @@ type Uris struct {
 	Uris []string `json:"uris"`
 }
 
+type Folder struct {
+	FolderId int `json:"folderId"`
+}
+
 type Repository struct {
 	Blobs    BlobRepository
 	Files    FileRepository

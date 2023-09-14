@@ -46,12 +46,13 @@ export const sentTable = new DataTable("#sentTable", {
       const response = await api(
         sentFormAlert.id,
         200,
-        `${window.apiHost}/api/v1/messages`,
+        `${window.apiHost}/api/v1/messages/list`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ folderId: 1 }),
         }
       );
 

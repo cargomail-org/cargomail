@@ -98,7 +98,7 @@ func (c *MessageDeleted) Scan() []interface{} {
 	return columns
 }
 
-func (r *MessageRepository) List(user *User) (*MessageList, error) {
+func (r *MessageRepository) List(user *User, folderId int) (*MessageList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -112,11 +112,11 @@ func (r *MessageRepository) List(user *User) (*MessageList, error) {
 		SELECT *
 			FROM "Message"
 			WHERE "userId" = $1 AND
-			"folder" > 0 AND
+			CASE WHEN $2 == 0 THEN "folder" > $2 ELSE "folder" == $2 END AND
 			"lastStmt" < 2
 			ORDER BY CASE WHEN "modifiedAt" IS NOT NULL THEN "modifiedAt" ELSE "createdAt" END DESC;`
 
-	args := []interface{}{user.Id}
+	args := []interface{}{user.Id, folderId}
 
 	rows, err := tx.QueryContext(ctx, query, args...)
 	if err != nil {

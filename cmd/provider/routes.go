@@ -152,7 +152,7 @@ func (svc *service) routes(r *Router) {
 	r.Route("POST", "/api/v1/drafts/send", svc.api.Authenticate(svc.api.Drafts.Send()))
 
 	// Messages API
-	r.Route("GET", "/api/v1/messages", svc.api.Authenticate(svc.api.Messages.List()))
+	r.Route("POST", "/api/v1/messages/list", svc.api.Authenticate(svc.api.Messages.List()))
 	r.Route("POST", "/api/v1/messages/sync", svc.api.Authenticate(svc.api.Messages.Sync()))
 	r.Route("PUT", "/api/v1/messages", svc.api.Authenticate(svc.api.Messages.Update()))
 	r.Route("POST", "/api/v1/messages/trash", svc.api.Authenticate(svc.api.Messages.Trash()))
