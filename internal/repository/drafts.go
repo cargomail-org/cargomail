@@ -665,7 +665,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 			username = emailAddress[0]
 		}
 		messageId := uuid.NewString() + "@" + config.Configuration.DomainName
-		unread := false
+		unread := true
 		folder := 2 // inbox
 
 		draft.Payload.Headers["Message-ID"] = messageId

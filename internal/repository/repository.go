@@ -39,6 +39,7 @@ var (
 	ErrMissingUriField          = errors.New("missing 'uri' field")
 	ErrMissingPayloadField      = errors.New("missing 'payload' field")
 	ErrMissingHeadersField      = errors.New("missing 'headers' field")
+	ErrMissingStateField        = errors.New("missing state field(s)")
 )
 
 type History struct {
@@ -55,6 +56,12 @@ type Uris struct {
 
 type Folder struct {
 	FolderId int `json:"folderId"`
+}
+
+type State struct {
+	Uris    []string `json:"uris"`
+	Unread  *bool    `json:"unread"`
+	Starred *bool    `json:"starred"`
 }
 
 type Repository struct {

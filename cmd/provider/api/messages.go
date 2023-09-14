@@ -4,7 +4,6 @@ import (
 	"cargomail/cmd/provider/api/helper"
 	"cargomail/internal/repository"
 	"encoding/json"
-	"errors"
 	"net/http"
 )
 
@@ -74,41 +73,33 @@ func (api *MessagesApi) Update() http.Handler {
 			return
 		}
 
-		var message *repository.Message
+		var state repository.State
 
-		err := helper.Decoder(r.Body).Decode(&message)
+		err := helper.Decoder(r.Body).Decode(&state)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if message.Uri == "" {
-			http.Error(w, repository.ErrMissingUriField.Error(), http.StatusBadRequest)
+		if state.Uris == nil {
+			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if message.Payload == nil {
-			http.Error(w, repository.ErrMissingPayloadField.Error(), http.StatusBadRequest)
-			return
-		}
-
-		if message.Payload.Headers == nil {
-			http.Error(w, repository.ErrMissingHeadersField.Error(), http.StatusBadRequest)
-			return
-		}
-
-		message, err = api.messages.Update(user, message)
+		// back to body
+		_, err = json.Marshal(state.Uris)
 		if err != nil {
-			switch {
-			case errors.Is(err, repository.ErrMessageNotFound):
-				helper.ReturnErr(w, err, http.StatusNotFound)
-			default:
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-			}
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, message)
+		err = api.messages.Update(user, &state)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
 	})
 }
 

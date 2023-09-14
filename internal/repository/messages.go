@@ -340,34 +340,62 @@ func (r *MessageRepository) Sync(user *User, history *History) (*MessageSync, er
 	return messageSync, nil
 }
 
-func (r *MessageRepository) Update(user *User, message *Message) (*Message, error) {
+func (r *MessageRepository) Update(user *User, state *State) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	query := `
-		UPDATE "Message"
-			SET "payload" = $1,
-				"deviceId" = $2
-			WHERE "userId" = $3 AND
-			      "uri" = $4 AND
-				  "lastStmt" <> 2
-			RETURNING * ;`
+	if len(state.Uris) > 0 {
+		var query string
+		var args []interface{}
 
-	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
+		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{message.Payload, prefixedDeviceId, user.Id, message.Uri}
+		body, err := json.Marshal(&state)
+		if err != nil {
+			return err
+		}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(message.Scan()...)
-	if err != nil {
-		switch {
-		case errors.Is(err, sql.ErrNoRows):
-			return nil, ErrMessageNotFound
-		default:
-			return nil, err
+		urisString := string(body)
+
+		if state.Unread != nil && state.Starred != nil {
+			query = `
+			UPDATE Message
+				SET "unread" = $1,
+					"starred" = $2,
+					"deviceId" = $3
+				WHERE "userId" = $4 AND
+				"uri" IN (SELECT value FROM json_each($5, '$.uris')) AND
+				"lastStmt" <> 2;`
+			args = []interface{}{state.Unread, state.Starred, prefixedDeviceId, user.Id, urisString}
+		} else if state.Unread == nil && state.Starred != nil {
+			query = `
+			UPDATE Message
+				SET "starred" = $1,
+					"deviceId" = $2
+				WHERE "userId" = $3 AND
+				"uri" IN (SELECT value FROM json_each($4, '$.uris')) AND
+				"lastStmt" <> 2;`
+			args = []interface{}{state.Starred, prefixedDeviceId, user.Id, urisString}
+		} else if state.Unread != nil && state.Starred == nil {
+			query = `
+			UPDATE Message
+				SET "unread" = $1,
+					"deviceId" = $2
+				WHERE "userId" = $3 AND
+				"uri" IN (SELECT value FROM json_each($4, '$.uris')) AND
+				"lastStmt" <> 2;`
+			args = []interface{}{state.Unread, prefixedDeviceId, user.Id, urisString}
+		} else {
+			return ErrMissingStateField
+		}
+
+		_, err = r.db.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
 		}
 	}
 
-	return message, nil
+	return nil
 }
 
 func (r *MessageRepository) Trash(user *User, uris string) error {
