@@ -517,6 +517,9 @@ export const clearForm = () => {
   composeUriInput.dispatchEvent(new Event("change"));
   messageHtml.innerHTML = "";
 
+  messageHtmlLastValidContent = "";
+  messageHtmlLastValidCaretPosition = undefined;
+
   [...subjectHeadings].forEach((heading) => {
     heading.textContent = "";
   });
