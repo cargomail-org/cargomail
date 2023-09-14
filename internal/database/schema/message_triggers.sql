@@ -32,7 +32,8 @@ END;
 
 CREATE TRIGGER IF NOT EXISTS "MessageAfterUpdate"
     AFTER UPDATE OF
-        "payload"
+    "unread", 
+    "starred"
     ON "Message"
     FOR EACH ROW
 BEGIN
