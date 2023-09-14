@@ -17,6 +17,11 @@ const api = async (parentId, status, url, options) => {
     if (alert) alert.remove();
   }
 
+  if (parent) {
+    const alert = parent.querySelector('div[name="warning"]');
+    if (alert) alert.remove();
+  }
+
   let response;
 
   let spinner = document.querySelector(".menu-spinner");
@@ -31,11 +36,15 @@ const api = async (parentId, status, url, options) => {
     }
   }, "200");
 
+  let warning;
+
   // cross-domain !!!
   options["credentials"] = "include";
 
   try {
     const result = await fetch(url, options);
+
+    warning = result.headers.get("X-Warning");
 
     if (options.method != "HEAD") {
       response = await parseJSON(result);
@@ -64,7 +73,7 @@ const api = async (parentId, status, url, options) => {
     if (parent) {
       parent.insertAdjacentHTML(
         "beforeend",
-        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="alert">
+        `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="alert">
             ${errMessage}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
          </div>`
@@ -86,8 +95,20 @@ const api = async (parentId, status, url, options) => {
     if (parent) {
       parent.insertAdjacentHTML(
         "beforeend",
-        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="alert">
+        `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="alert">
             ${errMessage}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>`
+      );
+    }
+  }
+
+  if (warning) {
+    if (parent) {
+      parent.insertAdjacentHTML(
+        "beforeend",
+        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="warning">
+            ${warning}
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
          </div>`
       );

@@ -3,8 +3,18 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 )
+
+type RecipientsNotFoundError struct {
+	Recipients []string
+	Err        error
+}
+
+func (e *RecipientsNotFoundError) Error() string {
+	return fmt.Sprintf("recipients %v: err %v", e.Recipients, e.Err)
+}
 
 var (
 	ErrUsernameAlreadyTaken     = errors.New("username already taken")
@@ -23,7 +33,7 @@ var (
 	ErrInvalidSender            = errors.New("invalid sender")
 	ErrMissingRecipients        = errors.New("missing recipient(s)")
 	ErrInvalidRecipients        = errors.New("invalid recipient(s)")
-	ErrRecipientNotFound        = errors.New("recipient not found")
+	ErrRecipientNotFound        = errors.New("recipient(s) not found")
 	ErrMessageNotFound          = errors.New("message not found")
 	ErrMissingUrisField         = errors.New("missing 'uris' field")
 	ErrMissingUriField          = errors.New("missing 'uri' field")

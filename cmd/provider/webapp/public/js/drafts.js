@@ -395,7 +395,7 @@ export const upsertDraftsPage = async (composeForm, uri, parsed) => {
 
         composeForm.insertAdjacentHTML(
           "beforeend",
-          `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="upsertDraftsPageAlert">
+          `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="upsertDraftsPageAlert">
                 ${error}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>`
@@ -490,7 +490,7 @@ export const sendDraft = async (composeForm, uri, parsed) => {
 
         composeForm.insertAdjacentHTML(
           "beforeend",
-          `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="sendDraftsPageAlert">
+          `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="sendDraftsPageAlert">
                 ${error}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>`
@@ -501,7 +501,7 @@ export const sendDraft = async (composeForm, uri, parsed) => {
 
       composeForm.insertAdjacentHTML(
         "beforeend",
-        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="sendDraftsPageAlert">
+        `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="sendDraftsPageAlert">
               ${error}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>`

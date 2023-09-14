@@ -20,7 +20,7 @@ if (registerForm) {
     if (formData.password != confirmation) {
       form.insertAdjacentHTML(
         "beforeend",
-        `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="alert">
+        `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="alert">
           Passwords do NOT match
            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>`

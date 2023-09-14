@@ -842,7 +842,7 @@ export const messageHtmlChanged = (e) => {
 
     composeForm.insertAdjacentHTML(
       "beforeend",
-      `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="messageHtmlChangedAlert">
+      `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="messageHtmlChangedAlert">
                 ${error}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>`
@@ -862,7 +862,7 @@ export const messageHtmlChanged = (e) => {
 
     composeForm.insertAdjacentHTML(
       "beforeend",
-      `<div class="alert alert-warning alert-dismissible fade show" role="alert" name="messageHtmlChangedAlert">
+      `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="messageHtmlChangedAlert">
                 ${error}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>`

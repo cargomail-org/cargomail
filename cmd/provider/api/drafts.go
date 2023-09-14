@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strings"
 )
 
 type DraftsApi struct {
@@ -281,7 +282,13 @@ func (api *DraftsApi) Send() http.Handler {
 
 		message, err := api.drafts.Send(user, draft)
 		if err != nil {
+			recipientsNotFoundError := &repository.RecipientsNotFoundError{}
+
 			switch {
+			case errors.As(err, &recipientsNotFoundError):
+				warning := recipientsNotFoundError.Err.Error() + ": " + strings.Join(recipientsNotFoundError.Recipients, ", ")
+				w.Header().Set("X-Warning", string(warning))
+				goto ok
 			case errors.Is(err, repository.ErrDraftNotFound):
 				helper.ReturnErr(w, err, http.StatusNotFound)
 			default:
@@ -289,7 +296,7 @@ func (api *DraftsApi) Send() http.Handler {
 			}
 			return
 		}
-
+	ok:
 		helper.SetJsonResponse(w, http.StatusOK, message)
 	})
 }

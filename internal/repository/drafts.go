@@ -641,6 +641,8 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		return nil, err
 	}
 
+	var recipientsNotFound []string
+
 	// simple send
 	for _, recipient := range recipients {
 		query = `
@@ -678,7 +680,9 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		if err != nil {
 			switch {
 			case err.Error() == `NOT NULL constraint failed: Message.userId`:
-				return nil, ErrRecipientNotFound
+				// return nil, ErrRecipientNotFound
+				// ignore error
+				recipientsNotFound = append(recipientsNotFound, recipient)
 			default:
 				return nil, err
 			}
@@ -713,6 +717,13 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 
 	if err = tx.Commit(); err != nil {
 		return message, err
+	}
+
+	if len(recipientsNotFound) > 0 {
+		return message, &RecipientsNotFoundError{
+			Recipients: recipientsNotFound,
+			Err:        ErrRecipientNotFound,
+		}
 	}
 
 	return message, nil
