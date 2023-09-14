@@ -177,6 +177,7 @@ export const sentTable = new DataTable("#sentTable", {
 
           historyId = response.lastHistoryId;
 
+          // should refresh both the send and the inbox table
           for (const message of response.inserted) {
             if (message.folder == 1) {
               // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
