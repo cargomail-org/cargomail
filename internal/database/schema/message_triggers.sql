@@ -40,7 +40,7 @@ BEGIN
     UPDATE "MessageTimelineSeq" SET "lastTimelineId" = ("lastTimelineId" + 1) WHERE "userId" = old."userId";
     UPDATE "MessageHistorySeq" SET "lastHistoryId" = ("lastHistoryId" + 1) WHERE "userId" = old."userId";
     UPDATE "Message"
-    SET "timelineId" = (SELECT "lastTimelineId" FROM "MessageTimelineSeq" WHERE "userId" = old."userId"),
+    SET "timelineId" = (SELECT "lastTimelineId" FROM "MessageTimelineSeq" WHERE "userId" = old."userId"), -- ???
         "historyId"  = (SELECT "lastHistoryId" FROM "MessageHistorySeq" WHERE "userId" = old."userId"),
         "lastStmt"   = 1,
         "modifiedAt" = CURRENT_TIMESTAMP

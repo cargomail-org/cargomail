@@ -178,29 +178,50 @@ export const sentTable = new DataTable("#sentTable", {
           historyId = response.lastHistoryId;
 
           for (const message of response.inserted) {
-            // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-            const notFound =
-              sentTable.column(0).data().toArray().indexOf(message.uri) === -1; // !!! must be
-            if (notFound) {
-              sentTable.row.add(message);
+            if (message.folder == 1) {
+              // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+              const notFound =
+                sentTable.column(0).data().toArray().indexOf(message.uri) ===
+                -1; // !!! must be
+              if (notFound) {
+                sentTable.row.add(message);
+              }
             }
           }
 
           for (const message of response.updated) {
-            // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-            const notFound =
-              sentTable.column(0).data().toArray().indexOf(message.uri) === -1; // !!! must be
-            if (notFound) {
-              sentTable.row.add(message);
-            } else {
-              sentTable.row(`#${message.uri}`).data(message);
+            if (message.folder == 1) {
+              // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+              const notFound =
+                sentTable.column(0).data().toArray().indexOf(message.uri) ===
+                -1; // !!! must be
+              if (notFound) {
+                sentTable.row.add(message);
+              } else {
+                sentTable.row(`#${message.uri}`).data(message);
+
+                if (message.uri == composeUriInput.value) {
+                  try {
+                    const parsed = parsePayload(message.uri, message.payload);
+
+                    formIsPopulated = true;
+                    composePopulateForm(message.uri, parsed);
+                  } finally {
+                    formIsPopulated = false;
+                  }
+                }
+              }
+            }
+          }
+
+          for (const message of response.trashed) {
+            if (message.folder == 1) {
+              sentTable.row(`#${message.uri}`).remove();
 
               if (message.uri == composeUriInput.value) {
                 try {
-                  const parsed = parsePayload(message.uri, message.payload);
-
                   formIsPopulated = true;
-                  composePopulateForm(message.uri, parsed);
+                  composeClearForm();
                 } finally {
                   formIsPopulated = false;
                 }
@@ -208,28 +229,17 @@ export const sentTable = new DataTable("#sentTable", {
             }
           }
 
-          for (const message of response.trashed) {
-            sentTable.row(`#${message.uri}`).remove();
-
-            if (message.uri == composeUriInput.value) {
-              try {
-                formIsPopulated = true;
-                composeClearForm();
-              } finally {
-                formIsPopulated = false;
-              }
-            }
-          }
-
           for (const message of response.deleted) {
-            sentTable.row(`#${message.uri}`).remove();
+            if (message.folder == 1) {
+              sentTable.row(`#${message.uri}`).remove();
 
-            if (message.uri == composeUriInput.value) {
-              try {
-                formIsPopulated = true;
-                composeClearForm();
-              } finally {
-                formIsPopulated = false;
+              if (message.uri == composeUriInput.value) {
+                try {
+                  formIsPopulated = true;
+                  composeClearForm();
+                } finally {
+                  formIsPopulated = false;
+                }
               }
             }
           }
@@ -282,9 +292,7 @@ export const sentTable = new DataTable("#sentTable", {
 sentTable.on("select.dt deselect.dt", () => {
   const selectedRows = sentTable.rows({ selected: true }).indexes().length;
   const selected = selectedRows > 0;
-  sentTable
-    .buttons([".sent-edit"])
-    .enable(selectedRows == 1 ? true : false);
+  sentTable.buttons([".sent-edit"]).enable(selectedRows == 1 ? true : false);
   sentTable.buttons([".sent-delete"]).enable(selected ? true : false);
 });
 
@@ -348,9 +356,7 @@ export const deleteMessage = async (composeForm, uri) => {
 
   sentTable.rows(`#${uri}`).remove().draw();
   sentTable.buttons([".sent-edit"]).enable(sentTable.rows().count() > 0);
-  sentTable
-    .buttons([".sent-delete"])
-    .enable(sentTable.rows().count() > 0);
+  sentTable.buttons([".sent-delete"]).enable(sentTable.rows().count() > 0);
 
   try {
     formIsPopulated = true;
@@ -359,4 +365,3 @@ export const deleteMessage = async (composeForm, uri) => {
     formIsPopulated = false;
   }
 };
-
