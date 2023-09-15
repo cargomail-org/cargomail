@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS "Draft"
 CREATE TABLE IF NOT EXISTS "Message"
 (
     "uri"           VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
-    "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
+    "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,  
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
     "folder"        INTEGER(2) NOT NULL,  -- (0 reserverd) 1-sent, 2-inbox, 3-spam

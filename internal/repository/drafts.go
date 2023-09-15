@@ -579,6 +579,16 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		}
 	}
 
+	var threadIdValue string
+
+	if val, ok := draft.Payload.Headers["X-ThreadID"]; ok {
+		threadIdValue = fmt.Sprintf("%v", val)
+	}
+
+	if len(threadIdValue) == 0 {
+		threadIdValue = "<" + uuid.NewString() + "@" + config.Configuration.DomainName + ">"
+	}
+
 	message := &Message{}
 
 	tx, err := r.db.BeginTx(ctx, nil)
@@ -624,11 +634,13 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 				$5)
 		RETURNING * ;`
 
-	messageId := uuid.NewString() + "@" + config.Configuration.DomainName
+	messageIdValue := "<" + uuid.NewString() + "@" + config.Configuration.DomainName + ">"
 	unread := false
 	folder := 1 // sent
 
-	draft.Payload.Headers["Message-ID"] = messageId
+	draft.Payload.Headers["Message-ID"] = messageIdValue
+
+	draft.Payload.Headers["X-Thread-ID"] = threadIdValue
 
 	args = []interface{}{user.Id,
 		prefixedDeviceId,
@@ -664,11 +676,13 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		if strings.EqualFold(emailAddress[1], config.Configuration.DomainName) {
 			username = emailAddress[0]
 		}
-		messageId := uuid.NewString() + "@" + config.Configuration.DomainName
+		messageIdValue := "<" + uuid.NewString() + "@" + config.Configuration.DomainName + ">"
 		unread := true
 		folder := 2 // inbox
 
-		draft.Payload.Headers["Message-ID"] = messageId
+		draft.Payload.Headers["Message-ID"] = messageIdValue
+
+		draft.Payload.Headers["X-Thread-ID"] = threadIdValue
 
 		args = []interface{}{username,
 			prefixedDeviceId,

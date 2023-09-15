@@ -453,6 +453,11 @@ export const sendDraft = async (composeForm, uri, parsed) => {
         if (data.createdAt) draft.createdAt = data.createdAt;
         if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
 
+        // test !!!
+        // draft.payload.headers["In-Reply-To"] = "<95477aba-0ee9-4563-89d3-a864c073aa05@cargomail.org>";
+        // draft.payload.headers["References"] = "<95477aba-0ee9-4563-89d3-a864c073aa05@cargomail.org>";
+        // draft.payload.headers["X-Thread-ID"] = "<4b444375-b985-4527-98ed-b458f43b0e67@cargomail.org>";
+
         const response = await api(
           composeForm.id,
           200,
