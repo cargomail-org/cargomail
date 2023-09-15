@@ -583,7 +583,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 
 	var threadIdValue string
 
-	if val, ok := draft.Payload.Headers["X-ThreadID"]; ok {
+	if val, ok := draft.Payload.Headers["X-Thread-ID"]; ok {
 		threadIdValue = fmt.Sprintf("%v", val)
 	}
 
