@@ -1,3 +1,14 @@
+const ignoreDeviceUrlSet = new Set();
+
+const getUrlResourceName = (url) => {
+  const match = url.match(/\/contacts|\/files|\/blobs|\/drafts|\/messages/);
+
+  if (match) {
+    return match[0];
+  }
+  return null;
+};
+
 const parseJSON = async (response) => {
   if (
     response.status === 204 ||
@@ -41,6 +52,15 @@ const api = async (parentId, status, url, options) => {
   // cross-domain !!!
   options["credentials"] = "include";
 
+  if (
+    url.endsWith("/sync") &&
+    ignoreDeviceUrlSet.has(getUrlResourceName(url))
+  ) {
+    const body = JSON.parse(options.body);
+    body.ignoreDevice = true;
+    options.body = JSON.stringify(body);
+  }
+
   try {
     const result = await fetch(url, options);
 
@@ -48,6 +68,15 @@ const api = async (parentId, status, url, options) => {
 
     if (options.method != "HEAD") {
       response = await parseJSON(result);
+    }
+
+    if (!url.endsWith("/sync") && result.status == 500) {
+      const rsn = getUrlResourceName(url);
+      if (rsn) {
+        ignoreDeviceUrlSet.add(getUrlResourceName(url));
+      }
+    } else if (url.endsWith("/sync") && result.status == status) {
+      ignoreDeviceUrlSet.delete(getUrlResourceName(url));
     }
 
     if (result.status != status) {
