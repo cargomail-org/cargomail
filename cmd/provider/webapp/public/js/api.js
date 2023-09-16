@@ -73,10 +73,13 @@ const api = async (parentId, status, url, options) => {
     if (!url.endsWith("/sync") && result.status == 500) {
       const rsn = getUrlResourceName(url);
       if (rsn) {
-        ignoreDeviceUrlSet.add(getUrlResourceName(url));
+        ignoreDeviceUrlSet.add(rsn);
       }
     } else if (url.endsWith("/sync") && result.status == status) {
-      ignoreDeviceUrlSet.delete(getUrlResourceName(url));
+      const rsn = getUrlResourceName(url);
+      if (rsn) {
+        ignoreDeviceUrlSet.delete(rsn);
+      }
     }
 
     if (result.status != status) {
