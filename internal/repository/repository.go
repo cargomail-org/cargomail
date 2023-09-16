@@ -43,7 +43,8 @@ var (
 )
 
 type History struct {
-	Id int64 `json:"historyId"`
+	Id           int64 `json:"historyId"`
+	IgnoreDevice bool  `json:"ignoreDevice"`
 }
 
 type Uri struct {

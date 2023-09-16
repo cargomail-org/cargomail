@@ -173,6 +173,12 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 	}
 	defer tx.Rollback()
 
+	var deviceId string
+
+	if !history.IgnoreDevice {
+		deviceId = *user.DeviceId
+	}
+
 	// inserted rows
 	query := `
 		SELECT *
@@ -183,7 +189,7 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 				"historyId" > $3
 			ORDER BY "createdAt" DESC;`
 
-	args := []interface{}{user.Id, user.DeviceId, history.Id}
+	args := []interface{}{user.Id, deviceId, history.Id}
 
 	rows, err := tx.QueryContext(ctx, query, args...)
 	if err != nil {
@@ -225,7 +231,7 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 				"historyId" > $3
 			ORDER BY "createdAt" DESC;`
 
-	args = []interface{}{user.Id, user.DeviceId, history.Id}
+	args = []interface{}{user.Id, deviceId, history.Id}
 
 	rows, err = tx.QueryContext(ctx, query, args...)
 	if err != nil {
@@ -260,7 +266,7 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 				"historyId" > $3
 			ORDER BY "createdAt" DESC;`
 
-	args = []interface{}{user.Id, user.DeviceId, history.Id}
+	args = []interface{}{user.Id, deviceId, history.Id}
 
 	rows, err = tx.QueryContext(ctx, query, args...)
 	if err != nil {
@@ -293,7 +299,7 @@ func (r *ContactRepository) Sync(user *User, history *History) (*ContactSync, er
 			("deviceId" <> $2 OR "deviceId" IS NULL) AND
 			"historyId" > $3;`
 
-	args = []interface{}{user.Id, user.DeviceId, history.Id}
+	args = []interface{}{user.Id, deviceId, history.Id}
 
 	rows, err = tx.QueryContext(ctx, query, args...)
 	if err != nil {
