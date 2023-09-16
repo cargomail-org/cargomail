@@ -106,13 +106,16 @@ const draftsTable = new DataTable("#draftsTable", {
           }
         }
 
-        let renderHtml = `<span>${content || "Draft"}</span>`;
+        let renderHtml = `<div role="button"><span>${
+          content || "Draft"
+        }</span>`;
         if (attachmentLinks.length > 0) {
           renderHtml += `<br/>`;
           for (const item of attachmentLinks) {
             renderHtml += `<span>${item}  </span>`;
           }
         }
+        renderHtml += "</div>"
 
         return renderHtml;
       },
@@ -262,6 +265,10 @@ const draftsTable = new DataTable("#draftsTable", {
 });
 
 draftsTable.on("click", "td.payload", (e) => {
+  if (e.target.classList.contains("attachmentLink")) {
+    return
+  }
+
   const data = draftsTable.row(e.currentTarget).data();
   const parsed = parsePayload(data.uri, data.payload);
 
