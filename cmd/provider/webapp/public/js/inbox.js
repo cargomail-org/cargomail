@@ -21,6 +21,7 @@ import {
   createSubjectSnippet,
   createPlainContentSnippet,
 } from "/public/js/utils.js";
+import { sentTableRefresh } from "/public/js/sent.js";
 
 let selectedUris = [];
 
@@ -215,77 +216,8 @@ export const inboxTable = new DataTable("#inboxTable", {
             return;
           }
 
-          historyId = response.lastHistoryId;
-
-          // should refresh both the send and the inbox table
-          for (const message of response.inserted) {
-            if (message.folder == 2) {
-              // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-              const notFound =
-                inboxTable.column(0).data().toArray().indexOf(message.uri) ===
-                -1; // !!! must be
-              if (notFound) {
-                inboxTable.row.add(message);
-              }
-            }
-          }
-
-          for (const message of response.updated) {
-            if (message.folder == 2) {
-              // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-              const notFound =
-                inboxTable.column(0).data().toArray().indexOf(message.uri) ===
-                -1; // !!! must be
-              if (notFound) {
-                inboxTable.row.add(message);
-              } else {
-                inboxTable.row(`#${message.uri}`).data(message);
-
-                if (message.uri == composeUriInput.value) {
-                  try {
-                    const parsed = parsePayload(message.uri, message.payload);
-
-                    formIsPopulated = true;
-                    composePopulateForm(message.uri, parsed);
-                  } finally {
-                    formIsPopulated = false;
-                  }
-                }
-              }
-            }
-          }
-
-          for (const message of response.trashed) {
-            if (message.folder == 2) {
-              inboxTable.row(`#${message.uri}`).remove();
-
-              if (message.uri == composeUriInput.value) {
-                try {
-                  formIsPopulated = true;
-                  composeClearForm();
-                } finally {
-                  formIsPopulated = false;
-                }
-              }
-            }
-          }
-
-          for (const message of response.deleted) {
-            if (message.folder == 2) {
-              inboxTable.row(`#${message.uri}`).remove();
-
-              if (message.uri == composeUriInput.value) {
-                try {
-                  formIsPopulated = true;
-                  composeClearForm();
-                } finally {
-                  formIsPopulated = false;
-                }
-              }
-            }
-          }
-
-          inboxTable.draw();
+          inboxTableRefresh(response);
+          sentTableRefresh(response);
         })();
       },
     },
@@ -328,6 +260,78 @@ inboxTable.on("select.dt deselect.dt", () => {
   const selected = selectedRows > 0;
   inboxTable.buttons([".inbox-delete"]).enable(selected ? true : false);
 });
+
+export const inboxTableRefresh = (data) => {
+  historyId = data.lastHistoryId;
+
+  // should refresh both the send and the inbox table
+  for (const message of data.inserted) {
+    if (message.folder == 2) {
+      // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+      const notFound =
+        inboxTable.column(0).data().toArray().indexOf(message.uri) === -1; // !!! must be
+      if (notFound) {
+        inboxTable.row.add(message);
+      }
+    }
+  }
+
+  for (const message of data.updated) {
+    if (message.folder == 2) {
+      // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+      const notFound =
+        inboxTable.column(0).data().toArray().indexOf(message.uri) === -1; // !!! must be
+      if (notFound) {
+        inboxTable.row.add(message);
+      } else {
+        inboxTable.row(`#${message.uri}`).data(message);
+
+        if (message.uri == composeUriInput.value) {
+          try {
+            const parsed = parsePayload(message.uri, message.payload);
+
+            formIsPopulated = true;
+            composePopulateForm(message.uri, parsed);
+          } finally {
+            formIsPopulated = false;
+          }
+        }
+      }
+    }
+  }
+
+  for (const message of data.trashed) {
+    if (message.folder == 2) {
+      inboxTable.row(`#${message.uri}`).remove();
+
+      if (message.uri == composeUriInput.value) {
+        try {
+          formIsPopulated = true;
+          composeClearForm();
+        } finally {
+          formIsPopulated = false;
+        }
+      }
+    }
+  }
+
+  for (const message of data.deleted) {
+    if (message.folder == 2) {
+      inboxTable.row(`#${message.uri}`).remove();
+
+      if (message.uri == composeUriInput.value) {
+        try {
+          formIsPopulated = true;
+          composeClearForm();
+        } finally {
+          formIsPopulated = false;
+        }
+      }
+    }
+  }
+
+  inboxTable.draw();
+};
 
 export const deleteInboxMessages = (e) => {
   e?.preventDefault();

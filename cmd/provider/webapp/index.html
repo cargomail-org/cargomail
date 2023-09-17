@@ -104,7 +104,7 @@
                       <span class="ms-1 d-sm-inline">Inbox</span></a>
                   </li>
                   <li class="dropdown-item">
-                    <a class="btn px-2" id="sentLinkSm" >
+                    <a class="btn px-2" id="sentLinkSm">
                       <i class="bi bi-envelope-check h4"></i>
                       <span class="ms-1 d-sm-inline">Sent</span></a>
                   </li>
@@ -123,7 +123,7 @@
                     <span class="ms-1 d-none d-sm-inline">Inbox</span></a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link px-sm-0 px-2" id="sentLinkLg" >
+                  <a href="#" class="nav-link px-sm-0 px-2" id="sentLinkLg">
                     <i class="bi bi-envelope-check h4"></i>
                     <span class="ms-1 d-none d-sm-inline">Sent</span></a>
                 </li>
@@ -326,11 +326,11 @@
   document.querySelector('#composePanelDiscard').addEventListener('click', discardDraft);
 
   // inbox
-  import { deleteInboxMessages } from "/public/js/inbox.js";
+  import { deleteInboxMessages, inboxTableRefresh } from "/public/js/inbox.js";
   document.querySelector('#inboxConfirmButton').addEventListener('click', deleteInboxMessages);
 
   // sent
-  import { deleteSentMessages } from "/public/js/sent.js";
+  import { deleteSentMessages, sentTableRefresh } from "/public/js/sent.js";
   document.querySelector('#sentConfirmButton').addEventListener('click', deleteSentMessages);
 
   // drafts
