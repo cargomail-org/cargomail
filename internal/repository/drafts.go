@@ -5,7 +5,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"net/mail"
 	"reflect"
 	"strings"
@@ -527,14 +526,12 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	t := time.Now()
 	draft.Payload.Headers["Date"] = t.Format(time.UnixDate)
 
-	if val, ok := draft.Payload.Headers["From"]; ok {
-		sender := fmt.Sprintf("%v", val)
-
-		if len(sender) == 0 {
+	if val, ok := draft.Payload.Headers["From"].(string); ok {
+		if len(val) == 0 {
 			return nil, ErrMissingSender
 		}
 
-		if !validSender(user, sender) {
+		if !validSender(user, val) {
 			return nil, ErrInvalidSender
 		}
 	} else {
@@ -543,14 +540,12 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 
 	var recipients []string
 
-	if val, ok := draft.Payload.Headers["To"]; ok {
-		s := fmt.Sprintf("%v", val)
-
-		if len(s) == 0 {
+	if val, ok := draft.Payload.Headers["To"].(string); ok {
+		if len(val) == 0 {
 			return nil, ErrMissingRecipients
 		}
 
-		if val, ok := validRecipients(s); ok {
+		if val, ok := validRecipients(val); ok {
 			if ok {
 				recipients = append(recipients, val...)
 			} else {
@@ -561,10 +556,8 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		return nil, ErrMissingRecipients
 	}
 
-	if val, ok := draft.Payload.Headers["Cc"]; ok {
-		s := fmt.Sprintf("%v", val)
-
-		if val, ok := validRecipients(s); ok {
+	if val, ok := draft.Payload.Headers["Cc"].(string); ok {
+		if val, ok := validRecipients(val); ok {
 			if ok {
 				recipients = append(recipients, val...)
 			} else {
@@ -573,10 +566,8 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		}
 	}
 
-	if val, ok := draft.Payload.Headers["Bcc"]; ok {
-		s := fmt.Sprintf("%v", val)
-
-		if val, ok := validRecipients(s); ok {
+	if val, ok := draft.Payload.Headers["Bcc"].(string); ok {
+		if val, ok := validRecipients(val); ok {
 			if ok {
 				recipients = append(recipients, val...)
 			} else {
@@ -589,8 +580,8 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 
 	var threadIdValue string
 
-	if val, ok := draft.Payload.Headers["X-Thread-ID"]; ok {
-		threadIdValue = fmt.Sprintf("%v", val)
+	if val, ok := draft.Payload.Headers["X-Thread-ID"].(string); ok {
+		threadIdValue = val
 	}
 
 	if len(threadIdValue) == 0 {
@@ -659,6 +650,38 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		return nil, err
 	}
 
+	var attachmentDigests []string
+
+	// :--)
+	if len(draft.Payload.Parts) > 0 {
+		for _, part := range draft.Payload.Parts {
+			if val, ok := part.Headers["Content-Type"].(string); ok {
+				if strings.EqualFold(val, "multipart/mixed") {
+					if len(part.Parts) > 0 {
+						for _, part := range part.Parts {
+							if val, ok := part.Headers["Content-Disposition"].(string); ok {
+								if strings.HasPrefix(val, "attachment;") {
+									if val, ok := part.Headers["Content-Type"].([]interface{}); ok {
+										if len(val) > 1 {
+											if val, ok := val[0].(string); ok {
+												s := strings.SplitAfter(val, "digest:sha-256=\"")
+												if len(s) > 1 {
+													digest := strings.SplitAfter(s[1], "\"")[0]
+													// log.Println(uri)
+													attachmentDigests = append(attachmentDigests, digest)
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	var recipientsNotFound []string
 
 	// simple send
@@ -670,7 +693,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 				 "unread",
 				 "folder",
 				 "payload")
-			VALUES ((SELECT id FROM User WHERE username = $1),
+			VALUES ((SELECT "id" FROM "User" WHERE "username" = $1),
 					$2,
 					$3,
 					$4,
@@ -704,6 +727,26 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 			default:
 				return nil, err
 			}
+		}
+
+		// access to files
+		for _, digest := range attachmentDigests {
+			query := `
+			INSERT INTO
+				"File" ("userId", "deviceId", "hash", "name", "path", "contentType", "size")
+				 SELECT (SELECT "id" FROM "User" WHERE "username" = $1), NULL, "hash", "name", "path", "contentType", "size"
+					FROM "File"
+					WHERE "userId" = $2" AND
+						  "hash" = $3 AND
+						  "lastStmt" < 2;`
+
+			args := []interface{}{username, user.Id, digest}
+
+			_, err := tx.ExecContext(ctx, query, args...)
+			if err != nil {
+				return nil, err
+			}
+
 		}
 	}
 
