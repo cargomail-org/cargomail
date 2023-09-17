@@ -416,9 +416,11 @@ const composeTable = new DataTable("#composeTable", {
     },
   },
   lengthMenu: [
-    [10, 25, 50],
-    ["10 rows", "25 rows", "50 rows"],
+    [5, 10, 15, 25],
+    [5, 10, 15, 25],
   ],
+  pageLength:
+    $(document).height() >= 900 ? ($(document).height() >= 1100 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
@@ -441,6 +443,18 @@ const composeTable = new DataTable("#composeTable", {
       },
     },
   ],
+});
+
+$(window).resize(function () {
+  if ($(this).height() >= "900") {
+    if ($(this).height() >= "1100") {
+      composeTable.page.len(15).draw();
+    } else {
+      composeTable.page.len(10).draw();
+    }
+  } else {
+    composeTable.page.len(5).draw();
+  }
 });
 
 composeTable.on("select.dt deselect.dt", () => {

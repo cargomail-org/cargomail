@@ -281,9 +281,11 @@ const filesTable = new DataTable("#filesTable", {
     },
   },
   lengthMenu: [
-    [10, 25, 50],
-    ["10 rows", "25 rows", "50 rows"],
+    [5, 10, 15, 25],
+    [5, 10, 15, 25],
   ],
+  pageLength:
+    $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
@@ -350,6 +352,18 @@ const filesTable = new DataTable("#filesTable", {
       },
     },
   ],
+});
+
+$(window).resize(function () {
+  if ($(this).height() >= "700") {
+    if ($(this).height() >= "900") {
+      filesTable.page.len(15).draw();
+    } else {
+      filesTable.page.len(10).draw();
+    }
+  } else {
+    filesTable.page.len(5).draw();
+  }
 });
 
 filesTable.on("select.dt deselect.dt", () => {
