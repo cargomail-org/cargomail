@@ -119,41 +119,7 @@ const contactsTable = new DataTable("#contactsTable", {
             return;
           }
 
-          historyId = response.lastHistoryId;
-
-          for (const contact of response.inserted) {
-            // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-            const notFound =
-              contactsTable.column(0).data().toArray().indexOf(contact.uri) ===
-              -1; // !!! must be
-            if (notFound) {
-              contactsTable.row.add(contact);
-            }
-          }
-
-          for (const contact of response.updated) {
-            // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-            const notFound =
-              contactsTable.column(0).data().toArray().indexOf(contact.uri) ===
-              -1; // !!! must be
-            if (notFound) {
-              contactsTable.row.add(contact);
-            } else {
-              contactsTable.row(`#${contact.uri}`).data(contact);
-            }
-          }
-
-          for (const contact of response.trashed) {
-            contactsTable.row(`#${contact.uri}`).remove();
-          }
-
-          for (const contact of response.deleted) {
-            contactsTable.row(`#${contact.uri}`).remove();
-          }
-
-          setComposeContacts(contactsTable.rows().data().toArray());
-
-          contactsTable.draw();
+          contactsTableRefresh(response);
         })();
       },
     },
@@ -207,6 +173,42 @@ contactsTable.on("select.dt deselect.dt", () => {
     .enable(selectedRows == 1 ? true : false);
   contactsTable.buttons([".contacts-delete"]).enable(selected ? true : false);
 });
+
+export const contactsTableRefresh = (data) => {
+  historyId = data.lastHistoryId;
+
+  for (const contact of data.inserted) {
+    // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+    const notFound =
+      contactsTable.column(0).data().toArray().indexOf(contact.uri) === -1; // !!! must be
+    if (notFound) {
+      contactsTable.row.add(contact);
+    }
+  }
+
+  for (const contact of data.updated) {
+    // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+    const notFound =
+      contactsTable.column(0).data().toArray().indexOf(contact.uri) === -1; // !!! must be
+    if (notFound) {
+      contactsTable.row.add(contact);
+    } else {
+      contactsTable.row(`#${contact.uri}`).data(contact);
+    }
+  }
+
+  for (const contact of data.trashed) {
+    contactsTable.row(`#${contact.uri}`).remove();
+  }
+
+  for (const contact of data.deleted) {
+    contactsTable.row(`#${contact.uri}`).remove();
+  }
+
+  setComposeContacts(contactsTable.rows().data().toArray());
+
+  contactsTable.draw();
+};
 
 export const showContactsFormDialog = (e) => {
   const formDialog = e.currentTarget;
@@ -341,7 +343,7 @@ export const deleteContacts = (e) => {
     contactsTable.rows(".selected").remove().draw();
     contactsTable.buttons([".contacts-edit"]).enable(false);
     contactsTable.buttons([".contacts-delete"]).enable(false);
-    
+
     setComposeContacts(contactsTable.rows().data().toArray());
   })();
 };
