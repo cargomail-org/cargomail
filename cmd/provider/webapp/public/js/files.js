@@ -309,26 +309,7 @@ const filesTable = new DataTable("#filesTable", {
             return;
           }
 
-          historyId = response.lastHistoryId;
-
-          for (const file of response.inserted) {
-            // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-            const notFound =
-              filesTable.column(0).data().toArray().indexOf(file.uri) === -1; // !!! must be
-            if (notFound) {
-              filesTable.row.add(file);
-            }
-          }
-
-          for (const file of response.trashed) {
-            filesTable.row(`#${file.uri}`).remove();
-          }
-
-          for (const file of response.deleted) {
-            filesTable.row(`#${file.uri}`).remove();
-          }
-
-          filesTable.draw();
+          filesTableRefresh(response);
         })();
       },
     },
@@ -376,6 +357,29 @@ filesTable.on("select.dt deselect.dt", () => {
     document.getElementById("copySelectedFiles").classList.add("disabled");
   }
 });
+
+export const filesTableRefresh = (data) => {
+  historyId = data.lastHistoryId;
+
+  for (const file of data.inserted) {
+    // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+    const notFound =
+      filesTable.column(0).data().toArray().indexOf(file.uri) === -1; // !!! must be
+    if (notFound) {
+      filesTable.row.add(file);
+    }
+  }
+
+  for (const file of data.trashed) {
+    filesTable.row(`#${file.uri}`).remove();
+  }
+
+  for (const file of data.deleted) {
+    filesTable.row(`#${file.uri}`).remove();
+  }
+
+  filesTable.draw();
+};
 
 export const deleteFiles = (e) => {
   e?.preventDefault();

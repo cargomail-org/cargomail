@@ -215,66 +215,7 @@ const draftsTable = new DataTable("#draftsTable", {
             return;
           }
 
-          historyId = response.lastHistoryId;
-
-          for (const draft of response.inserted) {
-            // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-            const notFound =
-              draftsTable.column(0).data().toArray().indexOf(draft.uri) === -1; // !!! must be
-            if (notFound) {
-              draftsTable.row.add(draft);
-            }
-          }
-
-          for (const draft of response.updated) {
-            // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-            const notFound =
-              draftsTable.column(0).data().toArray().indexOf(draft.uri) === -1; // !!! must be
-            if (notFound) {
-              draftsTable.row.add(draft);
-            } else {
-              draftsTable.row(`#${draft.uri}`).data(draft);
-
-              if (draft.uri == composeUriInput.value) {
-                try {
-                  const parsed = parsePayload(draft.uri, draft.payload);
-
-                  formIsPopulated = true;
-                  composePopulateForm(draft.uri, parsed);
-                } finally {
-                  formIsPopulated = false;
-                }
-              }
-            }
-          }
-
-          for (const draft of response.trashed) {
-            draftsTable.row(`#${draft.uri}`).remove();
-
-            if (draft.uri == composeUriInput.value) {
-              try {
-                formIsPopulated = true;
-                composeClearForm();
-              } finally {
-                formIsPopulated = false;
-              }
-            }
-          }
-
-          for (const draft of response.deleted) {
-            draftsTable.row(`#${draft.uri}`).remove();
-
-            if (draft.uri == composeUriInput.value) {
-              try {
-                formIsPopulated = true;
-                composeClearForm();
-              } finally {
-                formIsPopulated = false;
-              }
-            }
-          }
-
-          draftsTable.draw();
+          draftsTableRefresh(response);
         })();
       },
     },
@@ -335,6 +276,69 @@ draftsTable.on("select.dt deselect.dt", () => {
   const selected = selectedRows > 0;
   draftsTable.buttons([".drafts-delete"]).enable(selected ? true : false);
 });
+
+export const draftsTableRefresh = (data) => {
+  historyId = data.lastHistoryId;
+
+  for (const draft of data.inserted) {
+    // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+    const notFound =
+      draftsTable.column(0).data().toArray().indexOf(draft.uri) === -1; // !!! must be
+    if (notFound) {
+      draftsTable.row.add(draft);
+    }
+  }
+
+  for (const draft of data.updated) {
+    // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+    const notFound =
+      draftsTable.column(0).data().toArray().indexOf(draft.uri) === -1; // !!! must be
+    if (notFound) {
+      draftsTable.row.add(draft);
+    } else {
+      draftsTable.row(`#${draft.uri}`).data(draft);
+
+      if (draft.uri == composeUriInput.value) {
+        try {
+          const parsed = parsePayload(draft.uri, draft.payload);
+
+          formIsPopulated = true;
+          composePopulateForm(draft.uri, parsed);
+        } finally {
+          formIsPopulated = false;
+        }
+      }
+    }
+  }
+
+  for (const draft of data.trashed) {
+    draftsTable.row(`#${draft.uri}`).remove();
+
+    if (draft.uri == composeUriInput.value) {
+      try {
+        formIsPopulated = true;
+        composeClearForm();
+      } finally {
+        formIsPopulated = false;
+      }
+    }
+  }
+
+  for (const draft of data.deleted) {
+    draftsTable.row(`#${draft.uri}`).remove();
+
+    if (draft.uri == composeUriInput.value) {
+      try {
+        formIsPopulated = true;
+        composeClearForm();
+      } finally {
+        formIsPopulated = false;
+      }
+    }
+  }
+
+  draftsTable.draw();
+};
 
 export const deleteDraftsMessages = (e) => {
   e?.preventDefault();
