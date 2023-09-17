@@ -433,6 +433,9 @@ export const composePayload = (parsed) => {
         payload.headers = { ...payload.headers, ...htmlTextPart.headers };
         payload.body = htmlTextPart.body;
       }
+    } else if (mixedAttachmentsPart) {
+      payload.parts = [];
+      payload.parts.push(mixedAttachmentsPart);
     }
   }
 
