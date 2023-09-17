@@ -93,9 +93,11 @@ const contactsTable = new DataTable("#contactsTable", {
     },
   },
   lengthMenu: [
-    [10, 25, 50],
-    ["10 rows", "25 rows", "50 rows"],
+    [5, 10, 15, 25],
+    [5, 10, 15, 25],
   ],
+  pageLength:
+    $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
@@ -163,6 +165,18 @@ const contactsTable = new DataTable("#contactsTable", {
       },
     },
   ],
+});
+
+$(window).resize(function () {
+  if ($(this).height() >= "700") {
+    if ($(this).height() >= "900") {
+      contactsTable.page.len(15).draw();
+    } else {
+      contactsTable.page.len(10).draw();
+    }
+  } else {
+    contactsTable.page.len(5).draw();
+  }
 });
 
 contactsTable.on("select.dt deselect.dt", () => {
