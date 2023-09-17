@@ -10,50 +10,161 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
+import { composeContentPage } from "/public/js/menu.js";
+import {
+  clearForm as composeClearForm,
+  populateForm as composePopulateForm,
+} from "/public/js/compose.js";
+import {
+  parsePayload,
+  composePayload,
+  createSubjectSnippet,
+  createPlainContentSnippet,
+} from "/public/js/utils.js";
+
 let selectedUris = [];
 
 const inboxConfirmDialog = new bootstrap.Modal(
   document.querySelector("#inboxConfirmDialog")
 );
 
-/*const inboxTable = new DataTable("#inboxTable", {
+const inboxFormAlert = document.getElementById("inboxFormAlert");
+
+const composeUriInput = document.getElementById("composeUriInput");
+
+let formIsPopulated = false;
+
+let historyId = 0;
+
+export const inboxTable = new DataTable("#inboxTable", {
   paging: true,
   responsive: {
     details: false,
   },
-  ordering: false,
+  rowCallback: function (row, data, dataIndex) {
+    const $row = $(row);
+    if ($row.hasClass("even")) {
+      $row.css("background-color", "rgb(245,245,245)");
+      $row.hover(
+        function () {
+          $(this).css("background-color", "rgb(226 232 240)");
+        },
+        function () {
+          $(this).css("background-color", "rgb(245,245,245)");
+        }
+      );
+    } else {
+      $row.css("background-color", "rgb(245,245,245)");
+      $row.hover(
+        function () {
+          $(this).css("background-color", "rgb(226 232 240)");
+        },
+        function () {
+          $(this).css("background-color", "rgb(245,245,245)");
+        }
+      );
+    }
+  },
+  // createdRow: function (row, data, dataIndex) {
+  //   if (dataIndex%2 == 0) {
+  //     $(row).attr('style', 'background-color: yellow;');
+  //   } else {
+  //     $(row).attr('style', 'background-color: yellow;');
+  //   }
+  // },
+  // stripeClasses: [],
+  // drawCallback: function () {
+  //   // $(this.api().table().header()).hide();
+  //   $("#selector thead").remove();
+  // },
+  ajax: function (data, callback, settings) {
+    (async () => {
+      const response = await api(
+        inboxFormAlert.id,
+        200,
+        `${window.apiHost}/api/v1/messages/list`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ folderId: 2 }),
+        }
+      );
+
+      if (response === false) {
+        return;
+      }
+
+      historyId = response.lastHistoryId;
+
+      callback({ data: response.messages });
+    })();
+  },
+  ordering: true,
   columns: [
     { data: "uri", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
-      data: "name",
+      data: "payload",
+      className: "payload",
+      orderable: false,
       render: (data, type, full, meta) => {
+        const parsed = parsePayload(full.uri, full.payload);
+
         const link = `${window.apiHost}/api/v1/files/`;
-        return `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('inboxForm', '${link}${full.uri}', '${data}');">${data}</a>`;
+        const attachmentLinks = [];
+
+        for (const attachment of parsed.attachments) {
+          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('inboxFormAlert', '${link}${attachment.uri}', '${attachment.fileName}');">${attachment.fileName}</a>`;
+          attachmentLinks.push(attachmentAnchor);
+        }
+
+        const subject =
+          type === "display"
+            ? createSubjectSnippet(parsed.subject)
+            : parsed.subject;
+        const plainContent =
+          type === "display"
+            ? createPlainContentSnippet(parsed.plainContent)
+            : parsed.plainContent;
+
+        let content;
+
+        if (subject) {
+          content = subject;
+          if (plainContent) {
+            content = subject + " - " + plainContent;
+          }
+        } else {
+          if (plainContent) {
+            content = plainContent;
+          }
+        }
+
+        let renderHtml = `<div"><span>${content || "Draft"}</span>`;
+        if (attachmentLinks.length > 0) {
+          renderHtml += `<br/>`;
+          for (const item of attachmentLinks) {
+            renderHtml += `<span>${item}  </span>`;
+          }
+        }
+        renderHtml += "</div>";
+
+        return renderHtml;
       },
     },
     {
-      data: "size",
-      render: function (data, type) {
-        if (type === "display" || type === "filter") {
-          return formatBytes(data, 0);
-        } else {
-          return data;
-        }
-      },
-    },
-    {
-      data: "createdAt",
-      render: function (data, type) {
-        if (type === "display" || type === "filter") {
-          var d = new Date(data);
-          return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
-        } else {
-          return data;
-        }
+      data: null,
+      visible: false,
+      orderable: true,
+      render: (data, type, full, meta) => {
+        const date = full.modifiedAt != null ? full.modifiedAt : full.createdAt;
+        return date;
       },
     },
   ],
+  rowId: "uri",
   columnDefs: [
     {
       targets: 1,
@@ -68,7 +179,7 @@ const inboxConfirmDialog = new bootstrap.Modal(
     selector: "td:first-child",
     info: true,
   },
-  order: [[2, "desc"]],
+  order: [[3, "desc"]],
   dom: "Bfrtip",
   language: {
     buttons: {
@@ -76,14 +187,111 @@ const inboxConfirmDialog = new bootstrap.Modal(
     },
   },
   lengthMenu: [
-    [10, 25, 50],
-    ["10 rows", "25 rows", "50 rows"],
+    [5, 10, 15, 25],
+    [5, 10, 15, 25],
   ],
+  pageLength:
+    $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
+      text: "Refresh",
+      action: function () {
+        (async () => {
+          const response = await api(
+            inboxFormAlert.id,
+            200,
+            `${window.apiHost}/api/v1/messages/sync`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ historyId: historyId }),
+            }
+          );
+
+          if (response === false) {
+            return;
+          }
+
+          historyId = response.lastHistoryId;
+
+          // should refresh both the send and the inbox table
+          for (const message of response.inserted) {
+            if (message.folder == 2) {
+              // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+              const notFound =
+                inboxTable.column(0).data().toArray().indexOf(message.uri) ===
+                -1; // !!! must be
+              if (notFound) {
+                inboxTable.row.add(message);
+              }
+            }
+          }
+
+          for (const message of response.updated) {
+            if (message.folder == 2) {
+              // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+              const notFound =
+                inboxTable.column(0).data().toArray().indexOf(message.uri) ===
+                -1; // !!! must be
+              if (notFound) {
+                inboxTable.row.add(message);
+              } else {
+                inboxTable.row(`#${message.uri}`).data(message);
+
+                if (message.uri == composeUriInput.value) {
+                  try {
+                    const parsed = parsePayload(message.uri, message.payload);
+
+                    formIsPopulated = true;
+                    composePopulateForm(message.uri, parsed);
+                  } finally {
+                    formIsPopulated = false;
+                  }
+                }
+              }
+            }
+          }
+
+          for (const message of response.trashed) {
+            if (message.folder == 2) {
+              inboxTable.row(`#${message.uri}`).remove();
+
+              if (message.uri == composeUriInput.value) {
+                try {
+                  formIsPopulated = true;
+                  composeClearForm();
+                } finally {
+                  formIsPopulated = false;
+                }
+              }
+            }
+          }
+
+          for (const message of response.deleted) {
+            if (message.folder == 2) {
+              inboxTable.row(`#${message.uri}`).remove();
+
+              if (message.uri == composeUriInput.value) {
+                try {
+                  formIsPopulated = true;
+                  composeClearForm();
+                } finally {
+                  formIsPopulated = false;
+                }
+              }
+            }
+          }
+
+          inboxTable.draw();
+        })();
+      },
+    },
+    {
       text: "Delete",
-      className: "files-delete",
+      className: "inbox-delete",
       enabled: false,
       action: function () {
         selectedUris = [];
@@ -101,14 +309,90 @@ const inboxConfirmDialog = new bootstrap.Modal(
       },
     },
   ],
-});*/
+});
+
+$(window).resize(function () {
+  if ($(this).height() >= "700") {
+    if ($(this).height() >= "900") {
+      inboxTable.page.len(15).draw();
+    } else {
+      inboxTable.page.len(10).draw();
+    }
+  } else {
+    inboxTable.page.len(5).draw();
+  }
+});
+
+inboxTable.on("select.dt deselect.dt", () => {
+  const selectedRows = inboxTable.rows({ selected: true }).indexes().length;
+  const selected = selectedRows > 0;
+  inboxTable.buttons([".inbox-delete"]).enable(selected ? true : false);
+});
 
 export const deleteInboxMessages = (e) => {
   e?.preventDefault();
 
   inboxConfirmDialog.hide();
 
-  inboxTable.rows(".selected").remove().draw();
-  inboxTable.buttons([".files-delete"]).enable(false);
+  (async () => {
+    const response = await api(
+      inboxFormAlert.id,
+      200,
+      `${window.apiHost}/api/v1/messages/trash`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uris: selectedUris }),
+      }
+    );
+
+    if (response === false) {
+      return;
+    }
+
+    if (selectedUris.includes(composeUriInput.value)) {
+      try {
+        formIsPopulated = true;
+        composeClearForm();
+      } finally {
+        formIsPopulated = false;
+      }
+    }
+
+    inboxTable.rows(".selected").remove().draw();
+    inboxTable.buttons([".inbox-delete"]).enable(false);
+  })();
 };
 
+export const deleteMessage = async (composeForm, uri) => {
+  const response = await api(
+    composeForm.id,
+    200,
+    `${window.apiHost}/api/v1/messages/trash`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ uris: [uri] }),
+    }
+  );
+
+  if (response === false) {
+    return;
+  }
+
+  inboxTable.rows(`#${uri}`).remove().draw();
+  inboxTable.buttons([".inbox-delete"]).enable(inboxTable.rows().count() > 0);
+
+  try {
+    formIsPopulated = true;
+    composeClearForm();
+  } finally {
+    formIsPopulated = false;
+  }
+};

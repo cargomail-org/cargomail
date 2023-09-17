@@ -42,6 +42,42 @@ const draftsTable = new DataTable("#draftsTable", {
   responsive: {
     details: false,
   },
+  rowCallback: function (row, data, dataIndex) {
+    const $row = $(row);
+    if ($row.hasClass("even")) {
+      $row.css("background-color", "rgb(245,245,245)");
+      $row.hover(
+        function () {
+          $(this).css("background-color", "rgb(226 232 240)");
+        },
+        function () {
+          $(this).css("background-color", "rgb(245,245,245)");
+        }
+      );
+    } else {
+      $row.css("background-color", "rgb(245,245,245)");
+      $row.hover(
+        function () {
+          $(this).css("background-color", "rgb(226 232 240)");
+        },
+        function () {
+          $(this).css("background-color", "rgb(245,245,245)");
+        }
+      );
+    }
+  },
+  // createdRow: function (row, data, dataIndex) {
+  //   if (dataIndex%2 == 0) {
+  //     $(row).attr('style', 'background-color: yellow;');
+  //   } else {
+  //     $(row).attr('style', 'background-color: yellow;');
+  //   }
+  // },
+  // stripeClasses: [],
+  // drawCallback: function () {
+  //   // $(this.api().table().header()).hide();
+  //   $("#selector thead").remove();
+  // },
   ajax: function (data, callback, settings) {
     (async () => {
       const response = await api(
@@ -106,16 +142,14 @@ const draftsTable = new DataTable("#draftsTable", {
           }
         }
 
-        let renderHtml = `<div role="button"><span>${
-          content || "Draft"
-        }</span>`;
+        let renderHtml = `<div"><span>${content || "Draft"}</span>`;
         if (attachmentLinks.length > 0) {
           renderHtml += `<br/>`;
           for (const item of attachmentLinks) {
             renderHtml += `<span>${item}  </span>`;
           }
         }
-        renderHtml += "</div>"
+        renderHtml += "</div>";
 
         return renderHtml;
       },
@@ -153,9 +187,11 @@ const draftsTable = new DataTable("#draftsTable", {
     },
   },
   lengthMenu: [
-    [10, 25, 50],
-    ["10 rows", "25 rows", "50 rows"],
+    [5, 10, 15, 25],
+    [5, 10, 15, 25],
   ],
+  pageLength:
+    $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
@@ -264,9 +300,21 @@ const draftsTable = new DataTable("#draftsTable", {
   ],
 });
 
+$(window).resize(function () {
+  if ($(this).height() >= "700") {
+    if ($(this).height() >= "900") {
+      draftsTable.page.len(15).draw();
+    } else {
+      draftsTable.page.len(10).draw();
+    }
+  } else {
+    draftsTable.page.len(5).draw();
+  }
+});
+
 draftsTable.on("click", "td.payload", (e) => {
   if (e.target.classList.contains("attachmentLink")) {
-    return
+    return;
   }
 
   const data = draftsTable.row(e.currentTarget).data();

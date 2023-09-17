@@ -41,6 +41,42 @@ export const sentTable = new DataTable("#sentTable", {
   responsive: {
     details: false,
   },
+  rowCallback: function (row, data, dataIndex) {
+    const $row = $(row);
+    if ($row.hasClass("even")) {
+      $row.css("background-color", "rgb(245,245,245)");
+      $row.hover(
+        function () {
+          $(this).css("background-color", "rgb(226 232 240)");
+        },
+        function () {
+          $(this).css("background-color", "rgb(245,245,245)");
+        }
+      );
+    } else {
+      $row.css("background-color", "rgb(245,245,245)");
+      $row.hover(
+        function () {
+          $(this).css("background-color", "rgb(226 232 240)");
+        },
+        function () {
+          $(this).css("background-color", "rgb(245,245,245)");
+        }
+      );
+    }
+  },
+  // createdRow: function (row, data, dataIndex) {
+  //   if (dataIndex%2 == 0) {
+  //     $(row).attr('style', 'background-color: yellow;');
+  //   } else {
+  //     $(row).attr('style', 'background-color: yellow;');
+  //   }
+  // },
+  // stripeClasses: [],
+  // drawCallback: function () {
+  //   // $(this.api().table().header()).hide();
+  //   $("#selector thead").remove();
+  // },
   ajax: function (data, callback, settings) {
     (async () => {
       const response = await api(
@@ -71,6 +107,7 @@ export const sentTable = new DataTable("#sentTable", {
     { data: null, visible: true, orderable: false, width: "15px" },
     {
       data: "payload",
+      className: "payload",
       orderable: false,
       render: (data, type, full, meta) => {
         const parsed = parsePayload(full.uri, full.payload);
@@ -105,13 +142,14 @@ export const sentTable = new DataTable("#sentTable", {
           }
         }
 
-        let renderHtml = `<span>${content || "Message"}</span>`;
+        let renderHtml = `<div"><span>${content || "Draft"}</span>`;
         if (attachmentLinks.length > 0) {
           renderHtml += `<br/>`;
           for (const item of attachmentLinks) {
             renderHtml += `<span>${item}  </span>`;
           }
         }
+        renderHtml += "</div>";
 
         return renderHtml;
       },
@@ -149,9 +187,11 @@ export const sentTable = new DataTable("#sentTable", {
     },
   },
   lengthMenu: [
-    [10, 25, 50],
-    ["10 rows", "25 rows", "50 rows"],
+    [5, 10, 15, 25],
+    [5, 10, 15, 25],
   ],
+  pageLength:
+    $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
@@ -249,25 +289,6 @@ export const sentTable = new DataTable("#sentTable", {
         })();
       },
     },
-    // {
-    //   text: "Edit",
-    //   className: "sent-edit",
-    //   enabled: false,
-    //   action: function (e) {
-    //     const data = sentTable.rows(".selected").data()[0];
-
-    //     const parsed = parsePayload(data.uri, data.payload);
-
-    //     try {
-    //       formIsPopulated = true;
-    //       composePopulateForm(data.uri, parsed);
-    //     } finally {
-    //       formIsPopulated = false;
-    //     }
-
-    //     composeContentPage(e);
-    //   },
-    // },
     {
       text: "Delete",
       className: "sent-delete",
@@ -290,10 +311,21 @@ export const sentTable = new DataTable("#sentTable", {
   ],
 });
 
+$(window).resize(function () {
+  if ($(this).height() >= "700") {
+    if ($(this).height() >= "900") {
+      sentTable.page.len(15).draw();
+    } else {
+      sentTable.page.len(10).draw();
+    }
+  } else {
+    sentTable.page.len(5).draw();
+  }
+});
+
 sentTable.on("select.dt deselect.dt", () => {
   const selectedRows = sentTable.rows({ selected: true }).indexes().length;
   const selected = selectedRows > 0;
-  sentTable.buttons([".sent-edit"]).enable(selectedRows == 1 ? true : false);
   sentTable.buttons([".sent-delete"]).enable(selected ? true : false);
 });
 
@@ -331,7 +363,6 @@ export const deleteSentMessages = (e) => {
     }
 
     sentTable.rows(".selected").remove().draw();
-    sentTable.buttons([".sent-edit"]).enable(false);
     sentTable.buttons([".sent-delete"]).enable(false);
   })();
 };
@@ -356,7 +387,6 @@ export const deleteMessage = async (composeForm, uri) => {
   }
 
   sentTable.rows(`#${uri}`).remove().draw();
-  sentTable.buttons([".sent-edit"]).enable(sentTable.rows().count() > 0);
   sentTable.buttons([".sent-delete"]).enable(sentTable.rows().count() > 0);
 
   try {

@@ -87,6 +87,8 @@ export function inboxContentPage(e) {
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = true;
+
+  document.getElementById("inboxTable").classList.remove("table-striped");
 }
 
 export function sentContentPage(e) {
@@ -139,6 +141,8 @@ export function sentContentPage(e) {
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = true;
+
+  document.getElementById("sentTable").classList.remove("table-striped");
 }
 
 export function draftsContentPage(e) {
@@ -191,6 +195,8 @@ export function draftsContentPage(e) {
   document.getElementById("filesPanel").hidden = true;
   document.getElementById("contactsPanel").hidden = true;
   document.getElementById("profilePanel").hidden = true;
+
+  document.getElementById("draftsTable").classList.remove("table-striped");
 }
 
 export function filesContentPage(e) {
