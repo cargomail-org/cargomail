@@ -89,7 +89,7 @@ export const inboxTable = new DataTable("#inboxTable", {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ folderId: 2 }),
+          body: JSON.stringify({ folder: 2 }),
         }
       );
 
@@ -143,7 +143,7 @@ export const inboxTable = new DataTable("#inboxTable", {
           }
         }
 
-        let renderHtml = `<div"><span>${content || "Draft"}</span>`;
+        let renderHtml = `<div"><span>${content || "Message"}</span>`;
         if (attachmentLinks.length > 0) {
           renderHtml += `<br/>`;
           for (const item of attachmentLinks) {

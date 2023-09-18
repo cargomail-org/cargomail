@@ -98,7 +98,7 @@ func (c *MessageDeleted) Scan() []interface{} {
 	return columns
 }
 
-func (r *MessageRepository) List(user *User, folderId int) (*MessageList, error) {
+func (r *MessageRepository) List(user *User, folder int) (*MessageList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -116,7 +116,7 @@ func (r *MessageRepository) List(user *User, folderId int) (*MessageList, error)
 			"lastStmt" < 2
 			ORDER BY CASE WHEN "modifiedAt" IS NOT NULL THEN "modifiedAt" ELSE "createdAt" END DESC;`
 
-	args := []interface{}{user.Id, folderId}
+	args := []interface{}{user.Id, folder}
 
 	rows, err := tx.QueryContext(ctx, query, args...)
 	if err != nil {

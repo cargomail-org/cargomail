@@ -29,7 +29,7 @@ func (api *MessagesApi) List() http.Handler {
 			}
 		}
 
-		messageHistory, err := api.messages.List(user, folder.FolderId)
+		messageHistory, err := api.messages.List(user, folder.Folder)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

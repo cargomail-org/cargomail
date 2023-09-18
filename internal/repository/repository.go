@@ -57,7 +57,7 @@ type Uris struct {
 }
 
 type Folder struct {
-	FolderId int `json:"folderId"`
+	Folder int `json:"folder"`
 }
 
 type State struct {

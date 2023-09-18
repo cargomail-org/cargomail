@@ -211,7 +211,7 @@ const filesTable = new DataTable("#filesTable", {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ folderId: 0 }),
+          body: JSON.stringify({ folder: 0 }),
         }
       );
 
@@ -363,20 +363,26 @@ export const filesTableRefresh = (data) => {
   historyId = data.lastHistoryId;
 
   for (const file of data.inserted) {
-    // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-    const notFound =
-      filesTable.column(0).data().toArray().indexOf(file.uri) === -1; // !!! must be
-    if (notFound) {
-      filesTable.row.add(file);
+    if (file.folder == 0) {
+      // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
+      const notFound =
+        filesTable.column(0).data().toArray().indexOf(file.uri) === -1; // !!! must be
+      if (notFound) {
+        filesTable.row.add(file);
+      }
     }
   }
 
   for (const file of data.trashed) {
-    filesTable.row(`#${file.uri}`).remove();
+    if (file.folder == 0) {
+      filesTable.row(`#${file.uri}`).remove();
+    }
   }
 
   for (const file of data.deleted) {
-    filesTable.row(`#${file.uri}`).remove();
+    if (file.folder == 0) {
+      filesTable.row(`#${file.uri}`).remove();
+    }
   }
 
   filesTable.draw();

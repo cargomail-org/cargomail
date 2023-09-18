@@ -226,7 +226,7 @@ func (api *BlobsApi) List() http.Handler {
 			}
 		}
 
-		blobList, err := api.blobs.List(user, folder.FolderId)
+		blobList, err := api.blobs.List(user, folder.Folder)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

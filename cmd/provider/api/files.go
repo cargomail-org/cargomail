@@ -178,7 +178,7 @@ func (api *FilesApi) List() http.Handler {
 			}
 		}
 
-		fileList, err := api.files.List(user, folder.FolderId)
+		fileList, err := api.files.List(user, folder.Folder)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

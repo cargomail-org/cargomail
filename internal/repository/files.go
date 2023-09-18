@@ -93,7 +93,7 @@ func (r FileRepository) Create(user *User, file *File) (*File, error) {
 	return file, nil
 }
 
-func (r FileRepository) List(user *User, folderId int) (*FileList, error) {
+func (r FileRepository) List(user *User, folder int) (*FileList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -112,7 +112,7 @@ func (r FileRepository) List(user *User, folderId int) (*FileList, error) {
 			"lastStmt" < 2
 			ORDER BY "createdAt" DESC;`
 
-	args := []interface{}{user.Id, folderId}
+	args := []interface{}{user.Id, folder}
 
 	rows, err := tx.QueryContext(ctx, query, args...)
 	if err != nil {

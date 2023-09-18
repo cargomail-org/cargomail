@@ -96,7 +96,7 @@ func (r BlobRepository) Create(user *User, blob *Blob) (*Blob, error) {
 	return blob, nil
 }
 
-func (r BlobRepository) List(user *User, folderId int) (*BlobList, error) {
+func (r BlobRepository) List(user *User, folder int) (*BlobList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -114,7 +114,7 @@ func (r BlobRepository) List(user *User, folderId int) (*BlobList, error) {
 			CASE WHEN $2 == -1 THEN "folder" > $2 ELSE "folder" == $2 END AND			
 			"lastStmt" < 2;`
 
-	args := []interface{}{user.Id, folderId}
+	args := []interface{}{user.Id, folder}
 
 	rows, err := tx.QueryContext(ctx, query, args...)
 	if err != nil {
