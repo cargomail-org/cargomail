@@ -15,7 +15,8 @@ type BlobRepository struct {
 type Blob struct {
 	Uri         string     `json:"uri"`
 	UserId      int64      `json:"-"`
-	Hash        string     `json:"-"`
+	Folder      int16      `json:"folder"`
+	Digest      string     `json:"digest"`
 	Name        string     `json:"name"`
 	Snippet     string     `json:"snippet"`
 	Path        string     `json:"-"`
@@ -77,13 +78,15 @@ func (r BlobRepository) Create(user *User, blob *Blob) (*Blob, error) {
 
 	query := `
 		INSERT INTO
-			"Blob" ("userId", "deviceId", "hash", "name", "snippet", "path", "contentType", "size")
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+			"Blob" ("userId", "deviceId", "folder", "digest", "name", "snippet", "path", "contentType", "size")
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{user.Id, prefixedDeviceId, blob.Hash, blob.Name, blob.Snippet, blob.Path, blob.ContentType, blob.Size}
+	folder := 0
+
+	args := []interface{}{user.Id, prefixedDeviceId, folder, blob.Digest, blob.Name, blob.Snippet, blob.Path, blob.ContentType, blob.Size}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 	if err != nil {
@@ -93,7 +96,7 @@ func (r BlobRepository) Create(user *User, blob *Blob) (*Blob, error) {
 	return blob, nil
 }
 
-func (r BlobRepository) List(user *User) (*BlobList, error) {
+func (r BlobRepository) List(user *User, folderId int) (*BlobList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -108,9 +111,10 @@ func (r BlobRepository) List(user *User) (*BlobList, error) {
 		SELECT *
 			FROM "Blob"
 			WHERE "userId" = $1 AND
+			CASE WHEN $2 == -1 THEN "folder" > $2 ELSE "folder" == $2 END AND			
 			"lastStmt" < 2;`
 
-	args := []interface{}{user.Id}
+	args := []interface{}{user.Id, folderId}
 
 	rows, err := tx.QueryContext(ctx, query, args...)
 	if err != nil {
@@ -345,7 +349,7 @@ func (r BlobRepository) Update(user *User, blob *Blob) (*Blob, error) {
 
 	query := `
 		UPDATE "Blob"
-			SET "hash" = $1,
+			SET "digest" = $1,
 				"snippet" = $2,
 				"size" = $3,
 				"deviceId" = $4
@@ -356,7 +360,7 @@ func (r BlobRepository) Update(user *User, blob *Blob) (*Blob, error) {
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{blob.Hash, blob.Snippet, blob.Size, prefixedDeviceId, user.Id, blob.Uri}
+	args := []interface{}{blob.Digest, blob.Snippet, blob.Size, prefixedDeviceId, user.Id, blob.Uri}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 	if err != nil {
@@ -421,14 +425,16 @@ func (r *BlobRepository) Untrash(user *User, uris string) error {
 	return nil
 }
 
-func (r BlobRepository) Delete(user *User, uris string) error {
+func (r BlobRepository) Delete(user *User, uris string) (*[]Blob, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+
+	blobs := []Blob{}
 
 	if len(uris) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		defer tx.Rollback()
 
@@ -436,14 +442,22 @@ func (r BlobRepository) Delete(user *User, uris string) error {
 		DELETE
 			FROM "Blob"
 			WHERE "userId" = $1 AND
-			"uri" IN (SELECT value FROM json_each($2, '$.uris'));`
+			"uri" IN (SELECT value FROM json_each($2, '$.uris'))
+			RETURNING * ;`
+
+		blob := Blob{}
 
 		args := []interface{}{user.Id, uris}
 
-		_, err = tx.ExecContext(ctx, query, args...)
+		err = tx.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 		if err != nil {
-			return err
+			if err.Error() == "sql: no rows in result set" {
+				return &[]Blob{}, nil
+			}
+			return nil, err
 		}
+
+		blobs = append(blobs, blob)
 
 		query = `
 		UPDATE "BlobDeleted"
@@ -455,15 +469,15 @@ func (r BlobRepository) Delete(user *User, uris string) error {
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		if err = tx.Commit(); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	return nil
+	return &blobs, nil
 }
 
 func (r BlobRepository) GetBlobByUri(user *User, uri string) (*Blob, error) {
@@ -480,6 +494,33 @@ func (r BlobRepository) GetBlobByUri(user *User, uri string) (*Blob, error) {
 	blob := &Blob{}
 
 	args := []interface{}{user.Id, uri}
+
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
+	if err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			return &Blob{}, nil
+		}
+		return &Blob{}, err
+	}
+
+	return blob, nil
+}
+
+func (r BlobRepository) GetBlobByDigest(user *User, digest string) (*Blob, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	query := `
+		SELECT *
+			FROM "Blob"
+			WHERE "userId" = $1 AND
+				"digest" = $2 AND
+				"lastStmt" < 2
+				LIMIT 1;`
+
+	blob := &Blob{}
+
+	args := []interface{}{user.Id, digest}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 	if err != nil {

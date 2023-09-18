@@ -5,6 +5,7 @@ import (
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"crypto/sha256"
+	b64 "encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -74,12 +75,12 @@ func (api *FilesApi) Upload() http.Handler {
 			}
 
 			hashSum := hash.Sum(nil)
-			hashStr := fmt.Sprintf("%x", hashSum)
+			digest := b64.RawURLEncoding.EncodeToString(hashSum)
 
 			contentType := files[i].Header.Get("content-type")
 
 			uploadedFile := &repository.File{
-				Hash:        hashStr,
+				Digest:      digest,
 				Name:        files[i].Filename,
 				Size:        written,
 				ContentType: contentType,
@@ -91,7 +92,7 @@ func (api *FilesApi) Upload() http.Handler {
 				return
 			}
 
-			os.Rename(filepath.Join(filesPath, uuid), filepath.Join(filesPath, uploadedFile.Uri))
+			os.Rename(filepath.Join(filesPath, uuid), filepath.Join(filesPath, digest))
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
@@ -118,9 +119,9 @@ func (api *FilesApi) Download() http.Handler {
 			return
 		}
 
-		uri := path.Base(r.URL.Path)
+		digest := path.Base(r.URL.Path)
 
-		file, err := api.files.GetFileByUri(user, uri)
+		file, err := api.files.GetFileByDigest(user, digest)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -148,7 +149,7 @@ func (api *FilesApi) Download() http.Handler {
 
 			filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
 
-			filePath := filepath.Join(filesPath, uri)
+			filePath := filepath.Join(filesPath, digest)
 			w.Header().Set("Content-Type", "application/octet-stream")
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiFileName, urlEncodedFileName))
 
@@ -167,7 +168,17 @@ func (api *FilesApi) List() http.Handler {
 			return
 		}
 
-		fileList, err := api.files.List(user)
+		var folder repository.Folder
+
+		err := helper.Decoder(r.Body).Decode(&folder)
+		if err != nil {
+			if err.Error() != "EOF" {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+		}
+
+		fileList, err := api.files.List(user, folder.FolderId)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -313,25 +324,19 @@ func (api *FilesApi) Delete() http.Handler {
 
 		urisString := string(body)
 
-		err = api.files.Delete(user, urisString)
+		_, err = api.files.Delete(user, urisString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
+		//TODO remove if no reference
 
-		var bodyList []string
+		// filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
 
-		err = json.Unmarshal(body, &bodyList)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		for _, uuid := range bodyList {
-			_ = os.Remove(filepath.Join(filesPath, uuid))
-		}
+		// for _, file := range *files {
+		// 	_ = os.Remove(filepath.Join(filesPath, file.Digest))
+		// }
 
 		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
 	})

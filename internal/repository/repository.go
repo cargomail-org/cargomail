@@ -27,6 +27,7 @@ var (
 	ErrDuplicateContact         = errors.New("contact already exists")
 	ErrInvalidEmailAddress      = errors.New("invalid email address")
 	ErrBlobNotFound             = errors.New("blob not found")
+	ErrBlobWrongName            = errors.New("wrong blob name")
 	ErrFileNotFound             = errors.New("file not found")
 	ErrDraftNotFound            = errors.New("draft not found")
 	ErrMissingSender            = errors.New("missing sender")

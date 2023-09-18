@@ -380,7 +380,7 @@ const composeTable = new DataTable("#composeTable", {
       data: "fileName",
       render: (data, type, full, meta) => {
         const link = `${window.apiHost}/api/v1/files/`;
-        return `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('composeForm', '${link}${full.uri}', '${data}');">${data}</a>`;
+        return `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('composeForm', '${link}${full.digest}', '${data}');">${data}</a>`;
       },
     },
     {
@@ -687,8 +687,11 @@ export const composeAddItems = (items) => {
     }
 
     if (!found) {
+      const uri = items[i].uri ? { uri: items[i].uri } : undefined;
+      const digest = items[i].digest ? { digest: items[i].digest } : undefined;
       const item = {
-        uri: items[i].uri,
+        ...uri,
+        ...digest,
         contentType: items[i].contentType,
         fileName: items[i]?.name ? items[i]?.name : items[i]?.fileName, // file name or attachment fileName
         size: items[i].size,

@@ -664,9 +664,9 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 									if val, ok := part.Headers["Content-Type"].([]interface{}); ok {
 										if len(val) > 1 {
 											if val, ok := val[0].(string); ok {
-												s := strings.SplitAfter(val, "digest:sha-256=\"")
+												s := strings.SplitAfter(val, "digest=\"")
 												if len(s) > 1 {
-													digest := strings.SplitAfter(s[1], "\"")[0]
+													digest := strings.Split(s[1], "\"")[0]
 													// log.Println(uri)
 													attachmentDigests = append(attachmentDigests, digest)
 												}
@@ -694,10 +694,10 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 				 "folder",
 				 "payload")
 			VALUES ((SELECT "id" FROM "User" WHERE "username" = $1),
+					NULL,
 					$2,
 					$3,
-					$4,
-					$5)
+					$4)
 			RETURNING * ;`
 
 		var username string
@@ -712,7 +712,6 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		draft.Payload.Headers["X-Thread-ID"] = threadIdValue
 
 		args = []interface{}{username,
-			prefixedDeviceId,
 			unread,
 			folder,
 			draft.Payload}
@@ -731,16 +730,19 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 
 		// access to files
 		for _, digest := range attachmentDigests {
+			folder := 2 // inbox
+
 			query := `
 			INSERT INTO
-				"File" ("userId", "deviceId", "hash", "name", "path", "contentType", "size")
-				 SELECT (SELECT "id" FROM "User" WHERE "username" = $1), NULL, "hash", "name", "path", "contentType", "size"
+				"File" ("userId", "deviceId", "folder", "digest", "name", "path", "contentType", "size")
+				 SELECT (SELECT "id" FROM "User" WHERE "username" = $1), NULL, $2, "digest", "name", "path", "contentType", "size"
 					FROM "File"
-					WHERE "userId" = $2" AND
-						  "hash" = $3 AND
-						  "lastStmt" < 2;`
+					WHERE "userId" = $3 AND
+						  "digest" = $4 AND
+						  "lastStmt" < 2
+						  LIMIT 1;`
 
-			args := []interface{}{username, user.Id, digest}
+			args := []interface{}{username, folder, user.Id, digest}
 
 			_, err := tx.ExecContext(ctx, query, args...)
 			if err != nil {

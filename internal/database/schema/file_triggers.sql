@@ -16,7 +16,8 @@ CREATE TRIGGER IF NOT EXISTS "FileBeforeUpdate"
     BEFORE UPDATE OF
         "uri",
         "userId",
-        "hash",
+        "folder",
+        "digest",
         "name",
         "path",
         "size",

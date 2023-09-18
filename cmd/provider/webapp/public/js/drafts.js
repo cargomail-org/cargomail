@@ -83,9 +83,9 @@ const draftsTable = new DataTable("#draftsTable", {
       const response = await api(
         draftsFormAlert.id,
         200,
-        `${window.apiHost}/api/v1/drafts`,
+        `${window.apiHost}/api/v1/drafts/list`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -116,7 +116,7 @@ const draftsTable = new DataTable("#draftsTable", {
         const attachmentLinks = [];
 
         for (const attachment of parsed.attachments) {
-          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('draftsFormAlert', '${link}${attachment.uri}', '${attachment.fileName}');">${attachment.fileName}</a>`;
+          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('draftsFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
           attachmentLinks.push(attachmentAnchor);
         }
 

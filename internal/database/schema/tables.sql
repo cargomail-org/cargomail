@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS "Session" (
 CREATE TABLE IF NOT EXISTS "Blob" (
     "uri"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
-    "hash" 	    	VARCHAR(32) NOT NULL,
+    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox, 3-spam
+    "digest"     	VARCHAR(32) NOT NULL,
     "name"          VARCHAR(255),
     "snippet"       VARCHAR(255),
     "path"			TEXT NOT NULL,
@@ -38,7 +39,8 @@ CREATE TABLE IF NOT EXISTS "Blob" (
 CREATE TABLE IF NOT EXISTS "File" (
     "uri"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
-    "hash" 	    	VARCHAR(32) NOT NULL,
+    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox, 3-spam
+    "digest"     	VARCHAR(32) NOT NULL,
     "name"			TEXT NOT NULL,
     "path"			TEXT NOT NULL,
     "size"			INTEGER NOT NULL,
@@ -73,7 +75,7 @@ CREATE TABLE IF NOT EXISTS "Message"
     "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,  
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
-    "folder"        INTEGER(2) NOT NULL,  -- (0 reserverd) 1-sent, 2-inbox, 3-spam
+    "folder"        INTEGER(2) NOT NULL,  -- (0-draft), 1-sent, 2-inbox, 3-spam
     "payload"       TEXT,                 -- json 'MessagePart' object
     "labelIds"      TEXT,                 -- json 'labelIds' array
     "sentAt"        TIMESTAMP,
@@ -221,12 +223,12 @@ CREATE TABLE IF NOT EXISTS "ContactHistorySeq" (
 
 ------------------------------indexes----------------------------
 
-CREATE INDEX IF NOT EXISTS "IdxBlobHash" ON "Blob" ("hash");
+CREATE INDEX IF NOT EXISTS "IdxBlobDigest" ON "Blob" ("digest");
 CREATE INDEX IF NOT EXISTS "IdxBlobTimelineId" ON "Blob" ("timelineId");
 CREATE INDEX IF NOT EXISTS "IdxBlobHistoryId" ON "Blob" ("historyId");
 CREATE INDEX IF NOT EXISTS "IdxBlobLastStmt" ON "Blob" ("lastStmt");
 
-CREATE INDEX IF NOT EXISTS "IdxFileHash" ON "File" ("hash");
+CREATE INDEX IF NOT EXISTS "IdxFileDigest" ON "File" ("digest");
 CREATE INDEX IF NOT EXISTS "IdxFileTimelineId" ON "File" ("timelineId");
 CREATE INDEX IF NOT EXISTS "IdxFileHistoryId" ON "File" ("historyId");
 CREATE INDEX IF NOT EXISTS "IdxFileLastStmt" ON "File" ("lastStmt");

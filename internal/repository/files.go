@@ -14,7 +14,8 @@ type FileRepository struct {
 type File struct {
 	Uri         string     `json:"uri"`
 	UserId      int64      `json:"-"`
-	Hash        string     `json:"-"`
+	Folder      int16      `json:"folder"`
+	Digest      string     `json:"digest"`
 	Name        string     `json:"name"`
 	Path        string     `json:"-"`
 	Size        int64      `json:"size"`
@@ -74,13 +75,15 @@ func (r FileRepository) Create(user *User, file *File) (*File, error) {
 
 	query := `
 		INSERT INTO
-			"File" ("userId", "deviceId", "hash", "name", "path", "contentType", "size")
-			VALUES ($1, $2, $3, $4, $5, $6, $7)
+			"File" ("userId", "deviceId", "folder", "digest", "name", "path", "contentType", "size")
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{user.Id, prefixedDeviceId, file.Hash, file.Name, file.Path, file.ContentType, file.Size}
+	folder := 0
+
+	args := []interface{}{user.Id, prefixedDeviceId, folder, file.Digest, file.Name, file.Path, file.ContentType, file.Size}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
 	if err != nil {
@@ -90,7 +93,7 @@ func (r FileRepository) Create(user *User, file *File) (*File, error) {
 	return file, nil
 }
 
-func (r FileRepository) List(user *User) (*FileList, error) {
+func (r FileRepository) List(user *User, folderId int) (*FileList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -105,10 +108,11 @@ func (r FileRepository) List(user *User) (*FileList, error) {
 		SELECT *
 			FROM "File"
 			WHERE "userId" = $1 AND
+			CASE WHEN $2 == -1 THEN "folder" > $2 ELSE "folder" == $2 END AND			
 			"lastStmt" < 2
 			ORDER BY "createdAt" DESC;`
 
-	args := []interface{}{user.Id}
+	args := []interface{}{user.Id, folderId}
 
 	rows, err := tx.QueryContext(ctx, query, args...)
 	if err != nil {
@@ -351,14 +355,16 @@ func (r *FileRepository) Untrash(user *User, uris string) error {
 	return nil
 }
 
-func (r FileRepository) Delete(user *User, uris string) error {
+func (r FileRepository) Delete(user *User, uris string) (*[]File, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+
+	files := []File{}
 
 	if len(uris) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		defer tx.Rollback()
 
@@ -366,14 +372,22 @@ func (r FileRepository) Delete(user *User, uris string) error {
 		DELETE
 			FROM "File"
 			WHERE "userId" = $1 AND
-			"uri" IN (SELECT value FROM json_each($2, '$.uris'));`
+			"uri" IN (SELECT value FROM json_each($2, '$.uris'))
+			RETURNING * ;`
+
+		file := File{}
 
 		args := []interface{}{user.Id, uris}
 
-		_, err = tx.ExecContext(ctx, query, args...)
+		err = tx.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
 		if err != nil {
-			return err
+			if err.Error() == "sql: no rows in result set" {
+				return &[]File{}, nil
+			}
+			return nil, err
 		}
+
+		files = append(files, file)
 
 		query = `
 		UPDATE "FileDeleted"
@@ -385,15 +399,15 @@ func (r FileRepository) Delete(user *User, uris string) error {
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		if err = tx.Commit(); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	return nil
+	return &files, nil
 }
 
 func (r FileRepository) GetFileByUri(user *User, uri string) (*File, error) {
@@ -410,6 +424,32 @@ func (r FileRepository) GetFileByUri(user *User, uri string) (*File, error) {
 	file := &File{}
 
 	args := []interface{}{user.Id, uri}
+
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
+	if err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			return &File{}, nil
+		}
+		return &File{}, err
+	}
+
+	return file, nil
+}
+
+func (r FileRepository) GetFileByDigest(user *User, digest string) (*File, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	query := `
+		SELECT *
+			FROM "File"
+			WHERE "userId" = $1 AND
+				"digest" = $2 AND
+				"lastStmt" < 2;`
+
+	file := &File{}
+
+	args := []interface{}{user.Id, digest}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
 	if err != nil {

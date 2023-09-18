@@ -205,12 +205,13 @@ const filesTable = new DataTable("#filesTable", {
       const response = await api(
         uploadForm.id,
         200,
-        `${window.apiHost}/api/v1/files`,
+        `${window.apiHost}/api/v1/files/list`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ folderId: 0 }),
         }
       );
 
@@ -230,7 +231,7 @@ const filesTable = new DataTable("#filesTable", {
       data: "name",
       render: (data, type, full, meta) => {
         const link = `${window.apiHost}/api/v1/files/`;
-        return `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('uploadForm', '${link}${full.uri}', '${data}');">${data}</a>`;
+        return `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('uploadForm', '${link}${full.digest}', '${data}');">${data}</a>`;
       },
     },
     {

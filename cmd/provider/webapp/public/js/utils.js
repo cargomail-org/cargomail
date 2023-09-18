@@ -157,7 +157,7 @@ const parseParts = (payload) => {
       item.startsWith("message/external-body")
     );
 
-    let attachmentUri = "#";
+    let attachmentUri;
 
     if (externalContent) {
       attachmentUri = externalContent.split("uri=").pop();
@@ -166,7 +166,20 @@ const parseParts = (payload) => {
       if (quotedStrings?.length > 1) {
         attachmentUri = quotedStrings[1];
       } else {
-        attachmentUri = "#";
+        attachmentUri = undefined;
+      }
+    }
+
+    let attachmentDigest;
+
+    if (externalContent) {
+      attachmentDigest = externalContent.split("digest=").pop();
+
+      const quotedStrings = attachmentDigest.split('"');
+      if (quotedStrings?.length > 1) {
+        attachmentDigest = quotedStrings[1];
+      } else {
+        attachmentDigest = undefined;
       }
     }
 
@@ -183,36 +196,43 @@ const parseParts = (payload) => {
       }
     }
 
-    let attachmentDigestSha256;
-
-    if (externalContent) {
-      attachmentDigestSha256 = externalContent.split("digest:sha-256=").pop();
-
-      const quotedStrings = attachmentDigestSha256.split('"');
-      if (quotedStrings?.length > 1) {
-        attachmentDigestSha256 = quotedStrings[1];
-      } else {
-        attachmentDigestSha256 = undefined;
-      }
-    }
-
-    if (attachmentUri && attachmentFileName && attachmentSize) {
-      if (attachmentDigestSha256 > 0) {
-        attachments.push({
-          uri: attachmentUri,
-          contentType: attachmentContentType,
-          fileName: attachmentFileName,
-          size: parseInt(attachmentSize),
-          digestSha256: attachmentDigestSha256,
-        });
-      } else {
-        attachments.push({
-          uri: attachmentUri,
-          contentType: attachmentContentType,
-          fileName: attachmentFileName,
-          size: parseInt(attachmentSize),
-        });
-      }
+    if (
+      attachmentUri &&
+      attachmentDigest &&
+      attachmentFileName &&
+      attachmentSize
+    ) {
+      attachments.push({
+        uri: attachmentUri,
+        digest: attachmentDigest,
+        contentType: attachmentContentType,
+        fileName: attachmentFileName,
+        size: parseInt(attachmentSize),
+      });
+    } else if (
+      !attachmentUri &&
+      attachmentDigest &&
+      attachmentFileName &&
+      attachmentSize
+    ) {
+      attachments.push({
+       digest: attachmentDigest,
+        contentType: attachmentContentType,
+        fileName: attachmentFileName,
+        size: parseInt(attachmentSize),
+      });
+    } else if (
+      attachmentUri &&
+      !attachmentDigest &&
+      attachmentFileName &&
+      attachmentSize
+    ) {
+      attachments.push({
+        uri: attachmentUri,
+        contentType: attachmentContentType,
+        fileName: attachmentFileName,
+        size: parseInt(attachmentSize),
+      });
     }
   }
 
@@ -373,7 +393,7 @@ export const composePayload = (parsed) => {
         const attachmentPart = {
           headers: {
             "Content-Type": [
-              `message/external-body; uri="${attachment.uri}"; size="${attachment.size}"`,
+              `message/external-body; uri="${attachment.uri}"; digest="${attachment.digest}"; size="${attachment.size}"`,
               attachment.contentType,
             ],
             "Content-Disposition": `attachment; filename="${attachment.fileName}"`,

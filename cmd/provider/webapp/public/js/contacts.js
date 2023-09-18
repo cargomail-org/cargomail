@@ -37,9 +37,9 @@ const contactsTable = new DataTable("#contactsTable", {
       const response = await api(
         contactsForm.id,
         200,
-        `${window.apiHost}/api/v1/contacts`,
+        `${window.apiHost}/api/v1/contacts/list`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },

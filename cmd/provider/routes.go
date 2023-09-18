@@ -113,7 +113,7 @@ func (svc *service) routes(r *Router) {
 
 	// Contacts API
 	r.Route("POST", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.Create()))
-	r.Route("GET", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.List()))
+	r.Route("POST", "/api/v1/contacts/list", svc.api.Authenticate(svc.api.Contacts.List()))
 	r.Route("POST", "/api/v1/contacts/sync", svc.api.Authenticate(svc.api.Contacts.Sync()))
 	r.Route("PUT", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.Update()))
 	r.Route("POST", "/api/v1/contacts/trash", svc.api.Authenticate(svc.api.Contacts.Trash()))
@@ -122,7 +122,7 @@ func (svc *service) routes(r *Router) {
 
 	// Files API
 	r.Route("POST", "/api/v1/files/upload", svc.api.Authenticate(svc.api.Files.Upload()))
-	r.Route("GET", "/api/v1/files", svc.api.Authenticate(svc.api.Files.List()))
+	r.Route("POST", "/api/v1/files/list", svc.api.Authenticate(svc.api.Files.List()))
 	r.Route("POST", "/api/v1/files/sync", svc.api.Authenticate(svc.api.Files.Sync()))
 	r.Route("HEAD", "/api/v1/files/", svc.api.Authenticate(svc.api.Files.Download()))
 	r.Route("GET", "/api/v1/files/", svc.api.Authenticate(svc.api.Files.Download()))
@@ -132,7 +132,7 @@ func (svc *service) routes(r *Router) {
 
 	// Blobs API
 	r.Route("POST", "/api/v1/blobs/upload", svc.api.Authenticate(svc.api.Blobs.Upload()))
-	r.Route("GET", "/api/v1/blobs", svc.api.Authenticate(svc.api.Blobs.List()))
+	r.Route("POST", "/api/v1/blobs/list", svc.api.Authenticate(svc.api.Blobs.List()))
 	r.Route("POST", "/api/v1/blobs/sync", svc.api.Authenticate(svc.api.Blobs.Sync()))
 	r.Route("PUT", "/api/v1/blobs/upload", svc.api.Authenticate(svc.api.Blobs.Upload()))
 	r.Route("HEAD", "/api/v1/blobs/", svc.api.Authenticate(svc.api.Blobs.Download()))
@@ -143,7 +143,7 @@ func (svc *service) routes(r *Router) {
 
 	// Drafts API
 	r.Route("POST", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.Create()))
-	r.Route("GET", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.List()))
+	r.Route("POST", "/api/v1/drafts/list", svc.api.Authenticate(svc.api.Drafts.List()))
 	r.Route("POST", "/api/v1/drafts/sync", svc.api.Authenticate(svc.api.Drafts.Sync()))
 	r.Route("PUT", "/api/v1/drafts", svc.api.Authenticate(svc.api.Drafts.Update()))
 	r.Route("POST", "/api/v1/drafts/trash", svc.api.Authenticate(svc.api.Drafts.Trash()))

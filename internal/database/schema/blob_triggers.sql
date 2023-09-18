@@ -16,7 +16,8 @@ CREATE TRIGGER IF NOT EXISTS "BlobBeforeUpdate"
     BEFORE UPDATE OF
         "uri",
         "userId",
-        -- "hash",
+        "folder",
+        -- "digest",
         -- "name",
         -- "snippet",
         "path",
@@ -30,7 +31,7 @@ END;
 
 CREATE TRIGGER IF NOT EXISTS "BlobAfterUpdate"
     AFTER UPDATE OF
-        "hash",
+        "digest",
         "name",
         "snippet",
         "size"

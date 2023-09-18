@@ -117,7 +117,7 @@ export const inboxTable = new DataTable("#inboxTable", {
         const attachmentLinks = [];
 
         for (const attachment of parsed.attachments) {
-          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('inboxFormAlert', '${link}${attachment.uri}', '${attachment.fileName}');">${attachment.fileName}</a>`;
+          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('inboxFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
           attachmentLinks.push(attachmentAnchor);
         }
 
