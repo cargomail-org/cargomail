@@ -39,7 +39,7 @@ func redirectToLoginPage(w http.ResponseWriter, r *http.Request) {
 // middleware
 func (app *App) Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sessionCookie, err := r.Cookie("sessionUri")
+		sessionCookie, err := r.Cookie("sessionId")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
@@ -50,15 +50,15 @@ func (app *App) Authenticate(next http.Handler) http.Handler {
 			return
 		}
 
-		sessionUri := sessionCookie.Value
+		sessionId := sessionCookie.Value
 
 		// TODO magic number!
-		if len(sessionUri) != 32 {
+		if len(sessionId) != 32 {
 			redirectToLoginPage(w, r)
 			return
 		}
 
-		user, err := app.repository.User.GetBySession(repository.ScopeAuthentication, sessionUri)
+		user, err := app.repository.User.GetBySession(repository.ScopeAuthentication, sessionId)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrUsernameNotFound):
@@ -101,7 +101,7 @@ func (app *App) Logout() http.Handler {
 		}
 
 		clearCookie := http.Cookie{
-			Name:     "sessionUri",
+			Name:     "sessionId",
 			Value:    "",
 			MaxAge:   -1,
 			Path:     "/",
@@ -111,7 +111,7 @@ func (app *App) Logout() http.Handler {
 		}
 		http.SetCookie(w, &clearCookie)
 
-		cookie, err := r.Cookie("sessionUri")
+		cookie, err := r.Cookie("sessionId")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
@@ -122,9 +122,9 @@ func (app *App) Logout() http.Handler {
 			return
 		}
 
-		sessionUri := cookie.Value
+		sessionId := cookie.Value
 
-		err = app.repository.Session.Remove(user, sessionUri)
+		err = app.repository.Session.Remove(user, sessionId)
 		if err != nil {
 			redirectToLoginPage(w, r)
 			return

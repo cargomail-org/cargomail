@@ -13,7 +13,7 @@ type BlobRepository struct {
 }
 
 type Blob struct {
-	Uri         string     `json:"uri"`
+	Id          string     `json:"id"`
 	UserId      int64      `json:"-"`
 	Folder      int16      `json:"folder"`
 	Digest      string     `json:"digest"`
@@ -31,7 +31,7 @@ type Blob struct {
 }
 
 type BlobDeleted struct {
-	Uri       string  `json:"uri"`
+	Id        string  `json:"id"`
 	UserId    int64   `json:"-"`
 	HistoryId int64   `json:"-"`
 	DeviceId  *string `json:"-"`
@@ -354,13 +354,13 @@ func (r BlobRepository) Update(user *User, blob *Blob) (*Blob, error) {
 				"size" = $3,
 				"deviceId" = $4
 			WHERE "userId" = $5 AND
-			      "uri" = $6 AND
+			      "id" = $6 AND
 				  "lastStmt" <> 2
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{blob.Digest, blob.Snippet, blob.Size, prefixedDeviceId, user.Id, blob.Uri}
+	args := []interface{}{blob.Digest, blob.Snippet, blob.Size, prefixedDeviceId, user.Id, blob.Id}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 	if err != nil {
@@ -375,21 +375,21 @@ func (r BlobRepository) Update(user *User, blob *Blob) (*Blob, error) {
 	return blob, nil
 }
 
-func (r *BlobRepository) Trash(user *User, uris string) error {
+func (r *BlobRepository) Trash(user *User, ids string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(uris) > 0 {
+	if len(ids) > 0 {
 		query := `
 		UPDATE "Blob"
 			SET "lastStmt" = 2,
 				"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, uris}
+		args := []interface{}{prefixedDeviceId, user.Id, ids}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -400,21 +400,21 @@ func (r *BlobRepository) Trash(user *User, uris string) error {
 	return nil
 }
 
-func (r *BlobRepository) Untrash(user *User, uris string) error {
+func (r *BlobRepository) Untrash(user *User, ids string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(uris) > 0 {
+	if len(ids) > 0 {
 		query := `
 		UPDATE "Blob"
 			SET "lastStmt" = 0,
 				"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, uris}
+		args := []interface{}{prefixedDeviceId, user.Id, ids}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -425,13 +425,13 @@ func (r *BlobRepository) Untrash(user *User, uris string) error {
 	return nil
 }
 
-func (r BlobRepository) Delete(user *User, uris string) (*[]Blob, error) {
+func (r BlobRepository) Delete(user *User, ids string) (*[]Blob, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	blobs := []Blob{}
 
-	if len(uris) > 0 {
+	if len(ids) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
 		if err != nil {
 			return nil, err
@@ -442,12 +442,12 @@ func (r BlobRepository) Delete(user *User, uris string) (*[]Blob, error) {
 		DELETE
 			FROM "Blob"
 			WHERE "userId" = $1 AND
-			"uri" IN (SELECT value FROM json_each($2, '$.uris'))
+			"id" IN (SELECT value FROM json_each($2, '$.ids'))
 			RETURNING * ;`
 
 		blob := Blob{}
 
-		args := []interface{}{user.Id, uris}
+		args := []interface{}{user.Id, ids}
 
 		err = tx.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 		if err != nil {
@@ -463,9 +463,9 @@ func (r BlobRepository) Delete(user *User, uris string) (*[]Blob, error) {
 		UPDATE "BlobDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
-		args = []interface{}{user.DeviceId, user.Id, uris}
+		args = []interface{}{user.DeviceId, user.Id, ids}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -480,7 +480,7 @@ func (r BlobRepository) Delete(user *User, uris string) (*[]Blob, error) {
 	return &blobs, nil
 }
 
-func (r BlobRepository) GetBlobByUri(user *User, uri string) (*Blob, error) {
+func (r BlobRepository) GetBlobById(user *User, id string) (*Blob, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -488,12 +488,12 @@ func (r BlobRepository) GetBlobByUri(user *User, uri string) (*Blob, error) {
 		SELECT *
 			FROM "Blob"
 			WHERE "userId" = $1 AND
-				"uri" = $2 AND
+				"id" = $2 AND
 				"lastStmt" < 2;`
 
 	blob := &Blob{}
 
-	args := []interface{}{user.Id, uri}
+	args := []interface{}{user.Id, id}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 	if err != nil {

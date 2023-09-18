@@ -21,7 +21,7 @@ type MessagePart struct {
 }
 
 type Message struct {
-	Uri        string       `json:"uri"`
+	Id         string       `json:"id"`
 	UserId     int64        `json:"-"`
 	Unread     bool         `json:"unread"`
 	Starred    bool         `json:"starred"`
@@ -40,7 +40,7 @@ type Message struct {
 }
 
 type MessageDeleted struct {
-	Uri       string  `json:"uri"`
+	Id        string  `json:"id"`
 	UserId    int64   `json:"-"`
 	HistoryId int64   `json:"-"`
 	DeviceId  *string `json:"-"`
@@ -350,7 +350,7 @@ func (r *MessageRepository) Update(user *User, state *State) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(state.Uris) > 0 {
+	if len(state.Ids) > 0 {
 		var query string
 		var args []interface{}
 
@@ -361,7 +361,7 @@ func (r *MessageRepository) Update(user *User, state *State) error {
 			return err
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
 		if state.Unread != nil && state.Starred != nil {
 			query = `
@@ -370,27 +370,27 @@ func (r *MessageRepository) Update(user *User, state *State) error {
 					"starred" = $2,
 					"deviceId" = $3
 				WHERE "userId" = $4 AND
-				"uri" IN (SELECT value FROM json_each($5, '$.uris')) AND
+				"id" IN (SELECT value FROM json_each($5, '$.ids')) AND
 				"lastStmt" <> 2;`
-			args = []interface{}{state.Unread, state.Starred, prefixedDeviceId, user.Id, urisString}
+			args = []interface{}{state.Unread, state.Starred, prefixedDeviceId, user.Id, idsString}
 		} else if state.Unread == nil && state.Starred != nil {
 			query = `
 			UPDATE Message
 				SET "starred" = $1,
 					"deviceId" = $2
 				WHERE "userId" = $3 AND
-				"uri" IN (SELECT value FROM json_each($4, '$.uris')) AND
+				"id" IN (SELECT value FROM json_each($4, '$.ids')) AND
 				"lastStmt" <> 2;`
-			args = []interface{}{state.Starred, prefixedDeviceId, user.Id, urisString}
+			args = []interface{}{state.Starred, prefixedDeviceId, user.Id, idsString}
 		} else if state.Unread != nil && state.Starred == nil {
 			query = `
 			UPDATE Message
 				SET "unread" = $1,
 					"deviceId" = $2
 				WHERE "userId" = $3 AND
-				"uri" IN (SELECT value FROM json_each($4, '$.uris')) AND
+				"id" IN (SELECT value FROM json_each($4, '$.ids')) AND
 				"lastStmt" <> 2;`
-			args = []interface{}{state.Unread, prefixedDeviceId, user.Id, urisString}
+			args = []interface{}{state.Unread, prefixedDeviceId, user.Id, idsString}
 		} else {
 			return ErrMissingStateField
 		}
@@ -404,21 +404,21 @@ func (r *MessageRepository) Update(user *User, state *State) error {
 	return nil
 }
 
-func (r *MessageRepository) Trash(user *User, uris string) error {
+func (r *MessageRepository) Trash(user *User, ids string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(uris) > 0 {
+	if len(ids) > 0 {
 		query := `
 		UPDATE Message
 			SET "lastStmt" = 2,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, uris}
+		args := []interface{}{prefixedDeviceId, user.Id, ids}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -429,21 +429,21 @@ func (r *MessageRepository) Trash(user *User, uris string) error {
 	return nil
 }
 
-func (r *MessageRepository) Untrash(user *User, uris string) error {
+func (r *MessageRepository) Untrash(user *User, ids string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(uris) > 0 {
+	if len(ids) > 0 {
 		query := `
 		UPDATE "Message"
 			SET "lastStmt" = 0,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, uris}
+		args := []interface{}{prefixedDeviceId, user.Id, ids}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -454,11 +454,11 @@ func (r *MessageRepository) Untrash(user *User, uris string) error {
 	return nil
 }
 
-func (r MessageRepository) Delete(user *User, uris string) error {
+func (r MessageRepository) Delete(user *User, ids string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(uris) > 0 {
+	if len(ids) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
 		if err != nil {
 			return err
@@ -469,9 +469,9 @@ func (r MessageRepository) Delete(user *User, uris string) error {
 		DELETE
 			FROM "Message"
 			WHERE "userId" = $1 AND
-			"uri" IN (SELECT value FROM json_each($2, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($2, '$.ids'));`
 
-		args := []interface{}{user.Id, uris}
+		args := []interface{}{user.Id, ids}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -482,9 +482,9 @@ func (r MessageRepository) Delete(user *User, uris string) error {
 		UPDATE "MessageDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
-		args = []interface{}{user.DeviceId, user.Id, uris}
+		args = []interface{}{user.DeviceId, user.Id, ids}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {

@@ -36,8 +36,8 @@ var (
 	ErrInvalidRecipients        = errors.New("invalid recipient(s)")
 	ErrRecipientNotFound        = errors.New("recipient(s) not found")
 	ErrMessageNotFound          = errors.New("message not found")
-	ErrMissingUrisField         = errors.New("missing 'uris' field")
-	ErrMissingUriField          = errors.New("missing 'uri' field")
+	ErrMissingIdsField          = errors.New("missing 'ids' field")
+	ErrMissingIdField           = errors.New("missing 'id' field")
 	ErrMissingPayloadField      = errors.New("missing 'payload' field")
 	ErrMissingHeadersField      = errors.New("missing 'headers' field")
 	ErrMissingStateField        = errors.New("missing state field(s)")
@@ -48,12 +48,12 @@ type History struct {
 	IgnoreDevice bool  `json:"ignoreDevice"`
 }
 
-type Uri struct {
-	Uri string `json:"uri"`
+type Id struct {
+	Id string `json:"id"`
 }
 
-type Uris struct {
-	Uris []string `json:"uris"`
+type Ids struct {
+	Ids []string `json:"ids"`
 }
 
 type Folder struct {
@@ -61,7 +61,7 @@ type Folder struct {
 }
 
 type State struct {
-	Uris    []string `json:"uris"`
+	Ids     []string `json:"ids"`
 	Unread  *bool    `json:"unread"`
 	Starred *bool    `json:"starred"`
 }

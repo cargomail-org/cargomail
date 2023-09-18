@@ -191,7 +191,7 @@ func (r UserRepository) GetByUsername(username string) (*User, error) {
 	return &user, nil
 }
 
-func (r UserRepository) GetBySession(sessionScope, uri string) (*User, error) {
+func (r UserRepository) GetBySession(sessionScope, id string) (*User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -200,11 +200,11 @@ func (r UserRepository) GetBySession(sessionScope, uri string) (*User, error) {
 			FROM "User"
 			INNER JOIN "Session"
 			ON "User"."id" = "Session"."userId"
-			WHERE "Session"."uri" = $1
+			WHERE "Session"."id" = $1
 			AND "Session"."scope" = $2
 			AND "Session"."expiry" > $3;`
 
-	args := []interface{}{uri, sessionScope, time.Now()}
+	args := []interface{}{id, sessionScope, time.Now()}
 
 	var user User
 

@@ -23,7 +23,7 @@ import {
 } from "/public/js/utils.js";
 import { sentTableRefresh } from "/public/js/sent.js";
 
-let selectedUris = [];
+let selectedIds = [];
 
 const inboxConfirmDialog = new bootstrap.Modal(
   document.querySelector("#inboxConfirmDialog")
@@ -31,7 +31,7 @@ const inboxConfirmDialog = new bootstrap.Modal(
 
 const inboxFormAlert = document.getElementById("inboxFormAlert");
 
-const composeUriInput = document.getElementById("composeUriInput");
+const composeIdInput = document.getElementById("composeIdInput");
 
 let formIsPopulated = false;
 
@@ -104,20 +104,20 @@ export const inboxTable = new DataTable("#inboxTable", {
   },
   ordering: true,
   columns: [
-    { data: "uri", visible: false, searchable: false },
+    { data: "id", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
       data: "payload",
       className: "payload",
       orderable: false,
       render: (data, type, full, meta) => {
-        const parsed = parsePayload(full.uri, full.payload);
+        const parsed = parsePayload(full.id, full.payload);
 
         const link = `${window.apiHost}/api/v1/files/`;
         const attachmentLinks = [];
 
         for (const attachment of parsed.attachments) {
-          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('inboxFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
+          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadId('inboxFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
           attachmentLinks.push(attachmentAnchor);
         }
 
@@ -165,7 +165,7 @@ export const inboxTable = new DataTable("#inboxTable", {
       },
     },
   ],
-  rowId: "uri",
+  rowId: "id",
   columnDefs: [
     {
       targets: 1,
@@ -226,16 +226,16 @@ export const inboxTable = new DataTable("#inboxTable", {
       className: "inbox-delete",
       enabled: false,
       action: function () {
-        selectedUris = [];
+        selectedIds = [];
 
         const selectedData = inboxTable
           .rows(".selected")
           .data()
-          .map((obj) => obj.uri);
+          .map((obj) => obj.id);
         if (selectedData.length > 0) {
           inboxConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
-            selectedUris.push(selectedData[i]);
+            selectedIds.push(selectedData[i]);
           }
         }
       },
@@ -269,7 +269,7 @@ export const inboxTableRefresh = (data) => {
     if (message.folder == 2) {
       // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
       const notFound =
-        inboxTable.column(0).data().toArray().indexOf(message.uri) === -1; // !!! must be
+        inboxTable.column(0).data().toArray().indexOf(message.id) === -1; // !!! must be
       if (notFound) {
         inboxTable.row.add(message);
       }
@@ -280,18 +280,18 @@ export const inboxTableRefresh = (data) => {
     if (message.folder == 2) {
       // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
       const notFound =
-        inboxTable.column(0).data().toArray().indexOf(message.uri) === -1; // !!! must be
+        inboxTable.column(0).data().toArray().indexOf(message.id) === -1; // !!! must be
       if (notFound) {
         inboxTable.row.add(message);
       } else {
-        inboxTable.row(`#${message.uri}`).data(message);
+        inboxTable.row(`#${message.id}`).data(message);
 
-        if (message.uri == composeUriInput.value) {
+        if (message.id == composeIdInput.value) {
           try {
-            const parsed = parsePayload(message.uri, message.payload);
+            const parsed = parsePayload(message.id, message.payload);
 
             formIsPopulated = true;
-            composePopulateForm(message.uri, parsed);
+            composePopulateForm(message.id, parsed);
           } finally {
             formIsPopulated = false;
           }
@@ -302,9 +302,9 @@ export const inboxTableRefresh = (data) => {
 
   for (const message of data.trashed) {
     if (message.folder == 2) {
-      inboxTable.row(`#${message.uri}`).remove();
+      inboxTable.row(`#${message.id}`).remove();
 
-      if (message.uri == composeUriInput.value) {
+      if (message.id == composeIdInput.value) {
         try {
           formIsPopulated = true;
           composeClearForm();
@@ -317,9 +317,9 @@ export const inboxTableRefresh = (data) => {
 
   for (const message of data.deleted) {
     if (message.folder == 2) {
-      inboxTable.row(`#${message.uri}`).remove();
+      inboxTable.row(`#${message.id}`).remove();
 
-      if (message.uri == composeUriInput.value) {
+      if (message.id == composeIdInput.value) {
         try {
           formIsPopulated = true;
           composeClearForm();
@@ -349,7 +349,7 @@ export const deleteInboxMessages = (e) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ uris: selectedUris }),
+        body: JSON.stringify({ ids: selectedIds }),
       }
     );
 
@@ -357,7 +357,7 @@ export const deleteInboxMessages = (e) => {
       return;
     }
 
-    if (selectedUris.includes(composeUriInput.value)) {
+    if (selectedIds.includes(composeIdInput.value)) {
       try {
         formIsPopulated = true;
         composeClearForm();
@@ -371,7 +371,7 @@ export const deleteInboxMessages = (e) => {
   })();
 };
 
-export const deleteMessage = async (composeForm, uri) => {
+export const deleteMessage = async (composeForm, id) => {
   const response = await api(
     composeForm.id,
     200,
@@ -382,7 +382,7 @@ export const deleteMessage = async (composeForm, uri) => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ uris: [uri] }),
+      body: JSON.stringify({ ids: [id] }),
     }
   );
 
@@ -390,7 +390,7 @@ export const deleteMessage = async (composeForm, uri) => {
     return;
   }
 
-  inboxTable.rows(`#${uri}`).remove().draw();
+  inboxTable.rows(`#${id}`).remove().draw();
   inboxTable.buttons([".inbox-delete"]).enable(inboxTable.rows().count() > 0);
 
   try {

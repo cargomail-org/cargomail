@@ -62,9 +62,9 @@ window.apiHost = "";
   })();
 })();
 
-const downloadUri = (formId, uri, name) => {
+const downloadId = (formId, id, name) => {
   (async () => {
-    const response = await api(formId, 200, uri, {
+    const response = await api(formId, 200, id, {
       method: "HEAD",
       headers: {
         Accept: "application/json",
@@ -77,7 +77,7 @@ const downloadUri = (formId, uri, name) => {
 
     const link = document.createElement("a");
     link.download = name;
-    link.href = uri;
+    link.href = id;
     link.click();
   })();
 };

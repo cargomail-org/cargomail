@@ -99,8 +99,8 @@ func (api *DraftsApi) Update() http.Handler {
 			return
 		}
 
-		if draft.Uri == "" {
-			http.Error(w, repository.ErrMissingUriField.Error(), http.StatusBadRequest)
+		if draft.Id == "" {
+			http.Error(w, repository.ErrMissingIdField.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -137,29 +137,29 @@ func (api *DraftsApi) Trash() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		err = api.drafts.Trash(user, urisString)
+		err = api.drafts.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -177,29 +177,29 @@ func (api *DraftsApi) Untrash() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		err = api.drafts.Untrash(user, urisString)
+		err = api.drafts.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -217,29 +217,29 @@ func (api *DraftsApi) Delete() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		err = api.drafts.Delete(user, urisString)
+		err = api.drafts.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -265,8 +265,8 @@ func (api *DraftsApi) Send() http.Handler {
 			return
 		}
 
-		if draft.Uri == "" {
-			http.Error(w, repository.ErrMissingUriField.Error(), http.StatusBadRequest)
+		if draft.Id == "" {
+			http.Error(w, repository.ErrMissingIdField.Error(), http.StatusBadRequest)
 			return
 		}
 

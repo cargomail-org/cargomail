@@ -81,13 +81,13 @@ func (api *MessagesApi) Update() http.Handler {
 			return
 		}
 
-		if state.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if state.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		_, err = json.Marshal(state.Uris)
+		_, err = json.Marshal(state.Ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -111,29 +111,29 @@ func (api *MessagesApi) Trash() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		err = api.messages.Trash(user, urisString)
+		err = api.messages.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -151,29 +151,29 @@ func (api *MessagesApi) Untrash() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		err = api.messages.Untrash(user, urisString)
+		err = api.messages.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -191,29 +191,29 @@ func (api *MessagesApi) Delete() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		err = api.messages.Delete(user, urisString)
+		err = api.messages.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

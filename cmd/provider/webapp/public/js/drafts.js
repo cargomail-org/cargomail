@@ -23,7 +23,7 @@ import {
   createPlainContentSnippet,
 } from "/public/js/utils.js";
 
-let selectedUris = [];
+let selectedIds = [];
 
 const draftsConfirmDialog = new bootstrap.Modal(
   document.querySelector("#draftsConfirmDialog")
@@ -31,7 +31,7 @@ const draftsConfirmDialog = new bootstrap.Modal(
 
 const draftsFormAlert = document.getElementById("draftsFormAlert");
 
-const composeUriInput = document.getElementById("composeUriInput");
+const composeIdInput = document.getElementById("composeIdInput");
 
 let formIsPopulated = false;
 
@@ -103,20 +103,20 @@ const draftsTable = new DataTable("#draftsTable", {
   },
   ordering: true,
   columns: [
-    { data: "uri", visible: false, searchable: false },
+    { data: "id", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
       data: "payload",
       className: "payload",
       orderable: false,
       render: (data, type, full, meta) => {
-        const parsed = parsePayload(full.uri, full.payload);
+        const parsed = parsePayload(full.id, full.payload);
 
         const link = `${window.apiHost}/api/v1/files/`;
         const attachmentLinks = [];
 
         for (const attachment of parsed.attachments) {
-          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('draftsFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
+          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadId('draftsFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
           attachmentLinks.push(attachmentAnchor);
         }
 
@@ -164,7 +164,7 @@ const draftsTable = new DataTable("#draftsTable", {
       },
     },
   ],
-  rowId: "uri",
+  rowId: "id",
   columnDefs: [
     {
       targets: 1,
@@ -224,16 +224,16 @@ const draftsTable = new DataTable("#draftsTable", {
       className: "drafts-delete",
       enabled: false,
       action: function () {
-        selectedUris = [];
+        selectedIds = [];
 
         const selectedData = draftsTable
           .rows(".selected")
           .data()
-          .map((obj) => obj.uri);
+          .map((obj) => obj.id);
         if (selectedData.length > 0) {
           draftsConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
-            selectedUris.push(selectedData[i]);
+            selectedIds.push(selectedData[i]);
           }
         }
       },
@@ -259,11 +259,11 @@ draftsTable.on("click", "td.payload", (e) => {
   }
 
   const data = draftsTable.row(e.currentTarget).data();
-  const parsed = parsePayload(data.uri, data.payload);
+  const parsed = parsePayload(data.id, data.payload);
 
   try {
     formIsPopulated = true;
-    composePopulateForm(data.uri, parsed);
+    composePopulateForm(data.id, data.attachments, parsed);
   } finally {
     formIsPopulated = false;
   }
@@ -283,7 +283,7 @@ export const draftsTableRefresh = (data) => {
   for (const draft of data.inserted) {
     // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
     const notFound =
-      draftsTable.column(0).data().toArray().indexOf(draft.uri) === -1; // !!! must be
+      draftsTable.column(0).data().toArray().indexOf(draft.id) === -1; // !!! must be
     if (notFound) {
       draftsTable.row.add(draft);
     }
@@ -292,18 +292,18 @@ export const draftsTableRefresh = (data) => {
   for (const draft of data.updated) {
     // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
     const notFound =
-      draftsTable.column(0).data().toArray().indexOf(draft.uri) === -1; // !!! must be
+      draftsTable.column(0).data().toArray().indexOf(draft.id) === -1; // !!! must be
     if (notFound) {
       draftsTable.row.add(draft);
     } else {
-      draftsTable.row(`#${draft.uri}`).data(draft);
+      draftsTable.row(`#${draft.id}`).data(draft);
 
-      if (draft.uri == composeUriInput.value) {
+      if (draft.id == composeIdInput.value) {
         try {
-          const parsed = parsePayload(draft.uri, draft.payload);
+          const parsed = parsePayload(draft.id, draft.payload);
 
           formIsPopulated = true;
-          composePopulateForm(draft.uri, parsed);
+          composePopulateForm(draft.id, parsed);
         } finally {
           formIsPopulated = false;
         }
@@ -312,9 +312,9 @@ export const draftsTableRefresh = (data) => {
   }
 
   for (const draft of data.trashed) {
-    draftsTable.row(`#${draft.uri}`).remove();
+    draftsTable.row(`#${draft.id}`).remove();
 
-    if (draft.uri == composeUriInput.value) {
+    if (draft.id == composeIdInput.value) {
       try {
         formIsPopulated = true;
         composeClearForm();
@@ -325,9 +325,9 @@ export const draftsTableRefresh = (data) => {
   }
 
   for (const draft of data.deleted) {
-    draftsTable.row(`#${draft.uri}`).remove();
+    draftsTable.row(`#${draft.id}`).remove();
 
-    if (draft.uri == composeUriInput.value) {
+    if (draft.id == composeIdInput.value) {
       try {
         formIsPopulated = true;
         composeClearForm();
@@ -356,7 +356,7 @@ export const deleteDraftsMessages = (e) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ uris: selectedUris }),
+        body: JSON.stringify({ ids: selectedIds }),
       }
     );
 
@@ -364,7 +364,7 @@ export const deleteDraftsMessages = (e) => {
       return;
     }
 
-    if (selectedUris.includes(composeUriInput.value)) {
+    if (selectedIds.includes(composeIdInput.value)) {
       try {
         formIsPopulated = true;
         composeClearForm();
@@ -378,7 +378,7 @@ export const deleteDraftsMessages = (e) => {
   })();
 };
 
-export const deleteDraft = async (composeForm, uri) => {
+export const deleteDraft = async (composeForm, id) => {
   const response = await api(
     composeForm.id,
     200,
@@ -389,7 +389,7 @@ export const deleteDraft = async (composeForm, uri) => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ uris: [uri] }),
+      body: JSON.stringify({ ids: [id] }),
     }
   );
 
@@ -397,7 +397,7 @@ export const deleteDraft = async (composeForm, uri) => {
     return;
   }
 
-  draftsTable.rows(`#${uri}`).remove().draw();
+  draftsTable.rows(`#${id}`).remove().draw();
   draftsTable
     .buttons([".drafts-delete"])
     .enable(draftsTable.rows().count() > 0);
@@ -410,20 +410,20 @@ export const deleteDraft = async (composeForm, uri) => {
   }
 };
 
-export const upsertDraftsPage = async (composeForm, uri, parsed) => {
+export const upsertDraftsPage = async (composeForm, id, attachments, parsed) => {
   if (!formIsPopulated) {
     const alert = composeForm.querySelector(
       'div[name="upsertDraftsPageAlert"]'
     );
     if (alert) alert.remove();
 
-    if (uri) {
+    if (id) {
       // update
-      const index = draftsTable.column(0).data().toArray().indexOf(uri);
+      const index = draftsTable.column(0).data().toArray().indexOf(id);
 
       if (index >= 0) {
-        const data = draftsTable.row(`#${uri}`).data();
-        const draft = { uri, payload: composePayload(parsed) };
+        const data = draftsTable.row(`#${id}`).data();
+        const draft = { id, attachments, payload: composePayload(parsed) };
 
         if (data.labelIds) draft.labelIds = data.labelIds;
         if (data.unread) draft.unread = data.unread;
@@ -448,7 +448,7 @@ export const upsertDraftsPage = async (composeForm, uri, parsed) => {
           return;
         }
 
-        draftsTable.row(`#${response.uri}`).data(response).draw();
+        draftsTable.row(`#${response.id}`).data(response).draw();
       } else {
         const error = "record not found";
 
@@ -462,7 +462,7 @@ export const upsertDraftsPage = async (composeForm, uri, parsed) => {
       }
     } else {
       // insert
-      const draft = { payload: composePayload(parsed) };
+      const draft = { attachments, payload: composePayload(parsed) };
 
       const response = await api(
         composeForm.id,
@@ -481,11 +481,11 @@ export const upsertDraftsPage = async (composeForm, uri, parsed) => {
         return;
       }
 
-      const composeUriInput = document.getElementById("composeUriInput");
+      const composeIdInput = document.getElementById("composeIdInput");
 
-      composeUriInput.value = response.uri;
-      composeUriInput.dispatchEvent(new Event("input"));
-      composeUriInput.dispatchEvent(new Event("change"));
+      composeIdInput.value = response.id;
+      composeIdInput.dispatchEvent(new Event("input"));
+      composeIdInput.dispatchEvent(new Event("change"));
 
       draftsTable.row.add(response);
       draftsTable.draw();
@@ -493,18 +493,18 @@ export const upsertDraftsPage = async (composeForm, uri, parsed) => {
   }
 };
 
-export const sendDraft = async (composeForm, uri, parsed) => {
+export const sendDraft = async (composeForm, id, attachments, parsed) => {
   if (!formIsPopulated) {
     const alert = composeForm.querySelector('div[name="sendDraftsPageAlert"]');
     if (alert) alert.remove();
 
-    if (uri) {
+    if (id) {
       // update & send
-      const index = draftsTable.column(0).data().toArray().indexOf(uri);
+      const index = draftsTable.column(0).data().toArray().indexOf(id);
 
       if (index >= 0) {
-        const data = draftsTable.row(`#${uri}`).data();
-        const draft = { uri, payload: composePayload(parsed) };
+        const data = draftsTable.row(`#${id}`).data();
+        const draft = { id, attachments, payload: composePayload(parsed) };
 
         if (data.labelIds) draft.labelIds = data.labelIds;
         if (data.unread) draft.unread = data.unread;
@@ -535,7 +535,7 @@ export const sendDraft = async (composeForm, uri, parsed) => {
           return;
         }
 
-        draftsTable.rows(`#${uri}`).remove().draw();
+        draftsTable.rows(`#${id}`).remove().draw();
         draftsTable
           .buttons([".drafts-delete"])
           .enable(draftsTable.rows().count() > 0);
@@ -561,7 +561,7 @@ export const sendDraft = async (composeForm, uri, parsed) => {
         );
       }
     } else {
-      const error = "empty uri";
+      const error = "empty id";
 
       composeForm.insertAdjacentHTML(
         "beforeend",

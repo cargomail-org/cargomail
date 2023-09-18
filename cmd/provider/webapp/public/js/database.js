@@ -1,5 +1,5 @@
 export let userDatabase;
-// export let lastDraftUri;
+// export let lastDraftId;
 
 export const openDatabase = (dbname) => {
   const openRequest = window.indexedDB.open(dbname, 1);
@@ -12,12 +12,12 @@ export const openDatabase = (dbname) => {
     const db = openRequest.result;
     userDatabase = db;
 
-    // setLastDraftUri("3c57d616901d9be4a04b06a45effd4b9");
+    // setLastDraftId("3c57d616901d9be4a04b06a45effd4b9");
 
-    getLastDraftUri();
+    getLastDraftId();
 
-    // lastDraftUri = getLastDraftUri();
-    // console.log(lastDraftUri);
+    // lastDraftId = getLastDraftId();
+    // console.log(lastDraftId);
   };
 
   openRequest.onupgradeneeded = (event) => {
@@ -26,21 +26,21 @@ export const openDatabase = (dbname) => {
   };
 };
 
-export const getLastDraftUri = () => {
+export const getLastDraftId = () => {
   userDatabase
     .transaction("compose")
     .objectStore("compose")
-    .get("lastDraftUri").onsuccess = (event) => {
-    // console.log(`lastDraftUri is ${event.target.result?.uri}`);
+    .get("lastDraftId").onsuccess = (event) => {
+    // console.log(`lastDraftId is ${event.target.result?.id}`);
   };
 };
 
-export const setLastDraftUri = (uri) => {
+export const setLastDraftId = (id) => {
   const objectStore = userDatabase
     .transaction(["compose"], "readwrite")
     .objectStore("compose");
 
-  const request = objectStore.get("lastDraftUri");
+  const request = objectStore.get("lastDraftId");
 
   request.onerror = (event) => {
     // Handle errors!
@@ -52,7 +52,7 @@ export const setLastDraftUri = (uri) => {
 
     if (data) {
       // update the value(s) in the object that you want to change
-      data.uri = uri;
+      data.id = id;
 
       // Put this updated object back into the database.
       const requestUpdate = objectStore.put(data);
@@ -75,7 +75,7 @@ export const setLastDraftUri = (uri) => {
         // Don't forget to handle errors!
       };
 
-      const request = objectStore.add({ id: "lastDraftUri", uri });
+      const request = objectStore.add({ id: "lastDraftId", id });
       request.onsuccess = (event) => {
         // event.target.result === customer.ssn;
       };

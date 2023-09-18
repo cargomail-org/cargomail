@@ -25,7 +25,7 @@ import {
 } from "/public/js/drafts.js";
 
 const composeForm = document.getElementById("composeForm");
-const composeUriInput = document.getElementById("composeUriInput");
+const composeIdInput = document.getElementById("composeIdInput");
 const composeDateInput = document.getElementById("composeDateInput");
 const composeFromInput = document.getElementById("composeFromInput");
 
@@ -39,7 +39,7 @@ const recipientsTo = [];
 const recipientsCc = [];
 const recipientsBcc = [];
 
-const attachments = [];
+const attachmentList = [];
 
 let formIsCleared = false;
 
@@ -55,10 +55,10 @@ const composeDiscardConfirmDialog = new bootstrap.Modal(
 );
 
 let draft = {};
-// let lastDraftUri = database.getLastDraftUri(); // localStorage.getItem("lastDraftUri");
+// let lastDraftId = database.getLastDraftId(); // localStorage.getItem("lastDraftId");
 
-// if (lastDraftUri && lastDraftUri.length > 0) {
-//   console.log(lastDraftUri.length);
+// if (lastDraftId && lastDraftId.length > 0) {
+//   console.log(lastDraftId.length);
 // }
 
 const REGEX_EMAIL =
@@ -364,7 +364,7 @@ const bouncer = (e) => {
 subjectInput.addEventListener("keyup", (event) => bouncer(event));
 messageText.addEventListener("keyup", (event) => bouncer(event));
 
-let selectedUris = [];
+let selectedIds = [];
 
 const composeTable = new DataTable("#composeTable", {
   paging: true,
@@ -374,13 +374,13 @@ const composeTable = new DataTable("#composeTable", {
   ordering: false,
   searching: false,
   columns: [
-    { data: "uri", visible: false, searchable: false },
+    { data: "id", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
       data: "fileName",
       render: (data, type, full, meta) => {
         const link = `${window.apiHost}/api/v1/files/`;
-        return `<a class="attachmentLink" href="javascript:;" onclick="downloadUri('composeForm', '${link}${full.digest}', '${data}');">${data}</a>`;
+        return `<a class="attachmentLink" href="javascript:;" onclick="downloadId('composeForm', '${link}${full.digest}', '${data}');">${data}</a>`;
       },
     },
     {
@@ -428,16 +428,16 @@ const composeTable = new DataTable("#composeTable", {
       className: "files-delete",
       enabled: false,
       action: function () {
-        selectedUris = [];
+        selectedIds = [];
 
         const selectedData = composeTable
           .rows(".selected")
           .data()
-          .map((obj) => obj.uri);
+          .map((obj) => obj.id);
         if (selectedData.length > 0) {
           composeRemoveConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
-            selectedUris.push(selectedData[i]);
+            selectedIds.push(selectedData[i]);
           }
         }
       },
@@ -468,7 +468,7 @@ composeTable.on("select.dt deselect.dt", () => {
   }
 });
 
-export const uriChanged = (e) => {
+export const idChanged = (e) => {
   if (e.target.value) {
     document.querySelector("#composePanelSend").classList.remove("disabled");
     document.querySelector("#composePanelDiscard").classList.remove("disabled");
@@ -486,18 +486,18 @@ export const removeAttachments = (e) => {
   composeTable.rows(".selected").remove().draw();
   composeTable.buttons([".files-delete"]).enable(false);
 
-  attachments.length = 0;
+  attachmentList.length = 0;
 
   for (let i = 0; i < composeTable.rows().count(); i++) {
     const data = composeTable.row(i).data();
     const attachment = {
-      uri: data.uri,
+      id: data.id,
       contentType: data.contentType,
       fileName: data?.name ? data?.name : data?.fileName, // file name or attachment fileName
       size: data.size,
     };
 
-    attachments.push(attachment);
+    attachmentList.push(attachment);
   }
 
   (async () => {
@@ -527,8 +527,8 @@ export const clearForm = () => {
   bccButton.style.color = "#0d6efd";
 
   composeForm.reset();
-  composeUriInput.dispatchEvent(new Event("input"));
-  composeUriInput.dispatchEvent(new Event("change"));
+  composeIdInput.dispatchEvent(new Event("input"));
+  composeIdInput.dispatchEvent(new Event("change"));
   messageHtml.innerHTML = "";
 
   messageHtmlLastValidContent = "";
@@ -538,19 +538,19 @@ export const clearForm = () => {
     heading.textContent = "";
   });
 
-  attachments.length = 0;
+  attachmentList.length = 0;
   composeTable.clear();
   composeTable.draw();
 
   formIsCleared = false;
 };
 
-export const populateForm = (uri, parsed) => {
-  attachments.length = 0;
+export const populateForm = (id, attachments, parsed) => {
+  attachmentList.length = 0;
 
-  composeUriInput.value = uri;
-  composeUriInput.dispatchEvent(new Event("input"));
-  composeUriInput.dispatchEvent(new Event("change"));
+  composeIdInput.value = id;
+  composeIdInput.dispatchEvent(new Event("input"));
+  composeIdInput.dispatchEvent(new Event("change"));
 
   const selectizeTo = $("#toInput")[0].selectize;
   const selectizeCc = $("#ccInput")[0].selectize;
@@ -624,7 +624,7 @@ export const populateForm = (uri, parsed) => {
 
   composeTable.clear();
 
-  composeAddItems(parsed.attachments);
+  composeAddItems(attachments);
 
   composeTable.draw();
 };
@@ -639,7 +639,7 @@ const formPopulated = async (cmd) => {
     subject: subjectInput.value,
     plainContent: messageText.value,
     htmlContent: messageHtml.innerHTML,
-    attachments: attachments,
+    attachments: attachmentList,
   };
 
   const ccButton = document.querySelector("#ccButton");
@@ -666,9 +666,19 @@ const formPopulated = async (cmd) => {
   }
 
   if (cmd == "new" || cmd == "update") {
-    await upsertDraftsPage(composeForm, composeUriInput.value, parsed);
+    await upsertDraftsPage(
+      composeForm,
+      composeIdInput.value,
+      attachmentList,
+      parsed
+    );
   } else if (cmd == "send") {
-    await draftsSendDraft(composeForm, composeUriInput.value, parsed);
+    await draftsSendDraft(
+      composeForm,
+      composeIdInput.value,
+      attachmentList,
+      parsed
+    );
   } else {
     throw new Error(`Unknown command ${cmd} (should be 'update or 'send'`);
   }
@@ -679,18 +689,18 @@ export const composeAddItems = (items) => {
     let found = false;
 
     for (let j = 0; j < composeTable.rows().count(); j++) {
-      const uri = composeTable.row(j).data().uri;
-      if (uri == items[i].uri) {
+      const id = composeTable.row(j).data().id;
+      if (id == items[i].id) {
         found = true;
         break;
       }
     }
 
     if (!found) {
-      const uri = items[i].uri ? { uri: items[i].uri } : undefined;
+      const id = items[i].id ? { id: items[i].id } : undefined;
       const digest = items[i].digest ? { digest: items[i].digest } : undefined;
       const item = {
-        ...uri,
+        ...id,
         ...digest,
         contentType: items[i].contentType,
         fileName: items[i]?.name ? items[i]?.name : items[i]?.fileName, // file name or attachment fileName
@@ -713,7 +723,7 @@ export const composeAddItems = (items) => {
       }
       composeTable.page(currentPage).draw(false);
 
-      attachments.push(item);
+      attachmentList.push(item);
     }
   }
 
@@ -827,12 +837,12 @@ export const discardDraft = (e) => {
 export const deleteDraft = (e) => {
   composeDiscardConfirmDialog.hide();
 
-  if (composeUriInput.value) {
+  if (composeIdInput.value) {
     clearTimeout(bouncerTimeout);
     bouncerHasQueue = false;
 
     (async () => {
-      await draftsDeleteDraft(composeForm, composeUriInput.value);
+      await draftsDeleteDraft(composeForm, composeIdInput.value);
     })();
   }
 };

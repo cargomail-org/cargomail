@@ -123,8 +123,8 @@ func (api *SessionApi) Login() http.Handler {
 		}
 
 		sessionCookie := http.Cookie{
-			Name:     "sessionUri",
-			Value:    session.Uri,
+			Name:     "sessionId",
+			Value:    session.Id,
 			Path:     "/",
 			HttpOnly: true,
 			Secure:   true,
@@ -177,7 +177,7 @@ func (api *SessionApi) Logout() http.Handler {
 		}
 
 		clearCookie := http.Cookie{
-			Name:     "sessionUri",
+			Name:     "sessionId",
 			Value:    "",
 			MaxAge:   -1,
 			Path:     "/",
@@ -187,7 +187,7 @@ func (api *SessionApi) Logout() http.Handler {
 		}
 		http.SetCookie(w, &clearCookie)
 
-		cookie, err := r.Cookie("sessionUri")
+		cookie, err := r.Cookie("sessionId")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
@@ -198,9 +198,9 @@ func (api *SessionApi) Logout() http.Handler {
 			return
 		}
 
-		sessionUri := cookie.Value
+		sessionId := cookie.Value
 
-		err = api.session.Remove(user, sessionUri)
+		err = api.session.Remove(user, sessionId)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusNotFound)
 			return

@@ -4,6 +4,8 @@ import (
 	"cargomail/internal/config"
 	"context"
 	"database/sql"
+	"database/sql/driver"
+	"encoding/json"
 	"errors"
 	"net/mail"
 	"reflect"
@@ -17,23 +19,36 @@ type DraftRepository struct {
 	db *sql.DB
 }
 
+type Attachment struct {
+	Id          string `json:"id"`
+	Digest      string `json:"digest"`
+	ContentType string `json:"contentType"`
+	FileName    string `json:"fileName"`
+	Size        int64  `json:"size"`
+}
+
+type Attachments []Attachment
+
+// type AttachmentIds []string
+
 type Draft struct {
-	Uri        string       `json:"uri"`
-	UserId     int64        `json:"-"`
-	Unread     bool         `json:"unread"`
-	Starred    bool         `json:"starred"`
-	Payload    *MessagePart `json:"payload,omitempty"`
-	LabelIds   *string      `json:"labelIds"`
-	CreatedAt  Timestamp    `json:"createdAt"`
-	ModifiedAt *Timestamp   `json:"modifiedAt"`
-	TimelineId int64        `json:"-"`
-	HistoryId  int64        `json:"-"`
-	LastStmt   int          `json:"-"`
-	DeviceId   *string      `json:"-"`
+	Id          string       `json:"id"`
+	UserId      int64        `json:"-"`
+	Unread      bool         `json:"unread"`
+	Starred     bool         `json:"starred"`
+	Payload     *MessagePart `json:"payload,omitempty"`
+	Attachments Attachments  `json:"attachments,omitempty"`
+	LabelIds    *string      `json:"labelIds"`
+	CreatedAt   Timestamp    `json:"createdAt"`
+	ModifiedAt  *Timestamp   `json:"modifiedAt"`
+	TimelineId  int64        `json:"-"`
+	HistoryId   int64        `json:"-"`
+	LastStmt    int          `json:"-"`
+	DeviceId    *string      `json:"-"`
 }
 
 type DraftDeleted struct {
-	Uri       string  `json:"uri"`
+	Id        string  `json:"id"`
 	UserId    int64   `json:"-"`
 	HistoryId int64   `json:"-"`
 	DeviceId  *string `json:"-"`
@@ -50,6 +65,19 @@ type DraftSync struct {
 	DraftsUpdated  []*Draft        `json:"updated"`
 	DraftsTrashed  []*Draft        `json:"trashed"`
 	DraftsDeleted  []*DraftDeleted `json:"deleted"`
+}
+
+func (v Attachments) Value() (driver.Value, error) {
+	return json.Marshal(v)
+}
+
+func (v *Attachments) Scan(value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	return json.Unmarshal(b, &v)
 }
 
 func (d *Draft) Scan() []interface{} {
@@ -83,12 +111,14 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 			INTO "Draft" ("userId",
 				 "deviceId",
 				 "unread",
-				 "payload")
+				 "payload",
+				 "attachments")
 			VALUES ($1,
 					$2,
 					$3,
-					$4)
-			RETURNING * ;`
+					$4,
+				    $5)
+			RETURNING id ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -97,9 +127,10 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 	args := []interface{}{user.Id,
 		prefixedDeviceId,
 		unread,
-		draft.Payload}
+		draft.Payload,
+		draft.Attachments}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(&draft.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -361,17 +392,18 @@ func (r *DraftRepository) Update(user *User, draft *Draft) (*Draft, error) {
 	query := `
 		UPDATE "Draft"
 			SET "payload" = $1,
-				"deviceId" = $2
-			WHERE "userId" = $3 AND
-			      "uri" = $4 AND
+			    "attachments" = $2,
+				"deviceId" = $3
+			WHERE "userId" = $4 AND
+			      "id" = $5 AND
 				  "lastStmt" <> 2
-			RETURNING * ;`
+			RETURNING id ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{draft.Payload, prefixedDeviceId, user.Id, draft.Uri}
+	args := []interface{}{draft.Payload, draft.Attachments, prefixedDeviceId, user.Id, draft.Id}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(&draft.Id)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
@@ -384,21 +416,21 @@ func (r *DraftRepository) Update(user *User, draft *Draft) (*Draft, error) {
 	return draft, nil
 }
 
-func (r *DraftRepository) Trash(user *User, uris string) error {
+func (r *DraftRepository) Trash(user *User, ids string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(uris) > 0 {
+	if len(ids) > 0 {
 		query := `
 		UPDATE Draft
 			SET "lastStmt" = 2,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, uris}
+		args := []interface{}{prefixedDeviceId, user.Id, ids}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -409,21 +441,21 @@ func (r *DraftRepository) Trash(user *User, uris string) error {
 	return nil
 }
 
-func (r *DraftRepository) Untrash(user *User, uris string) error {
+func (r *DraftRepository) Untrash(user *User, ids string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(uris) > 0 {
+	if len(ids) > 0 {
 		query := `
 		UPDATE "Draft"
 			SET "lastStmt" = 0,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
-			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
 		prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-		args := []interface{}{prefixedDeviceId, user.Id, uris}
+		args := []interface{}{prefixedDeviceId, user.Id, ids}
 
 		_, err := r.db.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -434,11 +466,11 @@ func (r *DraftRepository) Untrash(user *User, uris string) error {
 	return nil
 }
 
-func (r DraftRepository) Delete(user *User, uris string) error {
+func (r DraftRepository) Delete(user *User, ids string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if len(uris) > 0 {
+	if len(ids) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
 		if err != nil {
 			return err
@@ -449,9 +481,9 @@ func (r DraftRepository) Delete(user *User, uris string) error {
 		DELETE
 			FROM "Draft"
 			WHERE "userId" = $1 AND
-			"uri" IN (SELECT value FROM json_each($2, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($2, '$.ids'));`
 
-		args := []interface{}{user.Id, uris}
+		args := []interface{}{user.Id, ids}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -462,9 +494,9 @@ func (r DraftRepository) Delete(user *User, uris string) error {
 		UPDATE "DraftDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
-			"uri" IN (SELECT value FROM json_each($3, '$.uris'));`
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
 
-		args = []interface{}{user.DeviceId, user.Id, uris}
+		args = []interface{}{user.DeviceId, user.Id, ids}
 
 		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
@@ -601,13 +633,13 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		SET "payload" = $1,
 			"deviceId" = $2
 		WHERE "userId" = $3 AND
-			  "uri" = $4 AND
+			  "id" = $4 AND
 			  "lastStmt" <> 2
 		RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{draft.Payload, prefixedDeviceId, user.Id, draft.Uri}
+	args := []interface{}{draft.Payload, prefixedDeviceId, user.Id, draft.Id}
 
 	err = tx.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
 	if err != nil {
@@ -667,7 +699,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 												s := strings.SplitAfter(val, "digest=\"")
 												if len(s) > 1 {
 													digest := strings.Split(s[1], "\"")[0]
-													// log.Println(uri)
+													// log.Println(digest)
 													attachmentDigests = append(attachmentDigests, digest)
 												}
 											}
@@ -756,9 +788,9 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	DELETE
 		FROM "Draft"
 		WHERE "userId" = $1 AND
-		"uri" = $2;`
+		"id" = $2;`
 
-	args = []interface{}{user.Id, draft.Uri}
+	args = []interface{}{user.Id, draft.Id}
 
 	_, err = tx.ExecContext(ctx, query, args...)
 	if err != nil {
@@ -769,9 +801,9 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	UPDATE "DraftDeleted"
 		SET "deviceId" = $1
 		WHERE "userId" = $2 AND
-		"uri" = $3;`
+		"id" = $3;`
 
-	args = []interface{}{user.DeviceId, user.Id, draft.Uri}
+	args = []interface{}{user.DeviceId, user.Id, draft.Id}
 
 	_, err = tx.ExecContext(ctx, query, args...)
 	if err != nil {

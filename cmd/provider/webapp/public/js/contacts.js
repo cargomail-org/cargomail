@@ -12,7 +12,7 @@ import "datatables.net-responsive-bs5";
 
 import { setComposeContacts } from "/public/js/compose.js";
 
-let selectedUris = [];
+let selectedIds = [];
 
 const contactsFormDialog = new bootstrap.Modal(
   document.querySelector("#contactsFormDialog")
@@ -58,7 +58,7 @@ const contactsTable = new DataTable("#contactsTable", {
     })();
   },
   columns: [
-    { data: "uri", visible: false, searchable: false },
+    { data: "id", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
       data: "emailAddress",
@@ -70,7 +70,7 @@ const contactsTable = new DataTable("#contactsTable", {
       data: "lastName",
     },
   ],
-  rowId: "uri",
+  rowId: "id",
   columnDefs: [
     {
       targets: 1,
@@ -150,16 +150,16 @@ const contactsTable = new DataTable("#contactsTable", {
       className: "contacts-delete",
       enabled: false,
       action: function () {
-        selectedUris = [];
+        selectedIds = [];
 
         const selectedData = contactsTable
           .rows(".selected")
           .data()
-          .map((obj) => obj.uri);
+          .map((obj) => obj.id);
         if (selectedData.length > 0) {
           contactsConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
-            selectedUris.push(selectedData[i]);
+            selectedIds.push(selectedData[i]);
           }
         }
       },
@@ -194,7 +194,7 @@ export const contactsTableRefresh = (data) => {
   for (const contact of data.inserted) {
     // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
     const notFound =
-      contactsTable.column(0).data().toArray().indexOf(contact.uri) === -1; // !!! must be
+      contactsTable.column(0).data().toArray().indexOf(contact.id) === -1; // !!! must be
     if (notFound) {
       contactsTable.row.add(contact);
     }
@@ -203,20 +203,20 @@ export const contactsTableRefresh = (data) => {
   for (const contact of data.updated) {
     // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
     const notFound =
-      contactsTable.column(0).data().toArray().indexOf(contact.uri) === -1; // !!! must be
+      contactsTable.column(0).data().toArray().indexOf(contact.id) === -1; // !!! must be
     if (notFound) {
       contactsTable.row.add(contact);
     } else {
-      contactsTable.row(`#${contact.uri}`).data(contact);
+      contactsTable.row(`#${contact.id}`).data(contact);
     }
   }
 
   for (const contact of data.trashed) {
-    contactsTable.row(`#${contact.uri}`).remove();
+    contactsTable.row(`#${contact.id}`).remove();
   }
 
   for (const contact of data.deleted) {
-    contactsTable.row(`#${contact.uri}`).remove();
+    contactsTable.row(`#${contact.id}`).remove();
   }
 
   setComposeContacts(contactsTable.rows().data().toArray());
@@ -236,8 +236,8 @@ export const showContactsFormDialog = (e) => {
 
   const modalTitle = formDialog.querySelector(".modal-title");
 
-  const contactUriInput = formDialog.querySelector(
-    ".modal-body #contactUriInput"
+  const contactIdInput = formDialog.querySelector(
+    ".modal-body #contactIdInput"
   );
   const emailInput = formDialog.querySelector(".modal-body #emailInput");
   const firstNameInput = formDialog.querySelector(
@@ -257,12 +257,12 @@ export const showContactsFormDialog = (e) => {
   }
 
   if (contact) {
-    contactUriInput.value = contact.uri;
+    contactIdInput.value = contact.id;
     emailInput.value = contact.emailAddress;
     firstNameInput.value = contact.firstName;
     lastNameInput.value = contact.lastName;
   } else {
-    contactUriInput.value = "";
+    contactIdInput.value = "";
     emailInput.value = "";
     firstNameInput.value = "";
     lastNameInput.value = "";
@@ -275,15 +275,15 @@ export const submitFormContact = async (e) => {
   const form = e.currentTarget;
 
   const formData = {
-    uri: form.querySelector('input[name="contactUri"]').value,
+    id: form.querySelector('input[name="contactId"]').value,
     emailAddress: form.querySelector('input[name="emailAddress"]').value,
     firstName: form.querySelector('input[name="firstName"]').value,
     lastName: form.querySelector('input[name="lastName"]').value,
   };
 
-  if (formData.uri.length == 0) {
+  if (formData.id.length == 0) {
     // new
-    delete formData.uri;
+    delete formData.id;
 
     const response = await api(
       form.id,
@@ -303,7 +303,7 @@ export const submitFormContact = async (e) => {
     }
 
     contactsTable.row.add(response).draw();
-  } else if (formData.uri.length == 32) {
+  } else if (formData.id.length == 32) {
     // edit
     const response = await api(
       form.id,
@@ -322,7 +322,7 @@ export const submitFormContact = async (e) => {
       return;
     }
 
-    contactsTable.row(`#${response.uri}`).data(response).draw();
+    contactsTable.row(`#${response.id}`).data(response).draw();
   }
 
   contactsFormDialog.hide();
@@ -346,7 +346,7 @@ export const deleteContacts = (e) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ uris: selectedUris }),
+        body: JSON.stringify({ ids: selectedIds }),
       }
     );
 

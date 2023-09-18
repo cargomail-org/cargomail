@@ -43,7 +43,7 @@ const raw = JSON.stringify({
           {
             headers: {
               "Content-Type": [
-                'message/external-body; uri="f3ee6cf816db5c0e1c83be9a9c90e4cb"; digest="UxG7xb9iTHQ2XP284bVnFjYbAcfher-LSS8uRGbhEvY"; size="182726"',
+                'message/external-body; digest="UxG7xb9iTHQ2XP284bVnFjYbAcfher-LSS8uRGbhEvY"; size="182726"',
                 "application/pdf",
               ],
               "Content-Disposition":
@@ -53,7 +53,7 @@ const raw = JSON.stringify({
           {
             headers: {
               "Content-Type": [
-                'message/external-body; uri="e3671df3331059e5b510b6ebd9b91a63"; digest="bBjqnY0mM1YbspZVyHaIkDnJ6VL8jkr_sRX2Bsus__0"; size="48789"',
+                'message/external-body; digest="bBjqnY0mM1YbspZVyHaIkDnJ6VL8jkr_sRX2Bsus__0"; size="48789"',
                 "image/jpeg",
               ],
               "Content-Disposition": 'attachment; filename="1217350108.jpg"',
@@ -62,7 +62,7 @@ const raw = JSON.stringify({
           {
             headers: {
               "Content-Type": [
-                'message/external-body; uri="1a513cea72f78aa4853afc9a6d1b91dd"; digest="jeUTMsDAiJwrsenkYRSD05nG3DJwdMboIdVDdnLT4zw"; size="3593"',
+                'message/external-body; digest="jeUTMsDAiJwrsenkYRSD05nG3DJwdMboIdVDdnLT4zw"; size="3593"',
                 "image/png",
               ],
               "Content-Disposition": 'attachment; filename="sample.png"',

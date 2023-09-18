@@ -48,7 +48,7 @@ func (api *Api) contextSetUser(r *http.Request, user *repository.User) *http.Req
 // middleware
 func (api *Api) Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sessionCookie, err := r.Cookie("sessionUri")
+		sessionCookie, err := r.Cookie("sessionId")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
@@ -59,15 +59,15 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 			return
 		}
 
-		sessionUri := sessionCookie.Value
+		sessionId := sessionCookie.Value
 
 		// TODO magic number!
-		if len(sessionUri) != 32 {
+		if len(sessionId) != 32 {
 			helper.ReturnErr(w, repository.ErrInvalidOrMissingSession, http.StatusForbidden)
 			return
 		}
 
-		user, err := api.User.user.GetBySession(repository.ScopeAuthentication, sessionUri)
+		user, err := api.User.user.GetBySession(repository.ScopeAuthentication, sessionId)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrUsernameNotFound):
@@ -97,7 +97,7 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 
 		r = api.contextSetUser(r, user)
 
-		// refresh sessionUri/deviceId cookies
+		// refresh sessionId/deviceId cookies
 
 		ttl := config.DefaultSessionTTL
 		sessionCookie.Expires = time.Now().Add(ttl)

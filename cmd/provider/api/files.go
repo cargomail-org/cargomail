@@ -222,29 +222,29 @@ func (api *FilesApi) Trash() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		err = api.files.Trash(user, urisString)
+		err = api.files.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -262,29 +262,29 @@ func (api *FilesApi) Untrash() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		err = api.files.Untrash(user, urisString)
+		err = api.files.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -302,29 +302,29 @@ func (api *FilesApi) Delete() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		_, err = api.files.Delete(user, urisString)
+		_, err = api.files.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

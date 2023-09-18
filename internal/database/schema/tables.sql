@@ -12,14 +12,14 @@ CREATE TABLE IF NOT EXISTS "User" (
 );
 
 CREATE TABLE IF NOT EXISTS "Session" (
-    "uri" 			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    "id" 			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "expiry" 		TIMESTAMP NOT NULL,
     "scope" 		TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "Blob" (
-    "uri"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    "id"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox, 3-spam
     "digest"     	VARCHAR(32) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS "Blob" (
 );
 
 CREATE TABLE IF NOT EXISTS "File" (
-    "uri"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    "id"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox, 3-spam
     "digest"     	VARCHAR(32) NOT NULL,
@@ -55,11 +55,12 @@ CREATE TABLE IF NOT EXISTS "File" (
 
 CREATE TABLE IF NOT EXISTS "Draft"
 (
-    "uri"           VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    "id"           VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
     "payload"       TEXT,                 -- json 'MessagePart' object
+    "attachments"   TEXT,                 -- json 'attachments' array
     "labelIds"      TEXT,                 -- json 'labelIds' array
     "createdAt"		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "modifiedAt"    TIMESTAMP,
@@ -71,7 +72,7 @@ CREATE TABLE IF NOT EXISTS "Draft"
 
 CREATE TABLE IF NOT EXISTS "Message"
 (
-    "uri"           VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    "id"           VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,  
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
@@ -90,7 +91,7 @@ CREATE TABLE IF NOT EXISTS "Message"
 );
 
 CREATE TABLE IF NOT EXISTS "Label" (
-    "uri"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    "id"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES user ON DELETE CASCADE,
     "name"          VARCHAR(255) NOT NULL,
     "createdAt"		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -102,7 +103,7 @@ CREATE TABLE IF NOT EXISTS "Label" (
 );
 
 CREATE TABLE IF NOT EXISTS "Contact" (
-    "uri"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
+    "id"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "emailAddress"  VARCHAR(255) NOT NULL CHECK (
         "emailAddress" LIKE '%_@_%._%' AND
@@ -120,42 +121,42 @@ CREATE TABLE IF NOT EXISTS "Contact" (
 );
 
 CREATE TABLE IF NOT EXISTS "BlobDeleted" (
-    "uri"			VARCHAR(32) NOT NULL PRIMARY KEY,
+    "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS "FileDeleted" (
-    "uri"			VARCHAR(32) NOT NULL PRIMARY KEY,
+    "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS "DraftDeleted" (
-    "uri"			VARCHAR(32) NOT NULL PRIMARY KEY,
+    "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS "MessageDeleted" (
-    "uri"			VARCHAR(32) NOT NULL PRIMARY KEY,
+    "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS "LabelDeleted" (
-    "uri"			VARCHAR(32) NOT NULL PRIMARY KEY,
+    "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS "ContactDeleted" (
-    "uri"			VARCHAR(32) NOT NULL PRIMARY KEY,
+    "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "historyId" 	INTEGER(8) NOT NULL DEFAULT 0,
     "deviceId"      VARCHAR(32)

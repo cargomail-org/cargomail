@@ -17,7 +17,7 @@ type SessionRepository struct {
 }
 
 type Session struct {
-	Uri    string    `json:"uri"`
+	Id     string    `json:"id"`
 	UserID int64     `json:"-"`
 	Expiry time.Time `json:"expiry"`
 	Scope  string    `json:"-"`
@@ -50,11 +50,11 @@ func (r SessionRepository) Insert(session *Session) error {
 	query := `
 		INSERT INTO "Session" ("userId", "expiry", "scope")
 			VALUES ($1, $2, $3)
-			RETURNING uri ;`
+			RETURNING id ;`
 
 	args := []interface{}{session.UserID, session.Expiry, session.Scope}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(&session.Uri)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(&session.Id)
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func (r SessionRepository) Insert(session *Session) error {
 	return err
 }
 
-func (r SessionRepository) UpdateIfOlderThan5Minutes(user *User, uri string, expiry time.Time) (bool, error) {
+func (r SessionRepository) UpdateIfOlderThan5Minutes(user *User, id string, expiry time.Time) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -71,13 +71,13 @@ func (r SessionRepository) UpdateIfOlderThan5Minutes(user *User, uri string, exp
 		UPDATE "Session"
 			SET "expiry" = $1
 			WHERE "userId" = $2 AND
-			      "uri" = $3 AND
+			      "id" = $3 AND
 				  ROUND((JULIANDAY($1) - JULIANDAY("expiry")) * 86400) > 300
-				  RETURNING uri;`
+				  RETURNING id;`
 
-	args := []interface{}{expiry, user.Id, uri}
+	args := []interface{}{expiry, user.Id, id}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(&uri)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(&id)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
@@ -90,16 +90,16 @@ func (r SessionRepository) UpdateIfOlderThan5Minutes(user *User, uri string, exp
 	return true, err
 }
 
-func (r SessionRepository) Remove(user *User, uri string) error {
+func (r SessionRepository) Remove(user *User, id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	query := `
 		DELETE FROM "Session"
 			WHERE "userId" = $1 AND
-			"uri" = $2;`
+			"id" = $2;`
 
-	args := []interface{}{user.Id, uri}
+	args := []interface{}{user.Id, id}
 
 	_, err := r.db.ExecContext(ctx, query, args...)
 	return err

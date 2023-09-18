@@ -61,20 +61,20 @@ func (api *BlobsApi) Upload() http.Handler {
 
 			uploadedBlob := &repository.Blob{}
 
-			// update should be by uri
+			// update should be by id
 			if r.Method == "PUT" {
 				if len(files[i].Filename) != 32 {
 					helper.ReturnErr(w, repository.ErrBlobWrongName, http.StatusBadRequest)
 					return
 				}
 
-				blob, err := api.blobs.GetBlobByUri(user, files[i].Filename)
+				blob, err := api.blobs.GetBlobById(user, files[i].Filename)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusNotFound)
 					return
 				}
 
-				if len(blob.Uri) > 0 {
+				if len(blob.Id) > 0 {
 					f, err := os.OpenFile(filepath.Join(blobsPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
 					if err != nil {
 						fmt.Println(err)
@@ -95,7 +95,7 @@ func (api *BlobsApi) Upload() http.Handler {
 					contentType := files[i].Header.Get("content-type")
 
 					uploadedBlob = &repository.Blob{
-						Uri:         blob.Uri,
+						Id:          blob.Id,
 						Digest:      digest,
 						Size:        written,
 						ContentType: contentType,
@@ -270,29 +270,29 @@ func (api *BlobsApi) Trash() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		err = api.blobs.Trash(user, urisString)
+		err = api.blobs.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -310,29 +310,29 @@ func (api *BlobsApi) Untrash() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		err = api.blobs.Untrash(user, urisString)
+		err = api.blobs.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -350,29 +350,29 @@ func (api *BlobsApi) Delete() http.Handler {
 			return
 		}
 
-		var uris repository.Uris
+		var ids repository.Ids
 
-		err := helper.Decoder(r.Body).Decode(&uris)
+		err := helper.Decoder(r.Body).Decode(&ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if uris.Uris == nil {
-			http.Error(w, repository.ErrMissingUrisField.Error(), http.StatusBadRequest)
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
 			return
 		}
 
 		// back to body
-		body, err := json.Marshal(uris)
+		body, err := json.Marshal(ids)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		urisString := string(body)
+		idsString := string(body)
 
-		_, err = api.blobs.Delete(user, urisString)
+		_, err = api.blobs.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

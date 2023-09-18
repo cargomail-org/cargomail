@@ -157,19 +157,6 @@ const parseParts = (payload) => {
       item.startsWith("message/external-body")
     );
 
-    let attachmentUri;
-
-    if (externalContent) {
-      attachmentUri = externalContent.split("uri=").pop();
-
-      const quotedStrings = attachmentUri.split('"');
-      if (quotedStrings?.length > 1) {
-        attachmentUri = quotedStrings[1];
-      } else {
-        attachmentUri = undefined;
-      }
-    }
-
     let attachmentDigest;
 
     if (externalContent) {
@@ -196,40 +183,11 @@ const parseParts = (payload) => {
       }
     }
 
-    if (
-      attachmentUri &&
-      attachmentDigest &&
-      attachmentFileName &&
-      attachmentSize
-    ) {
+    if (attachmentDigest && attachmentFileName && attachmentSize) {
+      const contentType = attachmentContentType ? { contentType: attachmentContentType } : undefined;
       attachments.push({
-        uri: attachmentUri,
         digest: attachmentDigest,
-        contentType: attachmentContentType,
-        fileName: attachmentFileName,
-        size: parseInt(attachmentSize),
-      });
-    } else if (
-      !attachmentUri &&
-      attachmentDigest &&
-      attachmentFileName &&
-      attachmentSize
-    ) {
-      attachments.push({
-       digest: attachmentDigest,
-        contentType: attachmentContentType,
-        fileName: attachmentFileName,
-        size: parseInt(attachmentSize),
-      });
-    } else if (
-      attachmentUri &&
-      !attachmentDigest &&
-      attachmentFileName &&
-      attachmentSize
-    ) {
-      attachments.push({
-        uri: attachmentUri,
-        contentType: attachmentContentType,
+        ...contentType,
         fileName: attachmentFileName,
         size: parseInt(attachmentSize),
       });
@@ -255,7 +213,7 @@ const parseParts = (payload) => {
   return { plainContent, htmlContent, attachments };
 };
 
-export const parsePayload = (uri, payload) => {
+export const parsePayload = (id, payload) => {
   const date = payload?.headers?.["Date"] || "";
 
   const from = payload?.headers?.["From"] || "";
@@ -292,7 +250,7 @@ export const parsePayload = (uri, payload) => {
       attachments,
     };
   } catch (e) {
-    console.log(`message uri: ${uri}`);
+    console.log(`message id: ${id}`);
     console.log(e);
     return {
       date,
@@ -301,8 +259,8 @@ export const parsePayload = (uri, payload) => {
       cc,
       bcc,
       subject,
-      plainContent: `Parse failed for Message ${uri}`,
-      htmlContent: `<span>Parse failed for Message ${uri}</span>`,
+      plainContent: `Parse failed for Message ${id}`,
+      htmlContent: `<span>Parse failed for Message ${id}</span>`,
       attachments: [],
     };
   }
@@ -393,7 +351,7 @@ export const composePayload = (parsed) => {
         const attachmentPart = {
           headers: {
             "Content-Type": [
-              `message/external-body; uri="${attachment.uri}"; digest="${attachment.digest}"; size="${attachment.size}"`,
+              `message/external-body; digest="${attachment.digest}"; size="${attachment.size}"`,
               attachment.contentType,
             ],
             "Content-Disposition": `attachment; filename="${attachment.fileName}"`,
