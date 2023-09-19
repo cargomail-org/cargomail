@@ -43,29 +43,32 @@ const raw = JSON.stringify({
           {
             headers: {
               "Content-Type": [
-                'message/external-body; digest="UxG7xb9iTHQ2XP284bVnFjYbAcfher-LSS8uRGbhEvY"; size="182726"',
+                'message/external-body; access-type="x-content-addressed-uri"; hash-algorithm="sha256"; size="182726"',
                 "application/pdf",
               ],
               "Content-Disposition":
                 'attachment; filename="INFO Malá maturita z ANJ 2023.pdf"',
+              "Content-ID": "<UxG7xb9iTHQ2XP284bVnFjYbAcfher-LSS8uRGbhEvY>",
             },
           },
           {
             headers: {
               "Content-Type": [
-                'message/external-body; digest="bBjqnY0mM1YbspZVyHaIkDnJ6VL8jkr_sRX2Bsus__0"; size="48789"',
+                'message/external-body; access-type="x-content-addressed-uri"; hash-algorithm="sha256"; size="48789"',
                 "image/jpeg",
               ],
               "Content-Disposition": 'attachment; filename="1217350108.jpg"',
+              "Content-ID": "<bBjqnY0mM1YbspZVyHaIkDnJ6VL8jkr_sRX2Bsus__0>",
             },
           },
           {
             headers: {
               "Content-Type": [
-                'message/external-body; digest="jeUTMsDAiJwrsenkYRSD05nG3DJwdMboIdVDdnLT4zw"; size="3593"',
+                'message/external-body; access-type="x-content-addressed-uri"; hash-algorithm="sha256"; size="3593"',
                 "image/png",
               ],
               "Content-Disposition": 'attachment; filename="sample.png"',
+              "Content-ID": "<jeUTMsDAiJwrsenkYRSD05nG3DJwdMboIdVDdnLT4zw>",
             },
           },
         ],

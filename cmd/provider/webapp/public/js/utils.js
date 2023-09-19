@@ -150,29 +150,37 @@ const parseParts = (payload) => {
     }
 
     const attachmentContentType = attachmentDisposition["Content-Type"].find(
-      (item) => !item.startsWith("message/external-body")
+      (item) => !item.startsWith("message/external-body;")
     );
 
     const externalContent = attachmentDisposition["Content-Type"].find((item) =>
       item.startsWith("message/external-body")
     );
 
-    let attachmentDigest;
+    const contentAddressedUri = attachmentDisposition["Content-Type"].find(
+      (item) => item.includes('access-type="x-content-addressed-uri"')
+    );
 
-    if (externalContent) {
-      attachmentDigest = externalContent.split("digest=").pop();
+    const sha256Algorithm = attachmentDisposition["Content-Type"].find((item) =>
+      item.includes('hash-algorithm="sha256"')
+    );
 
-      const quotedStrings = attachmentDigest.split('"');
-      if (quotedStrings?.length > 1) {
-        attachmentDigest = quotedStrings[1];
-      } else {
-        attachmentDigest = undefined;
+    let contentId;
+
+    if (attachmentDisposition["Content-ID"]) {
+      value = attachmentDisposition["Content-ID"];
+
+      if (value.length > 2) {
+        contentId =
+          value[0] === "<"
+            ? value.slice(1, value.length - 1)
+            : value.slice(0, value.length);
       }
     }
 
     let attachmentSize;
 
-    if (externalContent) {
+    if (externalContent && contentAddressedUri) {
       attachmentSize = externalContent.split("size=").pop();
 
       const quotedStrings = attachmentSize.split('"');
@@ -183,10 +191,12 @@ const parseParts = (payload) => {
       }
     }
 
-    if (attachmentDigest && attachmentFileName && attachmentSize) {
-      const contentType = attachmentContentType ? { contentType: attachmentContentType } : undefined;
+    if (contentId && attachmentFileName && attachmentSize) {
+      const contentType = attachmentContentType
+        ? { contentType: attachmentContentType }
+        : undefined;
       attachments.push({
-        digest: attachmentDigest,
+        digest: contentId,
         ...contentType,
         fileName: attachmentFileName,
         size: parseInt(attachmentSize),
@@ -351,10 +361,11 @@ export const composePayload = (parsed) => {
         const attachmentPart = {
           headers: {
             "Content-Type": [
-              `message/external-body; digest="${attachment.digest}"; size="${attachment.size}"`,
+              `message/external-body; access-type="x-content-addressed-uri"; hash-algorithm="sha256"; size="${attachment.size}"`,
               attachment.contentType,
             ],
             "Content-Disposition": `attachment; filename="${attachment.fileName}"`,
+            "Content-ID": `<${attachment.digest}>`
           },
         };
         attachmentParts.push(attachmentPart);

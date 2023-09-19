@@ -682,7 +682,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		return nil, err
 	}
 
-	var attachmentDigests []string
+	var contentIds []string
 
 	// :--)
 	if len(draft.Payload.Parts) > 0 {
@@ -693,17 +693,31 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 						for _, part := range part.Parts {
 							if val, ok := part.Headers["Content-Disposition"].(string); ok {
 								if strings.HasPrefix(val, "attachment;") {
+									var accessType string
+									var hashAlgorithm string
+									var contentId string
+									if val, ok := part.Headers["Content-ID"].(string); ok {
+										s := strings.SplitAfter(val, "<")
+										if len(s) > 0 {
+											contentId = strings.TrimRight(s[1], ">")
+										}
+									}
 									if val, ok := part.Headers["Content-Type"].([]interface{}); ok {
 										if len(val) > 1 {
 											if val, ok := val[0].(string); ok {
-												s := strings.SplitAfter(val, "digest=\"")
+												s := strings.SplitAfter(val, "access-type=\"")
 												if len(s) > 1 {
-													digest := strings.Split(s[1], "\"")[0]
-													// log.Println(digest)
-													attachmentDigests = append(attachmentDigests, digest)
+													accessType = strings.Split(s[1], "\"")[0]
+												}
+												s = strings.SplitAfter(val, "hash-algorithm=\"")
+												if len(s) > 1 {
+													hashAlgorithm = strings.Split(s[1], "\"")[0]
 												}
 											}
 										}
+									}
+									if len(contentId) > 0 && accessType == "x-content-addressed-uri" && hashAlgorithm == "sha256" {
+										contentIds = append(contentIds, contentId)
 									}
 								}
 							}
@@ -761,7 +775,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		}
 
 		// access to files
-		for _, digest := range attachmentDigests {
+		for _, contentId := range contentIds {
 			folder := 2 // inbox
 
 			query := `
@@ -774,7 +788,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 						  "lastStmt" < 2
 						  LIMIT 1;`
 
-			args := []interface{}{username, folder, user.Id, digest}
+			args := []interface{}{username, folder, user.Id, contentId}
 
 			_, err := tx.ExecContext(ctx, query, args...)
 			if err != nil {
