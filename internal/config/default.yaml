@@ -2,9 +2,12 @@ domainName: ${DOMAIN_NAME}
 storagePath: ${STORAGE_PATH}
 databasePath: ${DATABASE_PATH}
 resourcesPath: ${RESOURCES_PATH}
-transferCertPath: ${TRANSFER_CERT_PATH}
-transferPeyPath: ${TRANSFER_KEY_PATH}
+mtaCertPath: ${MTA_CERT_PATH}
+mtaPeyPath: ${MTA_KEY_PATH}
+rtaCertPath: ${RTA_CERT_PATH}
+rtaPeyPath: ${RTA_KEY_PATH}
 providerBind: ${PROVIDER_BIND}
-transferBind: ${TRANSFER_BIND}
+mtaBind: ${MTA_BIND}
+rtaBind: ${RTA_BIND}
 cookieSameSite: ${COOKIE_SAME_SITE}
 

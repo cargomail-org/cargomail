@@ -2,7 +2,8 @@ package cargomail
 
 import (
 	"cargomail/cmd/provider"
-	"cargomail/cmd/transfer"
+	"cargomail/cmd/mta"
+	"cargomail/cmd/rta"
 	"cargomail/internal/config"
 	"cargomail/internal/database"
 	"context"
@@ -44,12 +45,19 @@ func Start() error {
 	}
 	providerService.Serve(ctx, errs)
 
-	// transfer service
-	transferService := transfer.NewService(
-		&transfer.ServiceParams{
+	// mta service
+	mtaService := mta.NewService(
+		&mta.ServiceParams{
 			DB: db,
 		})
-	transferService.Serve(ctx, errs)
+	mtaService.Serve(ctx, errs)
+
+	// rta service
+	rtaService := rta.NewService(
+		&rta.ServiceParams{
+			DB: db,
+		})
+	rtaService.Serve(ctx, errs)
 
 	go func() error {
 		stop := make(chan os.Signal, 1)

@@ -21,18 +21,21 @@ var (
 )
 
 type Config = struct {
-	DomainName       string `yaml:"domainName"`
-	StoragePath      string `yaml:"storagePath"`
-	DatabasePath     string `yaml:"databasePath"`
-	ResourcesPath    string `yaml:"resources_path"`
-	BlobsFolder      string `yaml:"blobsFolder"`
-	FilesFolder      string `yaml:"filesFolder"`
-	TransferCertPath string `yaml:"transferCertPath"`
-	TransferKeyPath  string `yaml:"transferKeyPath"`
-	ProviderBind     string `yaml:"providerBind"`
-	TransferBind     string `yaml:"transferBind"`
-	CookieSameSite   string `yaml:"cookieSameSite"`
-	Stage            string `yaml:"stage"`
+	DomainName     string `yaml:"domainName"`
+	StoragePath    string `yaml:"storagePath"`
+	DatabasePath   string `yaml:"databasePath"`
+	ResourcesPath  string `yaml:"resources_path"`
+	BlobsFolder    string `yaml:"blobsFolder"`
+	FilesFolder    string `yaml:"filesFolder"`
+	MtaCertPath    string `yaml:"mtaCertPath"`
+	MtaKeyPath     string `yaml:"mtaKeyPath"`
+	RtaCertPath    string `yaml:"rtaCertPath"`
+	RtaKeyPath     string `yaml:"rtaKeyPath"`
+	ProviderBind   string `yaml:"providerBind"`
+	MtaBind        string `yaml:"mtaBind"`
+	RtaBind        string `yaml:"rtaBind"`
+	CookieSameSite string `yaml:"cookieSameSite"`
+	Stage          string `yaml:"stage"`
 	// SessionTTL       time.Duration
 }
 

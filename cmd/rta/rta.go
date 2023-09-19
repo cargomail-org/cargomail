@@ -1,7 +1,7 @@
-package transfer
+package rta
 
 import (
-	"cargomail/cmd/transfer/api"
+	"cargomail/cmd/rta/api"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"context"
@@ -36,7 +36,7 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 	mux := http.NewServeMux()
 	svc.routes(mux)
 
-	http1Server := &http.Server{Handler: mux, Addr: config.Configuration.TransferBind}
+	http1Server := &http.Server{Handler: mux, Addr: config.Configuration.RtaBind}
 
 	errs.Go(func() error {
 		<-ctx.Done()
@@ -47,12 +47,12 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 		if err != nil {
 			return err
 		}
-		log.Print("transfer service shutdown gracefully")
+		log.Print("resource transfer agent shutdown gracefully")
 		return nil
 	})
 
 	errs.Go(func() error {
-		log.Printf("transfer service is listening on https://%s", http1Server.Addr)
-		return http1Server.ListenAndServeTLS(config.Configuration.TransferCertPath, config.Configuration.TransferKeyPath)
+		log.Printf("resource transfer agent is listening on https://%s", http1Server.Addr)
+		return http1Server.ListenAndServeTLS(config.Configuration.RtaCertPath, config.Configuration.RtaKeyPath)
 	})
 }

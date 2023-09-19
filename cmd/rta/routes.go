@@ -1,4 +1,4 @@
-package transfer
+package rta
 
 import (
 	"net/http"

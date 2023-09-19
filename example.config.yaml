@@ -2,8 +2,11 @@ domainName: cargomail.org
 storagePath: ./storage/cargomail.org
 databasePath: ./storage/cargomail.org/database/cargomail.db
 resourcesPath: ./storage/cargomail.org/resources/
-transferCertPath: ./storage/cargomail.org/certificates/server.crt
-transferKeyPath: ./storage/cargomail.org/certificates/server.key
+mtaCertPath: ./storage/cargomail.org/certificates/server.crt
+mtaKeyPath: ./storage/cargomail.org/certificates/server.key
+rtaCertPath: ./storage/cargomail.org/certificates/server.crt
+rtaKeyPath: ./storage/cargomail.org/certificates/server.key
 providerBind: 127.0.0.1:8181
-transferBind: 127.0.0.1:2125
+mtaBind: 127.0.0.1:2125
+rtaBind: 127.0.0.1:2135
 cookieSameSite: strict
