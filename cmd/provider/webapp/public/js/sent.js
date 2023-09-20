@@ -99,12 +99,35 @@ export const sentTable = new DataTable("#sentTable", {
 
       historyId = response.lastHistoryId;
 
-      callback({ data: response.messages });
+      const threadsById = new Map();
+      for (const message of response.messages) {
+        const threadId = message.payload.headers["X-Thread-ID"];
+        const thread = threadsById.get(threadId);
+        const payload = message.payload;
+        const createdAt =
+          message.modifiedAt != null ? message.modifiedAt : message.createdAt;
+
+        if (thread) {
+          thread.messages.push(message);
+        } else {
+          threadsById.set(threadId, {
+            threadId,
+            payload,
+            createdAt,
+            messages: [message],
+          });
+        }
+      }
+      const threads = [...threadsById.values()];
+
+      console.log(threads);
+
+      callback({ data: threads });
     })();
   },
   ordering: true,
   columns: [
-    { data: "id", visible: false, searchable: false },
+    { data: "threadId", visible: false, searchable: false },
     { data: null, visible: true, orderable: false, width: "15px" },
     {
       data: "payload",
@@ -160,12 +183,11 @@ export const sentTable = new DataTable("#sentTable", {
       visible: false,
       orderable: true,
       render: (data, type, full, meta) => {
-        const date = full.modifiedAt != null ? full.modifiedAt : full.createdAt;
-        return date;
+        return full.createdAt;
       },
     },
   ],
-  rowId: "id",
+  rowId: "threadId",
   columnDefs: [
     {
       targets: 1,
@@ -217,7 +239,7 @@ export const sentTable = new DataTable("#sentTable", {
           }
 
           sentTableRefresh(response);
-          inboxTableRefresh(response);         
+          inboxTableRefresh(response);
         })();
       },
     },
@@ -252,6 +274,50 @@ $(window).resize(function () {
     }
   } else {
     sentTable.page.len(5).draw();
+  }
+});
+
+function format(d) {
+  var trs = "";
+  $.each($(d.messages), function (key, value) {
+    trs += "<tr><td>" + value.id + "</td><td>" + value.payload?.headers?.["Subject"] + "</td></tr>";
+  });
+  // `d` is the original data object for the row
+  return (
+    '<table class="table table-border table-hover">' +
+    "<thead>" +
+    "<th>Id</th>" +
+    "<th>Message</th>" +
+    "</thead><tbody>" +
+    trs +
+    "</tbody></table>"
+  );
+  // return (
+  //   '<button class="btn btn-primary btn-round">' +
+  //   d.threadId +
+  //   '<div class="ripple-container"></div></button>'
+  // );
+}
+
+sentTable.on("click", "td.payload", (e) => {
+  if (e.target.classList.contains("attachmentLink")) {
+    return;
+  }
+
+  let tr = e.target.closest("tr");
+  let row = sentTable.row(tr);
+  let rowData = row.data();
+
+  if (row.child.isShown()) {
+    // This row is already open - close it
+    row.child.hide();
+    tr.classList.remove("shown");
+  } else {
+    if (sentTable.row(".shown").length)
+      $(".payload", sentTable.row(".shown").node()).click();
+    // Open this row
+    row.child(format(rowData)).show();
+    tr.classList.add("shown");
   }
 });
 
@@ -330,7 +396,7 @@ export const sentTableRefresh = (data) => {
     }
   }
 
-  sentTable.draw(); 
+  sentTable.draw();
 };
 
 export const deleteSentMessages = (e) => {
