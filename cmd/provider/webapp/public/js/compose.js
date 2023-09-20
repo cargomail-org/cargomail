@@ -492,6 +492,7 @@ export const removeAttachments = (e) => {
     const data = composeTable.row(i).data();
     const attachment = {
       id: data.id,
+      digest: data.digest,
       contentType: data.contentType,
       fileName: data?.name ? data?.name : data?.fileName, // file name or attachment fileName
       size: data.size,
