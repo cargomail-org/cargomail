@@ -686,7 +686,7 @@ const formPopulated = async (cmd) => {
 };
 
 export const composeAddItems = (items) => {
-  for (let i = items.length - 1; i >= 0; i--) {
+  for (let i = items?.length - 1; i >= 0; i--) {
     let found = false;
 
     for (let j = 0; j < composeTable.rows().count(); j++) {
@@ -728,7 +728,7 @@ export const composeAddItems = (items) => {
     }
   }
 
-  if (items.length > 0) {
+  if (items?.length > 0) {
     (async () => {
       await formPopulated("update");
     })();

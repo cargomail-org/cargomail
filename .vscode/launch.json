@@ -71,7 +71,7 @@
             "type": "chrome",
             "name": "webapp",
             "request": "launch",
-            "url": "http://127.0.0.1:3000/index.html"
+            "url": "http://127.0.0.1:3000"
         }
     ]
 }
