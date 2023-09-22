@@ -24,7 +24,8 @@ import {
 import { inboxTableRefresh } from "/public/js/inbox.js";
 import {
   messageListResponse,
-  conversationPane,
+  createThreadTable,
+  destroyThreadTable,
 } from "/public/js/thread.js";
 
 let selectedIds = [];
@@ -271,17 +272,16 @@ sentTable.on("click", "td.payload", (e) => {
 
   let tr = e.target.closest("tr");
   let row = sentTable.row(tr);
-  let rowData = row.data();
 
   if (row.child.isShown()) {
     // This row is already open - close it
-    row.child.hide();
+    destroyThreadTable(row);
     tr.classList.remove("shown");
   } else {
-    if (sentTable.row(".shown").length)
-      $(".payload", sentTable.row(".shown").node()).click();
+    // if (sentTable.row(".shown").length)
+    //   $(".payload", sentTable.row(".shown").node()).click();
     // Open this row
-    row.child(conversationPane(rowData)).show();
+    createThreadTable(row);
     tr.classList.add("shown");
   }
 });

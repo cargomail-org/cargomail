@@ -53,6 +53,7 @@ const getPartIfNotContainer = (part) => {
     const contentType = part.headers["Content-Type"];
     const contentTransferEnconding = part.headers["Content-Transfer-Encoding"];
     const contentDisposition = part.headers["Content-Disposition"];
+    const contentId = part.headers["Content-ID"];
 
     let isContainer;
 
@@ -82,6 +83,10 @@ const getPartIfNotContainer = (part) => {
 
       if (contentDisposition) {
         result["Content-Disposition"] = contentDisposition;
+      }
+
+      if (contentId) {
+        result["Content-ID"] = contentId;
       }
 
       if (Object.keys(result).length > 0) {
@@ -168,7 +173,7 @@ const parseParts = (payload) => {
     let contentId;
 
     if (attachmentDisposition["Content-ID"]) {
-      value = attachmentDisposition["Content-ID"];
+      const value = attachmentDisposition["Content-ID"];
 
       if (value.length > 2) {
         contentId =
@@ -365,7 +370,7 @@ export const composePayload = (parsed) => {
               attachment.contentType,
             ],
             "Content-Disposition": `attachment; filename="${attachment.fileName}"`,
-            "Content-ID": `<${attachment.digest}>`
+            "Content-ID": `<${attachment.digest}>`,
           },
         };
         attachmentParts.push(attachmentPart);

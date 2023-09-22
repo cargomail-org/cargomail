@@ -153,7 +153,7 @@ a:not([class*="btn"]):hover {
   --bs-table-bg: transparent;
 }
 
-td.payload {
+td.payload, td.threads-payload {
   cursor: pointer;
 }
 
@@ -168,6 +168,10 @@ td.select-checkbox {
 .dataTables_paginate {
   display: inline-flex;
   float: right;
+}
+
+table.thread-table.dataTable tbody tr:hover {
+  background-color: rgb(226 232 240);
 }
 
 @media screen and (max-width: 575px) {
