@@ -153,7 +153,8 @@ a:not([class*="btn"]):hover {
   --bs-table-bg: transparent;
 }
 
-td.payload, td.threads-payload {
+td.payload,
+td.threads-payload {
   cursor: pointer;
 }
 
@@ -170,8 +171,13 @@ td.select-checkbox {
   float: right;
 }
 
-table.thread-table.dataTable tbody tr:hover {
-  background-color: rgb(226 232 240);
+table.thread-table.dataTable thead th {
+  font-size: 1.25em;
+  font-weight: 400;
+}
+
+table.thread-table.dataTable tr.dt-hasChild td.threads-payload {
+  border-bottom: none;
 }
 
 @media screen and (max-width: 575px) {

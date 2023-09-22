@@ -17,6 +17,8 @@ import {
   createPlainContentSnippet,
 } from "/public/js/utils.js";
 
+import { showDetail } from "/public/js/detail.js";
+
 const getMessages = async () => {
   const response = await api(
     sentFormAlert.id,
@@ -41,7 +43,7 @@ const getMessages = async () => {
 export const createThreadTable = (row) => {
   // This is the table we'll convert into a DataTable
   const table = $(
-    '<table class="table thread-table table-bordered table-hover" width="100%"/>'
+    '<table class="table thread-table" width="100%"/>'
   );
 
   // Display it the child row
@@ -63,6 +65,30 @@ export const createThreadTable = (row) => {
     responsive: {
       details: false,
     },
+    rowCallback: function (row, data, dataIndex) {
+        const $row = $(row);
+        if ($row.hasClass("even")) {
+          $row.css("background-color", "rgb(255, 255, 255)");
+          $row.hover(
+            function () {
+              $(this).css("background-color", "rgb(255, 255, 255)");
+            },
+            function () {
+              $(this).css("background-color", "rgb(255, 255, 255)");
+            }
+          );
+        } else {
+          $row.css("background-color", "rgb(255, 255, 255)");
+          $row.hover(
+            function () {
+              $(this).css("background-color", "rgb(255, 255, 255)");
+            },
+            function () {
+              $(this).css("background-color", "rgb(255, 255, 255)");
+            }
+          );
+        }
+      },
     dom: "Bfrtip",
     pageLength: 50,
     rowId: "id",
@@ -140,26 +166,17 @@ export const createThreadTable = (row) => {
     if (e.target.classList.contains("attachmentLink")) {
       return;
     }
-  
-    console.log(e.target);
-  
-    /*let tr = e.target.closest("tr");
-    let row = sentTable.row(tr);
-    // let rowData = row.data();
-  
+
+    let tr = e.target.closest("tr");
+    let row = threadsTable.row(tr);
+
     if (row.child.isShown()) {
       // This row is already open - close it
-      // row.child.hide();
-      destroyThreadTable(row);
-      tr.classList.remove("shown");
+      row.child.hide();
     } else {
-      // if (sentTable.row(".shown").length)
-      //   $(".payload", sentTable.row(".shown").node()).click();
       // Open this row
-      // row.child(conversationPane(rowData)).show();
-      createThreadTable(row);
-      tr.classList.add("shown");
-    }*/
+      row.child(showDetail(row.data())).show();
+    }
   });
 };
 
