@@ -22,6 +22,10 @@ import {
   createPlainContentSnippet,
 } from "/public/js/utils.js";
 import { inboxTableRefresh } from "/public/js/inbox.js";
+import {
+  messageListResponse,
+  conversationPane,
+} from "/public/js/thread.js";
 
 let selectedIds = [];
 
@@ -79,28 +83,11 @@ export const sentTable = new DataTable("#sentTable", {
   //   $("#selector thead").remove();
   // },
   ajax: function (data, callback, settings) {
-    (async () => {
-      const response = await api(
-        sentFormAlert.id,
-        200,
-        `${window.apiHost}/api/v1/messages/list`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ folder: 1 }),
-        }
-      );
-
-      if (response === false) {
-        return;
-      }
-
-      historyId = response.lastHistoryId;
+    if (messageListResponse) {
+      historyId = messageListResponse.lastHistoryId;
 
       const threadsById = new Map();
-      for (const message of response.messages) {
+      for (const message of messageListResponse.messages) {
         const threadId = message.payload.headers["X-Thread-ID"];
         const thread = threadsById.get(threadId);
         const payload = message.payload;
@@ -123,7 +110,7 @@ export const sentTable = new DataTable("#sentTable", {
       console.log(threads);
 
       callback({ data: threads });
-    })();
+    }
   },
   ordering: true,
   columns: [
@@ -277,28 +264,6 @@ $(window).resize(function () {
   }
 });
 
-function format(d) {
-  var trs = "";
-  $.each($(d.messages), function (key, value) {
-    trs += "<tr><td>" + value.id + "</td><td>" + value.payload?.headers?.["Subject"] + "</td></tr>";
-  });
-  // `d` is the original data object for the row
-  return (
-    '<table class="table table-border table-hover">' +
-    "<thead>" +
-    "<th>Id</th>" +
-    "<th>Message</th>" +
-    "</thead><tbody>" +
-    trs +
-    "</tbody></table>"
-  );
-  // return (
-  //   '<button class="btn btn-primary btn-round">' +
-  //   d.threadId +
-  //   '<div class="ripple-container"></div></button>'
-  // );
-}
-
 sentTable.on("click", "td.payload", (e) => {
   if (e.target.classList.contains("attachmentLink")) {
     return;
@@ -316,7 +281,7 @@ sentTable.on("click", "td.payload", (e) => {
     if (sentTable.row(".shown").length)
       $(".payload", sentTable.row(".shown").node()).click();
     // Open this row
-    row.child(format(rowData)).show();
+    row.child(conversationPane(rowData)).show();
     tr.classList.add("shown");
   }
 });
