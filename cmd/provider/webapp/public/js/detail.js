@@ -66,9 +66,6 @@ export const showDetail = (row) => {
       paging: false,
       searching: false,
       ordering: false,
-      responsive: {
-        details: false,
-      },
       data: testData, // rowData,
       columns: [
         { data: "id", visible: false, searchable: false },

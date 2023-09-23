@@ -57,9 +57,6 @@ export const createThreadTable = (row) => {
     paging: false,
     searching: false,
     ordering: true,
-    responsive: {
-      details: false,
-    },
     rowCallback: function (row, data, dataIndex) {
       const $row = $(row);
       if ($row.hasClass("even")) {
