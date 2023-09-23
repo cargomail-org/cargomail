@@ -41,7 +41,7 @@ export const showDetail = (row) => {
             <span contenteditable="false" class="form-control detail-message-html" spellcheck="false">${
               parsed.htmlContent
             }</span>
-            <label style="margin-left: -5px;">Message</label>
+            <label style="margin-left: -5px; margin-top: -5px;">Message</label>
         </div>
         <table ${
             testData.length > 0 ? "" : "hidden"
