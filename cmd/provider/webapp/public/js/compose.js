@@ -710,14 +710,14 @@ export const composeAddItems = (items) => {
 
       composeTable.row.add(item);
 
-      var currentPage = composeTable.page();
+      const currentPage = composeTable.page();
 
-      var index = composeTable.row(this).index(),
+      let index = composeTable.row(this).index(),
         rowCount = composeTable.data().length - 1,
         insertedRow = composeTable.row(rowCount).data(),
         tempRow;
 
-      for (var k = rowCount; k > index; k--) {
+      for (const k = rowCount; k > index; k--) {
         tempRow = composeTable.row(k - 1).data();
         composeTable.row(k).data(tempRow);
         composeTable.row(k - 1).data(insertedRow);

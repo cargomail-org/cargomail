@@ -278,8 +278,9 @@ sentTable.on("click", "td.payload", (e) => {
     destroyThreadTable(row);
     tr.classList.remove("shown");
   } else {
-    // if (sentTable.row(".shown").length)
-    //   $(".payload", sentTable.row(".shown").node()).click();
+    if (sentTable.row(".shown").length) {
+      $(".payload", sentTable.row(".shown").node()).click();
+    }
     // Open this row
     createThreadTable(row);
     tr.classList.add("shown");

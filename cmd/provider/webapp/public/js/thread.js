@@ -42,17 +42,12 @@ const getMessages = async () => {
 
 export const createThreadTable = (row) => {
   // This is the table we'll convert into a DataTable
-  const table = $(
-    '<table class="table thread-table" width="100%"/>'
-  );
-
-  // Display it the child row
-  row.child(table).show();
+  const table = $('<table class="table thread-table" width="100%"/>');
 
   const rowData = row.data();
 
   if (!rowData?.messages) {
-    console.log("no data");
+    console.log("thread-table no data");
     return;
   }
 
@@ -66,29 +61,29 @@ export const createThreadTable = (row) => {
       details: false,
     },
     rowCallback: function (row, data, dataIndex) {
-        const $row = $(row);
-        if ($row.hasClass("even")) {
-          $row.css("background-color", "rgb(255, 255, 255)");
-          $row.hover(
-            function () {
-              $(this).css("background-color", "rgb(255, 255, 255)");
-            },
-            function () {
-              $(this).css("background-color", "rgb(255, 255, 255)");
-            }
-          );
-        } else {
-          $row.css("background-color", "rgb(255, 255, 255)");
-          $row.hover(
-            function () {
-              $(this).css("background-color", "rgb(255, 255, 255)");
-            },
-            function () {
-              $(this).css("background-color", "rgb(255, 255, 255)");
-            }
-          );
-        }
-      },
+      const $row = $(row);
+      if ($row.hasClass("even")) {
+        $row.css("background-color", "rgb(255, 255, 255)");
+        $row.hover(
+          function () {
+            $(this).css("background-color", "rgb(255, 255, 255)");
+          },
+          function () {
+            $(this).css("background-color", "rgb(255, 255, 255)");
+          }
+        );
+      } else {
+        $row.css("background-color", "rgb(255, 255, 255)");
+        $row.hover(
+          function () {
+            $(this).css("background-color", "rgb(255, 255, 255)");
+          },
+          function () {
+            $(this).css("background-color", "rgb(255, 255, 255)");
+          }
+        );
+      }
+    },
     dom: "Bfrtip",
     pageLength: 50,
     rowId: "id",
@@ -175,13 +170,18 @@ export const createThreadTable = (row) => {
       row.child.hide();
     } else {
       // Open this row
-      row.child(showDetail(row.data())).show();
+      showDetail(row);
+      tr.classList.add("shown");
     }
   });
+
+  // Display it the child row
+  row.child(table).show();
 };
 
 export const destroyThreadTable = (row) => {
-  const table = $("table", row.child());
+  const table = $("thread-table", row.child());
+
   table.detach();
   table.DataTable().destroy();
 

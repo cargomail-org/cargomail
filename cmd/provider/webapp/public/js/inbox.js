@@ -278,8 +278,9 @@ inboxTable.on("click", "td.payload", (e) => {
     destroyThreadTable(row);
     tr.classList.remove("shown");
   } else {
-    if (inboxTable.row(".shown").length)
+    if (inboxTable.row(".shown").length) {
       $(".payload", inboxTable.row(".shown").node()).click();
+    }
     // Open this row
     createThreadTable(row);
     tr.classList.add("shown");

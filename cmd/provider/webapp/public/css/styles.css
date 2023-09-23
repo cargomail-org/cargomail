@@ -172,14 +172,50 @@ td.select-checkbox {
 }
 
 table.thread-table.dataTable thead th {
-  border-bottom: none;
+  border-bottom-width: 0px;
   font-size: 1.25em;
   font-weight: 400;
 }
 
 table.thread-table.dataTable tr.dt-hasChild td.threads-payload {
-  border-bottom: none;
+  border-bottom-width: 0px;
 }
+
+table.detail-table.dataTable thead th {
+  border-bottom-width: 1px;
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.detail-message-html {
+  height: auto !important;
+  max-height: 30em;
+  /* padding: 1.6em 0.5em 0 0.5em;
+  background-color: white;
+  font-size: initial;
+  text-align: left;
+  border: 1px solid #e0e0e0;*/
+  border-radius: 5px;
+  resize: vertical;
+  overflow: auto;
+}
+
+.detail.message.html > p {
+  line-height: inherit !important;
+}
+
+#DataTables_Table_x_wrapper {
+  display: none;
+}
+
+/* table.detail-table:has(> tbody:empty) { */
+/* table.detail-table:has(.dataTables_empty) {
+  display: none;
+} */
+
+/* .dataTables_empty {
+  display: none;
+} */
 
 @media screen and (max-width: 575px) {
   .responsive-menu {
