@@ -204,10 +204,6 @@ table.detail-table.dataTable thead th {
   line-height: inherit !important;
 }
 
-#DataTables_Table_x_wrapper {
-  display: none;
-}
-
 /* table.detail-table:has(> tbody:empty) { */
 /* table.detail-table:has(.dataTables_empty) {
   display: none;
@@ -216,6 +212,64 @@ table.detail-table.dataTable thead th {
 /* .dataTables_empty {
   display: none;
 } */
+
+.message-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 0px;
+  min-width: 100%;
+}
+
+.message-row-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.message-row-header {
+  display: flex;
+  gap: 4px;
+  height: 1.4em;
+  align-items: flex-end;
+}
+
+.message-row-person {
+  display: flex;
+  gap: 4px;
+}
+
+.message-row-fullname {
+  text-wrap: nowrap;
+  font-weight: 600;
+}
+
+.message-row-email {
+  display: none;
+}
+
+.message-row-space {
+  flex: 1;
+}
+
+.message-row-date {
+  font-size: small;
+  vertical-align: middle;
+}
+
+.message-row-dropdown {
+  display: none;
+}
+
+.message-row-message {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 1.4em;
+}
 
 @media screen and (max-width: 575px) {
   .responsive-menu {

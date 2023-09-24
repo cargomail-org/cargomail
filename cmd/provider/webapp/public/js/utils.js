@@ -20,7 +20,7 @@ export const b64DecodeUtf8 = (base64) => {
   return decoder.decode(bytes);
 };
 
-const parseNameAndEmail = (value) => {
+export const parseNameAndEmail = (value) => {
   if (!value) return { name: "", email: "" };
 
   const delimiterIndex = value.lastIndexOf(" ");

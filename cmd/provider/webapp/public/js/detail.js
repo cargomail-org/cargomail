@@ -33,7 +33,7 @@ export const showDetail = (row) => {
     { id: 2, fileName: "file.pdf", size: 456789 },
   ];
 
-//   const testData = [];
+  //   const testData = [];
 
   const form = $(`
     <form class="detail-form" method="" action="#" enctype="multipart/form-data" autocomplete="off">
@@ -44,7 +44,7 @@ export const showDetail = (row) => {
             <label style="margin-left: -5px; margin-top: -5px;">Message</label>
         </div>
         <table ${
-            testData.length > 0 ? "" : "hidden"
+          testData.length > 0 ? "" : "hidden"
         } class="table detail-table table-striped table-bordered" width="100%">
         <thead>
             <tr>

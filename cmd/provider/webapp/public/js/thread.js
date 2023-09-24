@@ -18,6 +18,7 @@ import {
 } from "/public/js/utils.js";
 
 import { showDetail } from "/public/js/detail.js";
+import { createMessageRow } from "/public/js/row.js";
 
 const getMessages = async () => {
   const response = await api(
@@ -94,33 +95,7 @@ export const createThreadTable = (row) => {
         render: (data, type, full, meta) => {
           const parsed = parsePayload(full.id, full.payload);
 
-          const link = `${window.apiHost}/api/v1/files/`;
-          const attachmentLinks = [];
-
-          for (const attachment of parsed.attachments) {
-            const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadId('sentFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
-            attachmentLinks.push(attachmentAnchor);
-          }
-
-          const plainContent =
-            type === "display"
-              ? createPlainContentSnippet(parsed.plainContent)
-              : parsed.plainContent;
-
-          let content;
-
-          if (plainContent) {
-            content = plainContent;
-          }
-
-          let renderHtml = `<div"><span>${content || "Message"}</span>`;
-          if (attachmentLinks.length > 0) {
-            renderHtml += `<br/>`;
-            for (const item of attachmentLinks) {
-              renderHtml += `<span>${item}  </span>`;
-            }
-          }
-          renderHtml += "</div>";
+          const renderHtml = createMessageRow(parsed);
 
           return renderHtml;
         },
@@ -159,13 +134,39 @@ export const createThreadTable = (row) => {
       return;
     }
 
+    if (
+      e.target.classList.contains("bi-star") ||
+      e.target.classList.contains("bi-star-fill")
+    ) {
+      return;
+    }
+
+    if (
+      e.target.classList.contains("bi-three-dots-vertical") ||
+      e.target.classList.contains("dropdown-item") ||
+      e.target.classList.contains("dropdown-divider") ||
+      e.target.classList.contains("dropdown-menu-light")
+    ) {
+      return;
+    }
+
     let tr = e.target.closest("tr");
     let row = threadsTable.row(tr);
 
     if (row.child.isShown()) {
+      tr.getElementsByClassName("message-row-message")[0].style.display =
+        "block";
+      tr.getElementsByClassName("message-row-dropdown")[0].style.display =
+        "none";
+
       // This row is already open - close it
       row.child.hide();
     } else {
+      tr.getElementsByClassName("message-row-message")[0].style.display =
+        "none";
+      tr.getElementsByClassName("message-row-dropdown")[0].style.display =
+        "block";
+
       // Open this row
       showDetail(row);
       tr.classList.add("shown");
