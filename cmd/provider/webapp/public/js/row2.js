@@ -2,19 +2,28 @@ import { parseNameAndEmail } from "/public/js/utils.js";
 
 // https://codepen.io/sergiopedercini/pen/RLJYLj/
 function stringToHslColor(str, s, l) {
-  var hash = 0;
-  for (var i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  if (str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const h = hash % 360;
+    return "hsl(" + h + ", " + s + "%, " + l + "%)";
   }
 
-  var h = hash % 360;
-  return "hsl(" + h + ", " + s + "%, " + l + "%)";
+  return "hsl(" + 0 + ", " + 0 + "%, " + 0 + "%)";
 }
 
 export const createMessageRow = (parsed) => {
   const person = parseNameAndEmail(parsed.from);
 
-  let splitted = person.name.split(" ");
+  let splitted;
+
+  if (person.name) {
+    splitted = person.name?.split(" ");
+  }
+
   if (!splitted) {
     splitted = person.email[0];
   }
@@ -84,7 +93,7 @@ export const createMessageRow = (parsed) => {
     <div class="message-row">
         <div class="message-row-icon">
             <div class="rounded-circle border d-flex justify-content-center align-items-center" style="width:34px;height:34px;background-color:${stringToHslColor(
-              person.name,
+              person.name || person.email.split("@")[0],
               30,
               80
             )};" alt="Avatar">${initials}</div>
@@ -92,7 +101,11 @@ export const createMessageRow = (parsed) => {
         <div class="message-row-content">
             <div class="message-row-header">
                 <div class="message-row-person">
-                    <div class="message-row-fullname">${person.name}</div>
+                    <div class="message-row-fullname">${
+                      person.name?.length > 0
+                        ? person.name
+                        : person.email.split("@")[0]
+                    }</div>
                     <div class="message-row-email">${person.email}</div>
                 </div>    
                 <div class="message-row-space"></div>
