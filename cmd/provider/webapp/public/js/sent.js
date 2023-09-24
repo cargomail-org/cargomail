@@ -10,7 +10,8 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-import { composeContentPage } from "/public/js/menu.js";
+import { createThreadRow } from "/public/js/row1.js";
+
 import {
   clearForm as composeClearForm,
   populateForm as composePopulateForm,
@@ -124,44 +125,7 @@ export const sentTable = new DataTable("#sentTable", {
       render: (data, type, full, meta) => {
         const parsed = parsePayload(full.id, full.payload);
 
-        const link = `${window.apiHost}/api/v1/files/`;
-        const attachmentLinks = [];
-
-        for (const attachment of parsed.attachments) {
-          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadId('sentFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
-          attachmentLinks.push(attachmentAnchor);
-        }
-
-        const subject =
-          type === "display"
-            ? createSubjectSnippet(parsed.subject)
-            : parsed.subject;
-        const plainContent =
-          type === "display"
-            ? createPlainContentSnippet(parsed.plainContent)
-            : parsed.plainContent;
-
-        let content;
-
-        if (subject) {
-          content = subject;
-          if (plainContent) {
-            content = subject + " - " + plainContent;
-          }
-        } else {
-          if (plainContent) {
-            content = plainContent;
-          }
-        }
-
-        let renderHtml = `<div"><span>${content || "Message"}</span>`;
-        if (attachmentLinks.length > 0) {
-          renderHtml += `<br/>`;
-          for (const item of attachmentLinks) {
-            renderHtml += `<span>${item}  </span>`;
-          }
-        }
-        renderHtml += "</div>";
+        const renderHtml = createThreadRow(type, parsed);
 
         return renderHtml;
       },

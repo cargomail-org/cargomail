@@ -18,7 +18,7 @@ import {
 } from "/public/js/utils.js";
 
 import { showDetail } from "/public/js/detail.js";
-import { createMessageRow } from "/public/js/row.js";
+import { createMessageRow } from "/public/js/row2.js";
 
 const getMessages = async () => {
   const response = await api(
