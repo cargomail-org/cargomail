@@ -63,9 +63,11 @@ export const createThreadRow = (type, messages, parsed) => {
   let renderAttachmentLinks = "";
 
   for (const item of attachmentLinks) {
-    renderAttachmentLinks += `<span>${item}  ${
-      moreAttachments > 0 ? `+${moreAttachments}` : ""
-    }</span>`;
+    renderAttachmentLinks += `<span>${item}  </span>`;
+  }
+
+  if (moreAttachments > 0) {
+    renderAttachmentLinks += `<span>+${moreAttachments}</span>`
   }
 
   const htmlFlex = `

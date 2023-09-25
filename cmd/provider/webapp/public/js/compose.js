@@ -374,7 +374,7 @@ const composeTable = new DataTable("#composeTable", {
   ordering: false,
   searching: false,
   columns: [
-    { data: "id", visible: false, searchable: false },
+    { data: "digest", visible: false, searchable: false },
     { data: null, visible: true, orderable: false },
     {
       data: "fileName",
@@ -410,6 +410,9 @@ const composeTable = new DataTable("#composeTable", {
   },
   order: [[2, "desc"]],
   dom: "Bfrtip",
+  rowId: (row) => {
+    return row.digest + "@" + row.fileName;
+  },
   language: {
     buttons: {
       pageLength: "Show %d",
@@ -491,7 +494,6 @@ export const removeAttachments = (e) => {
   for (let i = 0; i < composeTable.rows().count(); i++) {
     const data = composeTable.row(i).data();
     const attachment = {
-      id: data.id,
       digest: data.digest,
       contentType: data.contentType,
       fileName: data?.name ? data?.name : data?.fileName, // file name or attachment fileName
@@ -690,19 +692,20 @@ export const composeAddItems = (items) => {
     let found = false;
 
     for (let j = 0; j < composeTable.rows().count(); j++) {
-      const id = composeTable.row(j).data().id;
-      if (id == items[i].id) {
+      const id =
+        composeTable.row(j).data().digest +
+        "@" +
+        composeTable.row(j).data().fileName;
+      const fileName = items[i]?.name ? items[i]?.name : items[i]?.fileName;
+      if (id == items[i].digest + "@" + fileName) {
         found = true;
         break;
       }
     }
 
     if (!found) {
-      const id = items[i].id ? { id: items[i].id } : undefined;
-      const digest = items[i].digest ? { digest: items[i].digest } : undefined;
       const item = {
-        ...id,
-        ...digest,
+        digest: items[i].digest,
         contentType: items[i].contentType,
         fileName: items[i]?.name ? items[i]?.name : items[i]?.fileName, // file name or attachment fileName
         size: items[i].size,
@@ -717,7 +720,7 @@ export const composeAddItems = (items) => {
         insertedRow = composeTable.row(rowCount).data(),
         tempRow;
 
-      for (const k = rowCount; k > index; k--) {
+      for (let k = rowCount; k > index; k--) {
         tempRow = composeTable.row(k - 1).data();
         composeTable.row(k).data(tempRow);
         composeTable.row(k - 1).data(insertedRow);
