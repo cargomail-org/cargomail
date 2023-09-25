@@ -45,7 +45,7 @@ export const showDetail = (row) => {
         </div>
         <table ${
           testData.length > 0 ? "" : "hidden"
-        } class="table detail-table table-striped table-bordered" width="100%">
+        } class="table detail-table table-bordered" width="100%">
         <thead>
             <tr>
                 <th>Id</th>

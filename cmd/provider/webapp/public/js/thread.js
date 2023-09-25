@@ -64,7 +64,7 @@ export const createThreadTable = (row) => {
         $row.css("background-color", "rgb(255, 255, 255)");
         $row.hover(
           function () {
-            $(this).css("background-color", "rgb(255, 255, 255)");
+            $(this).css("background-color", "rgb(245,245,245)");
           },
           function () {
             $(this).css("background-color", "rgb(255, 255, 255)");
@@ -74,7 +74,7 @@ export const createThreadTable = (row) => {
         $row.css("background-color", "rgb(255, 255, 255)");
         $row.hover(
           function () {
-            $(this).css("background-color", "rgb(255, 255, 255)");
+            $(this).css("background-color", "rgb(245,245,245)");
           },
           function () {
             $(this).css("background-color", "rgb(255, 255, 255)");
