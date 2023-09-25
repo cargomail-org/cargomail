@@ -226,7 +226,7 @@ const filesTable = new DataTable("#filesTable", {
   },
   columns: [
     { data: "id", visible: false, searchable: false },
-    { data: null, visible: true, orderable: false, width: "15px" },
+    { data: null, visible: true, orderable: false },
     {
       data: "name",
       render: (data, type, full, meta) => {

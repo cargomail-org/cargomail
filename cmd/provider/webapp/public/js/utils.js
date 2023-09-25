@@ -41,11 +41,57 @@ export const parseNameAndEmail = (value) => {
     email = value.slice(delimiterIndex + 2, value.length - 1);
   }
 
+  let person;
+
   if (name) {
-    return { name, email };
+    person = { name, email };
   } else {
-    return { email };
+    person = { email };
   }
+
+  return person;
+};
+
+export const parseInitialsAndName = (person) => {
+  const name = person.name || person.email.split("@")[0];
+
+  let splitted;
+
+  if (person.name) {
+    splitted = person.name?.split(" ");
+  }
+
+  if (!splitted) {
+    splitted = person.email[0];
+  }
+  const initials = (
+    splitted[1] ? splitted[0][0] + splitted[1][0] : splitted[0][0]
+  ).toUpperCase();
+
+  return { name, initials };
+};
+
+export const parseDisplayDate = (value) => {
+  let displayDate = "";
+
+  if (value) {
+    const splitted = value.split(" ");
+    const currentYear = new Date().getFullYear();
+  
+    if (splitted.length > 3) {
+      let displayTime = splitted[3].split(":");
+  
+      displayDate = `${splitted[1]} ${splitted[2]}, ${displayTime[0]}:${
+        displayTime[1]
+      } ${
+        splitted[splitted.length - 1] == currentYear
+          ? ""
+          : "," + splitted[splitted.length - 1]
+      }`;
+    }
+  }
+
+  return displayDate;
 };
 
 const getPartIfNotContainer = (part) => {

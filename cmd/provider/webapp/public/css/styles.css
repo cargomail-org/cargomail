@@ -171,6 +171,10 @@ td.select-checkbox {
   float: right;
 }
 
+.select-checkbox {
+  width: 5px;
+}
+
 table.thread-table.dataTable thead th {
   border-bottom-width: 0px;
   font-size: 1.25em;
@@ -213,7 +217,8 @@ table.detail-table.dataTable thead th {
   display: none;
 } */
 
-.message-row {
+.message-row,
+.thread-row {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -223,52 +228,64 @@ table.detail-table.dataTable thead th {
   min-width: 100%;
 }
 
-.message-row-content {
+.message-row-content,
+.thread-row-content {
   width: 100%;
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-.message-row-header {
+.message-row-header,
+.thread-row-header {
   display: flex;
-  gap: 4px;
   height: 1.4em;
   align-items: flex-end;
 }
 
-.message-row-person {
+.message-row-person,
+.thread-row-person {
   display: flex;
   gap: 4px;
 }
 
-.message-row-fullname {
+.message-row-fullname,
+.thread-row-fullname {
   text-wrap: nowrap;
   font-weight: 600;
 }
 
-.message-row-email {
+.message-row-email,
+.thread-row-email {
   display: none;
 }
 
-.message-row-space {
+.message-row-space,
+.thread-row-space {
   flex: 1;
 }
 
-.message-row-date {
+.message-row-date,
+.thread-row-date {
   font-size: small;
   vertical-align: middle;
 }
 
-.message-row-dropdown {
+.message-row-dropdown,
+.thread-row-dropdown {
   display: none;
 }
 
-.message-row-message {
+.message-row-message,
+.thread-row-message {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   height: 1.4em;
+}
+
+.thread-row-count {
+  margin: 0 4px;
 }
 
 @media screen and (max-width: 575px) {

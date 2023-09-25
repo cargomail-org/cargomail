@@ -104,7 +104,7 @@ const draftsTable = new DataTable("#draftsTable", {
   ordering: true,
   columns: [
     { data: "id", visible: false, searchable: false },
-    { data: null, visible: true, orderable: false, width: "15px" },
+    { data: null, visible: true, orderable: false },
     {
       data: "payload",
       className: "payload",

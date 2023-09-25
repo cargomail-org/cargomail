@@ -117,7 +117,7 @@ export const inboxTable = new DataTable("#inboxTable", {
   ordering: true,
   columns: [
     { data: "threadId", visible: false, searchable: false },
-    { data: null, visible: true, orderable: false, width: "15px" },
+    { data: null, visible: true, orderable: false },
     {
       data: "payload",
       className: "payload",
@@ -125,7 +125,7 @@ export const inboxTable = new DataTable("#inboxTable", {
       render: (data, type, full, meta) => {
         const parsed = parsePayload(full.id, full.payload);
 
-        const renderHtml = createThreadRow(type, parsed);
+        const renderHtml = createThreadRow(type, full.messages?.length, parsed);
 
         return renderHtml;
       },
@@ -231,6 +231,13 @@ $(window).resize(function () {
 
 inboxTable.on("click", "td.payload", (e) => {
   if (e.target.classList.contains("attachmentLink")) {
+    return;
+  }
+
+  if (
+    e.target.classList.contains("bi-star") ||
+    e.target.classList.contains("bi-star-fill")
+  ) {
     return;
   }
 

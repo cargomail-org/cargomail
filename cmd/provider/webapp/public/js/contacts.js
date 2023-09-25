@@ -59,7 +59,7 @@ const contactsTable = new DataTable("#contactsTable", {
   },
   columns: [
     { data: "id", visible: false, searchable: false },
-    { data: null, visible: true, orderable: false, width: "15px" },
+    { data: null, visible: true, orderable: false },
     {
       data: "emailAddress",
     },

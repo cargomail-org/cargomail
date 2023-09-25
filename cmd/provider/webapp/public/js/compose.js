@@ -375,7 +375,7 @@ const composeTable = new DataTable("#composeTable", {
   searching: false,
   columns: [
     { data: "id", visible: false, searchable: false },
-    { data: null, visible: true, orderable: false, width: "15px" },
+    { data: null, visible: true, orderable: false },
     {
       data: "fileName",
       render: (data, type, full, meta) => {
