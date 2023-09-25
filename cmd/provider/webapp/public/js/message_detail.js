@@ -28,13 +28,6 @@ export const showDetail = (row) => {
 
   const parsed = parsePayload(rowData.id, rowData.payload);
 
-  const testData = [
-    { id: 1, fileName: "test.txt", size: 1234 },
-    { id: 2, fileName: "file.pdf", size: 456789 },
-  ];
-
-  //   const testData = [];
-
   const form = $(`
     <form class="detail-form" method="" action="#" enctype="multipart/form-data" autocomplete="off">
         <div class="form-floating mb-0">
@@ -44,7 +37,7 @@ export const showDetail = (row) => {
             <label style="margin-left: -5px; margin-top: -5px;">Message</label>
         </div>
         <table ${
-          testData.length > 0 ? "" : "hidden"
+          parsed.attachments?.length > 0 ? "" : "hidden"
         } class="table detail-table table-bordered" width="100%">
         <thead>
             <tr>
@@ -66,9 +59,9 @@ export const showDetail = (row) => {
       paging: false,
       searching: false,
       ordering: false,
-      data: testData, // rowData,
+      data: parsed.attachments,
       columns: [
-        { data: "id", visible: false, searchable: false },
+        { data: "digest", visible: false, searchable: false },
         { data: null, visible: true, orderable: false },
         {
           data: "fileName",
@@ -104,6 +97,7 @@ export const showDetail = (row) => {
       },
       order: [[2, "desc"]],
       dom: "Bfrtip",
+      rowId: (row) => {return row.digest + "@" + row.fileName},
       language: {
         buttons: {
           pageLength: "Show %d",
@@ -120,6 +114,10 @@ export const showDetail = (row) => {
             : 10
           : 5,
     });
+
+  // detailTable.clear();
+  // detailTable.rows.add(parsed.attachments);
+  // detailTable.draw();
 
   // Display it the child row
   row.child(form).show();
