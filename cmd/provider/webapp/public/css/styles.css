@@ -284,6 +284,17 @@ table.detail-table.dataTable thead th {
   height: 1.4em;
 }
 
+.message-row-recipients,
+.thread-row-recipients {
+  display: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: small;
+  padding: 1px 0;
+  vertical-align: middle;
+}
+
 .thread-row-count {
   margin: 0 4px;
 }

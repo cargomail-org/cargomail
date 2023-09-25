@@ -1,5 +1,16 @@
-import { parseNameAndEmail, parseInitialsAndName, parseDisplayDate } from "/public/js/utils.js";
-import { threeDotIcon, attachmentIcon, starredIcon, unstarredIcon } from "/public/js/icons.js";
+import {
+  parseNameAndEmail,
+  parseInitialsAndName,
+  parseDisplayDate,
+} from "/public/js/utils.js";
+import {
+  threeDotIcon,
+  attachmentIcon,
+  starredIcon,
+  unstarredIcon,
+} from "/public/js/icons.js";
+
+import { getProfileUsername } from "/public/js/profile.js";
 
 // https://codepen.io/sergiopedercini/pen/RLJYLj/
 function stringToHslColor(str, s, l) {
@@ -19,7 +30,7 @@ function stringToHslColor(str, s, l) {
 export const createMessageRow = (parsed) => {
   const person = parseNameAndEmail(parsed.from);
   const displayPerson = parseInitialsAndName(person);
-  const displayDate = parseDisplayDate(parsed.date)
+  const displayDate = parseDisplayDate(parsed.date);
 
   const htmlDropdownMenu = `    
     <div class="message-row-dropdown">
@@ -35,7 +46,51 @@ export const createMessageRow = (parsed) => {
     </div>
     `;
 
+  const profileUsername = getProfileUsername();
 
+  let recipientTo = "";   
+  let recipientCc = ""; 
+  let recipientBcc = ""; 
+
+  for (const to of parsed.to) {
+    const delim = recipientTo.length > 0 ? ", " : "";
+
+    if (to.email == profileUsername) {
+      recipientTo += delim + "me";
+    } else {
+      recipientTo += delim + (to.name || to.email);
+    }
+  }
+
+  for (const cc of parsed.cc) {
+    const delim = recipientCc.length > 0 ? ", " : "";
+
+    if (cc.email == profileUsername) {
+      recipientCc += delim + "me";
+    } else {
+      recipientCc += delim + (cc.name || cc.email);
+    }
+  }
+
+  for (const bcc of parsed.bcc) {
+    const delim = recipientBcc.length > 0 ? ", " : "";
+
+    if (bcc.email == profileUsername) {
+      recipientBcc += delim + "me";
+    } else {
+      recipientBcc += delim + (bcc.name || bcc.email);
+    }
+  }
+
+  let recipients = `to: ${recipientTo}`;
+
+  if (recipientCc) {
+    recipients += `, cc: ${recipientCc}`;
+  }
+
+  if (recipientBcc) {
+    recipients += `, bcc: ${recipientBcc}`;
+  }
 
   const htmlFlex = `
     <div class="message-row">
@@ -49,7 +104,9 @@ export const createMessageRow = (parsed) => {
         <div class="message-row-content">
             <div class="message-row-header">
                 <div class="message-row-person">
-                    <div class="message-row-fullname">${displayPerson.name}</div>
+                    <div class="message-row-fullname">${
+                      displayPerson.name
+                    }</div>
                     <div class="message-row-email">${person.email}</div>
                 </div>    
                 <div class="message-row-space"></div>
@@ -61,6 +118,7 @@ export const createMessageRow = (parsed) => {
                 ${htmlDropdownMenu}
             </div>
             <div class="message-row-message">${parsed.plainContent}</div>
+            <div class="message-row-recipients">${recipients}</div>
         </div>
     </div>
 `;

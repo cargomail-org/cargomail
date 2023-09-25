@@ -77,10 +77,10 @@ export const parseDisplayDate = (value) => {
   if (value) {
     const splitted = value.split(" ");
     const currentYear = new Date().getFullYear();
-  
+
     if (splitted.length > 3) {
       let displayTime = splitted[3].split(":");
-  
+
       displayDate = `${splitted[1]} ${splitted[2]}, ${displayTime[0]}:${
         displayTime[1]
       } ${

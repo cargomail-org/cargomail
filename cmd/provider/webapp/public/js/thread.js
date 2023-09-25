@@ -156,14 +156,19 @@ export const createThreadTable = (row) => {
     if (row.child.isShown()) {
       tr.getElementsByClassName("message-row-message")[0].style.display =
         "block";
+      tr.getElementsByClassName("message-row-recipients")[0].style.display =
+        "none";  
       tr.getElementsByClassName("message-row-dropdown")[0].style.display =
         "none";
+
 
       // This row is already open - close it
       row.child.hide();
     } else {
       tr.getElementsByClassName("message-row-message")[0].style.display =
         "none";
+      tr.getElementsByClassName("message-row-recipients")[0].style.display =
+        "block";
       tr.getElementsByClassName("message-row-dropdown")[0].style.display =
         "block";
 
