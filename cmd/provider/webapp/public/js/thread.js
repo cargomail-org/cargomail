@@ -188,3 +188,35 @@ export const destroyThreadTable = (row) => {
 };
 
 export const messageListResponse = await getMessages();
+
+export const getThreads = (folder = 0) => {
+  const historyId = messageListResponse.lastHistoryId;
+
+  const threadsById = new Map();
+  for (const message of messageListResponse.messages) {
+    const threadId = message.payload.headers["X-Thread-ID"];
+    const thread = threadsById.get(threadId);
+    const payload = message.payload;
+    const createdAt =
+      message.modifiedAt != null ? message.modifiedAt : message.createdAt;
+
+    if (thread) {
+      thread.messages.push(message);
+    } else {
+      threadsById.set(threadId, {
+        threadId,
+        payload,
+        createdAt,
+        messages: [message],
+      });
+    }
+  }
+  const threads = [...threadsById.values()];
+
+  return threads.filter((thread) => {
+    const rslt = thread.messages.filter(
+      (message, index) => message.folder == folder
+    );
+    return rslt.length > 0;
+  });
+};

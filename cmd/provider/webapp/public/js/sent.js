@@ -25,6 +25,7 @@ import {
 import { inboxTableRefresh } from "/public/js/inbox.js";
 import {
   messageListResponse,
+  getThreads,
   createThreadTable,
   destroyThreadTable,
 } from "/public/js/thread.js";
@@ -88,28 +89,7 @@ export const sentTable = new DataTable("#sentTable", {
     if (messageListResponse) {
       historyId = messageListResponse.lastHistoryId;
 
-      const threadsById = new Map();
-      for (const message of messageListResponse.messages) {
-        const threadId = message.payload.headers["X-Thread-ID"];
-        const thread = threadsById.get(threadId);
-        const payload = message.payload;
-        const createdAt =
-          message.modifiedAt != null ? message.modifiedAt : message.createdAt;
-
-        if (thread) {
-          thread.messages.push(message);
-        } else {
-          threadsById.set(threadId, {
-            threadId,
-            payload,
-            createdAt,
-            messages: [message],
-          });
-        }
-      }
-      const threads = [...threadsById.values()];
-
-      console.log(threads);
+      const threads = getThreads(1);
 
       callback({ data: threads });
     }
