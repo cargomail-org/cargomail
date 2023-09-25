@@ -1,4 +1,5 @@
 import {
+  parsePayload,
   createSubjectSnippet,
   createPlainContentSnippet,
   parseNameAndEmail,
@@ -12,7 +13,11 @@ import {
   unstarredIcon,
 } from "/public/js/icons.js";
 
-export const createThreadRow = (type, count = 0, parsed) => {
+const MAX_DISPLAYED_ATTACHMENTS = 3;
+
+export const createThreadRow = (type, messages, parsed) => {
+  const messagesCount = messages?.length || 0;
+
   const person = parseNameAndEmail(parsed.from);
   const displayPerson = parseInitialsAndName(person);
   const displayDate = parseDisplayDate(parsed.date);
@@ -20,9 +25,19 @@ export const createThreadRow = (type, count = 0, parsed) => {
   const link = `${window.apiHost}/api/v1/files/`;
   const attachmentLinks = [];
 
-  for (const attachment of parsed.attachments) {
-    const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadId('inboxFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
-    attachmentLinks.push(attachmentAnchor);
+  let moreAttachments = 0;
+
+  for (const message of messages) {
+    const parsedMessage = parsePayload(message.id, message.payload);
+
+    for (const attachment of parsedMessage.attachments) {
+      if (attachmentLinks.length < MAX_DISPLAYED_ATTACHMENTS) {
+        const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadId('inboxFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
+        attachmentLinks.push(attachmentAnchor);
+      } else {
+        moreAttachments += 1;
+      }
+    }
   }
 
   const subject =
@@ -48,7 +63,9 @@ export const createThreadRow = (type, count = 0, parsed) => {
   let renderAttachmentLinks = "";
 
   for (const item of attachmentLinks) {
-    renderAttachmentLinks += `<span>${item}  </span>`;
+    renderAttachmentLinks += `<span>${item}  ${
+      moreAttachments > 0 ? `+${moreAttachments}` : ""
+    }</span>`;
   }
 
   const htmlFlex = `
@@ -58,10 +75,12 @@ export const createThreadRow = (type, count = 0, parsed) => {
               <div class="thread-row-person">
                   <div class="thread-row-fullname">${displayPerson.name}</div>
               </div>
-              <div class="thread-row-count">${count > 1 ? count : ""}</div>
+              <div class="thread-row-count">${
+                messagesCount > 1 ? messagesCount : ""
+              }</div>
               <div class="thread-row-space"></div>
               <div class="thread-row-attch">${
-                parsed.attachments.length > 0 ? attachmentIcon : ""
+                attachmentLinks.length > 0 ? attachmentIcon : ""
               }</div>
             <div class="thread-row-date">${displayDate}</div>
               <div class="thread-row-starred">${unstarredIcon}</div>
