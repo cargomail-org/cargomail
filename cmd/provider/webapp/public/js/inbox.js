@@ -10,7 +10,7 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-import { createThreadRow } from "/public/js/row1.js";
+import { createThreadRow } from "/public/js/thread_row.js";
 
 import {
   clearForm as composeClearForm,

@@ -17,8 +17,8 @@ import {
   createPlainContentSnippet,
 } from "/public/js/utils.js";
 
-import { showDetail } from "/public/js/detail.js";
-import { createMessageRow } from "/public/js/row2.js";
+import { showDetail } from "/public/js/message_detail.js";
+import { createMessageRow } from "/public/js/message_row.js";
 
 const getMessages = async () => {
   const response = await api(
