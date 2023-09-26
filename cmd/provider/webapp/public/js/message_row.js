@@ -2,6 +2,7 @@ import {
   parseNameAndEmail,
   parseInitialsAndName,
   parseDisplayDate,
+  getRecipientsShort,
 } from "/public/js/utils.js";
 import {
   threeDotIcon,
@@ -38,59 +39,17 @@ export const createMessageRow = (id, parsed) => {
           ${threeDotIcon}
         </button>
         <ul class="dropdown-menu dropdown-menu-light">
-            <li><a class="dropdown-item" id="${id}" href="#">Reply</a></li>
-            <li><a class="dropdown-item" id="${id}" href="#">Reply to all</a></li>
+            <li><a class="dropdown-item message-reply" id="${id}" href="#">Reply</a></li>
+            <li><a class="dropdown-item message-reply-all" id="${id}" href="#">Reply to all</a></li>
             <li><hr class="dropdown-divider border-top border-secondary"></li>
-            <li><a class="dropdown-item" id="${id}" href="#">Forward</a></li>
+            <li><a class="dropdown-item message-forward" id="${id}" href="#">Forward</a></li>
         </ul>
     </div>
     `;
 
   const profileUsername = getProfileUsername();
 
-  let recipientTo = "";   
-  let recipientCc = ""; 
-  let recipientBcc = ""; 
-
-  for (const to of parsed.to) {
-    const delim = recipientTo.length > 0 ? ", " : "";
-
-    if (to.email == profileUsername) {
-      recipientTo += delim + "me";
-    } else {
-      recipientTo += delim + (to.name || to.email);
-    }
-  }
-
-  for (const cc of parsed.cc) {
-    const delim = recipientCc.length > 0 ? ", " : "";
-
-    if (cc.email == profileUsername) {
-      recipientCc += delim + "me";
-    } else {
-      recipientCc += delim + (cc.name || cc.email);
-    }
-  }
-
-  for (const bcc of parsed.bcc) {
-    const delim = recipientBcc.length > 0 ? ", " : "";
-
-    if (bcc.email == profileUsername) {
-      recipientBcc += delim + "me";
-    } else {
-      recipientBcc += delim + (bcc.name || bcc.email);
-    }
-  }
-
-  let recipients = `to: ${recipientTo}`;
-
-  if (recipientCc) {
-    recipients += `, cc: ${recipientCc}`;
-  }
-
-  if (recipientBcc) {
-    recipients += `, bcc: ${recipientBcc}`;
-  }
+  const recipients = getRecipientsShort(profileUsername, parsed);
 
   const htmlFlex = `
     <div class="message-row">

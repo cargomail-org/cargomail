@@ -121,7 +121,7 @@ a:not([class*="btn"]):hover {
 }
 
 #messageHtml {
-  min-height: 8.2em;
+  min-height: 10.2em;
   max-height: 30em;
   /* padding: 1.6em 0.5em 0 0.5em;
   background-color: white;
@@ -297,6 +297,17 @@ table.detail-table.dataTable thead th {
 
 .thread-row-count {
   margin: 0 4px;
+}
+
+blockquote {
+  background: #f9f9f9;
+  border-left: 6px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+}
+
+blockquote p {
+  display: inline;
 }
 
 @media screen and (max-width: 575px) {

@@ -40,8 +40,6 @@ const inboxFormAlert = document.getElementById("inboxFormAlert");
 
 const composeIdInput = document.getElementById("composeIdInput");
 
-let formIsPopulated = false;
-
 let historyId = 0;
 
 export const inboxTable = new DataTable("#inboxTable", {
@@ -270,14 +268,9 @@ export const inboxTableRefresh = (data) => {
         inboxTable.row(`#${message.id}`).data(message);
 
         if (message.id == composeIdInput.value) {
-          try {
-            const parsed = parsePayload(message.id, message.payload);
+          const parsed = parsePayload(message.id, message.payload);
 
-            formIsPopulated = true;
-            composePopulateForm(false, message.id, parsed);
-          } finally {
-            formIsPopulated = false;
-          }
+          composePopulateForm(false, message.id, parsed);
         }
       }
     }
@@ -288,12 +281,7 @@ export const inboxTableRefresh = (data) => {
       inboxTable.row(`#${message.id}`).remove();
 
       if (message.id == composeIdInput.value) {
-        try {
-          formIsPopulated = true;
-          composeClearForm();
-        } finally {
-          formIsPopulated = false;
-        }
+        composeClearForm();
       }
     }
   }
@@ -303,12 +291,7 @@ export const inboxTableRefresh = (data) => {
       inboxTable.row(`#${message.id}`).remove();
 
       if (message.id == composeIdInput.value) {
-        try {
-          formIsPopulated = true;
-          composeClearForm();
-        } finally {
-          formIsPopulated = false;
-        }
+        composeClearForm();
       }
     }
   }
@@ -341,12 +324,7 @@ export const deleteInboxMessages = (e) => {
     }
 
     if (selectedIds.includes(composeIdInput.value)) {
-      try {
-        formIsPopulated = true;
-        composeClearForm();
-      } finally {
-        formIsPopulated = false;
-      }
+      composeClearForm();
     }
 
     inboxTable.rows(".selected").remove().draw();
@@ -376,10 +354,5 @@ export const deleteMessage = async (composeForm, id) => {
   inboxTable.rows(`#${id}`).remove().draw();
   inboxTable.buttons([".inbox-delete"]).enable(inboxTable.rows().count() > 0);
 
-  try {
-    formIsPopulated = true;
-    composeClearForm();
-  } finally {
-    formIsPopulated = false;
-  }
+  composeClearForm();
 };

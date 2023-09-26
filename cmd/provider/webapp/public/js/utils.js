@@ -20,6 +20,98 @@ export const b64DecodeUtf8 = (base64) => {
   return decoder.decode(bytes);
 };
 
+export const getRecipientsShort = (profileUsername, parsed) => {
+  let recipientTo = "";
+  let recipientCc = "";
+  let recipientBcc = "";
+
+  for (const to of parsed.to) {
+    const delim = recipientTo.length > 0 ? ", " : "";
+
+    if (to.email == profileUsername) {
+      recipientTo += delim + "me";
+    } else {
+      recipientTo += delim + (to.name || to.email);
+    }
+  }
+
+  for (const cc of parsed.cc) {
+    const delim = recipientCc.length > 0 ? ", " : "";
+
+    if (cc.email == profileUsername) {
+      recipientCc += delim + "me";
+    } else {
+      recipientCc += delim + (cc.name || cc.email);
+    }
+  }
+
+  for (const bcc of parsed.bcc) {
+    const delim = recipientBcc.length > 0 ? ", " : "";
+
+    if (bcc.email == profileUsername) {
+      recipientBcc += delim + "me";
+    } else {
+      recipientBcc += delim + (bcc.name || bcc.email);
+    }
+  }
+
+  let recipients = `to: ${recipientTo}`;
+
+  if (recipientCc) {
+    recipients += `, cc: ${recipientCc}`;
+  }
+
+  if (recipientBcc) {
+    recipients += `, bcc: ${recipientBcc}`;
+  }
+
+  return recipients;
+};
+
+export const getRecipientsFull = (parsed) => {
+  let recipientTo = "";
+
+  for (const to of parsed.to) {
+    const delim = recipientTo.length > 0 ? ", " : "";
+
+    recipientTo += delim + (to.name ? `${to.name} ${to.email}` : to.email);
+  }
+
+  let recipientCc = "";
+
+  for (const cc of parsed.cc) {
+    const delim = recipientCc.length > 0 ? ", " : "";
+
+    recipientCc += delim + (cc.name ? `${cc.name} ${cc.email}` : cc.email);
+  }
+
+  let recipients = `To: ${recipientTo}`;
+
+  if (recipientCc) {
+    recipients += `<br/>Cc: ${recipientCc}`;
+  }
+
+  return recipients;
+};
+
+export const getRecipientsCcFull = (parsed) => {
+  let recipientCc = "";
+
+  for (const cc of parsed.cc) {
+    const delim = recipientCc.length > 0 ? ", " : "";
+
+    recipientCc += delim + (cc.name ? `${cc.name} ${cc.email}` : cc.email);
+  }
+
+  let recipients;
+
+  if (recipientCc) {
+    recipients += `Cc: ${recipientCc}`;
+  }
+
+  return recipients;
+};
+
 export const parseNameAndEmail = (value) => {
   if (!value) return { name: "", email: "" };
 
@@ -275,8 +367,15 @@ const parseParts = (payload) => {
 };
 
 export const parsePayload = (id, payload) => {
+  const xOriginResourceMailboxUrl =
+    payload?.headers?.["X-Origin-Resource-Mailbox-URL"];
+  const xDestinationResourceMailboxUrl =
+    payload?.headers?.["X-Destination-Resource-Mailbox-URL"];
+  const messageId = payload?.headers?.["Message-ID"];
+  const xThreadId = payload?.headers?.["X-Thread-ID"];
+  const inReplyTo = payload?.headers?.["In-Reply-To"];
+  const references = payload?.headers?.["References"];
   const date = payload?.headers?.["Date"] || "";
-
   const from = payload?.headers?.["From"] || "";
 
   const to = (payload?.headers?.["To"]?.split(",") || []).map((recipient) => {
@@ -299,7 +398,14 @@ export const parsePayload = (id, payload) => {
       htmlContent = "",
       attachments = [],
     } = payload ? parseParts(payload) : {};
-    return {
+
+    const obj = {
+      xOriginResourceMailboxUrl,
+      xDestinationResourceMailboxUrl,
+      messageId,
+      xThreadId,
+      inReplyTo,
+      references,
       date,
       from,
       to,
@@ -310,10 +416,18 @@ export const parsePayload = (id, payload) => {
       htmlContent,
       attachments,
     };
+
+    // remove blank attributes from an Object
+    return Object.fromEntries(
+      Object.entries(obj).filter(([_, v]) => v != null)
+    );
   } catch (e) {
     console.log(`message id: ${id}`);
     console.log(e);
     return {
+      xThreadId,
+      inReplyTo,
+      references,
       date,
       from,
       to,

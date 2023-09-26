@@ -34,8 +34,6 @@ const draftsFormAlert = document.getElementById("draftsFormAlert");
 
 const composeIdInput = document.getElementById("composeIdInput");
 
-let formIsPopulated = false;
-
 let historyId = 0;
 
 const draftsTable = new DataTable("#draftsTable", {
@@ -262,12 +260,7 @@ draftsTable.on("click", "td.payload", (e) => {
   const data = draftsTable.row(e.currentTarget).data();
   const parsed = parsePayload(data.id, data.payload);
 
-  try {
-    formIsPopulated = true;
-    composePopulateForm(false, data.id, data.attachments, parsed);
-  } finally {
-    formIsPopulated = false;
-  }
+  composePopulateForm(false, data.id, data.attachments, parsed);
 
   composeContentPage(e);
 });
@@ -300,14 +293,9 @@ export const draftsTableRefresh = (data) => {
       draftsTable.row(`#${draft.id}`).data(draft);
 
       if (draft.id == composeIdInput.value) {
-        try {
-          const parsed = parsePayload(draft.id, draft.payload);
+        const parsed = parsePayload(draft.id, draft.payload);
 
-          formIsPopulated = true;
-          composePopulateForm(false, draft.id, parsed);
-        } finally {
-          formIsPopulated = false;
-        }
+        composePopulateForm(false, draft.id, parsed);
       }
     }
   }
@@ -316,12 +304,7 @@ export const draftsTableRefresh = (data) => {
     draftsTable.row(`#${draft.id}`).remove();
 
     if (draft.id == composeIdInput.value) {
-      try {
-        formIsPopulated = true;
-        composeClearForm();
-      } finally {
-        formIsPopulated = false;
-      }
+      composeClearForm();
     }
   }
 
@@ -329,12 +312,7 @@ export const draftsTableRefresh = (data) => {
     draftsTable.row(`#${draft.id}`).remove();
 
     if (draft.id == composeIdInput.value) {
-      try {
-        formIsPopulated = true;
-        composeClearForm();
-      } finally {
-        formIsPopulated = false;
-      }
+      composeClearForm();
     }
   }
 
@@ -366,12 +344,7 @@ export const deleteDraftsMessages = (e) => {
     }
 
     if (selectedIds.includes(composeIdInput.value)) {
-      try {
-        formIsPopulated = true;
-        composeClearForm();
-      } finally {
-        formIsPopulated = false;
-      }
+      composeClearForm();
     }
 
     draftsTable.rows(".selected").remove().draw();
@@ -403,74 +376,45 @@ export const deleteDraft = async (composeForm, id) => {
     .buttons([".drafts-delete"])
     .enable(draftsTable.rows().count() > 0);
 
-  try {
-    formIsPopulated = true;
-    composeClearForm();
-  } finally {
-    formIsPopulated = false;
-  }
+  composeClearForm();
 };
 
-export const upsertDraftsPage = async (composeForm, id, attachments, parsed) => {
-  if (!formIsPopulated) {
-    const alert = composeForm.querySelector(
-      'div[name="upsertDraftsPageAlert"]'
-    );
-    if (alert) alert.remove();
+export const upsertDraftsPage = async (
+  composeForm,
+  id,
+  reply,
+  attachments,
+  parsed
+) => {
+  const alert = composeForm.querySelector('div[name="upsertDraftsPageAlert"]');
+  if (alert) alert.remove();
 
-    if (id) {
-      // update
-      const index = draftsTable.column(0).data().toArray().indexOf(id);
+  if (id) {
+    // update
+    const index = draftsTable.column(0).data().toArray().indexOf(id);
 
-      if (index >= 0) {
-        const data = draftsTable.row(`#${id}`).data();
-        const draft = { id, attachments, payload: composePayload(parsed) };
+    if (index >= 0) {
+      const data = draftsTable.row(`#${id}`).data();
+      const draft = { id, attachments, payload: composePayload(parsed) };
 
-        if (data.labelIds) draft.labelIds = data.labelIds;
-        if (data.unread) draft.unread = data.unread;
-        if (data.starred) draft.starred = data.starred;
-        if (data.createdAt) draft.createdAt = data.createdAt;
-        if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
+      if (data.labelIds) draft.labelIds = data.labelIds;
+      if (data.unread) draft.unread = data.unread;
+      if (data.starred) draft.starred = data.starred;
+      if (data.createdAt) draft.createdAt = data.createdAt;
+      if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
 
-        const response = await api(
-          composeForm.id,
-          200,
-          `${window.apiHost}/api/v1/drafts`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(draft),
-          }
-        );
-
-        if (response === false) {
-          return;
-        }
-
-        draftsTable.row(`#${response.id}`).data(response).draw();
-      } else {
-        const error = "record not found";
-
-        composeForm.insertAdjacentHTML(
-          "beforeend",
-          `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="upsertDraftsPageAlert">
-                ${error}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>`
-        );
+      if (reply) {
+        draft.payload.headers["In-Reply-To"] = reply.inReplyTo;
+        draft.payload.headers["References"] = reply.references;
+        draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
       }
-    } else {
-      // insert
-      const draft = { attachments, payload: composePayload(parsed) };
 
       const response = await api(
         composeForm.id,
-        201,
+        200,
         `${window.apiHost}/api/v1/drafts`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -482,95 +426,138 @@ export const upsertDraftsPage = async (composeForm, id, attachments, parsed) => 
         return;
       }
 
-      const composeIdInput = document.getElementById("composeIdInput");
+      draftsTable.row(`#${response.id}`).data(response).draw();
+    } else {
+      const error = "record not found";
 
-      composeIdInput.value = response.id;
-      composeIdInput.dispatchEvent(new Event("input"));
-      composeIdInput.dispatchEvent(new Event("change"));
-
-      draftsTable.row.add(response);
-      draftsTable.draw();
-    }
-  }
-};
-
-export const sendDraft = async (composeForm, id, attachments, parsed) => {
-  if (!formIsPopulated) {
-    const alert = composeForm.querySelector('div[name="sendDraftsPageAlert"]');
-    if (alert) alert.remove();
-
-    if (id) {
-      // update & send
-      const index = draftsTable.column(0).data().toArray().indexOf(id);
-
-      if (index >= 0) {
-        const data = draftsTable.row(`#${id}`).data();
-        const draft = { id, attachments, payload: composePayload(parsed) };
-
-        if (data.labelIds) draft.labelIds = data.labelIds;
-        if (data.unread) draft.unread = data.unread;
-        if (data.starred) draft.starred = data.starred;
-        if (data.createdAt) draft.createdAt = data.createdAt;
-        if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
-
-        // test !!!
-        // draft.payload.headers["In-Reply-To"] = "<c3494e4a-4d37-478a-b812-c6e4c02d6d80@cargomail.org>";
-        // draft.payload.headers["References"] = "<c3494e4a-4d37-478a-b812-c6e4c02d6d80@cargomail.org>";
-        // draft.payload.headers["X-Thread-ID"] = "<e722d183-1357-4c6e-838d-5a2f003fdc66@cargomail.org>";
-
-        const response = await api(
-          composeForm.id,
-          200,
-          `${window.apiHost}/api/v1/drafts/send`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(draft),
-          }
-        );
-
-        if (response === false) {
-          return;
-        }
-
-        draftsTable.rows(`#${id}`).remove().draw();
-        draftsTable
-          .buttons([".drafts-delete"])
-          .enable(draftsTable.rows().count() > 0);
-
-        sentTable.row.add(response);
-        sentTable.draw();
-
-        try {
-          formIsPopulated = true;
-          composeClearForm();
-        } finally {
-          formIsPopulated = false;
-        }
-      } else {
-        const error = "record not found";
-
-        composeForm.insertAdjacentHTML(
-          "beforeend",
-          `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="sendDraftsPageAlert">
+      composeForm.insertAdjacentHTML(
+        "beforeend",
+        `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="upsertDraftsPageAlert">
                 ${error}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>`
-        );
+      );
+    }
+  } else {
+    // insert
+    const draft = { attachments, payload: composePayload(parsed) };
+
+    if (reply) {
+      draft.payload.headers["In-Reply-To"] = reply.inReplyTo;
+      draft.payload.headers["References"] = reply.references;
+      draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
+    }
+
+    const response = await api(
+      composeForm.id,
+      201,
+      `${window.apiHost}/api/v1/drafts`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(draft),
       }
+    );
+
+    if (response === false) {
+      return;
+    }
+
+    const composeIdInput = document.getElementById("composeIdInput");
+
+    composeIdInput.value = response.id;
+    composeIdInput.dispatchEvent(new Event("input"));
+    composeIdInput.dispatchEvent(new Event("change"));
+
+    draftsTable.row.add(response);
+    draftsTable.draw();
+  }
+};
+
+export const sendDraft = async (
+  composeForm,
+  id,
+  reply,
+  attachments,
+  parsed
+) => {
+  const alert = composeForm.querySelector('div[name="sendDraftsPageAlert"]');
+  if (alert) alert.remove();
+
+  if (id) {
+    // update & send
+    const index = draftsTable.column(0).data().toArray().indexOf(id);
+
+    if (index >= 0) {
+      const data = draftsTable.row(`#${id}`).data();
+      const draft = { id, attachments, payload: composePayload(parsed) };
+
+      if (data.labelIds) draft.labelIds = data.labelIds;
+      if (data.unread) draft.unread = data.unread;
+      if (data.starred) draft.starred = data.starred;
+      if (data.createdAt) draft.createdAt = data.createdAt;
+      if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
+
+      // test !!!
+      // draft.payload.headers["In-Reply-To"] = "<c3494e4a-4d37-478a-b812-c6e4c02d6d80@cargomail.org>";
+      // draft.payload.headers["References"] = "<c3494e4a-4d37-478a-b812-c6e4c02d6d80@cargomail.org>";
+      // draft.payload.headers["X-Thread-ID"] = "<e722d183-1357-4c6e-838d-5a2f003fdc66@cargomail.org>";
+
+      if (reply) {
+        draft.payload.headers["In-Reply-To"] = reply.inReplyTo;
+        draft.payload.headers["References"] = reply.references;
+        draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
+      }
+
+      const response = await api(
+        composeForm.id,
+        200,
+        `${window.apiHost}/api/v1/drafts/send`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(draft),
+        }
+      );
+
+      if (response === false) {
+        return;
+      }
+
+      draftsTable.rows(`#${id}`).remove().draw();
+      draftsTable
+        .buttons([".drafts-delete"])
+        .enable(draftsTable.rows().count() > 0);
+
+      sentTable.row.add(response);
+      sentTable.draw();
+
+      composeClearForm();
     } else {
-      const error = "empty id";
+      const error = "record not found";
 
       composeForm.insertAdjacentHTML(
         "beforeend",
         `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="sendDraftsPageAlert">
+                ${error}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`
+      );
+    }
+  } else {
+    const error = "empty id";
+
+    composeForm.insertAdjacentHTML(
+      "beforeend",
+      `<div class="alert alert-danger alert-dismissible fade show" role="alert" name="sendDraftsPageAlert">
               ${error}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>`
-      );
-    }
+    );
   }
 };

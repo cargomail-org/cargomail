@@ -40,8 +40,6 @@ const sentFormAlert = document.getElementById("sentFormAlert");
 
 const composeIdInput = document.getElementById("composeIdInput");
 
-let formIsPopulated = false;
-
 let historyId = 0;
 
 export const sentTable = new DataTable("#sentTable", {
@@ -270,14 +268,9 @@ export const sentTableRefresh = (data) => {
         sentTable.row(`#${message.id}`).data(message);
 
         if (message.id == composeIdInput.value) {
-          try {
-            const parsed = parsePayload(message.id, message.payload);
+          const parsed = parsePayload(message.id, message.payload);
 
-            formIsPopulated = true;
-            composePopulateForm(false, message.id, parsed);
-          } finally {
-            formIsPopulated = false;
-          }
+          composePopulateForm(false, message.id, parsed);
         }
       }
     }
@@ -288,12 +281,7 @@ export const sentTableRefresh = (data) => {
       sentTable.row(`#${message.id}`).remove();
 
       if (message.id == composeIdInput.value) {
-        try {
-          formIsPopulated = true;
-          composeClearForm();
-        } finally {
-          formIsPopulated = false;
-        }
+        composeClearForm();
       }
     }
   }
@@ -303,12 +291,7 @@ export const sentTableRefresh = (data) => {
       sentTable.row(`#${message.id}`).remove();
 
       if (message.id == composeIdInput.value) {
-        try {
-          formIsPopulated = true;
-          composeClearForm();
-        } finally {
-          formIsPopulated = false;
-        }
+        composeClearForm();
       }
     }
   }
@@ -341,12 +324,7 @@ export const deleteSentMessages = (e) => {
     }
 
     if (selectedIds.includes(composeIdInput.value)) {
-      try {
-        formIsPopulated = true;
-        composeClearForm();
-      } finally {
-        formIsPopulated = false;
-      }
+      composeClearForm();
     }
 
     sentTable.rows(".selected").remove().draw();
@@ -376,10 +354,5 @@ export const deleteMessage = async (composeForm, id) => {
   sentTable.rows(`#${id}`).remove().draw();
   sentTable.buttons([".sent-delete"]).enable(sentTable.rows().count() > 0);
 
-  try {
-    formIsPopulated = true;
-    composeClearForm();
-  } finally {
-    formIsPopulated = false;
-  }
+  composeClearForm();
 };

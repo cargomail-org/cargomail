@@ -26,6 +26,9 @@ import {
 
 const composeForm = document.getElementById("composeForm");
 const composeIdInput = document.getElementById("composeIdInput");
+const composeXThreadId = document.getElementById("composeXThreadId");
+const composeInReplyTo = document.getElementById("composeInTeplyTo");
+const composeReferences = document.getElementById("composeReferences");
 const composeDateInput = document.getElementById("composeDateInput");
 const composeFromInput = document.getElementById("composeFromInput");
 
@@ -145,7 +148,7 @@ $("#toInput").selectize({
 
     if (!ignoreOnChange) {
       (async () => {
-        await formPopulated("update");
+        await formPopulated("upsert");
       })();
     }
   },
@@ -231,7 +234,7 @@ $("#ccInput").selectize({
 
     if (!ignoreOnChange) {
       (async () => {
-        await formPopulated("update");
+        await formPopulated("upsert");
       })();
     }
   },
@@ -317,7 +320,7 @@ $("#bccInput").selectize({
 
     if (!ignoreOnChange) {
       (async () => {
-        await formPopulated("update");
+        await formPopulated("upsert");
       })();
     }
   },
@@ -355,7 +358,7 @@ const bouncer = (e) => {
 
       // Save form
       (async () => {
-        await formPopulated("update");
+        await formPopulated("upsert");
       })();
     }
   }, 2000);
@@ -504,7 +507,7 @@ export const removeAttachments = (e) => {
   }
 
   (async () => {
-    await formPopulated("update");
+    await formPopulated("upsert");
   })();
 };
 
@@ -548,7 +551,7 @@ export const clearForm = () => {
   ignoreOnChange = false;
 };
 
-export const populateForm = (save, id, attachments, parsed) => {
+export const populateForm = async (save, id, attachments, parsed) => {
   ignoreOnChange = true;
 
   attachmentList.length = 0;
@@ -634,9 +637,7 @@ export const populateForm = (save, id, attachments, parsed) => {
   ignoreOnChange = false;
 
   if (save) {
-    (async () => {
-      await formPopulated("new");
-    })();
+    await formPopulated("upsert");
   }
 
   composeTable.draw();
@@ -678,10 +679,25 @@ const formPopulated = async (cmd) => {
     bccButton.style.color = "#0d6efd";
   }
 
-  if (cmd == "new" || cmd == "update") {
+  let reply = {};
+
+  if (
+    composeXThreadId.value &&
+    composeInReplyTo.value &&
+    composeReferences.value
+  ) {
+    reply = {
+      xThreadId: composeXThreadId.value,
+      inReplyTo: composeInReplyTo.value,
+      references: composeReferences.value,
+    };
+  }
+
+  if (cmd == "upsert") {
     await upsertDraftsPage(
       composeForm,
       composeIdInput.value,
+      reply,
       attachmentList,
       parsed
     );
@@ -689,13 +705,12 @@ const formPopulated = async (cmd) => {
     await draftsSendDraft(
       composeForm,
       composeIdInput.value,
+      reply,
       attachmentList,
       parsed
     );
-  } else if (cmd == "reply") {
-    console.log("reply");
   } else {
-    throw new Error(`Unknown command ${cmd} (should be 'update or 'send'`);
+    throw new Error(`Unknown command ${cmd} (should be 'upsert or 'send'`);
   }
 };
 
@@ -745,7 +760,7 @@ export const composeAddItems = (save, items) => {
 
   if (save && items?.length > 0) {
     (async () => {
-      await formPopulated("update");
+      await formPopulated("upsert");
     })();
   }
 };
@@ -838,7 +853,7 @@ export const newDraft = async (e) => {
 
     // Save form
     (async () => {
-      await formPopulated("new"); // new or update ???
+      await formPopulated("upsert");
       clearForm();
     })();
   } else {

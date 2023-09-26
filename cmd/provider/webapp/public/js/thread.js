@@ -15,6 +15,7 @@ import {
   composePayload,
   createSubjectSnippet,
   createPlainContentSnippet,
+  getRecipientsFull,
 } from "/public/js/utils.js";
 
 import { showDetail } from "/public/js/message_detail.js";
@@ -154,8 +155,6 @@ export const createThreadTable = (row) => {
       e.target.classList.contains("dropdown-menu-light")
     ) {
       if (e.target.classList.contains("dropdown-item")) {
-        console.log(e.target.id);
-
         let tr = e.target.closest("tr");
         let row = threadsTable.row(tr);
 
@@ -163,12 +162,58 @@ export const createThreadTable = (row) => {
 
         const parsed = parsePayload(data.id, data.payload);
 
+        parsed.inReplyTo = parsed.messageId;
+
+        if (parsed.references) {
+          parsed.references += ` ${parsed.messageId}`;
+        } else {
+          parsed.references = parsed.messageId;
+        }
+
+        delete parsed["messageId"];
+
+        if (e.target.classList.contains("message-reply")) {
+          parsed.htmlContent = `
+          <br/>
+            <blockquote>
+              <p>
+                ${parsed.htmlContent}
+              </p>
+            </blockquote>`;
+          parsed.cc = [];
+          parsed.bcc = [];
+          parsed.attachments.length = 0;
+        } else if (e.target.classList.contains("message-reply-all")) {
+          parsed.htmlContent = `
+          <br/>
+            <blockquote>
+              <p>
+                ${parsed.htmlContent}
+              </p>
+            </blockquote>`;
+          parsed.attachments.length = 0;
+        } else if (e.target.classList.contains("message-forward")) {
+          parsed.htmlContent = `
+          <br/>
+            ---------- Forwarded message ---------<br/>
+            From: ${parsed.from}<br/>
+            Date: ${parsed.date}<br/>
+            Subject: ${parsed.subject}<br/>
+            ${getRecipientsFull(parsed)}
+            <p>
+              ${parsed.htmlContent}
+            </p>`;
+          parsed.to = [];
+          parsed.cc = [];
+          parsed.bcc = [];
+        }
+
         console.log(parsed);
 
         (async () => {
           await composeNewDraft();
 
-          composePopulateForm(true, "", parsed.attachments, parsed);
+          await composePopulateForm(true, "", parsed.attachments, parsed);
 
           composeContentPage(e);
         })();
