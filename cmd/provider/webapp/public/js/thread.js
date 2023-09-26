@@ -20,6 +20,12 @@ import {
 import { showDetail } from "/public/js/message_detail.js";
 import { createMessageRow } from "/public/js/message_row.js";
 
+import { composeContentPage } from "/public/js/menu.js";
+import {
+  newDraft as composeNewDraft,
+  populateForm as composePopulateForm,
+} from "/public/js/compose.js";
+
 const getMessages = async () => {
   const response = await api(
     sentFormAlert.id,
@@ -95,7 +101,7 @@ export const createThreadTable = (row) => {
         render: (data, type, full, meta) => {
           const parsed = parsePayload(full.id, full.payload);
 
-          const renderHtml = createMessageRow(parsed);
+          const renderHtml = createMessageRow(full.id, parsed);
 
           return renderHtml;
         },
@@ -147,6 +153,26 @@ export const createThreadTable = (row) => {
       e.target.classList.contains("dropdown-divider") ||
       e.target.classList.contains("dropdown-menu-light")
     ) {
+      if (e.target.classList.contains("dropdown-item")) {
+        console.log(e.target.id);
+
+        let tr = e.target.closest("tr");
+        let row = threadsTable.row(tr);
+
+        const data = row.data();
+
+        const parsed = parsePayload(data.id, data.payload);
+
+        console.log(parsed);
+
+        (async () => {
+          await composeNewDraft();
+
+          composePopulateForm(true, "", parsed.attachments, parsed);
+
+          composeContentPage(e);
+        })();
+      }
       return;
     }
 
@@ -157,10 +183,9 @@ export const createThreadTable = (row) => {
       tr.getElementsByClassName("message-row-message")[0].style.display =
         "block";
       tr.getElementsByClassName("message-row-recipients")[0].style.display =
-        "none";  
+        "none";
       tr.getElementsByClassName("message-row-dropdown")[0].style.display =
         "none";
-
 
       // This row is already open - close it
       row.child.hide();

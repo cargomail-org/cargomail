@@ -27,7 +27,7 @@ function stringToHslColor(str, s, l) {
   return "hsl(" + 0 + ", " + 0 + "%, " + 0 + "%)";
 }
 
-export const createMessageRow = (parsed) => {
+export const createMessageRow = (id, parsed) => {
   const person = parseNameAndEmail(parsed.from);
   const displayPerson = parseInitialsAndName(person);
   const displayDate = parseDisplayDate(parsed.date);
@@ -38,10 +38,10 @@ export const createMessageRow = (parsed) => {
           ${threeDotIcon}
         </button>
         <ul class="dropdown-menu dropdown-menu-light">
-            <li><a class="dropdown-item" href="#">Reply</a></li>
-            <li><a class="dropdown-item href="#">Reply to all</a></li>
+            <li><a class="dropdown-item" id="${id}" href="#">Reply</a></li>
+            <li><a class="dropdown-item" id="${id}" href="#">Reply to all</a></li>
             <li><hr class="dropdown-divider border-top border-secondary"></li>
-            <li><a class="dropdown-item href="#">Forward</a></li>
+            <li><a class="dropdown-item" id="${id}" href="#">Forward</a></li>
         </ul>
     </div>
     `;

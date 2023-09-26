@@ -421,7 +421,7 @@ export const copySelectedFiles = (e) => {
   e?.preventDefault();
 
   const selected = filesTable.rows(".selected").data();
-  composeAddItems(selected);
+  composeAddItems(true, selected);
 };
 
 export const inputUploadChanged = (e) => {

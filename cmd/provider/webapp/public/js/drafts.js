@@ -10,11 +10,6 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-import { composeContentPage } from "/public/js/menu.js";
-import {
-  clearForm as composeClearForm,
-  populateForm as composePopulateForm,
-} from "/public/js/compose.js";
 import { sentTable } from "/public/js/sent.js";
 import {
   parsePayload,
@@ -22,6 +17,12 @@ import {
   createSubjectSnippet,
   createPlainContentSnippet,
 } from "/public/js/utils.js";
+
+import { composeContentPage } from "/public/js/menu.js";
+import {
+  clearForm as composeClearForm,
+  populateForm as composePopulateForm,
+} from "/public/js/compose.js";
 
 let selectedIds = [];
 
@@ -263,7 +264,7 @@ draftsTable.on("click", "td.payload", (e) => {
 
   try {
     formIsPopulated = true;
-    composePopulateForm(data.id, data.attachments, parsed);
+    composePopulateForm(false, data.id, data.attachments, parsed);
   } finally {
     formIsPopulated = false;
   }
@@ -303,7 +304,7 @@ export const draftsTableRefresh = (data) => {
           const parsed = parsePayload(draft.id, draft.payload);
 
           formIsPopulated = true;
-          composePopulateForm(draft.id, parsed);
+          composePopulateForm(false, draft.id, parsed);
         } finally {
           formIsPopulated = false;
         }

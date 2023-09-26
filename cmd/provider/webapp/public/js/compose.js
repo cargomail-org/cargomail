@@ -41,7 +41,7 @@ const recipientsBcc = [];
 
 const attachmentList = [];
 
-let formIsCleared = false;
+let ignoreOnChange = false;
 
 let messageHtmlLastValidContent = "";
 let messageHtmlLastValidCaretPosition;
@@ -143,7 +143,7 @@ $("#toInput").selectize({
       }
     }
 
-    if (!formIsCleared) {
+    if (!ignoreOnChange) {
       (async () => {
         await formPopulated("update");
       })();
@@ -229,7 +229,7 @@ $("#ccInput").selectize({
       }
     }
 
-    if (!formIsCleared) {
+    if (!ignoreOnChange) {
       (async () => {
         await formPopulated("update");
       })();
@@ -315,7 +315,7 @@ $("#bccInput").selectize({
       }
     }
 
-    if (!formIsCleared) {
+    if (!ignoreOnChange) {
       (async () => {
         await formPopulated("update");
       })();
@@ -509,7 +509,7 @@ export const removeAttachments = (e) => {
 };
 
 export const clearForm = () => {
-  formIsCleared = true;
+  ignoreOnChange = true;
 
   $("#toInput")[0].selectize.clear();
   $("#ccInput")[0].selectize.clear();
@@ -545,10 +545,12 @@ export const clearForm = () => {
   composeTable.clear();
   composeTable.draw();
 
-  formIsCleared = false;
+  ignoreOnChange = false;
 };
 
-export const populateForm = (id, attachments, parsed) => {
+export const populateForm = (save, id, attachments, parsed) => {
+  ignoreOnChange = true;
+
   attachmentList.length = 0;
 
   composeIdInput.value = id;
@@ -627,7 +629,15 @@ export const populateForm = (id, attachments, parsed) => {
 
   composeTable.clear();
 
-  composeAddItems(attachments);
+  composeAddItems(false, attachments);
+
+  ignoreOnChange = false;
+
+  if (save) {
+    (async () => {
+      await formPopulated("new");
+    })();
+  }
 
   composeTable.draw();
 };
@@ -682,12 +692,14 @@ const formPopulated = async (cmd) => {
       attachmentList,
       parsed
     );
+  } else if (cmd == "reply") {
+    console.log("reply");
   } else {
     throw new Error(`Unknown command ${cmd} (should be 'update or 'send'`);
   }
 };
 
-export const composeAddItems = (items) => {
+export const composeAddItems = (save, items) => {
   for (let i = items?.length - 1; i >= 0; i--) {
     let found = false;
 
@@ -731,7 +743,7 @@ export const composeAddItems = (items) => {
     }
   }
 
-  if (items?.length > 0) {
+  if (save && items?.length > 0) {
     (async () => {
       await formPopulated("update");
     })();
@@ -818,7 +830,7 @@ export const setComposeContacts = (contacts) => {
   setSelectizeComposeContacts(selectizeBcc, composeContacts);
 };
 
-export const newDraft = (e) => {
+export const newDraft = async (e) => {
   clearTimeout(bouncerTimeout);
 
   if (bouncerHasQueue) {
@@ -826,7 +838,7 @@ export const newDraft = (e) => {
 
     // Save form
     (async () => {
-      await formPopulated("new");
+      await formPopulated("new"); // new or update ???
       clearForm();
     })();
   } else {

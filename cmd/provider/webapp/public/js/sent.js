@@ -274,7 +274,7 @@ export const sentTableRefresh = (data) => {
             const parsed = parsePayload(message.id, message.payload);
 
             formIsPopulated = true;
-            composePopulateForm(message.id, parsed);
+            composePopulateForm(false, message.id, parsed);
           } finally {
             formIsPopulated = false;
           }
