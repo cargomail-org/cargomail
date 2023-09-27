@@ -26,9 +26,9 @@ import {
 
 const composeForm = document.getElementById("composeForm");
 const composeIdInput = document.getElementById("composeIdInput");
-const composeXThreadId = document.getElementById("composeXThreadId");
-const composeInReplyTo = document.getElementById("composeInTeplyTo");
-const composeReferences = document.getElementById("composeReferences");
+const composeXThreadIdInput = document.getElementById("composeXThreadIdInput");
+const composeInReplyToInput = document.getElementById("composeInReplyToInput");
+const composeReferencesInput = document.getElementById("composeReferencesInput");
 const composeDateInput = document.getElementById("composeDateInput");
 const composeFromInput = document.getElementById("composeFromInput");
 
@@ -560,6 +560,10 @@ export const populateForm = async (save, id, attachments, parsed) => {
   composeIdInput.dispatchEvent(new Event("input"));
   composeIdInput.dispatchEvent(new Event("change"));
 
+  composeXThreadIdInput.value = parsed.xThreadId;
+  composeInReplyToInput.value = parsed.inReplyTo;
+  composeReferencesInput.value = parsed.references;
+
   const selectizeTo = $("#toInput")[0].selectize;
   const selectizeCc = $("#ccInput")[0].selectize;
   const selectizeBcc = $("#bccInput")[0].selectize;
@@ -682,14 +686,14 @@ const formPopulated = async (cmd) => {
   let reply = {};
 
   if (
-    composeXThreadId.value &&
-    composeInReplyTo.value &&
-    composeReferences.value
+    composeXThreadIdInput.value &&
+    composeInReplyToInput.value &&
+    composeReferencesInput.value
   ) {
     reply = {
-      xThreadId: composeXThreadId.value,
-      inReplyTo: composeInReplyTo.value,
-      references: composeReferences.value,
+      xThreadId: composeXThreadIdInput.value,
+      inReplyTo: composeInReplyToInput.value,
+      references: composeReferencesInput.value,
     };
   }
 

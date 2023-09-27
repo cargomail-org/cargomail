@@ -10,7 +10,9 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
+import { getHistoryId, setHistoryId, threadsRefresh } from "/public/js/threads_refresh.js";
 import { createThreadRow } from "/public/js/thread_row.js";
+import { inboxTable } from "/public/js/inbox.js";
 
 import {
   clearForm as composeClearForm,
@@ -22,7 +24,6 @@ import {
   createSubjectSnippet,
   createPlainContentSnippet,
 } from "/public/js/utils.js";
-import { inboxTableRefresh } from "/public/js/inbox.js";
 import {
   messageListResponse,
   getThreads,
@@ -39,8 +40,6 @@ const sentConfirmDialog = new bootstrap.Modal(
 const sentFormAlert = document.getElementById("sentFormAlert");
 
 const composeIdInput = document.getElementById("composeIdInput");
-
-let historyId = 0;
 
 export const sentTable = new DataTable("#sentTable", {
   paging: true,
@@ -85,7 +84,7 @@ export const sentTable = new DataTable("#sentTable", {
   // },
   ajax: function (data, callback, settings) {
     if (messageListResponse) {
-      historyId = messageListResponse.lastHistoryId;
+      setHistoryId(messageListResponse.lastHistoryId);
 
       const threads = getThreads(1);
 
@@ -160,7 +159,7 @@ export const sentTable = new DataTable("#sentTable", {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ historyId: historyId }),
+              body: JSON.stringify({ historyId: getHistoryId() }),
             }
           );
 
@@ -168,8 +167,7 @@ export const sentTable = new DataTable("#sentTable", {
             return;
           }
 
-          sentTableRefresh(response);
-          inboxTableRefresh(response);
+          threadsRefresh(sentTable, inboxTable, response);
         })();
       },
     },
@@ -241,63 +239,6 @@ sentTable.on("select.dt deselect.dt", () => {
   const selected = selectedRows > 0;
   sentTable.buttons([".sent-delete"]).enable(selected ? true : false);
 });
-
-export const sentTableRefresh = (data) => {
-  historyId = data.lastHistoryId;
-
-  // should refresh both the send and the inbox table
-  for (const message of data.inserted) {
-    if (message.folder == 1) {
-      // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-      const notFound =
-        sentTable.column(0).data().toArray().indexOf(message.id) === -1; // !!! must be
-      if (notFound) {
-        sentTable.row.add(message);
-      }
-    }
-  }
-
-  for (const message of data.updated) {
-    if (message.folder == 1) {
-      // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-      const notFound =
-        sentTable.column(0).data().toArray().indexOf(message.id) === -1; // !!! must be
-      if (notFound) {
-        sentTable.row.add(message);
-      } else {
-        sentTable.row(`#${message.id}`).data(message);
-
-        if (message.id == composeIdInput.value) {
-          const parsed = parsePayload(message.id, message.payload);
-
-          composePopulateForm(false, message.id, parsed);
-        }
-      }
-    }
-  }
-
-  for (const message of data.trashed) {
-    if (message.folder == 1) {
-      sentTable.row(`#${message.id}`).remove();
-
-      if (message.id == composeIdInput.value) {
-        composeClearForm();
-      }
-    }
-  }
-
-  for (const message of data.deleted) {
-    if (message.folder == 1) {
-      sentTable.row(`#${message.id}`).remove();
-
-      if (message.id == composeIdInput.value) {
-        composeClearForm();
-      }
-    }
-  }
-
-  sentTable.draw();
-};
 
 export const deleteSentMessages = (e) => {
   e?.preventDefault();

@@ -13,6 +13,7 @@ import "datatables.net-responsive-bs5";
 import {
   parsePayload,
   composePayload,
+  parseNameAndEmail,
   createSubjectSnippet,
   createPlainContentSnippet,
   getRecipientsFull,
@@ -180,6 +181,7 @@ export const createThreadTable = (row) => {
                 ${parsed.htmlContent}
               </p>
             </blockquote>`;
+          parsed.to = [parseNameAndEmail(parsed.from)];
           parsed.cc = [];
           parsed.bcc = [];
           parsed.attachments.length = 0;
@@ -191,6 +193,7 @@ export const createThreadTable = (row) => {
                 ${parsed.htmlContent}
               </p>
             </blockquote>`;
+          parsed.to = [parseNameAndEmail(parsed.from)];
           parsed.attachments.length = 0;
         } else if (e.target.classList.contains("message-forward")) {
           parsed.htmlContent = `

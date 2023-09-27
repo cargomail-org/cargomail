@@ -10,7 +10,6 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-import { sentTable } from "/public/js/sent.js";
 import {
   parsePayload,
   composePayload,
@@ -24,6 +23,12 @@ import {
   populateForm as composePopulateForm,
 } from "/public/js/compose.js";
 
+import { sentTable } from "/public/js/sent.js";
+import { inboxTable } from "/public/js/inbox.js";
+import { threadsRefresh } from "/public/js/threads_refresh.js";
+
+let historyId = 0;
+
 let selectedIds = [];
 
 const draftsConfirmDialog = new bootstrap.Modal(
@@ -33,8 +38,6 @@ const draftsConfirmDialog = new bootstrap.Modal(
 const draftsFormAlert = document.getElementById("draftsFormAlert");
 
 const composeIdInput = document.getElementById("composeIdInput");
-
-let historyId = 0;
 
 const draftsTable = new DataTable("#draftsTable", {
   paging: true,
@@ -534,8 +537,7 @@ export const sendDraft = async (
         .buttons([".drafts-delete"])
         .enable(draftsTable.rows().count() > 0);
 
-      sentTable.row.add(response);
-      sentTable.draw();
+      threadsRefresh(sentTable, inboxTable, { inserted: [response] });
 
       composeClearForm();
     } else {

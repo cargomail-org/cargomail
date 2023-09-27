@@ -12,6 +12,8 @@ import "datatables.net-responsive-bs5";
 
 import { setComposeContacts } from "/public/js/compose.js";
 
+let historyId = 0;
+
 let selectedIds = [];
 
 const contactsFormDialog = new bootstrap.Modal(
@@ -24,8 +26,6 @@ const contactsConfirmDialog = new bootstrap.Modal(
 
 const contactsFormAlert = document.getElementById("contactsFormAlert");
 const contactsForm = document.getElementById("contactsForm");
-
-let historyId = 0;
 
 const contactsTable = new DataTable("#contactsTable", {
   paging: true,

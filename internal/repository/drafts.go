@@ -835,5 +835,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		}
 	}
 
+	message.Folder = 1 // sent
+
 	return message, nil
 }

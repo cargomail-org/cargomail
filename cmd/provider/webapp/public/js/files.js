@@ -13,6 +13,8 @@ import "datatables.net-responsive-bs5";
 import { composeAddItems } from "/public/js/compose.js";
 import { formatBytes } from "/public/js/menu.js";
 
+let historyId = 0;
+
 let selectedIds = [];
 
 const filesConfirmDialog = new bootstrap.Modal(
@@ -192,8 +194,6 @@ uploadForm.onsubmit = async (e) => {
     }
   }
 };
-
-let historyId = 0;
 
 const filesTable = new DataTable("#filesTable", {
   paging: true,

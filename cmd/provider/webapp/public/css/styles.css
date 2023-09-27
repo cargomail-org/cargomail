@@ -240,7 +240,7 @@ table.detail-table.dataTable thead th {
 .thread-row-header {
   display: flex;
   height: 1.4em;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .message-row-person,
