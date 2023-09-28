@@ -55,7 +55,7 @@ export const createMessageRow = (id, parsed) => {
     <div class="message-row">
         <div class="message-row-icon">
             <div class="rounded-circle border d-flex justify-content-center align-items-center" style="width:34px;height:34px;background-color:${stringToHslColor(
-              displayPerson.name,
+              person.email,
               30,
               80
             )};" alt="Avatar">${displayPerson.initials}</div>

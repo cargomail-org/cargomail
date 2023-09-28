@@ -310,6 +310,10 @@ blockquote p {
   display: inline;
 }
 
+p.message-original-info {
+  font-size: small;
+}
+
 @media screen and (max-width: 575px) {
   .responsive-menu {
     flex-direction: column;

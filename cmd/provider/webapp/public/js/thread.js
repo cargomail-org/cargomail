@@ -173,10 +173,18 @@ export const createThreadTable = (row) => {
 
         delete parsed["messageId"];
 
+        const sender = parsed.from.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
         if (e.target.classList.contains("message-reply")) {
           parsed.htmlContent = `
           <br/>
             <blockquote>
+              <p class="message-original-info">
+                From: ${sender}<br/>
+                Date: ${parsed.date}<br/>
+                Subject: ${parsed.subject}<br/>
+                ${getRecipientsFull(parsed)}<br/><br/>
+              </p>
               <p>
                 ${parsed.htmlContent}
               </p>
@@ -189,6 +197,12 @@ export const createThreadTable = (row) => {
           parsed.htmlContent = `
           <br/>
             <blockquote>
+              <p class="message-original-info">
+                From: ${sender}<br/>
+                Date: ${parsed.date}<br/>
+                Subject: ${parsed.subject}<br/>
+                ${getRecipientsFull(parsed)}<br/><br/>
+              </p>
               <p>
                 ${parsed.htmlContent}
               </p>
@@ -198,11 +212,13 @@ export const createThreadTable = (row) => {
         } else if (e.target.classList.contains("message-forward")) {
           parsed.htmlContent = `
           <br/>
-            ---------- Forwarded message ---------<br/>
-            From: ${parsed.from}<br/>
-            Date: ${parsed.date}<br/>
-            Subject: ${parsed.subject}<br/>
-            ${getRecipientsFull(parsed)}
+            <p class="message-original-info">
+              ---------- Forwarded message ---------<br/>
+              From: ${sender}<br/>
+              Date: ${parsed.date}<br/>
+              Subject: ${parsed.subject}<br/>
+              ${getRecipientsFull(parsed)}<br/><br/>
+            </p>
             <p>
               ${parsed.htmlContent}
             </p>`;

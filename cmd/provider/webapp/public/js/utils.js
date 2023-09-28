@@ -74,7 +74,7 @@ export const getRecipientsFull = (parsed) => {
   for (const to of parsed.to) {
     const delim = recipientTo.length > 0 ? ", " : "";
 
-    recipientTo += delim + (to.name ? `${to.name} ${to.email}` : to.email);
+    recipientTo += delim + (to.name ? `${to.name} <${to.email}>` : `<${to.email}>`);
   }
 
   let recipientCc = "";
@@ -82,13 +82,13 @@ export const getRecipientsFull = (parsed) => {
   for (const cc of parsed.cc) {
     const delim = recipientCc.length > 0 ? ", " : "";
 
-    recipientCc += delim + (cc.name ? `${cc.name} ${cc.email}` : cc.email);
+    recipientCc += delim + (cc.name ? `${cc.name} <${cc.email}>` : `<${cc.email}>`);
   }
 
-  let recipients = `To: ${recipientTo}`;
+  let recipients = `To: ${recipientTo.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`;
 
   if (recipientCc) {
-    recipients += `<br/>Cc: ${recipientCc}`;
+    recipients += `<br/>Cc: ${recipientCc.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`;
   }
 
   return recipients;
@@ -157,7 +157,8 @@ export const parseInitialsAndName = (person) => {
     splitted = person.email[0];
   }
   const initials = (
-    splitted[1] ? splitted[0][0] + splitted[1][0] : splitted[0][0]
+    // splitted[1] ? splitted[0][0] + splitted[1][0] : splitted[0][0]
+    splitted[0][0]
   ).toUpperCase();
 
   return { name, initials };

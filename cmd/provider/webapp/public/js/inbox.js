@@ -10,7 +10,11 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-import { getHistoryId, setHistoryId, threadsRefresh } from "/public/js/threads_refresh.js";
+import {
+  getHistoryId,
+  setHistoryId,
+  threadsRefresh,
+} from "/public/js/threads_refresh.js";
 import { createThreadRow } from "/public/js/thread_row.js";
 import { sentTable } from "/public/js/sent.js";
 
@@ -181,11 +185,13 @@ export const inboxTable = new DataTable("#inboxTable", {
         const selectedData = inboxTable
           .rows(".selected")
           .data()
-          .map((obj) => obj.id);
+          .map((obj) => obj);
         if (selectedData.length > 0) {
           inboxConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
-            selectedIds.push(selectedData[i]);
+            for (let j = 0; j < selectedData[i].messages.length; j++) {
+              selectedIds.push(selectedData[i].messages[j].id);
+            }
           }
         }
       },
