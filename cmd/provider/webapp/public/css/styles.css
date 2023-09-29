@@ -217,6 +217,7 @@ table.detail-table.dataTable thead th {
   display: none;
 } */
 
+.draft-row,
 .message-row,
 .thread-row {
   display: flex;
@@ -228,6 +229,7 @@ table.detail-table.dataTable thead th {
   min-width: 100%;
 }
 
+.draft-row-content,
 .message-row-content,
 .thread-row-content {
   width: 100%;
@@ -236,6 +238,7 @@ table.detail-table.dataTable thead th {
   min-width: 0;
 }
 
+.draft-row-header,
 .message-row-header,
 .thread-row-header {
   display: flex;
@@ -243,39 +246,46 @@ table.detail-table.dataTable thead th {
   align-items: center;
 }
 
+.draft-row-person,
 .message-row-person,
 .thread-row-person {
   display: flex;
   gap: 4px;
 }
 
+.draft-row-fullname,
 .message-row-fullname,
 .thread-row-fullname {
   text-wrap: nowrap;
   font-weight: 600;
 }
 
+.draft-row-email,
 .message-row-email,
 .thread-row-email {
   display: none;
 }
 
+.draft-row-space,
 .message-row-space,
 .thread-row-space {
   flex: 1;
 }
 
+.draft-row-date,
 .message-row-date,
 .thread-row-date {
   font-size: small;
   vertical-align: middle;
 }
 
+.draft-row-dropdown,
 .message-row-dropdown,
 .thread-row-dropdown {
   display: none;
 }
 
+.draft-row-message,
 .message-row-message,
 .thread-row-message {
   white-space: nowrap;
@@ -284,6 +294,7 @@ table.detail-table.dataTable thead th {
   height: 1.4em;
 }
 
+.draft-row-recipients,
 .message-row-recipients,
 .thread-row-recipients {
   display: none;

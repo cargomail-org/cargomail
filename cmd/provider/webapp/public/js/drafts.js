@@ -27,6 +27,8 @@ import { sentTable } from "/public/js/sent.js";
 import { inboxTable } from "/public/js/inbox.js";
 import { threadsRefresh } from "/public/js/threads_refresh.js";
 
+import { createDraftRow } from "/public/js/draft_row.js";
+
 let historyId = 0;
 
 let selectedIds = [];
@@ -114,6 +116,11 @@ const draftsTable = new DataTable("#draftsTable", {
       render: (data, type, full, meta) => {
         const parsed = parsePayload(full.id, full.payload);
 
+        const renderHtml = createDraftRow(type, parsed);
+
+        return renderHtml;
+        /*const parsed = parsePayload(full.id, full.payload);
+
         const link = `${window.apiHost}/api/v1/files/`;
         const attachmentLinks = [];
 
@@ -153,7 +160,7 @@ const draftsTable = new DataTable("#draftsTable", {
         }
         renderHtml += "</div>";
 
-        return renderHtml;
+        return renderHtml;*/
       },
     },
     {

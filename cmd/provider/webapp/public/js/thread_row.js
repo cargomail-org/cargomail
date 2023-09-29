@@ -28,7 +28,6 @@ export const createThreadRow = (type, messages, parsed) => {
   let moreAttachments = 0;
 
   for (const message of messages) {
-    // TODO error:  messages is not iterable
     const parsedMessage = parsePayload(message.id, message.payload);
 
     for (const attachment of parsedMessage.attachments) {
@@ -67,6 +66,10 @@ if (plainContent) {
     if (plainContent) {
       content = plainContent;
     }
+  }
+
+  if (!content) {
+    content = "(no subject)";
   }
 
   let renderAttachmentLinks = "";
