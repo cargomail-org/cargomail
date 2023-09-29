@@ -27,7 +27,8 @@ export const createThreadRow = (type, messages, parsed) => {
 
   let moreAttachments = 0;
 
-  for (const message of messages) { // TODO error:  messages is not iterable
+  for (const message of messages) {
+    // TODO error:  messages is not iterable
     const parsedMessage = parsePayload(message.id, message.payload);
 
     for (const attachment of parsedMessage.attachments) {
@@ -40,12 +41,20 @@ export const createThreadRow = (type, messages, parsed) => {
     }
   }
 
+  const lastMessage = messages.at(-1);
+  const lastPlainContent =
+    parsePayload(lastMessage.id, lastMessage.payload).plainContent || "";
+
   const subject =
     type === "display" ? createSubjectSnippet(parsed.subject) : parsed.subject;
-  const plainContent =
+  let plainContent =
     type === "display"
-      ? createPlainContentSnippet(parsed.plainContent)
-      : parsed.plainContent;
+      ? createPlainContentSnippet(lastPlainContent)
+      : lastPlainContent;
+
+if (plainContent) {
+  plainContent = `<span style="color: gray;">${plainContent}</span>`;
+}
 
   let content;
 
@@ -67,7 +76,7 @@ export const createThreadRow = (type, messages, parsed) => {
   }
 
   if (moreAttachments > 0) {
-    renderAttachmentLinks += `<span>+${moreAttachments}</span>`
+    renderAttachmentLinks += `<span>+${moreAttachments}</span>`;
   }
 
   const htmlFlex = `
