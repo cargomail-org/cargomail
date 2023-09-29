@@ -45,7 +45,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         sentTable.row("#" + threadId).invalidate();
       } else {
         if (threadDataInbox) {
-          sentTable.rows.add([threadDataInbox]).draw();
+          sentTable.rows.add([JSON.parse(JSON.stringify(threadDataInbox))]).draw();
         } else {
           const newThreadData = {
             threadId,
@@ -88,7 +88,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         inboxTable.row("#" + threadId).invalidate();
       } else {
         if (threadDataSent) {
-          inboxTable.rows.add([threadDataSent]).draw();
+          inboxTable.rows.add([JSON.parse(JSON.stringify(threadDataSent))]).draw();
         } else {
           const newThreadData = {
             threadId,
