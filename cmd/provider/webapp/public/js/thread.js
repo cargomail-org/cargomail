@@ -180,8 +180,7 @@ export const createThreadTable = (row) => {
           <br/>
             <blockquote>
               <p class="message-original-info">
-                From: ${sender}<br/>
-                Date: ${parsed.date}<br/>
+                On ${parsed.date} ${sender} wrote:<br/>
                 Subject: ${parsed.subject}<br/>
                 ${getRecipientsFull(parsed)}<br/><br/>
               </p>
@@ -198,8 +197,7 @@ export const createThreadTable = (row) => {
           <br/>
             <blockquote>
               <p class="message-original-info">
-                From: ${sender}<br/>
-                Date: ${parsed.date}<br/>
+                On ${parsed.date} ${sender} wrote:<br/>
                 Subject: ${parsed.subject}<br/>
                 ${getRecipientsFull(parsed)}<br/><br/>
               </p>
