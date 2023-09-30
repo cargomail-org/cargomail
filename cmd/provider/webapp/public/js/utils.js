@@ -176,10 +176,33 @@ export const parseDisplayDate = (value) => {
 
       displayDate = `${splitted[1]} ${splitted[2]}, ${displayTime[0]}:${
         displayTime[1]
-      } ${
+      }${
         splitted[splitted.length - 1] == currentYear
           ? ""
-          : "," + splitted[splitted.length - 1]
+          : ", " + splitted[splitted.length - 1]
+      }`;
+    }
+  }
+
+  return displayDate;
+};
+
+export const parseDisplayDbDate = (value) => {
+  let displayDate = "";
+
+  if (value) {
+    const splitted = value.toString().split(" ");
+    const currentYear = new Date().getFullYear();
+
+    if (splitted.length > 3) {
+      let displayTime = splitted[4].split(":");
+
+      displayDate = `${splitted[1]} ${splitted[2]}, ${displayTime[0]}:${
+        displayTime[1]
+      }${
+        splitted[3] == currentYear
+          ? ""
+          : ", " + splitted[3]
       }`;
     }
   }

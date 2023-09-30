@@ -106,6 +106,12 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
 	query := `
 		INSERT
 			INTO "Draft" ("userId",
@@ -130,8 +136,27 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 		draft.Payload,
 		draft.Attachments}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(&draft.Id)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&draft.Id)
 	if err != nil {
+		return nil, err
+	}
+
+	query = `
+	SELECT *
+		FROM "Draft"
+		WHERE "userId" = $1 AND
+		"id" = $5 AND
+		"lastStmt" <> 2
+		ORDER BY CASE WHEN "modifiedAt" IS NOT NULL THEN "modifiedAt" ELSE "createdAt" END DESC;`
+
+	args = []interface{}{user.Id, draft.Id}
+
+	err = tx.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = tx.Commit(); err != nil {
 		return nil, err
 	}
 
@@ -389,6 +414,12 @@ func (r *DraftRepository) Update(user *User, draft *Draft) (*Draft, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
 	query := `
 		UPDATE "Draft"
 			SET "payload" = $1,
@@ -403,7 +434,7 @@ func (r *DraftRepository) Update(user *User, draft *Draft) (*Draft, error) {
 
 	args := []interface{}{draft.Payload, draft.Attachments, prefixedDeviceId, user.Id, draft.Id}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(&draft.Id)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&draft.Id)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
@@ -411,6 +442,25 @@ func (r *DraftRepository) Update(user *User, draft *Draft) (*Draft, error) {
 		default:
 			return nil, err
 		}
+	}
+
+	query = `
+	SELECT *
+		FROM "Draft"
+		WHERE "userId" = $1 AND
+		"id" = $5 AND
+		"lastStmt" <> 2
+		ORDER BY CASE WHEN "modifiedAt" IS NOT NULL THEN "modifiedAt" ELSE "createdAt" END DESC;`
+
+	args = []interface{}{user.Id, draft.Id}
+
+	err = tx.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = tx.Commit(); err != nil {
+		return nil, err
 	}
 
 	return draft, nil

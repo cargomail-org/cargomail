@@ -51,9 +51,11 @@ export const createThreadRow = (type, messages, parsed) => {
       ? createPlainContentSnippet(lastPlainContent)
       : lastPlainContent;
 
-if (plainContent) {
-  plainContent = `<span style="color: gray;">${plainContent}</span>`;
-}
+  if (plainContent) {
+    plainContent = `<span style="color: gray;">${plainContent
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")}</span>`;
+  }
 
   let content;
 

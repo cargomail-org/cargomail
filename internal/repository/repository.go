@@ -88,7 +88,7 @@ func NewRepository(db *sql.DB) Repository {
 	}
 }
 
-type Timestamp int64
+type Timestamp uint64
 
 func (p *Timestamp) Scan(value interface{}) error {
 	t := value.(time.Time).UnixMilli()

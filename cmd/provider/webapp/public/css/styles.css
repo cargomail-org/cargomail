@@ -244,6 +244,8 @@ table.detail-table.dataTable thead th {
   display: flex;
   height: 1.4em;
   align-items: center;
+  width: 0px;
+  min-width: 100%;
 }
 
 .draft-row-person,
@@ -251,19 +253,33 @@ table.detail-table.dataTable thead th {
 .thread-row-person {
   display: flex;
   gap: 4px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-right: 4px;
 }
 
 .draft-row-fullname,
 .message-row-fullname,
 .thread-row-fullname {
-  text-wrap: nowrap;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  /* text-wrap: nowrap; */
   font-weight: 600;
+}
+
+.draft-row-fullname {
+  font-weight: 400;
 }
 
 .draft-row-email,
 .message-row-email,
 .thread-row-email {
   display: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .draft-row-space,

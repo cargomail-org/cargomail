@@ -114,53 +114,7 @@ const draftsTable = new DataTable("#draftsTable", {
       className: "payload",
       orderable: false,
       render: (data, type, full, meta) => {
-        const parsed = parsePayload(full.id, full.payload);
-
-        const renderHtml = createDraftRow(type, parsed);
-
-        return renderHtml;
-        /*const parsed = parsePayload(full.id, full.payload);
-
-        const link = `${window.apiHost}/api/v1/files/`;
-        const attachmentLinks = [];
-
-        for (const attachment of parsed.attachments) {
-          const attachmentAnchor = `<a class="attachmentLink" href="javascript:;" onclick="downloadId('draftsFormAlert', '${link}${attachment.digest}', '${attachment.fileName}');">${attachment.fileName}</a>`;
-          attachmentLinks.push(attachmentAnchor);
-        }
-
-        const subject =
-          type === "display"
-            ? createSubjectSnippet(parsed.subject)
-            : parsed.subject;
-        const plainContent =
-          type === "display"
-            ? createPlainContentSnippet(parsed.plainContent)
-            : parsed.plainContent;
-
-        let content;
-
-        if (subject) {
-          content = subject;
-          if (plainContent) {
-            content = subject + " - " + plainContent;
-          }
-        } else {
-          if (plainContent) {
-            content = plainContent;
-          }
-        }
-
-        let renderHtml = `<div"><span>${content || "Draft"}</span>`;
-        if (attachmentLinks.length > 0) {
-          renderHtml += `<br/>`;
-          for (const item of attachmentLinks) {
-            renderHtml += `<span>${item}  </span>`;
-          }
-        }
-        renderHtml += "</div>";
-
-        return renderHtml;*/
+        return createDraftRow(type, full);
       },
     },
     {
@@ -435,6 +389,8 @@ export const upsertDraftsPage = async (
       if (response === false) {
         return;
       }
+
+      // response.modifiedAt = response.modifiedAt + 120000;
 
       draftsTable.row(`#${response.id}`).data(response).draw();
     } else {

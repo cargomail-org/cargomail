@@ -3,7 +3,7 @@ import {
   parseNameAndEmail,
   createSubjectSnippet,
   createPlainContentSnippet,
-  parseDisplayDate,
+  parseDisplayDbDate,
   getRecipientsShort,
 } from "/public/js/utils.js";
 import {
@@ -16,9 +16,14 @@ import { getProfileUsername } from "/public/js/profile.js";
 
 const MAX_DISPLAYED_ATTACHMENTS = 3;
 
-export const createDraftRow = (type, parsed) => {
+export const createDraftRow = (type, full) => {
+  const parsed = parsePayload(full.id, full.payload);
+  const timestamp = full.modifiedAt != null ? full.modifiedAt : full.createdAt;
+  const date = new Date(timestamp);
+
+  const displayDate = parseDisplayDbDate(date);
+
   const person = parseNameAndEmail(parsed.from);
-  const displayDate = parseDisplayDate(parsed.date);
 
   const profileUsername = getProfileUsername();
 
@@ -46,7 +51,9 @@ export const createDraftRow = (type, parsed) => {
       : parsed.plainContent;
 
   if (plainContent) {
-    plainContent = `<span style="color: gray;">${plainContent}</span>`;
+    plainContent = `<span style="color: gray;">${plainContent
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")}</span>`;
   }
 
   let content;

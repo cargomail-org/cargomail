@@ -564,6 +564,29 @@ export const populateForm = async (save, id, attachments, parsed) => {
   composeInReplyToInput.value = parsed.inReplyTo;
   composeReferencesInput.value = parsed.references;
 
+  const ccButton = document.querySelector("#ccButton");
+  const bccButton = document.querySelector("#bccButton");
+
+  if (parsed.cc?.length > 0) {
+    ccButton.style.pointerEvents = "none";
+    ccButton.style.cursor = "default";
+    ccButton.style.color = "silver";
+  } else {
+    ccButton.style.pointerEvents = "auto";
+    ccButton.style.cursor = "pointer";
+    ccButton.style.color = "#0d6efd";
+  }
+
+  if (parsed.bcc?.length > 0) {
+    bccButton.style.pointerEvents = "none";
+    bccButton.style.cursor = "default";
+    bccButton.style.color = "silver";
+  } else {
+    bccButton.style.pointerEvents = "auto";
+    bccButton.style.cursor = "pointer";
+    bccButton.style.color = "#0d6efd";
+  }
+
   const selectizeTo = $("#toInput")[0].selectize;
   const selectizeCc = $("#ccInput")[0].selectize;
   const selectizeBcc = $("#bccInput")[0].selectize;
