@@ -242,10 +242,10 @@
             </div>
             <div hidden class="container" id="draftsPanel">
               <div class="d-flex justify-content-evenly">
-                <a class="btn disabled btn-light px-2" id="copySelectedDrafts">
+                <!-- <a class="btn disabled btn-light px-2" id="copySelectedDrafts">
                   <i class="fs-5 bi-box-arrow-in-up"></i>
                   <span class="ms-1 d-none d-sm-inline">Copy selected to Compose Form</span>
-                </a>
+                </a> -->
               </div>
             </div>
             <div hidden class="container" id="filesPanel">
@@ -336,6 +336,11 @@
   // drafts
   import { deleteDraftsMessages } from "/public/js/drafts.js";
   document.querySelector('#draftsConfirmButton').addEventListener('click', deleteDraftsMessages);
+
+  // message_details
+  import { copySelectedFiles as copySelectedFilesFromMessages } from "/public/js/message_detail.js";
+  document.querySelector('#copySelectedSent').addEventListener('click', copySelectedFilesFromMessages);
+  document.querySelector('#copySelectedInbox').addEventListener('click', copySelectedFilesFromMessages);
 
   // files
   import { inputUploadChanged, clearUpload, deleteFiles, copySelectedFiles } from "/public/js/files.js";

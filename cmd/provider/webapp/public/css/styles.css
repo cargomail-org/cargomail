@@ -175,17 +175,33 @@ td.select-checkbox {
   width: 5px;
 }
 
-table.thread-table.dataTable thead th {
+table.thread-sent-table.dataTable thead th {
   border-bottom-width: 0px;
   font-size: 1.25em;
   font-weight: 400;
 }
 
-table.thread-table.dataTable tr.dt-hasChild td.threads-payload {
+table.thread-sent-table.dataTable thead th {
+  border-bottom-width: 0px;
+  font-size: 1.25em;
+  font-weight: 400;
+}
+
+table.thread-inbox-table.dataTable tr.dt-hasChild td.threads-payload {
   border-bottom-width: 0px;
 }
 
-table.detail-table.dataTable thead th {
+table.thread-inbox-table.dataTable tr.dt-hasChild td.threads-payload {
+  border-bottom-width: 0px;
+}
+
+table.detail-sent-table.dataTable thead th {
+  border-bottom-width: 1px;
+  font-size: 1em;
+  font-weight: 600;
+}
+
+table.detail-inbox-table.dataTable thead th {
   border-bottom-width: 1px;
   font-size: 1em;
   font-weight: 600;
@@ -208,8 +224,8 @@ table.detail-table.dataTable thead th {
   line-height: inherit !important;
 }
 
-/* table.detail-table:has(> tbody:empty) { */
-/* table.detail-table:has(.dataTables_empty) {
+/* table.detail-sent-table:has(> tbody:empty) { */
+/* table.detail-sent-table:has(.dataTables_empty) {
   display: none;
 } */
 

@@ -19,7 +19,7 @@ import {
   getRecipientsFull,
 } from "/public/js/utils.js";
 
-import { showDetail } from "/public/js/message_detail.js";
+import { showDetail, selectedRows } from "/public/js/message_detail.js";
 import { createMessageRow } from "/public/js/message_row.js";
 
 import { composeContentPage } from "/public/js/menu.js";
@@ -49,14 +49,14 @@ const getMessages = async () => {
   return response;
 };
 
-export const createThreadTable = (row) => {
+export const createThreadTable = (type, row) => {
   // This is the table we'll convert into a DataTable
-  const table = $('<table class="table thread-table" width="100%"/>');
+  const table = $(`<table class="table thread-${type}-table" width="100%"/>`);
 
   const rowData = row.data();
 
   if (!rowData?.messages) {
-    console.log("thread-table no data");
+    console.log(`thread-${type}-table no data`);
     return;
   }
 
@@ -173,7 +173,7 @@ export const createThreadTable = (row) => {
 
         delete parsed["messageId"];
 
-        const sender = parsed.from.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const sender = parsed.from.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
         if (e.target.classList.contains("message-reply")) {
           parsed.htmlContent = `
@@ -251,6 +251,16 @@ export const createThreadTable = (row) => {
 
       // This row is already open - close it
       row.child.hide();
+
+      let dataTable = e.target.closest("#sentTable");
+
+      if (!dataTable) {
+        dataTable = e.target.closest("#inboxTable");
+      }
+
+      if (dataTable) {
+        selectedRows(type, dataTable);
+      }
     } else {
       tr.getElementsByClassName("message-row-message")[0].style.display =
         "none";
@@ -260,7 +270,7 @@ export const createThreadTable = (row) => {
         "block";
 
       // Open this row
-      showDetail(row);
+      showDetail(type, row);
       tr.classList.add("shown");
     }
   });
@@ -269,14 +279,20 @@ export const createThreadTable = (row) => {
   row.child(table).show();
 };
 
-export const destroyThreadTable = (row) => {
-  const table = $("thread-table", row.child());
+export const destroyThreadTable = (type, parentTable, row) => {
+  const table = $(`thread-${type}-table`, row.child());
 
   table.detach();
   table.DataTable().destroy();
 
   // And then hide the row
   row.child.hide();
+
+  let dataTable = parentTable.table().node();
+
+  if (dataTable) {
+    selectedRows(type, dataTable);
+  }
 };
 
 export const messageListResponse = await getMessages();

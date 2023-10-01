@@ -228,14 +228,14 @@ sentTable.on("click", "td.payload", (e) => {
 
   if (row.child.isShown()) {
     // This row is already open - close it
-    destroyThreadTable(row);
+    destroyThreadTable("sent", sentTable, row);
     tr.classList.remove("shown");
   } else {
     if (sentTable.row(".shown").length) {
       $(".payload", sentTable.row(".shown").node()).click();
     }
     // Open this row
-    createThreadTable(row);
+    createThreadTable("sent", row);
     tr.classList.add("shown");
   }
 });

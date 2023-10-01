@@ -18,11 +18,11 @@ import {
   createPlainContentSnippet,
 } from "/public/js/utils.js";
 
-export const showDetail = (row) => {
+export const showDetail = (type, row) => {
   const rowData = row.data();
 
   if (!rowData?.payload) {
-    console.log("detail-table no data");
+    console.log(`detail-${type}-table no data`);
     return;
   }
 
@@ -38,7 +38,7 @@ export const showDetail = (row) => {
         </div>
         <table ${
           parsed.attachments?.length > 0 ? "" : "hidden"
-        } class="table detail-table table-bordered" width="100%">
+        } class="table detail-${type}-table table-bordered" width="100%">
         <thead>
             <tr>
                 <th>Id</th>
@@ -53,7 +53,7 @@ export const showDetail = (row) => {
 
   // Initialise as a DataTable
   const detailTable = $(form)
-    .find(".detail-table")
+    .find(`.detail-${type}-table`)
     .DataTable({
       info: false,
       paging: false,
@@ -97,7 +97,9 @@ export const showDetail = (row) => {
       },
       order: [[2, "desc"]],
       dom: "Bfrtip",
-      rowId: (row) => {return row.digest + "@" + row.fileName},
+      rowId: (row) => {
+        return row.digest + "@" + row.fileName;
+      },
       language: {
         buttons: {
           pageLength: "Show %d",
@@ -121,4 +123,55 @@ export const showDetail = (row) => {
 
   // Display it the child row
   row.child(form).show();
+
+  detailTable.on("select.dt deselect.dt", (e) => {
+    let dataTable = e.target.closest("#sentTable");
+
+    if (!dataTable) {
+      dataTable = e.target.closest("#inboxTable");
+    }
+
+    if (dataTable) {
+      selectedRows(type, dataTable);
+    }
+  });
+};
+
+export const selectedRows = (type, dataTable) => {
+  const details = document.querySelectorAll(`.detail-${type}-table`);
+
+  let selected = false;
+
+  details.forEach((detailTable) => {
+    selected =
+      selected ||
+      $(detailTable).DataTable().rows({ selected: true }).indexes().length > 0;
+  });
+
+  if (dataTable.id == "sentTable") {
+    if (selected) {
+      document.getElementById("copySelectedSent").classList.remove("disabled");
+    } else {
+      document.getElementById("copySelectedSent").classList.add("disabled");
+    }
+  } else {
+    if (dataTable.id == "inboxTable") {
+      if (selected) {
+        document
+          .getElementById("copySelectedInbox")
+          .classList.remove("disabled");
+      } else {
+        document.getElementById("copySelectedInbox").classList.add("disabled");
+      }
+    }
+  }
+};
+
+export const copySelectedFiles = (e) => {
+  e?.preventDefault();
+
+  console.log(e.currentTarget);
+
+  // const selected = filesTable.rows(".selected").data();
+  // composeAddItems(true, selected);
 };

@@ -228,14 +228,14 @@ inboxTable.on("click", "td.payload", (e) => {
 
   if (row.child.isShown()) {
     // This row is already open - close it
-    destroyThreadTable(row);
+    destroyThreadTable("inbox", inboxTable, row);
     tr.classList.remove("shown");
   } else {
     if (inboxTable.row(".shown").length) {
       $(".payload", inboxTable.row(".shown").node()).click();
     }
     // Open this row
-    createThreadTable(row);
+    createThreadTable("inbox", row);
     tr.classList.add("shown");
   }
 });
