@@ -18,6 +18,8 @@ import {
   createPlainContentSnippet,
 } from "/public/js/utils.js";
 
+import { composeAddItems } from "/public/js/compose.js";
+
 export const showDetail = (type, row) => {
   const rowData = row.data();
 
@@ -168,10 +170,25 @@ export const selectedRows = (type, dataTable) => {
 };
 
 export const copySelectedFiles = (e) => {
-  e?.preventDefault();
+  let selectedAll = [];
+  let details;
 
-  console.log(e.currentTarget);
+  if (e.currentTarget.id == "copySelectedInbox") {
+    const type = "inbox";
+    details = document.querySelectorAll(`.detail-${type}-table`);
+  } else if (e.currentTarget.id == "copySelectedSent") {
+    const type = "sent";
+    details = document.querySelectorAll(`.detail-${type}-table`);
+  }
 
-  // const selected = filesTable.rows(".selected").data();
-  // composeAddItems(true, selected);
+  if (details) {
+    details.forEach((detailTable) => {
+      const selected =
+        $(detailTable).DataTable().rows({ selected: true }).data();
+
+      selectedAll = [...selectedAll, ...selected.toArray()];
+    });
+  }
+
+  composeAddItems(true, selectedAll);
 };
