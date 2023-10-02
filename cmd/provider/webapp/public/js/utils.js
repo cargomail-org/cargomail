@@ -23,19 +23,18 @@ export const b64DecodeUtf8 = (base64) => {
 export const getParticipantsFrom = (username, messages) => {
   const participants = new Map();
 
-  let displayParticipants = "";
-
   for (const message of messages) {
-    const parsedMessage = parsePayload(message.id, message.payload);
-    const from = parseNameAndEmail(parsedMessage.from);
-    participants.set(from.email, from.name);
+    const parsed = parsePayload(message.id, message.payload);
+
+    const participant = parseNameAndEmail(parsed.from);
+    participants.set(participant.email, participant.name);
   }
+
+  let displayParticipants = "";
 
   for (const participant of Array.from(participants).reverse()) {
     const displayPerson =
-      participant[0] == username
-        ? "me"
-        : participant[1] || participant[0];
+      participant[0] == username ? "me" : participant[1] || participant[0];
 
     if (displayParticipants) {
       displayParticipants = `${displayPerson}, ${displayParticipants}`;
@@ -48,53 +47,40 @@ export const getParticipantsFrom = (username, messages) => {
 };
 
 export const getParticipantsTo = (username, messages) => {
-  const parsed = parsePayload(messages[0].id, messages[0].payload);
+  const participants = new Map();
 
-  let recipientTo = "";
-  let recipientCc = "";
-  let recipientBcc = "";
+  for (const message of messages) {
+    const parsed = parsePayload(message.id, message.payload);
 
-  for (const to of parsed.to) {
-    const delim = recipientTo.length > 0 ? ", " : "";
+    if (message.folder == 1) {
+      for (const to of parsed.to) {
+        participants.set(to.email, to.name);
+      }
 
-    if (to.email == username) {
-      recipientTo += delim + "me";
-    } else {
-      recipientTo += delim + (to.name || to.email);
+      for (const cc of parsed.cc) {
+        participants.set(cc.email, cc.name);
+      }
+
+      for (const bcc of parsed.bcc) {
+        participants.set(bcc.email, bcc.name);
+      }
     }
   }
 
-  for (const cc of parsed.cc) {
-    const delim = recipientCc.length > 0 ? ", " : "";
+  let displayParticipants = "";
 
-    if (cc.email == profileUsername) {
-      recipientCc += delim + "me";
+  for (const participant of Array.from(participants).reverse()) {
+    const displayPerson =
+      participant[0] == username ? "me" : participant[1] || participant[0];
+
+    if (displayParticipants) {
+      displayParticipants = `${displayPerson}, ${displayParticipants}`;
     } else {
-      recipientCc += delim + (cc.name || cc.email);
+      displayParticipants = displayPerson;
     }
   }
 
-  for (const bcc of parsed.bcc) {
-    const delim = recipientBcc.length > 0 ? ", " : "";
-
-    if (bcc.email == profileUsername) {
-      recipientBcc += delim + "me";
-    } else {
-      recipientBcc += delim + (bcc.name || bcc.email);
-    }
-  }
-
-  let recipients = `to: ${recipientTo}`;
-
-  if (recipientCc) {
-    recipients += `, cc: ${recipientCc}`;
-  }
-
-  if (recipientBcc) {
-    recipients += `, bcc: ${recipientBcc}`;
-  }
-
-  return recipients;
+  return `To: ${displayParticipants}`;
 };
 
 export const getRecipientsShort = (profileUsername, parsed) => {
