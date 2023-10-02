@@ -4,8 +4,6 @@ import (
 	"cargomail/internal/config"
 	"context"
 	"database/sql"
-	"database/sql/driver"
-	"encoding/json"
 	"errors"
 	"net/mail"
 	"reflect"
@@ -19,32 +17,32 @@ type DraftRepository struct {
 	db *sql.DB
 }
 
-type Attachment struct {
-	Id          string `json:"id"`
-	Digest      string `json:"digest"`
-	ContentType string `json:"contentType"`
-	FileName    string `json:"fileName"`
-	Size        int64  `json:"size"`
-}
+// type Attachment struct {
+// 	Id          string `json:"id"`
+// 	Digest      string `json:"digest"`
+// 	ContentType string `json:"contentType"`
+// 	FileName    string `json:"fileName"`
+// 	Size        int64  `json:"size"`
+// }
 
-type Attachments []Attachment
+// type Attachments []Attachment
 
 // type AttachmentIds []string
 
 type Draft struct {
-	Id          string       `json:"id"`
-	UserId      int64        `json:"-"`
-	Unread      bool         `json:"unread"`
-	Starred     bool         `json:"starred"`
-	Payload     *MessagePart `json:"payload,omitempty"`
-	Attachments Attachments  `json:"attachments,omitempty"`
-	LabelIds    *string      `json:"labelIds"`
-	CreatedAt   Timestamp    `json:"createdAt"`
-	ModifiedAt  *Timestamp   `json:"modifiedAt"`
-	TimelineId  int64        `json:"-"`
-	HistoryId   int64        `json:"-"`
-	LastStmt    int          `json:"-"`
-	DeviceId    *string      `json:"-"`
+	Id      string       `json:"id"`
+	UserId  int64        `json:"-"`
+	Unread  bool         `json:"unread"`
+	Starred bool         `json:"starred"`
+	Payload *MessagePart `json:"payload,omitempty"`
+	//	Attachments Attachments  `json:"attachments,omitempty"`
+	LabelIds   *string    `json:"labelIds"`
+	CreatedAt  Timestamp  `json:"createdAt"`
+	ModifiedAt *Timestamp `json:"modifiedAt"`
+	TimelineId int64      `json:"-"`
+	HistoryId  int64      `json:"-"`
+	LastStmt   int        `json:"-"`
+	DeviceId   *string    `json:"-"`
 }
 
 type DraftDeleted struct {
@@ -67,18 +65,18 @@ type DraftSync struct {
 	DraftsDeleted  []*DraftDeleted `json:"deleted"`
 }
 
-func (v Attachments) Value() (driver.Value, error) {
-	return json.Marshal(v)
-}
+// func (v Attachments) Value() (driver.Value, error) {
+// 	return json.Marshal(v)
+// }
 
-func (v *Attachments) Scan(value interface{}) error {
-	b, ok := value.([]byte)
-	if !ok {
-		return errors.New("type assertion to []byte failed")
-	}
+// func (v *Attachments) Scan(value interface{}) error {
+// 	b, ok := value.([]byte)
+// 	if !ok {
+// 		return errors.New("type assertion to []byte failed")
+// 	}
 
-	return json.Unmarshal(b, &v)
-}
+// 	return json.Unmarshal(b, &v)
+// }
 
 func (d *Draft) Scan() []interface{} {
 	s := reflect.ValueOf(d).Elem()
@@ -111,13 +109,11 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 			INTO "Draft" ("userId",
 				 "deviceId",
 				 "unread",
-				 "payload",
-				 "attachments")
+				 "payload")
 			VALUES ($1,
 					$2,
 					$3,
-					$4,
-				    $5)
+					$4)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
@@ -127,8 +123,7 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 	args := []interface{}{user.Id,
 		prefixedDeviceId,
 		unread,
-		draft.Payload,
-		draft.Attachments}
+		draft.Payload}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
 	if err != nil {
@@ -398,16 +393,15 @@ func (r *DraftRepository) Update(user *User, draft *Draft) (*Draft, error) {
 	query := `
 		UPDATE "Draft"
 			SET "payload" = $1,
-			    "attachments" = $2,
-				"deviceId" = $3
-			WHERE "userId" = $4 AND
-			      "id" = $5 AND
+				"deviceId" = $2
+			WHERE "userId" = $3 AND
+			      "id" = $4 AND
 				  "lastStmt" <> 2
 			RETURNING id ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
-	args := []interface{}{draft.Payload, draft.Attachments, prefixedDeviceId, user.Id, draft.Id}
+	args := []interface{}{draft.Payload, prefixedDeviceId, user.Id, draft.Id}
 
 	err = tx.QueryRowContext(ctx, query, args...).Scan(&draft.Id)
 	if err != nil {

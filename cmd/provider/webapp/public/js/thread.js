@@ -138,6 +138,8 @@ export const createThreadTable = (view, row) => {
   $(header).html(headerTitle);
 
   threadsTable.on("click", "td.threads-payload", (e) => {
+    e.preventDefault();
+    
     if (e.target.classList.contains("attachmentLink")) {
       return;
     }
@@ -225,12 +227,10 @@ export const createThreadTable = (view, row) => {
           parsed.bcc = [];
         }
 
-        console.log(parsed);
-
         (async () => {
           await composeNewDraft();
 
-          await composePopulateForm(true, "", parsed.attachments, parsed);
+          await composePopulateForm(true, "", parsed);
 
           composeContentPage(e);
         })();

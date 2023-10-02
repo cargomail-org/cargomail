@@ -551,7 +551,7 @@ export const clearForm = () => {
   ignoreOnChange = false;
 };
 
-export const populateForm = async (save, id, attachments, parsed) => {
+export const populateForm = async (save, id, parsed) => {
   ignoreOnChange = true;
 
   attachmentList.length = 0;
@@ -659,7 +659,7 @@ export const populateForm = async (save, id, attachments, parsed) => {
 
   composeTable.clear();
 
-  composeAddItems(false, attachments);
+  composeAddItems(false, parsed.attachments);
 
   ignoreOnChange = false;
 
@@ -725,7 +725,6 @@ const formPopulated = async (cmd) => {
       composeForm,
       composeIdInput.value,
       reply,
-      attachmentList,
       parsed
     );
   } else if (cmd == "send") {
@@ -733,7 +732,6 @@ const formPopulated = async (cmd) => {
       composeForm,
       composeIdInput.value,
       reply,
-      attachmentList,
       parsed
     );
   } else {
@@ -873,6 +871,8 @@ export const setComposeContacts = (contacts) => {
 };
 
 export const newDraft = async (e) => {
+  e?.preventDefault();
+
   clearTimeout(bouncerTimeout);
 
   if (bouncerHasQueue) {
@@ -889,10 +889,14 @@ export const newDraft = async (e) => {
 };
 
 export const discardDraft = (e) => {
+  e.preventDefault();
+
   composeDiscardConfirmDialog.show();
 };
 
 export const deleteDraft = (e) => {
+  e.preventDefault();
+
   composeDiscardConfirmDialog.hide();
 
   if (composeIdInput.value) {
@@ -906,6 +910,8 @@ export const deleteDraft = (e) => {
 };
 
 export const sendDraft = (e) => {
+  e.preventDefault();
+  
   clearTimeout(bouncerTimeout);
   bouncerHasQueue = false;
 

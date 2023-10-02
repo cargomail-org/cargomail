@@ -224,7 +224,7 @@ draftsTable.on("click", "td.payload", (e) => {
   const data = draftsTable.row(e.currentTarget).data();
   const parsed = parsePayload(data.id, data.payload);
 
-  composePopulateForm(false, data.id, data.attachments, parsed);
+  composePopulateForm(false, data.id, parsed);
 
   composeContentPage(e);
 });
@@ -347,7 +347,6 @@ export const upsertDraftsPage = async (
   composeForm,
   id,
   reply,
-  attachments,
   parsed
 ) => {
   const alert = composeForm.querySelector('div[name="upsertDraftsPageAlert"]');
@@ -359,7 +358,7 @@ export const upsertDraftsPage = async (
 
     if (index >= 0) {
       const data = draftsTable.row(`#${id}`).data();
-      const draft = { id, attachments, payload: composePayload(parsed) };
+      const draft = { id, payload: composePayload(parsed) };
 
       if (data.labelIds) draft.labelIds = data.labelIds;
       if (data.unread) draft.unread = data.unread;
@@ -404,7 +403,7 @@ export const upsertDraftsPage = async (
     }
   } else {
     // insert
-    const draft = { attachments, payload: composePayload(parsed) };
+    const draft = { payload: composePayload(parsed) };
 
     if (reply) {
       draft.payload.headers["In-Reply-To"] = reply.inReplyTo;
@@ -444,7 +443,6 @@ export const sendDraft = async (
   composeForm,
   id,
   reply,
-  attachments,
   parsed
 ) => {
   const alert = composeForm.querySelector('div[name="sendDraftsPageAlert"]');
@@ -456,7 +454,7 @@ export const sendDraft = async (
 
     if (index >= 0) {
       const data = draftsTable.row(`#${id}`).data();
-      const draft = { id, attachments, payload: composePayload(parsed) };
+      const draft = { id, payload: composePayload(parsed) };
 
       if (data.labelIds) draft.labelIds = data.labelIds;
       if (data.unread) draft.unread = data.unread;

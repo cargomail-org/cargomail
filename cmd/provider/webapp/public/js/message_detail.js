@@ -170,6 +170,8 @@ export const selectedRows = (view, dataTable) => {
 };
 
 export const copySelectedFiles = (e) => {
+  e.preventDefault();
+
   let selectedAll = [];
   let details;
 

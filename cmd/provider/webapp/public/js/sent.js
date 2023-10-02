@@ -20,7 +20,6 @@ import { inboxTable } from "/public/js/inbox.js";
 
 import {
   clearForm as composeClearForm,
-  populateForm as composePopulateForm,
 } from "/public/js/compose.js";
 import {
   parsePayload,

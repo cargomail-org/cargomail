@@ -60,7 +60,6 @@ CREATE TABLE IF NOT EXISTS "Draft"
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
     "payload"       TEXT,                 -- json 'MessagePart' object
-    "attachments"   TEXT,                 -- json 'attachments' array
     "labelIds"      TEXT,                 -- json 'labelIds' array
     "createdAt"		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "modifiedAt"    TIMESTAMP,

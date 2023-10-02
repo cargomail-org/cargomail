@@ -426,6 +426,7 @@ export const copySelectedFiles = (e) => {
 
 export const inputUploadChanged = (e) => {
   e?.preventDefault();
+
   const files = e.target.files;
   if (files.length && files.length > 0) {
     document.getElementById("uploadButton").classList.remove("disabled");
@@ -438,6 +439,7 @@ export const inputUploadChanged = (e) => {
 
 export const clearUpload = (e) => {
   e?.preventDefault();
+  
   document.getElementById("uploadButton").classList.add("disabled");
   uploadForm.reset();
   document.getElementById("clearButton").classList.add("disabled");

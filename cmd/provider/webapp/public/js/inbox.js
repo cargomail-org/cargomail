@@ -20,7 +20,6 @@ import { sentTable } from "/public/js/sent.js";
 
 import {
   clearForm as composeClearForm,
-  populateForm as composePopulateForm,
 } from "/public/js/compose.js";
 import {
   parsePayload,

@@ -30,9 +30,12 @@ profileForm.onsubmit = async (e) => {
     return;
   }
 
-  const loggedUsername = response?.firstName
-    ? response.firstName
-    : response.username;
+  setProfile(response);
+};
+
+export const setProfile = (value) => {
+  const loggedUsername =
+    value.firstName.length > 0 ? value.firstName : value.username;
 
   if (loggedUsername) {
     document.getElementById("loggedUsernameLetter").innerHTML = loggedUsername
@@ -40,6 +43,26 @@ profileForm.onsubmit = async (e) => {
       .toUpperCase();
     document.getElementById("loggedUsername").innerHTML = loggedUsername;
   }
+
+  const profileDomainName =
+    document.getElementById("profileDomainName").innerHTML;
+
+  const username = `${value.username}@${profileDomainName}`;
+
+  document.getElementById("profileUsername").innerHTML = username;
+
+  setProfileUsername(username);
+  setProfileFullName(value.firstName, value.lastName);
+
+  const composeFromInput = document.getElementById("composeFromInput");
+
+  composeFromInput.value =
+    `${getProfileFullName()} <${getProfileUsername()}>`.trim();
+
+  const profileForm = document.getElementById("profileForm");
+
+  profileForm.querySelector('input[name="firstName"]').value = value.firstName;
+  profileForm.querySelector('input[name="lastName"]').value = value.lastName;
 };
 
 export const getProfileUsername = () => {

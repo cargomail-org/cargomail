@@ -19,7 +19,6 @@ CREATE TRIGGER IF NOT EXISTS "DraftBeforeUpdate"
     -- "unread", 
     -- "starred", 
     -- "payload",
-    -- "attachments",
     -- "labelIds"
     ON "Draft"
     FOR EACH ROW
