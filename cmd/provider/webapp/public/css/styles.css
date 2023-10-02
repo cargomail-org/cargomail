@@ -282,7 +282,7 @@ table.detail-inbox-table.dataTable thead th {
   text-overflow: ellipsis;
   overflow: hidden;
   /* text-wrap: nowrap; */
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 
 .draft-row-fullname {

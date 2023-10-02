@@ -27,7 +27,7 @@ window.apiHost = "";
       window.apiHost = apiHost;
     }
 
-    response = await api(null, 200, `${window.apiHost}/api/v1/auth/info`, {
+    response = await api(null, 200, `${window.apiHost}/api/v1/auth/userinfo`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -35,9 +35,24 @@ window.apiHost = "";
     });
 
     let domainName = "";
+    let username = ""
 
-    if (response && response.domainName) {
+    if (response && response.domainName && response.username) {
       domainName = response.domainName;
+      username = response.username;
+    }
+
+    if (!domainName) {
+      response = await api(null, 200, `${window.apiHost}/api/v1/auth/info`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (response && response.domainName) {
+        domainName = response.domainName;
+      }
     }
 
     const registerForm = document.getElementById("registerForm");
@@ -57,6 +72,10 @@ window.apiHost = "";
 
       if (profileForm) {
         profileForm.querySelector("#profileDomainName").innerHTML = domainName;
+
+        if (username) {
+          profileForm.querySelector("#profileUsername").innerHTML = username;
+        }
       }
     }
   })();

@@ -4,7 +4,9 @@ import {
   createPlainContentSnippet,
   parseNameAndEmail,
   parseInitialsAndName,
-  parseDisplayDate,
+  parseDisplayDbDate,
+  getParticipantsFrom,
+  getParticipantsTo,
 } from "/public/js/utils.js";
 
 import {
@@ -13,14 +15,20 @@ import {
   unstarredIcon,
 } from "/public/js/icons.js";
 
+import { getProfileUsername } from "/public/js/profile.js";
+
 const MAX_DISPLAYED_ATTACHMENTS = 3;
 
-export const createThreadRow = (type, messages, parsed) => {
+export const createThreadRow = (view, type, username, messages, parsed) => {
   const messagesCount = messages?.length || 0;
 
-  const person = parseNameAndEmail(parsed.from);
-  const displayPerson = parseInitialsAndName(person);
-  const displayDate = parseDisplayDate(parsed.date);
+  let participants;
+
+  if (view == "sent") {
+    participants = getParticipantsTo(username, messages);
+  } else if (view == "inbox") {
+    participants = getParticipantsFrom(username, messages);
+  }
 
   const link = `${window.apiHost}/api/v1/files/`;
   const attachmentLinks = [];
@@ -41,6 +49,13 @@ export const createThreadRow = (type, messages, parsed) => {
   }
 
   const lastMessage = messages.at(-1);
+
+  const timestamp = lastMessage.createdAt;
+
+  const date = new Date(timestamp);
+
+  const displayDate = parseDisplayDbDate(date);
+
   const lastPlainContent =
     parsePayload(lastMessage.id, lastMessage.payload).plainContent || "";
 
@@ -89,7 +104,7 @@ export const createThreadRow = (type, messages, parsed) => {
       <div class="thread-row-content">
           <div class="thread-row-header">
               <div class="thread-row-person">
-                  <div class="thread-row-fullname">${displayPerson.name}</div>
+                  <div class="thread-row-fullname">${participants}</div>
               </div>
               <div class="thread-row-count">${
                 messagesCount > 1 ? messagesCount : ""

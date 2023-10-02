@@ -103,6 +103,7 @@ func (svc *service) routes(r *Router) {
 
 	// Auth API
 	r.Route("GET", "/api/v1/auth/info", svc.api.Auth.Info())
+	r.Route("GET", "/api/v1/auth/userinfo", svc.api.Authenticate(svc.api.Auth.Info()))
 	r.Route("POST", "/api/v1/auth/register", svc.api.User.Register())
 	r.Route("POST", "/api/v1/auth/authenticate", svc.api.Session.Login())
 	r.Route("POST", "/api/v1/auth/logout", svc.api.Authenticate(svc.api.Session.Logout()))

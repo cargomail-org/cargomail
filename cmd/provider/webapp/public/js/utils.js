@@ -20,6 +20,83 @@ export const b64DecodeUtf8 = (base64) => {
   return decoder.decode(bytes);
 };
 
+export const getParticipantsFrom = (username, messages) => {
+  const participants = new Map();
+
+  let displayParticipants = "";
+
+  for (const message of messages) {
+    const parsedMessage = parsePayload(message.id, message.payload);
+    const from = parseNameAndEmail(parsedMessage.from);
+    participants.set(from.email, from.name);
+  }
+
+  for (const participant of Array.from(participants).reverse()) {
+    const displayPerson =
+      participant[0] == username
+        ? "me"
+        : participant[1] || participant[0];
+
+    if (displayParticipants) {
+      displayParticipants = `${displayPerson}, ${displayParticipants}`;
+    } else {
+      displayParticipants = displayPerson;
+    }
+  }
+
+  return displayParticipants;
+};
+
+export const getParticipantsTo = (username, messages) => {
+  const parsed = parsePayload(messages[0].id, messages[0].payload);
+
+  let recipientTo = "";
+  let recipientCc = "";
+  let recipientBcc = "";
+
+  for (const to of parsed.to) {
+    const delim = recipientTo.length > 0 ? ", " : "";
+
+    if (to.email == username) {
+      recipientTo += delim + "me";
+    } else {
+      recipientTo += delim + (to.name || to.email);
+    }
+  }
+
+  for (const cc of parsed.cc) {
+    const delim = recipientCc.length > 0 ? ", " : "";
+
+    if (cc.email == profileUsername) {
+      recipientCc += delim + "me";
+    } else {
+      recipientCc += delim + (cc.name || cc.email);
+    }
+  }
+
+  for (const bcc of parsed.bcc) {
+    const delim = recipientBcc.length > 0 ? ", " : "";
+
+    if (bcc.email == profileUsername) {
+      recipientBcc += delim + "me";
+    } else {
+      recipientBcc += delim + (bcc.name || bcc.email);
+    }
+  }
+
+  let recipients = `to: ${recipientTo}`;
+
+  if (recipientCc) {
+    recipients += `, cc: ${recipientCc}`;
+  }
+
+  if (recipientBcc) {
+    recipients += `, bcc: ${recipientBcc}`;
+  }
+
+  return recipients;
+};
+
 export const getRecipientsShort = (profileUsername, parsed) => {
   let recipientTo = "";
   let recipientCc = "";
@@ -74,7 +151,8 @@ export const getRecipientsFull = (parsed) => {
   for (const to of parsed.to) {
     const delim = recipientTo.length > 0 ? ", " : "";
 
-    recipientTo += delim + (to.name ? `${to.name} <${to.email}>` : `<${to.email}>`);
+    recipientTo +=
+      delim + (to.name ? `${to.name} <${to.email}>` : `<${to.email}>`);
   }
 
   let recipientCc = "";
@@ -82,13 +160,18 @@ export const getRecipientsFull = (parsed) => {
   for (const cc of parsed.cc) {
     const delim = recipientCc.length > 0 ? ", " : "";
 
-    recipientCc += delim + (cc.name ? `${cc.name} <${cc.email}>` : `<${cc.email}>`);
+    recipientCc +=
+      delim + (cc.name ? `${cc.name} <${cc.email}>` : `<${cc.email}>`);
   }
 
-  let recipients = `To: ${recipientTo.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`;
+  let recipients = `To: ${recipientTo
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")}`;
 
   if (recipientCc) {
-    recipients += `<br/>Cc: ${recipientCc.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`;
+    recipients += `<br/>Cc: ${recipientCc
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")}`;
   }
 
   return recipients;
@@ -156,10 +239,8 @@ export const parseInitialsAndName = (person) => {
   if (!splitted) {
     splitted = person.email[0];
   }
-  const initials = (
-    // splitted[1] ? splitted[0][0] + splitted[1][0] : splitted[0][0]
-    splitted[0][0]
-  ).toUpperCase();
+  const initials = splitted[0][0] // splitted[1] ? splitted[0][0] + splitted[1][0] : splitted[0][0]
+    .toUpperCase();
 
   return { name, initials };
 };
@@ -168,6 +249,8 @@ export const parseDisplayDate = (value) => {
   let displayDate = "";
 
   if (value) {
+    value = value.replace(/\s+/g, " ");
+
     const splitted = value.split(" ");
     const currentYear = new Date().getFullYear();
 
@@ -191,7 +274,9 @@ export const parseDisplayDbDate = (value) => {
   let displayDate = "";
 
   if (value) {
-    const splitted = value.toString().split(" ");
+    value = value.toString().replace(/\s+/g, " ");
+
+    const splitted = value.split(" ");
     const currentYear = new Date().getFullYear();
 
     if (splitted.length > 3) {
@@ -199,11 +284,7 @@ export const parseDisplayDbDate = (value) => {
 
       displayDate = `${splitted[1]} ${splitted[2]}, ${displayTime[0]}:${
         displayTime[1]
-      }${
-        splitted[3] == currentYear
-          ? ""
-          : ", " + splitted[3]
-      }`;
+      }${splitted[3] == currentYear ? "" : ", " + splitted[3]}`;
     }
   }
 

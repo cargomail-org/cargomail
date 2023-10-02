@@ -49,14 +49,14 @@ const getMessages = async () => {
   return response;
 };
 
-export const createThreadTable = (type, row) => {
+export const createThreadTable = (view, row) => {
   // This is the table we'll convert into a DataTable
-  const table = $(`<table class="table thread-${type}-table" width="100%"/>`);
+  const table = $(`<table class="table thread-${view}-table" width="100%"/>`);
 
   const rowData = row.data();
 
   if (!rowData?.messages) {
-    console.log(`thread-${type}-table no data`);
+    console.log(`thread-${view}-table no data`);
     return;
   }
 
@@ -259,7 +259,7 @@ export const createThreadTable = (type, row) => {
       }
 
       if (dataTable) {
-        selectedRows(type, dataTable);
+        selectedRows(view, dataTable);
       }
     } else {
       tr.getElementsByClassName("message-row-message")[0].style.display =
@@ -270,7 +270,7 @@ export const createThreadTable = (type, row) => {
         "block";
 
       // Open this row
-      showDetail(type, row);
+      showDetail(view, row);
       tr.classList.add("shown");
     }
   });
@@ -279,8 +279,8 @@ export const createThreadTable = (type, row) => {
   row.child(table).show();
 };
 
-export const destroyThreadTable = (type, parentTable, row) => {
-  const table = $(`thread-${type}-table`, row.child());
+export const destroyThreadTable = (view, parentTable, row) => {
+  const table = $(`thread-${view}-table`, row.child());
 
   table.detach();
   table.DataTable().destroy();
@@ -291,7 +291,7 @@ export const destroyThreadTable = (type, parentTable, row) => {
   let dataTable = parentTable.table().node();
 
   if (dataTable) {
-    selectedRows(type, dataTable);
+    selectedRows(view, dataTable);
   }
 };
 
@@ -305,11 +305,14 @@ export const getThreads = (folder = 0) => {
     const threadId = message.payload.headers["X-Thread-ID"];
     const thread = threadsById.get(threadId);
     const payload = message.payload;
-    const createdAt =
-      message.modifiedAt != null ? message.modifiedAt : message.createdAt;
+    const createdAt = message.createdAt;
 
     if (thread) {
       thread.messages.push(message);
+
+      if (message.createdAt > thread.createdAt) {
+        thread.createdAt = message.createdAt;
+      }
     } else {
       threadsById.set(threadId, {
         threadId,

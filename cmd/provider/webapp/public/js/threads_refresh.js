@@ -18,8 +18,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
     if (message.folder == 1) {
       const threadId = message.payload.headers["X-Thread-ID"];
       const payload = message.payload;
-      const createdAt =
-        message.modifiedAt != null ? message.modifiedAt : message.createdAt;
+      const createdAt = message.createdAt;
 
       const threadDataInbox = inboxTable
         .rows()
@@ -66,8 +65,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
     if (message.folder == 2) {
       const threadId = message.payload.headers["X-Thread-ID"];
       const payload = message.payload;
-      const createdAt =
-        message.modifiedAt != null ? message.modifiedAt : message.createdAt;
+      const createdAt = message.createdAt;
 
       const threadDataSent = sentTable
         .rows()

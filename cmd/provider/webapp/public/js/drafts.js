@@ -390,8 +390,6 @@ export const upsertDraftsPage = async (
         return;
       }
 
-      // response.modifiedAt = response.modifiedAt + 120000;
-
       draftsTable.row(`#${response.id}`).data(response).draw();
     } else {
       const error = "record not found";
@@ -465,11 +463,6 @@ export const sendDraft = async (
       if (data.starred) draft.starred = data.starred;
       if (data.createdAt) draft.createdAt = data.createdAt;
       if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
-
-      // test !!!
-      // draft.payload.headers["In-Reply-To"] = "<c3494e4a-4d37-478a-b812-c6e4c02d6d80@cargomail.org>";
-      // draft.payload.headers["References"] = "<c3494e4a-4d37-478a-b812-c6e4c02d6d80@cargomail.org>";
-      // draft.payload.headers["X-Thread-ID"] = "<e722d183-1357-4c6e-838d-5a2f003fdc66@cargomail.org>";
 
       if (reply) {
         draft.payload.headers["In-Reply-To"] = reply.inReplyTo;

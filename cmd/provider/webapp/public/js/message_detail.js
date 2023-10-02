@@ -20,11 +20,11 @@ import {
 
 import { composeAddItems } from "/public/js/compose.js";
 
-export const showDetail = (type, row) => {
+export const showDetail = (view, row) => {
   const rowData = row.data();
 
   if (!rowData?.payload) {
-    console.log(`detail-${type}-table no data`);
+    console.log(`detail-${view}-table no data`);
     return;
   }
 
@@ -40,7 +40,7 @@ export const showDetail = (type, row) => {
         </div>
         <table ${
           parsed.attachments?.length > 0 ? "" : "hidden"
-        } class="table detail-${type}-table table-bordered" width="100%">
+        } class="table detail-${view}-table table-bordered" width="100%">
         <thead>
             <tr>
                 <th>Id</th>
@@ -55,7 +55,7 @@ export const showDetail = (type, row) => {
 
   // Initialise as a DataTable
   const detailTable = $(form)
-    .find(`.detail-${type}-table`)
+    .find(`.detail-${view}-table`)
     .DataTable({
       info: false,
       paging: false,
@@ -134,13 +134,13 @@ export const showDetail = (type, row) => {
     }
 
     if (dataTable) {
-      selectedRows(type, dataTable);
+      selectedRows(view, dataTable);
     }
   });
 };
 
-export const selectedRows = (type, dataTable) => {
-  const details = document.querySelectorAll(`.detail-${type}-table`);
+export const selectedRows = (view, dataTable) => {
+  const details = document.querySelectorAll(`.detail-${view}-table`);
 
   let selected = false;
 
@@ -174,11 +174,11 @@ export const copySelectedFiles = (e) => {
   let details;
 
   if (e.currentTarget.id == "copySelectedInbox") {
-    const type = "inbox";
-    details = document.querySelectorAll(`.detail-${type}-table`);
+    const view = "inbox";
+    details = document.querySelectorAll(`.detail-${view}-table`);
   } else if (e.currentTarget.id == "copySelectedSent") {
-    const type = "sent";
-    details = document.querySelectorAll(`.detail-${type}-table`);
+    const view = "sent";
+    details = document.querySelectorAll(`.detail-${view}-table`);
   }
 
   if (details) {

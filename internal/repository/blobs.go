@@ -347,6 +347,12 @@ func (r BlobRepository) Update(user *User, blob *Blob) (*Blob, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
 	query := `
 		UPDATE "Blob"
 			SET "digest" = $1,
@@ -356,13 +362,13 @@ func (r BlobRepository) Update(user *User, blob *Blob) (*Blob, error) {
 			WHERE "userId" = $5 AND
 			      "id" = $6 AND
 				  "lastStmt" <> 2
-			RETURNING * ;`
+			RETURNING id ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
 	args := []interface{}{blob.Digest, blob.Snippet, blob.Size, prefixedDeviceId, user.Id, blob.Id}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&blob.Id)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
@@ -370,6 +376,24 @@ func (r BlobRepository) Update(user *User, blob *Blob) (*Blob, error) {
 		default:
 			return nil, err
 		}
+	}
+
+	query = `
+	SELECT *
+		FROM "Blob"
+		WHERE "userId" = $1 AND
+		"id" = $1 AND		
+		"lastStmt" <> 2;`
+
+	args = []interface{}{user.Id, blob.Id}
+
+	err = tx.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = tx.Commit(); err != nil {
+		return nil, err
 	}
 
 	return blob, nil

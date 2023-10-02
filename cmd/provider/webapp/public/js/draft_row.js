@@ -18,7 +18,9 @@ const MAX_DISPLAYED_ATTACHMENTS = 3;
 
 export const createDraftRow = (type, full) => {
   const parsed = parsePayload(full.id, full.payload);
+
   const timestamp = full.modifiedAt != null ? full.modifiedAt : full.createdAt;
+  
   const date = new Date(timestamp);
 
   const displayDate = parseDisplayDbDate(date);

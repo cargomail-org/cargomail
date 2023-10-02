@@ -106,12 +106,6 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	tx, err := r.db.BeginTx(ctx, nil)
-	if err != nil {
-		return nil, err
-	}
-	defer tx.Rollback()
-
 	query := `
 		INSERT
 			INTO "Draft" ("userId",
@@ -124,7 +118,7 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 					$3,
 					$4,
 				    $5)
-			RETURNING id ;`
+			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
@@ -136,27 +130,8 @@ func (r *DraftRepository) Create(user *User, draft *Draft) (*Draft, error) {
 		draft.Payload,
 		draft.Attachments}
 
-	err = tx.QueryRowContext(ctx, query, args...).Scan(&draft.Id)
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
 	if err != nil {
-		return nil, err
-	}
-
-	query = `
-	SELECT *
-		FROM "Draft"
-		WHERE "userId" = $1 AND
-		"id" = $5 AND
-		"lastStmt" <> 2
-		ORDER BY CASE WHEN "modifiedAt" IS NOT NULL THEN "modifiedAt" ELSE "createdAt" END DESC;`
-
-	args = []interface{}{user.Id, draft.Id}
-
-	err = tx.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
-	if err != nil {
-		return nil, err
-	}
-
-	if err = tx.Commit(); err != nil {
 		return nil, err
 	}
 
@@ -448,9 +423,8 @@ func (r *DraftRepository) Update(user *User, draft *Draft) (*Draft, error) {
 	SELECT *
 		FROM "Draft"
 		WHERE "userId" = $1 AND
-		"id" = $5 AND
-		"lastStmt" <> 2
-		ORDER BY CASE WHEN "modifiedAt" IS NOT NULL THEN "modifiedAt" ELSE "createdAt" END DESC;`
+		"id" = $2 AND
+		"lastStmt" <> 2;`
 
 	args = []interface{}{user.Id, draft.Id}
 

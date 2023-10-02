@@ -32,7 +32,7 @@ type Message struct {
 	ReceivedAt *Timestamp   `json:"receivedAt"`
 	SnoozedAt  *Timestamp   `json:"snoozedAt"`
 	CreatedAt  Timestamp    `json:"createdAt"`
-	ModifiedAt *Timestamp   `json:"modifiedAt"`
+	ModifiedAt *Timestamp   `json:"-"`
 	TimelineId int64        `json:"-"`
 	HistoryId  int64        `json:"-"`
 	LastStmt   int          `json:"-"`
@@ -114,7 +114,7 @@ func (r *MessageRepository) List(user *User, folder int) (*MessageList, error) {
 			WHERE "userId" = $1 AND
 			CASE WHEN $2 == 0 THEN "folder" > $2 ELSE "folder" == $2 END AND
 			"lastStmt" < 2
-			ORDER BY CASE WHEN "modifiedAt" IS NOT NULL THEN "modifiedAt" ELSE "createdAt" END;` //TODO shouldn't it be DESC rather?
+			ORDER BY "createdAt";`
 
 	args := []interface{}{user.Id, folder}
 

@@ -37,6 +37,12 @@ import {
 
 let selectedIds = [];
 
+const username = document
+  .getElementById("profileForm")
+  .querySelector("#profileUsername").innerHTML + "@" + document
+  .getElementById("profileForm")
+  .querySelector("#profileDomainName").innerHTML;
+
 const sentConfirmDialog = new bootstrap.Modal(
   document.querySelector("#sentConfirmDialog")
 );
@@ -106,7 +112,13 @@ export const sentTable = new DataTable("#sentTable", {
       render: (data, type, full, meta) => {
         const parsed = parsePayload(full.id, full.payload);
 
-        const renderHtml = createThreadRow(type, full.messages, parsed);
+        const renderHtml = createThreadRow(
+          "sent",
+          type,
+          username,
+          full.messages,
+          parsed
+        );
 
         return renderHtml;
       },

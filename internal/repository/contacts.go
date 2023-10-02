@@ -348,6 +348,12 @@ func (r *ContactRepository) Update(user *User, contact *Contact) (*Contact, erro
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
 	query := `
 		UPDATE "Contact"
 			SET "emailAddress" = $1,
@@ -357,13 +363,13 @@ func (r *ContactRepository) Update(user *User, contact *Contact) (*Contact, erro
 			WHERE "userId" = $5 AND
 			      "id" = $6 AND
 				  "lastStmt" <> 2
-			RETURNING * ;`
+			RETURNING id ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
 	args := []interface{}{contact.EmailAddress, contact.FirstName, contact.LastName, prefixedDeviceId, user.Id, contact.Id}
 
-	err := r.db.QueryRowContext(ctx, query, args...).Scan(contact.Scan()...)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(&contact.Id)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
@@ -375,6 +381,24 @@ func (r *ContactRepository) Update(user *User, contact *Contact) (*Contact, erro
 		default:
 			return nil, err
 		}
+	}
+
+	query = `
+	SELECT *
+		FROM "Contact"
+		WHERE "userId" = $1 AND
+		"id" = $2 AND
+		"lastStmt" <> 2;`
+
+	args = []interface{}{user.Id, contact.Id}
+
+	err = tx.QueryRowContext(ctx, query, args...).Scan(contact.Scan()...)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = tx.Commit(); err != nil {
+		return nil, err
 	}
 
 	return contact, nil
