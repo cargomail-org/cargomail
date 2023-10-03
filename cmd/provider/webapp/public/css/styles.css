@@ -298,9 +298,9 @@ table.detail-inbox-table.dataTable thead th {
   overflow: hidden;
 }
 
-.draft-row-space,
-.message-row-space,
-.thread-row-space {
+.draft-row-space-1,
+.message-row-space-1,
+.thread-row-space-1 {
   flex: 1;
 }
 
@@ -334,7 +334,7 @@ table.detail-inbox-table.dataTable thead th {
   text-overflow: ellipsis;
   overflow: hidden;
   font-size: small;
-  padding: 1px 0;
+  margin: 1px 0;
   vertical-align: middle;
 }
 

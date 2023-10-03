@@ -17,6 +17,7 @@ import {
   createSubjectSnippet,
   createPlainContentSnippet,
   getRecipientsFull,
+  treatDupliciteMessage,
 } from "/public/js/utils.js";
 
 import { showDetail, selectedRows } from "/public/js/message_detail.js";
@@ -139,20 +140,38 @@ export const createThreadTable = (view, row) => {
 
   threadsTable.on("click", "td.threads-payload", (e) => {
     e.preventDefault();
-    
+
+    // console.log(e.target);
+    // console.log(e.target.nodeName);
+    // console.log(e.target.offsetWidth - e.offsetX);
+    // console.log(e.target.offsetHeight - e.offsetY);
+
     if (e.target.classList.contains("attachmentLink")) {
       return;
     }
 
+    if (e.target.classList.contains("message-row-date")) {
+      return;
+    }
+
     if (
-      e.target.classList.contains("bi-star") ||
+      (e.target.nodeName == "path" && e.target.id == "starred-icon") ||
       e.target.classList.contains("bi-star-fill")
     ) {
       return;
     }
 
     if (
+      (e.target.nodeName == "path" && e.target.id == "unstarred-icon") ||
+      e.target.classList.contains("bi-star")
+    ) {
+      return;
+    }
+
+    if (
+      (e.target.nodeName == "path" && e.target.id == "three-dot-icon") ||
       e.target.classList.contains("bi-three-dots-vertical") ||
+      e.target.classList.contains("button-dropdown") ||
       e.target.classList.contains("dropdown-item") ||
       e.target.classList.contains("dropdown-divider") ||
       e.target.classList.contains("dropdown-menu-light")
@@ -236,6 +255,15 @@ export const createThreadTable = (view, row) => {
         })();
       }
       return;
+    } else {
+      const tr = e.target.closest("tr");
+      const row = threadsTable.row(tr);
+      if (
+        (e.target.offsetWidth - e.offsetX < (row.child.isShown() ? 56 : 28)) &&
+        e.target.offsetHeight - e.offsetY > 14
+      ) {
+        return;
+      }
     }
 
     let tr = e.target.closest("tr");
@@ -308,7 +336,20 @@ export const getThreads = (folder = 0) => {
     const createdAt = message.createdAt;
 
     if (thread) {
-      thread.messages.push(message);
+      const dupliciteIndex = thread.messages.indexOf(
+        thread.messages.find((item) => {
+          return (
+            item.payload.headers["Message-ID"] ==
+            message.payload.headers["Message-ID"]
+          );
+        })
+      );
+
+      if (dupliciteIndex >= 0) {
+        treatDupliciteMessage(thread, message, folder, dupliciteIndex);
+      } else {
+        thread.messages.push(message);
+      }
 
       if (message.createdAt > thread.createdAt) {
         thread.createdAt = message.createdAt;
@@ -325,9 +366,9 @@ export const getThreads = (folder = 0) => {
   const threads = [...threadsById.values()];
 
   return threads.filter((thread) => {
-    const rslt = thread.messages.filter(
+    const messages = thread.messages.filter(
       (message, index) => message.folder == folder
     );
-    return rslt.length > 0;
+    return messages.length > 0;
   });
 };

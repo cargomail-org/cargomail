@@ -35,7 +35,7 @@ export const createMessageRow = (id, parsed) => {
 
   const htmlDropdownMenu = `    
     <div class="message-row-dropdown">
-        <button class="btn m-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn button-dropdown m-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           ${threeDotIcon}
         </button>
         <ul class="dropdown-menu dropdown-menu-light">
@@ -52,35 +52,35 @@ export const createMessageRow = (id, parsed) => {
   const recipients = getRecipientsShort(profileUsername, parsed);
 
   const htmlFlex = `
-    <div class="message-row">
-        <div class="message-row-icon">
-            <div class="rounded-circle border d-flex justify-content-center align-items-center" style="width:34px;height:34px;background-color:${stringToHslColor(
-              person.email,
-              30,
-              80
-            )};" alt="Avatar">${displayPerson.initials}</div>
-        </div>
-        <div class="message-row-content">
-            <div class="message-row-header">
-                <div class="message-row-person">
-                    <div class="message-row-fullname">${
-                      displayPerson.name
-                    }</div>
-                    <div class="message-row-email">${person.email}</div>
-                </div>    
-                <div class="message-row-space"></div>
-                <div class="message-row-attch">${
-                  parsed.attachments.length > 0 ? attachmentIcon : ""
-                }</div>
-                <div class="message-row-date">${displayDate}</div>
-                <div class="message-row-starred">${unstarredIcon}</div>
-                ${htmlDropdownMenu}
-            </div>
-            <div class="message-row-message">${parsed.plainContent}</div>
-            <div class="message-row-recipients">${recipients}</div>
-        </div>
-    </div>
-`;
+      <div class="message-row">
+          <div class="message-row-icon">
+              <div class="rounded-circle border d-flex justify-content-center align-items-center" style="width:34px;height:34px;background-color:${stringToHslColor(
+                person.email,
+                30,
+                80
+              )};" alt="Avatar">${displayPerson.initials}</div>
+          </div>
+          <div class="message-row-content">
+              <div class="message-row-header">
+                  <div class="message-row-person">
+                      <div class="message-row-fullname">${
+                        displayPerson.name
+                      }</div>
+                      <div class="message-row-email">${person.email}</div>
+                  </div>    
+                  <div class="message-row-space-1"></div>
+                  <div class="message-row-attch">${
+                    parsed.attachments.length > 0 ? attachmentIcon : ""
+                  }</div>
+                  <div class="message-row-date">${displayDate}</div>
+                  <div class="message-row-starred">${unstarredIcon}</div>
+                  ${htmlDropdownMenu}
+              </div>
+              <div class="message-row-message">${parsed.plainContent}</div>
+              <div class="message-row-recipients">${recipients}</div>
+          </div>
+      </div>
+    `;
 
   return htmlFlex;
 };

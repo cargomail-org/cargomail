@@ -20,6 +20,26 @@ export const b64DecodeUtf8 = (base64) => {
   return decoder.decode(bytes);
 };
 
+export const treatDupliciteMessage = (
+  thread,
+  message,
+  folder,
+  dupliciteIndex
+) => {
+  if (folder == 2 && message.folder == 2) {
+    // ok! send, then receive a myself message
+    thread.messages[dupliciteIndex] = message;
+  } else if (folder == 1 && message.folder == 1) {
+    // weird! receive, then send a myself message
+    thread.messages[dupliciteIndex] = message;
+  } else if (folder == 0) {
+    // ok! allow the duplicite
+    thread.messages.push(message);
+  } else {
+    // ok! otherwise ignore the duplicite
+  }
+};
+
 export const getParticipantsFrom = (username, messages) => {
   const participants = new Map();
 

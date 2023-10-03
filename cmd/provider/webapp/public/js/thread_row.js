@@ -109,7 +109,7 @@ export const createThreadRow = (view, type, username, messages, parsed) => {
               <div class="thread-row-count">${
                 messagesCount > 1 ? messagesCount : ""
               }</div>
-              <div class="thread-row-space"></div>
+              <div class="thread-row-space-1"></div>
               <div class="thread-row-attch">${
                 attachmentLinks.length > 0 ? attachmentIcon : ""
               }</div>

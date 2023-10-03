@@ -93,7 +93,7 @@ export const createDraftRow = (type, full) => {
                       <div class="draft-row-fullname">${recipients}</div>
                       <div class="draft-row-email">${person.email}</div>
                   </div>    
-                  <div class="draft-row-space"></div>
+                  <div class="draft-row-space-1"></div>
                   <div class="draft-row-attch">${
                     parsed.attachments.length > 0 ? attachmentIcon : ""
                   }</div>

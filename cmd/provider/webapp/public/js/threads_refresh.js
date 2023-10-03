@@ -1,3 +1,5 @@
+import { treatDupliciteMessage } from "/public/js/utils.js";
+
 let historyId = 0;
 
 export const getHistoryId = () => {
@@ -15,31 +17,64 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
 
   // should refresh both the send and the inbox table
   for (const message of data.inserted || []) {
+    const threadId = message.payload.headers["X-Thread-ID"];
+    const payload = message.payload;
+    const createdAt = message.createdAt;
+
+    const threadDataInbox = inboxTable
+      .rows()
+      .data()
+      .toArray()
+      .find((thread) => thread.threadId == threadId);
+
+    const threadDataSent = sentTable
+      .rows()
+      .data()
+      .toArray()
+      .find((thread) => thread.threadId == threadId);
+
+    const dupliciteInboxIndex = threadDataInbox?.messages.indexOf(
+      threadDataInbox.messages.find((item) => {
+        return (
+          item.payload.headers["Message-ID"] ==
+          message.payload.headers["Message-ID"]
+        );
+      })
+    );
+
+    const dupliciteSentIndex = threadDataSent?.messages.indexOf(
+      threadDataSent.messages.find((item) => {
+        return (
+          item.payload.headers["Message-ID"] ==
+          message.payload.headers["Message-ID"]
+        );
+      })
+    );
+
     if (message.folder == 1) {
-      const threadId = message.payload.headers["X-Thread-ID"];
-      const payload = message.payload;
-      const createdAt = message.createdAt;
-
-      const threadDataInbox = inboxTable
-        .rows()
-        .data()
-        .toArray()
-        .find((thread) => thread.threadId == threadId);
-
-      const threadDataSent = sentTable
-        .rows()
-        .data()
-        .toArray()
-        .find((thread) => thread.threadId == threadId);
-
       if (threadDataInbox) {
-        threadDataInbox.messages.push(message);
+        if (dupliciteInboxIndex >= 0) {
+          treatDupliciteMessage(
+            threadDataInbox,
+            message,
+            2,
+            dupliciteInboxIndex
+          );
+        } else {
+          threadDataInbox.messages.push(message);
+        }
+
         threadDataInbox.createdAt = createdAt;
         inboxTable.row("#" + threadId).invalidate();
       }
 
       if (threadDataSent) {
-        threadDataSent.messages.push(message);
+        if (dupliciteSentIndex >= 0) {
+          treatDupliciteMessage(threadDataSent, message, 1, dupliciteSentIndex);
+        } else {
+          threadDataSent.messages.push(message);
+        }
+
         threadDataSent.createdAt = createdAt;
         sentTable.row("#" + threadId).invalidate();
       } else {
@@ -63,30 +98,29 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
     }
 
     if (message.folder == 2) {
-      const threadId = message.payload.headers["X-Thread-ID"];
-      const payload = message.payload;
-      const createdAt = message.createdAt;
-
-      const threadDataSent = sentTable
-        .rows()
-        .data()
-        .toArray()
-        .find((thread) => thread.threadId == threadId);
-
-      const threadDataInbox = inboxTable
-        .rows()
-        .data()
-        .toArray()
-        .find((thread) => thread.threadId == threadId);
-
       if (threadDataSent) {
-        threadDataSent.messages.push(message);
+        if (dupliciteSentIndex >= 0) {
+          treatDupliciteMessage(threadDataSent, message, 1, dupliciteSentIndex);
+        } else {
+          threadDataSent.messages.push(message);
+        }
+
         threadDataSent.createdAt = createdAt;
         sentTable.row("#" + threadId).invalidate();
       }
 
       if (threadDataInbox) {
-        threadDataInbox.messages.push(message);
+        if (dupliciteInboxIndex >= 0) {
+          treatDupliciteMessage(
+            threadDataInbox,
+            message,
+            2,
+            dupliciteInboxIndex
+          );
+        } else {
+          threadDataInbox.messages.push(message);
+        }
+
         threadDataInbox.createdAt = createdAt;
         inboxTable.row("#" + threadId).invalidate();
       } else {
