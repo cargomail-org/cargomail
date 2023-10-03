@@ -220,6 +220,10 @@ table.detail-inbox-table.dataTable thead th {
   overflow: auto;
 }
 
+.detail.message.html {
+  display: inline-block;
+}
+
 .detail.message.html > p {
   line-height: inherit !important;
 }
