@@ -221,7 +221,8 @@ table.detail-inbox-table.dataTable thead th {
 }
 
 .detail.message.html {
-  display: inline-block;
+  /* display: inline-block; */
+  white-space: pre-wrap;
 }
 
 .detail.message.html > p {
