@@ -159,4 +159,10 @@ func (svc *service) routes(r *Router) {
 	r.Route("POST", "/api/v1/messages/trash", svc.api.Authenticate(svc.api.Messages.Trash()))
 	r.Route("POST", "/api/v1/messages/untrash", svc.api.Authenticate(svc.api.Messages.Untrash()))
 	r.Route("DELETE", "/api/v1/messages/delete", svc.api.Authenticate(svc.api.Messages.Delete()))
+
+	// Threads API
+	r.Route("POST", "/api/v1/threads/list", svc.api.Authenticate(svc.api.Threads.List()))
+	r.Route("POST", "/api/v1/threads/trash", svc.api.Authenticate(svc.api.Threads.Trash()))
+	r.Route("POST", "/api/v1/threads/untrash", svc.api.Authenticate(svc.api.Threads.Untrash()))
+	r.Route("DELETE", "/api/v1/threads/delete", svc.api.Authenticate(svc.api.Threads.Delete()))
 }

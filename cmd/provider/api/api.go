@@ -24,6 +24,7 @@ type Api struct {
 	Contacts ContactsApi
 	Drafts   DraftsApi
 	Messages MessagesApi
+	Threads  ThreadsApi
 }
 
 func NewApi(params ApiParams) Api {
@@ -37,6 +38,7 @@ func NewApi(params ApiParams) Api {
 		Contacts: ContactsApi{contacts: params.Repository.Contacts},
 		Drafts:   DraftsApi{drafts: params.Repository.Drafts},
 		Messages: MessagesApi{messages: params.Repository.Messages},
+		Threads:  ThreadsApi{threads: params.Repository.Threads},
 	}
 }
 

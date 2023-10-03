@@ -74,6 +74,7 @@ type Repository struct {
 	Contacts ContactRepository
 	Drafts   DraftRepository
 	Messages MessageRepository
+	Threads  ThreadRepository
 }
 
 func NewRepository(db *sql.DB) Repository {
@@ -85,6 +86,7 @@ func NewRepository(db *sql.DB) Repository {
 		Contacts: ContactRepository{db: db},
 		Drafts:   DraftRepository{db: db},
 		Messages: MessageRepository{db: db},
+		Threads:  ThreadRepository{db: db},
 	}
 }
 
