@@ -150,10 +150,6 @@ export const createThreadTable = (view, row) => {
       return;
     }
 
-    if (e.target.classList.contains("message-row-date")) {
-      return;
-    }
-
     if (
       (e.target.nodeName == "path" && e.target.id == "starred-icon") ||
       e.target.classList.contains("bi-star-fill")
@@ -259,7 +255,7 @@ export const createThreadTable = (view, row) => {
       const tr = e.target.closest("tr");
       const row = threadsTable.row(tr);
       if (
-        (e.target.offsetWidth - e.offsetX < (row.child.isShown() ? 56 : 28)) &&
+        (e.target.offsetWidth - e.offsetX < (row.child.isShown() ? 64 : 32)) &&
         e.target.offsetHeight - e.offsetY > 14
       ) {
         return;
