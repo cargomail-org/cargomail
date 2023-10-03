@@ -18,9 +18,7 @@ import {
 import { createThreadRow } from "/public/js/thread_row.js";
 import { inboxTable } from "/public/js/inbox.js";
 
-import {
-  clearForm as composeClearForm,
-} from "/public/js/compose.js";
+import { clearForm as composeClearForm } from "/public/js/compose.js";
 import {
   parsePayload,
   composePayload,
@@ -36,11 +34,12 @@ import {
 
 let selectedIds = [];
 
-const username = document
-  .getElementById("profileForm")
-  .querySelector("#profileUsername").innerHTML + "@" + document
-  .getElementById("profileForm")
-  .querySelector("#profileDomainName").innerHTML;
+const username =
+  document.getElementById("profileForm").querySelector("#profileUsername")
+    .innerHTML +
+  "@" +
+  document.getElementById("profileForm").querySelector("#profileDomainName")
+    .innerHTML;
 
 const sentConfirmDialog = new bootstrap.Modal(
   document.querySelector("#sentConfirmDialog")
@@ -200,9 +199,7 @@ export const sentTable = new DataTable("#sentTable", {
         if (selectedData.length > 0) {
           sentConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
-            for (let j = 0; j < selectedData[i].messages.length; j++) {
-              selectedIds.push(selectedData[i].messages[j].id);
-            }
+            selectedIds.push(selectedData[i].threadId);
           }
         }
       },
@@ -257,7 +254,7 @@ sentTable.on("select.dt deselect.dt", () => {
   sentTable.buttons([".sent-delete"]).enable(selected ? true : false);
 });
 
-export const deleteSentMessages = (e) => {
+export const deleteSentThreads = (e) => {
   e?.preventDefault();
 
   sentConfirmDialog.hide();
@@ -266,7 +263,7 @@ export const deleteSentMessages = (e) => {
     const response = await api(
       sentFormAlert.id,
       200,
-      `${window.apiHost}/api/v1/messages/trash`,
+      `${window.apiHost}/api/v1/threads/trash`,
       {
         method: "POST",
         headers: {
@@ -284,6 +281,19 @@ export const deleteSentMessages = (e) => {
     if (selectedIds.includes(composeIdInput.value)) {
       composeClearForm();
     }
+
+    sentTable.rows(".selected").every(function (index) {
+      const row = sentTable.row(index);
+      const threadId = row.data().threadId;
+
+      try {
+        inboxTable.rows(`#${threadId}`).remove();
+      } catch {
+        // ignore error throwed only if the row doesn't exist caused by the threadId '<..@.>' format (used as a selector)
+      }
+    });
+
+    inboxTable.draw();
 
     sentTable.rows(".selected").remove().draw();
     sentTable.buttons([".sent-delete"]).enable(false);

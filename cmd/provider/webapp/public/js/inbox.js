@@ -18,9 +18,7 @@ import {
 import { createThreadRow } from "/public/js/thread_row.js";
 import { sentTable } from "/public/js/sent.js";
 
-import {
-  clearForm as composeClearForm,
-} from "/public/js/compose.js";
+import { clearForm as composeClearForm } from "/public/js/compose.js";
 import {
   parsePayload,
   composePayload,
@@ -36,11 +34,12 @@ import {
 
 let selectedIds = [];
 
-const username = document
-  .getElementById("profileForm")
-  .querySelector("#profileUsername").innerHTML + "@" + document
-  .getElementById("profileForm")
-  .querySelector("#profileDomainName").innerHTML;
+const username =
+  document.getElementById("profileForm").querySelector("#profileUsername")
+    .innerHTML +
+  "@" +
+  document.getElementById("profileForm").querySelector("#profileDomainName")
+    .innerHTML;
 
 const inboxConfirmDialog = new bootstrap.Modal(
   document.querySelector("#inboxConfirmDialog")
@@ -200,9 +199,7 @@ export const inboxTable = new DataTable("#inboxTable", {
         if (selectedData.length > 0) {
           inboxConfirmDialog.show();
           for (let i = 0; i < selectedData.length; i++) {
-            for (let j = 0; j < selectedData[i].messages.length; j++) {
-              selectedIds.push(selectedData[i].messages[j].id);
-            }
+            selectedIds.push(selectedData[i].threadId);
           }
         }
       },
@@ -257,7 +254,7 @@ inboxTable.on("select.dt deselect.dt", () => {
   inboxTable.buttons([".inbox-delete"]).enable(selected ? true : false);
 });
 
-export const deleteInboxMessages = (e) => {
+export const deleteInboxThreads = (e) => {
   e?.preventDefault();
 
   inboxConfirmDialog.hide();
@@ -266,7 +263,7 @@ export const deleteInboxMessages = (e) => {
     const response = await api(
       inboxFormAlert.id,
       200,
-      `${window.apiHost}/api/v1/messages/trash`,
+      `${window.apiHost}/api/v1/threads/trash`,
       {
         method: "POST",
         headers: {
@@ -284,6 +281,19 @@ export const deleteInboxMessages = (e) => {
     if (selectedIds.includes(composeIdInput.value)) {
       composeClearForm();
     }
+
+    inboxTable.rows(".selected").every(function (index) {
+      const row = inboxTable.row(index);
+      const threadId = row.data().threadId;
+
+      try {
+        sentTable.rows(`#${threadId}`).remove();
+      } catch {
+        // ignore error throwed only if the row doesn't exist caused by the threadId '<..@.>' format (used as a selector)
+      }
+    });
+
+    inboxTable.draw();
 
     inboxTable.rows(".selected").remove().draw();
     inboxTable.buttons([".inbox-delete"]).enable(false);

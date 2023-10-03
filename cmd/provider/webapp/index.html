@@ -326,12 +326,12 @@
   document.querySelector('#composePanelDiscard').addEventListener('click', discardDraft);
 
   // inbox
-  import { deleteInboxMessages } from "/public/js/inbox.js";
-  document.querySelector('#inboxConfirmButton').addEventListener('click', deleteInboxMessages);
+  import { deleteInboxThreads } from "/public/js/inbox.js";
+  document.querySelector('#inboxConfirmButton').addEventListener('click', deleteInboxThreads);
 
   // sent
-  import { deleteSentMessages } from "/public/js/sent.js";
-  document.querySelector('#sentConfirmButton').addEventListener('click', deleteSentMessages);
+  import { deleteSentThreads } from "/public/js/sent.js";
+  document.querySelector('#sentConfirmButton').addEventListener('click', deleteSentThreads);
 
   // drafts
   import { deleteDraftsMessages } from "/public/js/drafts.js";
