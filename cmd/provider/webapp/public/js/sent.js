@@ -278,7 +278,7 @@ export const deleteSentThreads = (e) => {
       return;
     }
 
-    if (selectedIds.includes(composeIdInput.value)) {
+    if (selectedIds.includes(composeXThreadIdInput.value)) {
       composeClearForm();
     }
 
