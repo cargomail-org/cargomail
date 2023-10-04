@@ -47,7 +47,7 @@ const sentConfirmDialog = new bootstrap.Modal(
 
 const sentFormAlert = document.getElementById("sentFormAlert");
 
-const composeIdInput = document.getElementById("composeIdInput");
+const composeXThreadIdInput = document.getElementById("composeXThreadIdInput");
 
 export const sentTable = new DataTable("#sentTable", {
   paging: true,
@@ -277,10 +277,11 @@ export const deleteSentThreads = (e) => {
     if (response === false) {
       return;
     }
-
-    if (selectedIds.includes(composeXThreadIdInput.value)) {
-      composeClearForm();
-    }
+    
+    // do not clear compose!
+    // if (selectedIds.includes(composeXThreadIdInput.value)) {
+    //   composeClearForm();
+    // }
 
     sentTable.rows(".selected").every(function (index) {
       const row = sentTable.row(index);

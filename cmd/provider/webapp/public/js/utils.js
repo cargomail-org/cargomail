@@ -536,6 +536,9 @@ export const parsePayload = (id, payload) => {
     console.log(`message id: ${id}`);
     console.log(e);
     return {
+      xOriginResourceMailboxUrl,
+      xDestinationResourceMailboxUrl,
+      messageId,
       xThreadId,
       inReplyTo,
       references,

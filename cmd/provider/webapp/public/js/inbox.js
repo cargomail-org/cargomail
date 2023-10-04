@@ -47,7 +47,7 @@ const inboxConfirmDialog = new bootstrap.Modal(
 
 const inboxFormAlert = document.getElementById("inboxFormAlert");
 
-const composeIdInput = document.getElementById("composeIdInput");
+const composeXThreadIdInput = document.getElementById("composeXThreadIdInput");
 
 export const inboxTable = new DataTable("#inboxTable", {
   paging: true,
@@ -278,9 +278,10 @@ export const deleteInboxThreads = (e) => {
       return;
     }
 
-    if (selectedIds.includes(composeXThreadIdInput.value)) {
-      composeClearForm();
-    }
+    // do not clear compose!
+    // if (selectedIds.includes(composeXThreadIdInput.value)) {
+    //   composeClearForm();
+    // }
 
     inboxTable.rows(".selected").every(function (index) {
       const row = inboxTable.row(index);

@@ -10,6 +10,10 @@ export const setHistoryId = (value) => {
   historyId = value;
 };
 
+const composeIdInput = document.getElementById("composeIdInput");
+const composeInReplyToInput = document.getElementById("composeInReplyToInput");
+const composeXThreadIdInput = document.getElementById("composeXThreadIdInput");
+
 export const threadsRefresh = (sentTable, inboxTable, data) => {
   if (data.lastHistoryId) {
     historyId = data.lastHistoryId;
@@ -173,7 +177,9 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         .draw();
     }
 
-    // if (message.id == composeIdInput.value) {
+    // do not clear compose!
+    // if (message.id == composeIdInput.value) ||
+    //    ((message.id == composeInReplyToInput.value) && (threadId == composeXThreadIdInput.value)) {
     //   composeClearForm();
     // }
   }
@@ -207,7 +213,9 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         .draw();
     }
 
-    // if (message.id == composeIdInput.value) {
+    // do not clear compose!
+    // if (message.id == composeIdInput.value) ||
+    //    ((message.id == composeInReplyToInput.value) && (threadId == composeXThreadIdInput.value)) {
     //   composeClearForm();
     // }
   }
