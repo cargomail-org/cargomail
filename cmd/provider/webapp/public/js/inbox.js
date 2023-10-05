@@ -240,6 +240,8 @@ export const deleteInboxThreads = (e) => {
       return;
     }
 
+    // delete affected drafts
+
     // do not clear compose!
     // if (selectedIds.includes(composeXThreadIdInput.value)) {
     //   composeClearForm();

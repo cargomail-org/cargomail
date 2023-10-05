@@ -157,6 +157,8 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         .draw();
     }
 
+    // delete affected drafts
+
     // do not clear compose!
     // if (message.id == composeIdInput.value) ||
     //    ((message.id == composeInReplyToInput.value) && (threadId == composeXThreadIdInput.value)) {
@@ -192,6 +194,8 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         .remove()
         .draw();
     }
+
+    // delete affected drafts
 
     // do not clear compose!
     // if (message.id == composeIdInput.value) ||
