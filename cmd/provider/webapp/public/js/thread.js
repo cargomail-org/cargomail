@@ -342,12 +342,16 @@ export const getThreads = (folder = 0) => {
       );
 
       if (dupliciteIndex >= 0) {
-        treatDupliciteMessage(thread, message, folder, dupliciteIndex);
+        const view = folder;
+        treatDupliciteMessage(thread, view, message, dupliciteIndex);
       } else {
         thread.messages.push(message);
       }
 
-      if (message.createdAt > thread.createdAt) {
+      if (
+        (folder == 0 || message.folder == folder) &&
+        message.createdAt > thread.createdAt
+      ) {
         thread.createdAt = message.createdAt;
       }
     } else {
@@ -361,10 +365,14 @@ export const getThreads = (folder = 0) => {
   }
   const threads = [...threadsById.values()];
 
-  return threads.filter((thread) => {
-    const messages = thread.messages.filter(
-      (message, index) => message.folder == folder
-    );
-    return messages.length > 0;
-  });
+  if (folder == 0) {
+    return threads;
+  } else {
+    return threads.filter((thread) => {
+      const messages = thread.messages.filter(
+        (message, index) => message.folder == folder
+      );
+      return messages.length > 0;
+    });
+  }
 };

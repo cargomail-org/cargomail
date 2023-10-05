@@ -20,19 +20,20 @@ export const b64DecodeUtf8 = (base64) => {
   return decoder.decode(bytes);
 };
 
+// TODO check if the sender and one of the recipients are the same
 export const treatDupliciteMessage = (
   thread,
+  view,
   message,
-  folder,
   dupliciteIndex
 ) => {
-  if (folder == 2 && message.folder == 2) {
+  if (view == 2 && message.folder == 2) {
     // ok! send, then receive a myself message
     thread.messages[dupliciteIndex] = message;
-  } else if (folder == 1 && message.folder == 1) {
+  } else if (view == 1 && message.folder == 1) {
     // weird! receive, then send a myself message
     thread.messages[dupliciteIndex] = message;
-  } else if (folder == 0) {
+  } else if (view == 0) {
     // ok! allow the duplicite
     thread.messages.push(message);
   } else {

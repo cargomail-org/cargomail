@@ -60,8 +60,8 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         if (dupliciteInboxIndex >= 0) {
           treatDupliciteMessage(
             threadDataInbox,
-            message,
             2,
+            message,
             dupliciteInboxIndex
           );
         } else {
@@ -74,7 +74,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
 
       if (threadDataSent) {
         if (dupliciteSentIndex >= 0) {
-          treatDupliciteMessage(threadDataSent, message, 1, dupliciteSentIndex);
+          treatDupliciteMessage(threadDataSent, 1, message, dupliciteSentIndex);
         } else {
           threadDataSent.messages.push(message);
         }
@@ -104,7 +104,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
     if (message.folder == 2) {
       if (threadDataSent) {
         if (dupliciteSentIndex >= 0) {
-          treatDupliciteMessage(threadDataSent, message, 1, dupliciteSentIndex);
+          treatDupliciteMessage(threadDataSent, 1, message, dupliciteSentIndex);
         } else {
           threadDataSent.messages.push(message);
         }
@@ -117,8 +117,8 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         if (dupliciteInboxIndex >= 0) {
           treatDupliciteMessage(
             threadDataInbox,
-            message,
             2,
+            message,
             dupliciteInboxIndex
           );
         } else {

@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS "Message"
     "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,  
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
-    "folder"        INTEGER(2) NOT NULL,  -- (0-draft), 1-sent, 2-inbox, 3-spam
+    "folder"        INTEGER(2) NOT NULL,  -- 0-draft (reserved, not used), 1-sent, 2-inbox, 3-spam (reserved, not used)
     "payload"       TEXT,                 -- json 'MessagePart' object
     "labelIds"      TEXT,                 -- json 'labelIds' array
     "sentAt"        TIMESTAMP,
