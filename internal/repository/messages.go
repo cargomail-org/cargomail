@@ -112,7 +112,7 @@ func (r *MessageRepository) List(user *User, folder int) (*MessageList, error) {
 		SELECT *
 			FROM "Message"
 			WHERE "userId" = $1 AND
-			CASE WHEN $2 == 0 THEN "folder" > $2 ELSE "folder" == $2 END AND
+			CASE WHEN $2 == -1 THEN "folder" > $2 ELSE "folder" == $2 END AND
 			"lastStmt" < 2
 			ORDER BY "createdAt";`
 

@@ -21,18 +21,44 @@ export const b64DecodeUtf8 = (base64) => {
 };
 
 // TODO check if the sender and one of the recipients are the same
-export const treatDupliciteMessage = (thread, view, message, dupliciteIndex) => {
-  if (view == 2 && message.folder == 2) {
-    // ok! send, then receive a myself message
-    thread.messages[dupliciteIndex] = message;
-  } else if (view == 1 && message.folder == 1) {
-    // weird! receive, then send a myself message
-    thread.messages[dupliciteIndex] = message;
-  } else if (view == 0) {
-    // ok! allow the duplicite
+export const treatDupliciteMessage = (thread, view, message, duplicateIndex) => {
+  if (thread.messages[duplicateIndex].folder == 1 && message.folder == 2) {
+    // ok! sent, then received a myself message
+    if (view == 1) {
+      // ignore the received
+    } else if (view == 0 || view == 2) {
+      // overwrite the sent with the received
+      thread.messages[duplicateIndex] = message;
+    } else if (view == -1) {
+      // allow the duplicate
+      thread.messages.push(message);
+    } else {
+      // ignore the duplicate
+      console.log("the found duplicate ignored");
+    }
+  } else if (thread.messages[duplicateIndex].folder == 2 && message.folder == 1) {
+    // weird, not chronological, but ok! received, then sent a myself message
+    if (view == 1) {
+      // overwrite the received with the sent
+      thread.messages[duplicateIndex] = message;
+    } else if (view == 0 || view == 2) {
+      // ignore the sent
+    } else if (view == -1) {
+      // allow the duplicate
+      thread.messages.push(message);
+    } else {
+      // ignore the duplicate
+      console.log("the found duplicate ignored");
+    }
+  } else if (thread.messages[duplicateIndex].folder == 0 || message.folder == 0) {
+    // ok! it's a draft, allow the duplicate
+    thread.messages.push(message);
+  } else if (view == -1) {
+    // ok! allow the duplicate
     thread.messages.push(message);
   } else {
-    // ok! otherwise ignore the duplicite
+    // otherwise ignore the duplicate
+    console.log("the found duplicate ignored");
   }
 };
 

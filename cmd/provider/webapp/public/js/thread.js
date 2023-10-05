@@ -32,7 +32,7 @@ const getMessages = async () => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ folder: 0 }),
+    body: JSON.stringify({ folder: -1 }),
   });
 
   if (response === false) {
@@ -295,7 +295,8 @@ export const destroyThreadTable = (view, parentTable, row) => {
 
 export const messageListResponse = await getMessages();
 
-export const getThreads = (folder = 0) => {
+// folder -1 means all, where 0=draft (reserved, not used), 1=sent, 2=inbox, 3=spam (reserved, not used)
+export const getThreads = (folder = -1) => {
   const historyId = messageListResponse.lastHistoryId;
 
   const threadsById = new Map();
@@ -319,7 +320,7 @@ export const getThreads = (folder = 0) => {
         thread.messages.push(message);
       }
 
-      if ((folder == 0 || message.folder == folder) && message.createdAt > thread.createdAt) {
+      if ((folder == -1 || message.folder == folder) && message.createdAt > thread.createdAt) {
         thread.createdAt = message.createdAt;
       }
     } else {
@@ -333,7 +334,7 @@ export const getThreads = (folder = 0) => {
   }
   const threads = [...threadsById.values()];
 
-  if (folder == 0) {
+  if (folder == -1) {
     return threads;
   } else {
     return threads.filter((thread) => {

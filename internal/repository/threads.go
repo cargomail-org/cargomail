@@ -131,7 +131,7 @@ func (r *ThreadRepository) List(user *User, folder int) (*ThreadList, error) {
 		'deviceId', deviceId)) AS "messages"
 		FROM "Message"
 		WHERE "userId" = $1 AND
-		CASE WHEN $2 == 0 THEN "folder" > $2 ELSE "folder" == $2 END AND
+		CASE WHEN $2 == -1 THEN "folder" > $2 ELSE "folder" == $2 END AND
 		"lastStmt" < 2
 		GROUP BY payload->>'$.headers.X-Thread-ID'
 		ORDER BY CASE WHEN "modifiedAt" IS NOT NULL THEN "modifiedAt" ELSE "createdAt" END DESC;
