@@ -258,7 +258,7 @@ export const deleteInboxThreads = (e) => {
       }
     });
 
-    inboxTable.draw();
+    sentTable.draw();
 
     inboxTable.rows(".selected").remove().draw();
     inboxTable.buttons([".inbox-delete"]).enable(false);

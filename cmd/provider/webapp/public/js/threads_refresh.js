@@ -52,18 +52,20 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
     if (message.folder == 1) {
       if (threadDataInbox) {
         if (dupliciteInboxIndex >= 0) {
-          treatDupliciteMessage(threadDataInbox, 2, message, dupliciteInboxIndex);
+          const view = 2;
+          treatDupliciteMessage(threadDataInbox, view, message, dupliciteInboxIndex);
         } else {
           threadDataInbox.messages.push(message);
         }
 
-        threadDataInbox.createdAt = createdAt;
+        // threadDataInbox.createdAt = createdAt;
         inboxTable.row("#" + threadId).invalidate();
       }
 
       if (threadDataSent) {
         if (dupliciteSentIndex >= 0) {
-          treatDupliciteMessage(threadDataSent, 1, message, dupliciteSentIndex);
+          const view = 1;
+          treatDupliciteMessage(threadDataSent, view, message, dupliciteSentIndex);
         } else {
           threadDataSent.messages.push(message);
         }
@@ -72,7 +74,9 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         sentTable.row("#" + threadId).invalidate();
       } else {
         if (threadDataInbox) {
-          sentTable.rows.add([JSON.parse(JSON.stringify(threadDataInbox))]).draw();
+          const newThreadData = JSON.parse(JSON.stringify(threadDataInbox));
+          newThreadData.createdAt = createdAt;
+          sentTable.rows.add([newThreadData]).draw();
         } else {
           const newThreadData = {
             threadId,
@@ -91,18 +95,20 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
     if (message.folder == 2) {
       if (threadDataSent) {
         if (dupliciteSentIndex >= 0) {
-          treatDupliciteMessage(threadDataSent, 1, message, dupliciteSentIndex);
+          const view = 1;
+          treatDupliciteMessage(threadDataSent, view, message, dupliciteSentIndex);
         } else {
           threadDataSent.messages.push(message);
         }
 
-        threadDataSent.createdAt = createdAt;
+        // threadDataSent.createdAt = createdAt;
         sentTable.row("#" + threadId).invalidate();
       }
 
       if (threadDataInbox) {
         if (dupliciteInboxIndex >= 0) {
-          treatDupliciteMessage(threadDataInbox, 2, message, dupliciteInboxIndex);
+          const view = 2;
+          treatDupliciteMessage(threadDataInbox, view, message, dupliciteInboxIndex);
         } else {
           threadDataInbox.messages.push(message);
         }
@@ -111,7 +117,9 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         inboxTable.row("#" + threadId).invalidate();
       } else {
         if (threadDataSent) {
-          inboxTable.rows.add([JSON.parse(JSON.stringify(threadDataSent))]).draw();
+          const newThreadData = JSON.parse(JSON.stringify(threadDataSent));
+          newThreadData.createdAt = createdAt;
+          inboxTable.rows.add([newThreadData]).draw();
         } else {
           const newThreadData = {
             threadId,

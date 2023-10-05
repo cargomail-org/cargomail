@@ -23,9 +23,8 @@ This project is constantly evolving. You can download the latest revision (draft
     "Cc": "Carol <carol@cargomail.org>, Daniel <dan@cargomail.org>",
     "Date": "Tue Sep 19 20:52:05 CEST 2023",
     "Message-ID": "<b07d0cdf-c6f4-4f67-b24c-cc847a4c2df4@cargomail.org>",
-    "X-Thread-ID": "<68fb9177-6853-466a-8f7d-c96fbb885f81@cargomail.org>"
-    "Content-Type": "multipart/mixed",
-  },
+    "X-Thread-ID": "<68fb9177-6853-466a-8f7d-c96fbb885f81@cargomail.org>",
+    "Content-Type": "multipart/mixed"},
   "parts": [
     {
       "headers": {
