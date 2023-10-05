@@ -27,18 +27,13 @@ export const openDatabase = (dbname) => {
 };
 
 export const getLastDraftId = () => {
-  userDatabase
-    .transaction("compose")
-    .objectStore("compose")
-    .get("lastDraftId").onsuccess = (event) => {
+  userDatabase.transaction("compose").objectStore("compose").get("lastDraftId").onsuccess = (event) => {
     // console.log(`lastDraftId is ${event.target.result?.id}`);
   };
 };
 
 export const setLastDraftId = (id) => {
-  const objectStore = userDatabase
-    .transaction(["compose"], "readwrite")
-    .objectStore("compose");
+  const objectStore = userDatabase.transaction(["compose"], "readwrite").objectStore("compose");
 
   const request = objectStore.get("lastDraftId");
 

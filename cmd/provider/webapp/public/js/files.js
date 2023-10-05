@@ -17,9 +17,7 @@ let historyId = 0;
 
 let selectedIds = [];
 
-const filesConfirmDialog = new bootstrap.Modal(
-  document.querySelector("#filesConfirmDialog")
-);
+const filesConfirmDialog = new bootstrap.Modal(document.querySelector("#filesConfirmDialog"));
 
 const uploadForm = document.getElementById("uploadForm");
 
@@ -45,13 +43,9 @@ const uploadFile = (url, file, onProgress) =>
       lastLoaded = e.loaded;
     });
 
-    xhr.addEventListener("load", () =>
-      resolve({ status: xhr.status, body: xhr.response })
-    );
+    xhr.addEventListener("load", () => resolve({ status: xhr.status, body: xhr.response }));
 
-    xhr.addEventListener("error", () =>
-      reject(new Error("File upload failed"))
-    );
+    xhr.addEventListener("error", () => reject(new Error("File upload failed")));
 
     // xhr.addEventListener("abort", () =>
     //   reject(new Error("File upload aborted"))
@@ -202,18 +196,13 @@ const filesTable = new DataTable("#filesTable", {
   },
   ajax: function (data, callback, settings) {
     (async () => {
-      const response = await api(
-        uploadForm.id,
-        200,
-        `${window.apiHost}/api/v1/files/list`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ folder: 0 }),
-        }
-      );
+      const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/files/list`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ folder: 0 }),
+      });
 
       if (response === false) {
         return;
@@ -285,26 +274,20 @@ const filesTable = new DataTable("#filesTable", {
     [5, 10, 15, 25],
     [5, 10, 15, 25],
   ],
-  pageLength:
-    $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
+  pageLength: $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
       text: "Refresh",
       action: function () {
         (async () => {
-          const response = await api(
-            uploadForm.id,
-            200,
-            `${window.apiHost}/api/v1/files/sync`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ historyId: historyId }),
-            }
-          );
+          const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/files/sync`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ historyId: historyId }),
+          });
 
           if (response === false) {
             return;
@@ -365,8 +348,7 @@ export const filesTableRefresh = (data) => {
   for (const file of data.inserted) {
     if (file.folder == 0) {
       // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-      const notFound =
-        filesTable.column(0).data().toArray().indexOf(file.id) === -1; // !!! must be
+      const notFound = filesTable.column(0).data().toArray().indexOf(file.id) === -1; // !!! must be
       if (notFound) {
         filesTable.row.add(file);
       }
@@ -394,19 +376,14 @@ export const deleteFiles = (e) => {
   filesConfirmDialog.hide();
 
   (async () => {
-    const response = await api(
-      uploadForm.id,
-      200,
-      `${window.apiHost}/api/v1/files/trash`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedIds }),
-      }
-    );
+    const response = await api(uploadForm.id, 200, `${window.apiHost}/api/v1/files/trash`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ids: selectedIds }),
+    });
 
     if (response === false) {
       return;
@@ -439,7 +416,7 @@ export const inputUploadChanged = (e) => {
 
 export const clearUpload = (e) => {
   e?.preventDefault();
-  
+
   document.getElementById("uploadButton").classList.add("disabled");
   uploadForm.reset();
   document.getElementById("clearButton").classList.add("disabled");

@@ -1,15 +1,5 @@
-import {
-  parseNameAndEmail,
-  parseInitialsAndName,
-  parseDisplayDate,
-  getRecipientsShort,
-} from "/public/js/utils.js";
-import {
-  threeDotIcon,
-  attachmentIcon,
-  starredIcon,
-  unstarredIcon,
-} from "/public/js/icons.js";
+import { parseNameAndEmail, parseInitialsAndName, parseDisplayDate, getRecipientsShort } from "/public/js/utils.js";
+import { threeDotIcon, attachmentIcon, starredIcon, unstarredIcon } from "/public/js/icons.js";
 
 import { getProfileUsername } from "/public/js/profile.js";
 
@@ -63,15 +53,11 @@ export const createMessageRow = (id, parsed) => {
           <div class="message-row-content">
               <div class="message-row-header">
                   <div class="message-row-person">
-                      <div class="message-row-fullname">${
-                        displayPerson.name
-                      }</div>
+                      <div class="message-row-fullname">${displayPerson.name}</div>
                       <div class="message-row-email">${person.email}</div>
                   </div>    
                   <div class="message-row-space-1"></div>
-                  <div class="message-row-attch">${
-                    parsed.attachments.length > 0 ? attachmentIcon : ""
-                  }</div>
+                  <div class="message-row-attch">${parsed.attachments.length > 0 ? attachmentIcon : ""}</div>
                   <div class="message-row-date">${displayDate}</div>
                   <div class="message-row-starred">${unstarredIcon}</div>
                   ${htmlDropdownMenu}

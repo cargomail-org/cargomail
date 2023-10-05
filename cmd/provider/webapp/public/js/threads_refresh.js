@@ -39,31 +39,20 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
 
     const dupliciteInboxIndex = threadDataInbox?.messages.indexOf(
       threadDataInbox.messages.find((item) => {
-        return (
-          item.payload.headers["Message-ID"] ==
-          message.payload.headers["Message-ID"]
-        );
+        return item.payload.headers["Message-ID"] == message.payload.headers["Message-ID"];
       })
     );
 
     const dupliciteSentIndex = threadDataSent?.messages.indexOf(
       threadDataSent.messages.find((item) => {
-        return (
-          item.payload.headers["Message-ID"] ==
-          message.payload.headers["Message-ID"]
-        );
+        return item.payload.headers["Message-ID"] == message.payload.headers["Message-ID"];
       })
     );
 
     if (message.folder == 1) {
       if (threadDataInbox) {
         if (dupliciteInboxIndex >= 0) {
-          treatDupliciteMessage(
-            threadDataInbox,
-            2,
-            message,
-            dupliciteInboxIndex
-          );
+          treatDupliciteMessage(threadDataInbox, 2, message, dupliciteInboxIndex);
         } else {
           threadDataInbox.messages.push(message);
         }
@@ -83,9 +72,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         sentTable.row("#" + threadId).invalidate();
       } else {
         if (threadDataInbox) {
-          sentTable.rows
-            .add([JSON.parse(JSON.stringify(threadDataInbox))])
-            .draw();
+          sentTable.rows.add([JSON.parse(JSON.stringify(threadDataInbox))]).draw();
         } else {
           const newThreadData = {
             threadId,
@@ -115,12 +102,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
 
       if (threadDataInbox) {
         if (dupliciteInboxIndex >= 0) {
-          treatDupliciteMessage(
-            threadDataInbox,
-            2,
-            message,
-            dupliciteInboxIndex
-          );
+          treatDupliciteMessage(threadDataInbox, 2, message, dupliciteInboxIndex);
         } else {
           threadDataInbox.messages.push(message);
         }
@@ -129,9 +111,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         inboxTable.row("#" + threadId).invalidate();
       } else {
         if (threadDataSent) {
-          inboxTable.rows
-            .add([JSON.parse(JSON.stringify(threadDataSent))])
-            .draw();
+          inboxTable.rows.add([JSON.parse(JSON.stringify(threadDataSent))]).draw();
         } else {
           const newThreadData = {
             threadId,

@@ -13,18 +13,13 @@ profileForm.onsubmit = async (e) => {
     lastName: form.querySelector('input[name="lastName"]').value,
   };
 
-  const response = await api(
-    form.id,
-    200,
-    `${window.apiHost}/api/v1/user/profile`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    }
-  );
+  const response = await api(form.id, 200, `${window.apiHost}/api/v1/user/profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
 
   if (response === false) {
     return;
@@ -34,18 +29,14 @@ profileForm.onsubmit = async (e) => {
 };
 
 export const setProfile = (value) => {
-  const loggedUsername =
-    value.firstName.length > 0 ? value.firstName : value.username;
+  const loggedUsername = value.firstName.length > 0 ? value.firstName : value.username;
 
   if (loggedUsername) {
-    document.getElementById("loggedUsernameLetter").innerHTML = loggedUsername
-      .charAt(0)
-      .toUpperCase();
+    document.getElementById("loggedUsernameLetter").innerHTML = loggedUsername.charAt(0).toUpperCase();
     document.getElementById("loggedUsername").innerHTML = loggedUsername;
   }
 
-  const profileDomainName =
-    document.getElementById("profileDomainName").innerHTML;
+  const profileDomainName = document.getElementById("profileDomainName").innerHTML;
 
   const username = `${value.username}@${profileDomainName}`;
 
@@ -56,8 +47,7 @@ export const setProfile = (value) => {
 
   const composeFromInput = document.getElementById("composeFromInput");
 
-  composeFromInput.value =
-    `${getProfileFullName()} <${getProfileUsername()}>`.trim();
+  composeFromInput.value = `${getProfileFullName()} <${getProfileUsername()}>`.trim();
 
   const profileForm = document.getElementById("profileForm");
 

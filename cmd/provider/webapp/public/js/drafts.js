@@ -10,18 +10,10 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-import {
-  parsePayload,
-  composePayload,
-  createSubjectSnippet,
-  createPlainContentSnippet,
-} from "/public/js/utils.js";
+import { parsePayload, composePayload, createSubjectSnippet, createPlainContentSnippet } from "/public/js/utils.js";
 
 import { composeContentPage } from "/public/js/menu.js";
-import {
-  clearForm as composeClearForm,
-  populateForm as composePopulateForm,
-} from "/public/js/compose.js";
+import { clearForm as composeClearForm, populateForm as composePopulateForm } from "/public/js/compose.js";
 
 import { sentTable } from "/public/js/sent.js";
 import { inboxTable } from "/public/js/inbox.js";
@@ -33,9 +25,7 @@ let historyId = 0;
 
 let selectedIds = [];
 
-const draftsConfirmDialog = new bootstrap.Modal(
-  document.querySelector("#draftsConfirmDialog")
-);
+const draftsConfirmDialog = new bootstrap.Modal(document.querySelector("#draftsConfirmDialog"));
 
 const draftsFormAlert = document.getElementById("draftsFormAlert");
 
@@ -84,17 +74,12 @@ const draftsTable = new DataTable("#draftsTable", {
   // },
   ajax: function (data, callback, settings) {
     (async () => {
-      const response = await api(
-        draftsFormAlert.id,
-        200,
-        `${window.apiHost}/api/v1/drafts/list`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await api(draftsFormAlert.id, 200, `${window.apiHost}/api/v1/drafts/list`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (response === false) {
         return;
@@ -153,26 +138,20 @@ const draftsTable = new DataTable("#draftsTable", {
     [5, 10, 15, 25],
     [5, 10, 15, 25],
   ],
-  pageLength:
-    $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
+  pageLength: $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
       text: "Refresh",
       action: function () {
         (async () => {
-          const response = await api(
-            draftsFormAlert.id,
-            200,
-            `${window.apiHost}/api/v1/drafts/sync`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ historyId: historyId }),
-            }
-          );
+          const response = await api(draftsFormAlert.id, 200, `${window.apiHost}/api/v1/drafts/sync`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ historyId: historyId }),
+          });
 
           if (response === false) {
             return;
@@ -240,8 +219,7 @@ export const draftsTableRefresh = (data) => {
 
   for (const draft of data.inserted) {
     // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-    const notFound =
-      draftsTable.column(0).data().toArray().indexOf(draft.id) === -1; // !!! must be
+    const notFound = draftsTable.column(0).data().toArray().indexOf(draft.id) === -1; // !!! must be
     if (notFound) {
       draftsTable.row.add(draft);
     }
@@ -249,8 +227,7 @@ export const draftsTableRefresh = (data) => {
 
   for (const draft of data.updated) {
     // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-    const notFound =
-      draftsTable.column(0).data().toArray().indexOf(draft.id) === -1; // !!! must be
+    const notFound = draftsTable.column(0).data().toArray().indexOf(draft.id) === -1; // !!! must be
     if (notFound) {
       draftsTable.row.add(draft);
     } else {
@@ -289,19 +266,14 @@ export const deleteDraftsMessages = (e) => {
   draftsConfirmDialog.hide();
 
   (async () => {
-    const response = await api(
-      draftsFormAlert.id,
-      200,
-      `${window.apiHost}/api/v1/drafts/trash`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedIds }),
-      }
-    );
+    const response = await api(draftsFormAlert.id, 200, `${window.apiHost}/api/v1/drafts/trash`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ids: selectedIds }),
+    });
 
     if (response === false) {
       return;
@@ -317,38 +289,26 @@ export const deleteDraftsMessages = (e) => {
 };
 
 export const deleteDraft = async (composeForm, id) => {
-  const response = await api(
-    composeForm.id,
-    200,
-    `${window.apiHost}/api/v1/drafts/trash`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ids: [id] }),
-    }
-  );
+  const response = await api(composeForm.id, 200, `${window.apiHost}/api/v1/drafts/trash`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ids: [id] }),
+  });
 
   if (response === false) {
     return;
   }
 
   draftsTable.rows(`#${id}`).remove().draw();
-  draftsTable
-    .buttons([".drafts-delete"])
-    .enable(draftsTable.rows().count() > 0);
+  draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);
 
   composeClearForm();
 };
 
-export const upsertDraftsPage = async (
-  composeForm,
-  id,
-  reply,
-  parsed
-) => {
+export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
   const alert = composeForm.querySelector('div[name="upsertDraftsPageAlert"]');
   if (alert) alert.remove();
 
@@ -372,18 +332,13 @@ export const upsertDraftsPage = async (
         draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
       }
 
-      const response = await api(
-        composeForm.id,
-        200,
-        `${window.apiHost}/api/v1/drafts`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(draft),
-        }
-      );
+      const response = await api(composeForm.id, 200, `${window.apiHost}/api/v1/drafts`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(draft),
+      });
 
       if (response === false) {
         return;
@@ -411,18 +366,13 @@ export const upsertDraftsPage = async (
       draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
     }
 
-    const response = await api(
-      composeForm.id,
-      201,
-      `${window.apiHost}/api/v1/drafts`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(draft),
-      }
-    );
+    const response = await api(composeForm.id, 201, `${window.apiHost}/api/v1/drafts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(draft),
+    });
 
     if (response === false) {
       return;
@@ -439,12 +389,7 @@ export const upsertDraftsPage = async (
   }
 };
 
-export const sendDraft = async (
-  composeForm,
-  id,
-  reply,
-  parsed
-) => {
+export const sendDraft = async (composeForm, id, reply, parsed) => {
   const alert = composeForm.querySelector('div[name="sendDraftsPageAlert"]');
   if (alert) alert.remove();
 
@@ -468,28 +413,21 @@ export const sendDraft = async (
         draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
       }
 
-      const response = await api(
-        composeForm.id,
-        200,
-        `${window.apiHost}/api/v1/drafts/send`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(draft),
-        }
-      );
+      const response = await api(composeForm.id, 200, `${window.apiHost}/api/v1/drafts/send`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(draft),
+      });
 
       if (response === false) {
         return;
       }
 
       draftsTable.rows(`#${id}`).remove().draw();
-      draftsTable
-        .buttons([".drafts-delete"])
-        .enable(draftsTable.rows().count() > 0);
+      draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);
 
       threadsRefresh(sentTable, inboxTable, { inserted: [response] });
 

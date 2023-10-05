@@ -28,18 +28,13 @@ if (registerForm) {
       return;
     }
 
-    const response = await api(
-      form.id,
-      201,
-      `${window.apiHost}/api/v1/auth/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+    const response = await api(form.id, 201, `${window.apiHost}/api/v1/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
 
     if (response === false) {
       return;
@@ -61,18 +56,13 @@ if (loginForm) {
       rememberMe: form.querySelector('input[name="rememberMe"]').checked,
     };
 
-    const response = await api(
-      form.id,
-      200,
-      `${window.apiHost}/api/v1/auth/authenticate`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+    const response = await api(form.id, 200, `${window.apiHost}/api/v1/auth/authenticate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
 
     if (response === false) {
       return;

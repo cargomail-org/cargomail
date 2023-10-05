@@ -24,24 +24,16 @@ import { showDetail, selectedRows } from "/public/js/message_detail.js";
 import { createMessageRow } from "/public/js/message_row.js";
 
 import { composeContentPage } from "/public/js/menu.js";
-import {
-  newDraft as composeNewDraft,
-  populateForm as composePopulateForm,
-} from "/public/js/compose.js";
+import { newDraft as composeNewDraft, populateForm as composePopulateForm } from "/public/js/compose.js";
 
 const getMessages = async () => {
-  const response = await api(
-    sentFormAlert.id,
-    200,
-    `${window.apiHost}/api/v1/messages/list`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ folder: 0 }),
-    }
-  );
+  const response = await api(sentFormAlert.id, 200, `${window.apiHost}/api/v1/messages/list`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ folder: 0 }),
+  });
 
   if (response === false) {
     return;
@@ -124,10 +116,7 @@ export const createThreadTable = (view, row) => {
   let headerTitle = "";
 
   if (rowData.messages.length > 0) {
-    const parsed = parsePayload(
-      rowData.messages[0].id,
-      rowData.messages[0].payload
-    );
+    const parsed = parsePayload(rowData.messages[0].id, rowData.messages[0].payload);
     headerTitle = createSubjectSnippet(parsed.subject);
   }
 
@@ -150,17 +139,11 @@ export const createThreadTable = (view, row) => {
       return;
     }
 
-    if (
-      (e.target.nodeName == "path" && e.target.id == "starred-icon") ||
-      e.target.classList.contains("bi-star-fill")
-    ) {
+    if ((e.target.nodeName == "path" && e.target.id == "starred-icon") || e.target.classList.contains("bi-star-fill")) {
       return;
     }
 
-    if (
-      (e.target.nodeName == "path" && e.target.id == "unstarred-icon") ||
-      e.target.classList.contains("bi-star")
-    ) {
+    if ((e.target.nodeName == "path" && e.target.id == "unstarred-icon") || e.target.classList.contains("bi-star")) {
       return;
     }
 
@@ -254,10 +237,7 @@ export const createThreadTable = (view, row) => {
     } else {
       const tr = e.target.closest("tr");
       const row = threadsTable.row(tr);
-      if (
-        e.target.offsetWidth - e.offsetX < (row.child.isShown() ? 64 : 32) &&
-        e.target.offsetHeight - e.offsetY > 14
-      ) {
+      if (e.target.offsetWidth - e.offsetX < (row.child.isShown() ? 64 : 32) && e.target.offsetHeight - e.offsetY > 14) {
         return;
       }
     }
@@ -266,12 +246,9 @@ export const createThreadTable = (view, row) => {
     let row = threadsTable.row(tr);
 
     if (row.child.isShown()) {
-      tr.getElementsByClassName("message-row-message")[0].style.display =
-        "block";
-      tr.getElementsByClassName("message-row-recipients")[0].style.display =
-        "none";
-      tr.getElementsByClassName("message-row-dropdown")[0].style.display =
-        "none";
+      tr.getElementsByClassName("message-row-message")[0].style.display = "block";
+      tr.getElementsByClassName("message-row-recipients")[0].style.display = "none";
+      tr.getElementsByClassName("message-row-dropdown")[0].style.display = "none";
 
       // This row is already open - close it
       row.child.hide();
@@ -286,12 +263,9 @@ export const createThreadTable = (view, row) => {
         selectedRows(view, dataTable);
       }
     } else {
-      tr.getElementsByClassName("message-row-message")[0].style.display =
-        "none";
-      tr.getElementsByClassName("message-row-recipients")[0].style.display =
-        "block";
-      tr.getElementsByClassName("message-row-dropdown")[0].style.display =
-        "block";
+      tr.getElementsByClassName("message-row-message")[0].style.display = "none";
+      tr.getElementsByClassName("message-row-recipients")[0].style.display = "block";
+      tr.getElementsByClassName("message-row-dropdown")[0].style.display = "block";
 
       // Open this row
       showDetail(view, row);
@@ -334,10 +308,7 @@ export const getThreads = (folder = 0) => {
     if (thread) {
       const dupliciteIndex = thread.messages.indexOf(
         thread.messages.find((item) => {
-          return (
-            item.payload.headers["Message-ID"] ==
-            message.payload.headers["Message-ID"]
-          );
+          return item.payload.headers["Message-ID"] == message.payload.headers["Message-ID"];
         })
       );
 
@@ -348,10 +319,7 @@ export const getThreads = (folder = 0) => {
         thread.messages.push(message);
       }
 
-      if (
-        (folder == 0 || message.folder == folder) &&
-        message.createdAt > thread.createdAt
-      ) {
+      if ((folder == 0 || message.folder == folder) && message.createdAt > thread.createdAt) {
         thread.createdAt = message.createdAt;
       }
     } else {
@@ -369,9 +337,7 @@ export const getThreads = (folder = 0) => {
     return threads;
   } else {
     return threads.filter((thread) => {
-      const messages = thread.messages.filter(
-        (message, index) => message.folder == folder
-      );
+      const messages = thread.messages.filter((message, index) => message.folder == folder);
       return messages.length > 0;
     });
   }

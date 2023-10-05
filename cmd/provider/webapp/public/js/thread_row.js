@@ -9,11 +9,7 @@ import {
   getParticipantsTo,
 } from "/public/js/utils.js";
 
-import {
-  attachmentIcon,
-  starredIcon,
-  unstarredIcon,
-} from "/public/js/icons.js";
+import { attachmentIcon, starredIcon, unstarredIcon } from "/public/js/icons.js";
 
 import { getProfileUsername } from "/public/js/profile.js";
 
@@ -56,20 +52,13 @@ export const createThreadRow = (view, type, username, messages, parsed) => {
 
   const displayDate = parseDisplayDbDate(date);
 
-  const lastPlainContent =
-    parsePayload(lastMessage.id, lastMessage.payload).plainContent || "";
+  const lastPlainContent = parsePayload(lastMessage.id, lastMessage.payload).plainContent || "";
 
-  const subject =
-    type === "display" ? createSubjectSnippet(parsed.subject) : parsed.subject;
-  let plainContent =
-    type === "display"
-      ? createPlainContentSnippet(lastPlainContent)
-      : lastPlainContent;
+  const subject = type === "display" ? createSubjectSnippet(parsed.subject) : parsed.subject;
+  let plainContent = type === "display" ? createPlainContentSnippet(lastPlainContent) : lastPlainContent;
 
   if (plainContent) {
-    plainContent = `<span style="color: gray;">${plainContent
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")}</span>`;
+    plainContent = `<span style="color: gray;">${plainContent.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>`;
   }
 
   let content;
@@ -106,13 +95,9 @@ export const createThreadRow = (view, type, username, messages, parsed) => {
               <div class="thread-row-person">
                   <div class="thread-row-fullname">${participants}</div>
               </div>
-              <div class="thread-row-count">${
-                messagesCount > 1 ? messagesCount : ""
-              }</div>
+              <div class="thread-row-count">${messagesCount > 1 ? messagesCount : ""}</div>
               <div class="thread-row-space-1"></div>
-              <div class="thread-row-attch">${
-                attachmentLinks.length > 0 ? attachmentIcon : ""
-              }</div>
+              <div class="thread-row-attch">${attachmentLinks.length > 0 ? attachmentIcon : ""}</div>
             <div class="thread-row-date">${displayDate}</div>
               <div class="thread-row-starred">${unstarredIcon}</div>
           </div>

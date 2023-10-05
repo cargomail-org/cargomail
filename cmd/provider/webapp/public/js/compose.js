@@ -13,16 +13,8 @@ import "datatables.net-responsive-bs5";
 // import * as database from "/public/js/database.js";
 import { formatBytes } from "/public/js/menu.js";
 import { getProfileUsername, getProfileFullName } from "/public/js/profile.js";
-import {
-  b64EncodeUtf8,
-  getCaretPosition,
-  setCaretPosition,
-} from "/public/js/utils.js";
-import {
-  upsertDraftsPage,
-  deleteDraft as draftsDeleteDraft,
-  sendDraft as draftsSendDraft,
-} from "/public/js/drafts.js";
+import { b64EncodeUtf8, getCaretPosition, setCaretPosition } from "/public/js/utils.js";
+import { upsertDraftsPage, deleteDraft as draftsDeleteDraft, sendDraft as draftsSendDraft } from "/public/js/drafts.js";
 
 const composeForm = document.getElementById("composeForm");
 const composeIdInput = document.getElementById("composeIdInput");
@@ -49,13 +41,9 @@ let ignoreOnChange = false;
 let messageHtmlLastValidContent = "";
 let messageHtmlLastValidCaretPosition;
 
-const composeRemoveConfirmDialog = new bootstrap.Modal(
-  document.querySelector("#composeRemoveConfirmDialog")
-);
+const composeRemoveConfirmDialog = new bootstrap.Modal(document.querySelector("#composeRemoveConfirmDialog"));
 
-const composeDiscardConfirmDialog = new bootstrap.Modal(
-  document.querySelector("#composeDiscardConfirmDialog")
-);
+const composeDiscardConfirmDialog = new bootstrap.Modal(document.querySelector("#composeDiscardConfirmDialog"));
 
 let draft = {};
 // let lastDraftId = database.getLastDraftId(); // localStorage.getItem("lastDraftId");
@@ -80,12 +68,8 @@ $("#toInput").selectize({
     item: function (item, escape) {
       return (
         "<div>" +
-        (item.name
-          ? '<span class="name">' + escape(item.name + " ") + "</span>"
-          : "") +
-        (item.email
-          ? '<span class="email">' + escape(item.email) + "</span>"
-          : "") +
+        (item.name ? '<span class="name">' + escape(item.name + " ") + "</span>" : "") +
+        (item.email ? '<span class="email">' + escape(item.email) + "</span>" : "") +
         "</div>"
       );
     },
@@ -97,9 +81,7 @@ $("#toInput").selectize({
         '<span class="label">' +
         escape(label) +
         "</span>" +
-        (caption
-          ? '<span class="caption">' + escape(caption) + "</span>"
-          : "") +
+        (caption ? '<span class="caption">' + escape(caption) + "</span>" : "") +
         "</div>"
       );
     },
@@ -166,12 +148,8 @@ $("#ccInput").selectize({
     item: function (item, escape) {
       return (
         "<div>" +
-        (item.name
-          ? '<span class="name">' + escape(item.name + " ") + "</span>"
-          : "") +
-        (item.email
-          ? '<span class="email">' + escape(item.email) + "</span>"
-          : "") +
+        (item.name ? '<span class="name">' + escape(item.name + " ") + "</span>" : "") +
+        (item.email ? '<span class="email">' + escape(item.email) + "</span>" : "") +
         "</div>"
       );
     },
@@ -183,9 +161,7 @@ $("#ccInput").selectize({
         '<span class="label">' +
         escape(label) +
         "</span>" +
-        (caption
-          ? '<span class="caption">' + escape(caption) + "</span>"
-          : "") +
+        (caption ? '<span class="caption">' + escape(caption) + "</span>" : "") +
         "</div>"
       );
     },
@@ -252,12 +228,8 @@ $("#bccInput").selectize({
     item: function (item, escape) {
       return (
         "<div>" +
-        (item.name
-          ? '<span class="name">' + escape(item.name + " ") + "</span>"
-          : "") +
-        (item.email
-          ? '<span class="email">' + escape(item.email) + "</span>"
-          : "") +
+        (item.name ? '<span class="name">' + escape(item.name + " ") + "</span>" : "") +
+        (item.email ? '<span class="email">' + escape(item.email) + "</span>" : "") +
         "</div>"
       );
     },
@@ -269,9 +241,7 @@ $("#bccInput").selectize({
         '<span class="label">' +
         escape(label) +
         "</span>" +
-        (caption
-          ? '<span class="caption">' + escape(caption) + "</span>"
-          : "") +
+        (caption ? '<span class="caption">' + escape(caption) + "</span>" : "") +
         "</div>"
       );
     },
@@ -425,8 +395,7 @@ const composeTable = new DataTable("#composeTable", {
     [5, 10, 15, 25],
     [5, 10, 15, 25],
   ],
-  pageLength:
-    $(document).height() >= 900 ? ($(document).height() >= 1100 ? 15 : 10) : 5,
+  pageLength: $(document).height() >= 900 ? ($(document).height() >= 1100 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
@@ -708,11 +677,7 @@ const formPopulated = async (cmd) => {
 
   let reply = {};
 
-  if (
-    composeXThreadIdInput.value &&
-    composeInReplyToInput.value &&
-    composeReferencesInput.value
-  ) {
+  if (composeXThreadIdInput.value && composeInReplyToInput.value && composeReferencesInput.value) {
     reply = {
       xThreadId: composeXThreadIdInput.value,
       inReplyTo: composeInReplyToInput.value,
@@ -721,19 +686,9 @@ const formPopulated = async (cmd) => {
   }
 
   if (cmd == "upsert") {
-    await upsertDraftsPage(
-      composeForm,
-      composeIdInput.value,
-      reply,
-      parsed
-    );
+    await upsertDraftsPage(composeForm, composeIdInput.value, reply, parsed);
   } else if (cmd == "send") {
-    await draftsSendDraft(
-      composeForm,
-      composeIdInput.value,
-      reply,
-      parsed
-    );
+    await draftsSendDraft(composeForm, composeIdInput.value, reply, parsed);
   } else {
     throw new Error(`Unknown command ${cmd} (should be 'upsert or 'send'`);
   }
@@ -744,10 +699,7 @@ export const composeAddItems = (save, items) => {
     let found = false;
 
     for (let j = 0; j < composeTable.rows().count(); j++) {
-      const id =
-        composeTable.row(j).data().digest +
-        "@" +
-        composeTable.row(j).data().fileName;
+      const id = composeTable.row(j).data().digest + "@" + composeTable.row(j).data().fileName;
       const fileName = items[i]?.name ? items[i]?.name : items[i]?.fileName;
       if (id == items[i].digest + "@" + fileName) {
         found = true;
@@ -799,8 +751,7 @@ export const ccToggle = (e) => {
   if (selected.length > 0) {
     document.getElementById("ccPanel").hidden = false;
   } else {
-    document.getElementById("ccPanel").hidden =
-      !document.getElementById("ccPanel").hidden;
+    document.getElementById("ccPanel").hidden = !document.getElementById("ccPanel").hidden;
   }
 };
 
@@ -813,14 +764,12 @@ export const bccToggle = (e) => {
   if (selected.length > 0) {
     document.getElementById("bccPanel").hidden = false;
   } else {
-    document.getElementById("bccPanel").hidden =
-      !document.getElementById("bccPanel").hidden;
+    document.getElementById("bccPanel").hidden = !document.getElementById("bccPanel").hidden;
   }
 };
 
 const getFullName = (firstName, lastName) => {
-  const fullName =
-    firstName?.length > 0 ? firstName + " " + lastName : lastName;
+  const fullName = firstName?.length > 0 ? firstName + " " + lastName : lastName;
 
   return fullName.trim();
 };
@@ -911,7 +860,7 @@ export const deleteDraft = (e) => {
 
 export const sendDraft = (e) => {
   e.preventDefault();
-  
+
   clearTimeout(bouncerTimeout);
   bouncerHasQueue = false;
 
@@ -924,9 +873,7 @@ const TEXT_MAX_SIZE = 50000;
 const HTML_MAX_SIZE = 100000;
 
 export const messageHtmlChanged = (e) => {
-  const alert = composeForm.querySelector(
-    'div[name="messageHtmlChangedAlert"]'
-  );
+  const alert = composeForm.querySelector('div[name="messageHtmlChangedAlert"]');
   if (alert) alert.remove();
 
   const encodedMessageHtml = b64EncodeUtf8(messageHtml.innerHTML);

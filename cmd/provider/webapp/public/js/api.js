@@ -10,11 +10,7 @@ const getUrlResourceName = (url) => {
 };
 
 const parseJSON = async (response) => {
-  if (
-    response.status === 204 ||
-    response.status === 205 ||
-    parseInt(response.headers.get("content-length")) === 0
-  ) {
+  if (response.status === 204 || response.status === 205 || parseInt(response.headers.get("content-length")) === 0) {
     return null;
   }
   return await response.json();
@@ -52,10 +48,7 @@ const api = async (parentId, status, url, options) => {
   // cross-domain !!!
   options["credentials"] = "include";
 
-  if (
-    url.endsWith("/sync") &&
-    ignoreDeviceUrlSet.has(getUrlResourceName(url))
-  ) {
+  if (url.endsWith("/sync") && ignoreDeviceUrlSet.has(getUrlResourceName(url))) {
     const body = JSON.parse(options.body);
     body.ignoreDevice = true;
     options.body = JSON.stringify(body);
@@ -89,15 +82,8 @@ const api = async (parentId, status, url, options) => {
     }
   } catch (error) {
     let errMessage = "unknown error";
-    if (
-      error != null &&
-      "response" in error &&
-      error.response != null &&
-      error.response.Err
-    ) {
-      errMessage =
-        error.response.Err.charAt(0).toUpperCase() +
-        error.response.Err.slice(1);
+    if (error != null && "response" in error && error.response != null && error.response.Err) {
+      errMessage = error.response.Err.charAt(0).toUpperCase() + error.response.Err.slice(1);
     } else if (error != null) {
       errMessage = error.message;
     }

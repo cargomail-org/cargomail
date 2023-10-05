@@ -35,7 +35,7 @@ window.apiHost = "";
     });
 
     let domainName = "";
-    let username = ""
+    let username = "";
 
     if (response && response.domainName && response.username) {
       domainName = response.domainName;
@@ -49,7 +49,7 @@ window.apiHost = "";
           "Content-Type": "application/json",
         },
       });
-  
+
       if (response && response.domainName) {
         domainName = response.domainName;
       }
@@ -61,13 +61,11 @@ window.apiHost = "";
 
     if (domainName.length > 0) {
       if (registerForm) {
-        registerForm.querySelector('input[name="domainName"]').placeholder =
-          domainName;
+        registerForm.querySelector('input[name="domainName"]').placeholder = domainName;
       }
 
       if (loginForm) {
-        loginForm.querySelector('input[name="domainName"]').placeholder =
-          domainName;
+        loginForm.querySelector('input[name="domainName"]').placeholder = domainName;
       }
 
       if (profileForm) {

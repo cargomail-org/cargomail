@@ -21,12 +21,7 @@ export const b64DecodeUtf8 = (base64) => {
 };
 
 // TODO check if the sender and one of the recipients are the same
-export const treatDupliciteMessage = (
-  thread,
-  view,
-  message,
-  dupliciteIndex
-) => {
+export const treatDupliciteMessage = (thread, view, message, dupliciteIndex) => {
   if (view == 2 && message.folder == 2) {
     // ok! send, then receive a myself message
     thread.messages[dupliciteIndex] = message;
@@ -54,8 +49,7 @@ export const getParticipantsFrom = (username, messages) => {
   let displayParticipants = "";
 
   for (const participant of Array.from(participants).reverse()) {
-    const displayPerson =
-      participant[0] == username ? "me" : participant[1] || participant[0];
+    const displayPerson = participant[0] == username ? "me" : participant[1] || participant[0];
 
     if (displayParticipants) {
       displayParticipants = `${displayPerson}, ${displayParticipants}`;
@@ -91,8 +85,7 @@ export const getParticipantsTo = (username, messages) => {
   let displayParticipants = "";
 
   for (const participant of Array.from(participants).reverse()) {
-    const displayPerson =
-      participant[0] == username ? "me" : participant[1] || participant[0];
+    const displayPerson = participant[0] == username ? "me" : participant[1] || participant[0];
 
     if (displayParticipants) {
       displayParticipants = `${displayPerson}, ${displayParticipants}`;
@@ -158,8 +151,7 @@ export const getRecipientsFull = (parsed) => {
   for (const to of parsed.to) {
     const delim = recipientTo.length > 0 ? ", " : "";
 
-    recipientTo +=
-      delim + (to.name ? `${to.name} <${to.email}>` : `<${to.email}>`);
+    recipientTo += delim + (to.name ? `${to.name} <${to.email}>` : `<${to.email}>`);
   }
 
   let recipientCc = "";
@@ -167,18 +159,13 @@ export const getRecipientsFull = (parsed) => {
   for (const cc of parsed.cc) {
     const delim = recipientCc.length > 0 ? ", " : "";
 
-    recipientCc +=
-      delim + (cc.name ? `${cc.name} <${cc.email}>` : `<${cc.email}>`);
+    recipientCc += delim + (cc.name ? `${cc.name} <${cc.email}>` : `<${cc.email}>`);
   }
 
-  let recipients = `To: ${recipientTo
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")}`;
+  let recipients = `To: ${recipientTo.replace(/</g, "&lt;").replace(/>/g, "&gt;")}`;
 
   if (recipientCc) {
-    recipients += `<br/>Cc: ${recipientCc
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")}`;
+    recipients += `<br/>Cc: ${recipientCc.replace(/</g, "&lt;").replace(/>/g, "&gt;")}`;
   }
 
   return recipients;
@@ -211,15 +198,9 @@ export const parseNameAndEmail = (value) => {
   let email;
 
   if (delimiterIndex === -1) {
-    email =
-      value[0] === "<"
-        ? value.slice(1, value.length - 1)
-        : value.slice(0, value.length);
+    email = value[0] === "<" ? value.slice(1, value.length - 1) : value.slice(0, value.length);
   } else {
-    name =
-      value[0] === '"'
-        ? value.slice(1, delimiterIndex - 1)
-        : value.slice(0, delimiterIndex);
+    name = value[0] === '"' ? value.slice(1, delimiterIndex - 1) : value.slice(0, delimiterIndex);
     email = value.slice(delimiterIndex + 2, value.length - 1);
   }
 
@@ -264,12 +245,8 @@ export const parseDisplayDate = (value) => {
     if (splitted.length > 3) {
       let displayTime = splitted[3].split(":");
 
-      displayDate = `${splitted[1]} ${splitted[2]}, ${displayTime[0]}:${
-        displayTime[1]
-      }${
-        splitted[splitted.length - 1] == currentYear
-          ? ""
-          : ", " + splitted[splitted.length - 1]
+      displayDate = `${splitted[1]} ${splitted[2]}, ${displayTime[0]}:${displayTime[1]}${
+        splitted[splitted.length - 1] == currentYear ? "" : ", " + splitted[splitted.length - 1]
       }`;
     }
   }
@@ -289,9 +266,9 @@ export const parseDisplayDbDate = (value) => {
     if (splitted.length > 3) {
       let displayTime = splitted[4].split(":");
 
-      displayDate = `${splitted[1]} ${splitted[2]}, ${displayTime[0]}:${
-        displayTime[1]
-      }${splitted[3] == currentYear ? "" : ", " + splitted[3]}`;
+      displayDate = `${splitted[1]} ${splitted[2]}, ${displayTime[0]}:${displayTime[1]}${
+        splitted[3] == currentYear ? "" : ", " + splitted[3]
+      }`;
     }
   }
 
@@ -308,9 +285,7 @@ const getPartIfNotContainer = (part) => {
     let isContainer;
 
     if (Array.isArray(contentType)) {
-      const items = contentType.filter((item) =>
-        item["Content-Type"]?.startsWith("multipart/")
-      );
+      const items = contentType.filter((item) => item["Content-Type"]?.startsWith("multipart/"));
       isContainer = items.length > 0;
     } else {
       isContainer = contentType && contentType.startsWith("multipart/");
@@ -374,19 +349,11 @@ const parseParts = (payload) => {
   let htmlContent;
 
   const plainPart = partsWithContainersExcluded.find((part) => {
-    return (
-      !Array.isArray(part["Content-Type"]) &&
-      part["Content-Type"] &&
-      part["Content-Type"].startsWith("text/plain")
-    );
+    return !Array.isArray(part["Content-Type"]) && part["Content-Type"] && part["Content-Type"].startsWith("text/plain");
   });
 
   const htmlPart = partsWithContainersExcluded.find((part) => {
-    return (
-      !Array.isArray(part["Content-Type"]) &&
-      part["Content-Type"] &&
-      part["Content-Type"].startsWith("text/html")
-    );
+    return !Array.isArray(part["Content-Type"]) && part["Content-Type"] && part["Content-Type"].startsWith("text/html");
   });
 
   const attachmentsDisposition = partsWithContainersExcluded.filter((part) =>
@@ -397,9 +364,7 @@ const parseParts = (payload) => {
   const attachments = [];
 
   for (const attachmentDisposition of attachmentsDisposition) {
-    let attachmentFileName = attachmentDisposition["Content-Disposition"]
-      .split("filename=")
-      .pop();
+    let attachmentFileName = attachmentDisposition["Content-Disposition"].split("filename=").pop();
     if (attachmentFileName) {
       attachmentFileName = attachmentFileName.replace(/^"(.+(?="$))"$/, "$1");
     }
@@ -408,17 +373,13 @@ const parseParts = (payload) => {
       (item) => !item.startsWith("message/external-body;")
     );
 
-    const externalContent = attachmentDisposition["Content-Type"].find((item) =>
-      item.startsWith("message/external-body")
+    const externalContent = attachmentDisposition["Content-Type"].find((item) => item.startsWith("message/external-body"));
+
+    const contentAddressedUri = attachmentDisposition["Content-Type"].find((item) =>
+      item.includes('access-type="x-content-addressed-uri"')
     );
 
-    const contentAddressedUri = attachmentDisposition["Content-Type"].find(
-      (item) => item.includes('access-type="x-content-addressed-uri"')
-    );
-
-    const sha256Algorithm = attachmentDisposition["Content-Type"].find((item) =>
-      item.includes('hash-algorithm="sha256"')
-    );
+    const sha256Algorithm = attachmentDisposition["Content-Type"].find((item) => item.includes('hash-algorithm="sha256"'));
 
     let contentId;
 
@@ -426,10 +387,7 @@ const parseParts = (payload) => {
       const value = attachmentDisposition["Content-ID"];
 
       if (value.length > 2) {
-        contentId =
-          value[0] === "<"
-            ? value.slice(1, value.length - 1)
-            : value.slice(0, value.length);
+        contentId = value[0] === "<" ? value.slice(1, value.length - 1) : value.slice(0, value.length);
       }
     }
 
@@ -447,9 +405,7 @@ const parseParts = (payload) => {
     }
 
     if (contentId && attachmentFileName && attachmentSize) {
-      const contentType = attachmentContentType
-        ? { contentType: attachmentContentType }
-        : undefined;
+      const contentType = attachmentContentType ? { contentType: attachmentContentType } : undefined;
       attachments.push({
         digest: contentId,
         ...contentType,
@@ -460,17 +416,13 @@ const parseParts = (payload) => {
   }
 
   if (plainPart?.["Content-Transfer-Encoding"] == "base64") {
-    plainContent = plainPart?.body?.data
-      ? b64DecodeUtf8(plainPart.body.data)
-      : undefined;
+    plainContent = plainPart?.body?.data ? b64DecodeUtf8(plainPart.body.data) : undefined;
   } else {
     plainContent = plainPart?.body?.data ? plainPart.body.data : undefined;
   }
 
   if (htmlPart?.["Content-Transfer-Encoding"] == "base64") {
-    htmlContent = htmlPart?.body?.data
-      ? b64DecodeUtf8(htmlPart.body.data)
-      : undefined;
+    htmlContent = htmlPart?.body?.data ? b64DecodeUtf8(htmlPart.body.data) : undefined;
   } else {
     htmlContent = htmlPart?.body?.data ? htmlPart.body.data : undefined;
   }
@@ -479,10 +431,8 @@ const parseParts = (payload) => {
 };
 
 export const parsePayload = (id, payload) => {
-  const xOriginResourceMailboxUrl =
-    payload?.headers?.["X-Origin-Resource-Mailbox-URL"];
-  const xDestinationResourceMailboxUrl =
-    payload?.headers?.["X-Destination-Resource-Mailbox-URL"];
+  const xOriginResourceMailboxUrl = payload?.headers?.["X-Origin-Resource-Mailbox-URL"];
+  const xDestinationResourceMailboxUrl = payload?.headers?.["X-Destination-Resource-Mailbox-URL"];
   const messageId = payload?.headers?.["Message-ID"];
   const xThreadId = payload?.headers?.["X-Thread-ID"];
   const inReplyTo = payload?.headers?.["In-Reply-To"];
@@ -505,11 +455,7 @@ export const parsePayload = (id, payload) => {
   const subject = payload?.headers?.["Subject"] || "";
 
   try {
-    const {
-      plainContent = "",
-      htmlContent = "",
-      attachments = [],
-    } = payload ? parseParts(payload) : {};
+    const { plainContent = "", htmlContent = "", attachments = [] } = payload ? parseParts(payload) : {};
 
     const obj = {
       xOriginResourceMailboxUrl,
@@ -530,9 +476,7 @@ export const parsePayload = (id, payload) => {
     };
 
     // remove blank attributes from an Object
-    return Object.fromEntries(
-      Object.entries(obj).filter(([_, v]) => v != null)
-    );
+    return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
   } catch (e) {
     console.log(`message id: ${id}`);
     console.log(e);
@@ -607,11 +551,7 @@ export const composePayload = (parsed) => {
     payload.headers["Subject"] = parsed.subject;
   }
 
-  if (
-    parsed.plainContent !== undefined ||
-    parsed.htmlContent !== undefined ||
-    parsed.attachments?.length > 0
-  ) {
+  if (parsed.plainContent !== undefined || parsed.htmlContent !== undefined || parsed.attachments?.length > 0) {
     let plainTextPart;
     let htmlTextPart;
     const attachmentParts = [];
@@ -672,10 +612,7 @@ export const composePayload = (parsed) => {
       };
     }
 
-    if (
-      (plainTextPart || htmlTextPart || alternativeTextPart) &&
-      mixedAttachmentsPart
-    ) {
+    if ((plainTextPart || htmlTextPart || alternativeTextPart) && mixedAttachmentsPart) {
       payload.headers["Content-Type"] = "multipart/mixed";
       payload.parts = [];
 

@@ -16,13 +16,9 @@ let historyId = 0;
 
 let selectedIds = [];
 
-const contactsFormDialog = new bootstrap.Modal(
-  document.querySelector("#contactsFormDialog")
-);
+const contactsFormDialog = new bootstrap.Modal(document.querySelector("#contactsFormDialog"));
 
-const contactsConfirmDialog = new bootstrap.Modal(
-  document.querySelector("#contactsConfirmDialog")
-);
+const contactsConfirmDialog = new bootstrap.Modal(document.querySelector("#contactsConfirmDialog"));
 
 const contactsFormAlert = document.getElementById("contactsFormAlert");
 const contactsForm = document.getElementById("contactsForm");
@@ -34,17 +30,12 @@ const contactsTable = new DataTable("#contactsTable", {
   },
   ajax: function (data, callback, settings) {
     (async () => {
-      const response = await api(
-        contactsForm.id,
-        200,
-        `${window.apiHost}/api/v1/contacts/list`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await api(contactsForm.id, 200, `${window.apiHost}/api/v1/contacts/list`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (response === false) {
         return;
@@ -96,26 +87,20 @@ const contactsTable = new DataTable("#contactsTable", {
     [5, 10, 15, 25],
     [5, 10, 15, 25],
   ],
-  pageLength:
-    $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
+  pageLength: $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
       text: "Refresh",
       action: function () {
         (async () => {
-          const response = await api(
-            contactsFormAlert.id,
-            200,
-            `${window.apiHost}/api/v1/contacts/sync`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ historyId: historyId }),
-            }
-          );
+          const response = await api(contactsFormAlert.id, 200, `${window.apiHost}/api/v1/contacts/sync`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ historyId: historyId }),
+          });
 
           if (response === false) {
             return;
@@ -182,9 +167,7 @@ $(window).resize(function () {
 contactsTable.on("select.dt deselect.dt", () => {
   const selectedRows = contactsTable.rows({ selected: true }).indexes().length;
   const selected = selectedRows > 0;
-  contactsTable
-    .buttons([".contacts-edit"])
-    .enable(selectedRows == 1 ? true : false);
+  contactsTable.buttons([".contacts-edit"]).enable(selectedRows == 1 ? true : false);
   contactsTable.buttons([".contacts-delete"]).enable(selected ? true : false);
 });
 
@@ -193,8 +176,7 @@ export const contactsTableRefresh = (data) => {
 
   for (const contact of data.inserted) {
     // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-    const notFound =
-      contactsTable.column(0).data().toArray().indexOf(contact.id) === -1; // !!! must be
+    const notFound = contactsTable.column(0).data().toArray().indexOf(contact.id) === -1; // !!! must be
     if (notFound) {
       contactsTable.row.add(contact);
     }
@@ -202,8 +184,7 @@ export const contactsTableRefresh = (data) => {
 
   for (const contact of data.updated) {
     // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-    const notFound =
-      contactsTable.column(0).data().toArray().indexOf(contact.id) === -1; // !!! must be
+    const notFound = contactsTable.column(0).data().toArray().indexOf(contact.id) === -1; // !!! must be
     if (notFound) {
       contactsTable.row.add(contact);
     } else {
@@ -236,13 +217,9 @@ export const showContactsFormDialog = (e) => {
 
   const modalTitle = formDialog.querySelector(".modal-title");
 
-  const contactIdInput = formDialog.querySelector(
-    ".modal-body #contactIdInput"
-  );
+  const contactIdInput = formDialog.querySelector(".modal-body #contactIdInput");
   const emailInput = formDialog.querySelector(".modal-body #emailInput");
-  const firstNameInput = formDialog.querySelector(
-    ".modal-body #firstNameInput"
-  );
+  const firstNameInput = formDialog.querySelector(".modal-body #firstNameInput");
   const lastNameInput = formDialog.querySelector(".modal-body #lastNameInput");
 
   let contact;
@@ -285,18 +262,13 @@ export const submitFormContact = async (e) => {
     // new
     delete formData.id;
 
-    const response = await api(
-      form.id,
-      201,
-      `${window.apiHost}/api/v1/contacts`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+    const response = await api(form.id, 201, `${window.apiHost}/api/v1/contacts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
 
     if (response === false) {
       return;
@@ -305,18 +277,13 @@ export const submitFormContact = async (e) => {
     contactsTable.row.add(response).draw();
   } else if (formData.id.length == 32) {
     // edit
-    const response = await api(
-      form.id,
-      200,
-      `${window.apiHost}/api/v1/contacts`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+    const response = await api(form.id, 200, `${window.apiHost}/api/v1/contacts`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
 
     if (response === false) {
       return;
@@ -336,19 +303,14 @@ export const deleteContacts = (e) => {
   contactsConfirmDialog.hide();
 
   (async () => {
-    const response = await api(
-      contactsFormAlert.id,
-      200,
-      `${window.apiHost}/api/v1/contacts/trash`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedIds }),
-      }
-    );
+    const response = await api(contactsFormAlert.id, 200, `${window.apiHost}/api/v1/contacts/trash`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ids: selectedIds }),
+    });
 
     if (response === false) {
       return;

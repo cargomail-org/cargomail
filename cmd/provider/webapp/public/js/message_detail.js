@@ -11,12 +11,7 @@ import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
 import { formatBytes } from "/public/js/menu.js";
-import {
-  parsePayload,
-  composePayload,
-  createSubjectSnippet,
-  createPlainContentSnippet,
-} from "/public/js/utils.js";
+import { parsePayload, composePayload, createSubjectSnippet, createPlainContentSnippet } from "/public/js/utils.js";
 
 import { composeAddItems } from "/public/js/compose.js";
 
@@ -33,14 +28,10 @@ export const showDetail = (view, row) => {
   const form = $(`
     <form class="detail-form" method="" action="#" enctype="multipart/form-data" autocomplete="off">
         <div class="form-floating mb-0">
-            <span contenteditable="false" class="form-control detail-message-html" spellcheck="false">${
-              parsed.htmlContent
-            }</span>
+            <span contenteditable="false" class="form-control detail-message-html" spellcheck="false">${parsed.htmlContent}</span>
             <label style="margin-left: -5px; margin-top: -5px;">Message</label>
         </div>
-        <table ${
-          parsed.attachments?.length > 0 ? "" : "hidden"
-        } class="table detail-${view}-table table-bordered" width="100%">
+        <table ${parsed.attachments?.length > 0 ? "" : "hidden"} class="table detail-${view}-table table-bordered" width="100%">
         <thead>
             <tr>
                 <th>Id</th>
@@ -111,12 +102,7 @@ export const showDetail = (view, row) => {
         [5, 10, 15, 25],
         [5, 10, 15, 25],
       ],
-      pageLength:
-        $(document).height() >= 900
-          ? $(document).height() >= 1100
-            ? 15
-            : 10
-          : 5,
+      pageLength: $(document).height() >= 900 ? ($(document).height() >= 1100 ? 15 : 10) : 5,
     });
 
   // detailTable.clear();
@@ -145,9 +131,7 @@ export const selectedRows = (view, dataTable) => {
   let selected = false;
 
   details.forEach((detailTable) => {
-    selected =
-      selected ||
-      $(detailTable).DataTable().rows({ selected: true }).indexes().length > 0;
+    selected = selected || $(detailTable).DataTable().rows({ selected: true }).indexes().length > 0;
   });
 
   if (dataTable.id == "sentTable") {
@@ -159,9 +143,7 @@ export const selectedRows = (view, dataTable) => {
   } else {
     if (dataTable.id == "inboxTable") {
       if (selected) {
-        document
-          .getElementById("copySelectedInbox")
-          .classList.remove("disabled");
+        document.getElementById("copySelectedInbox").classList.remove("disabled");
       } else {
         document.getElementById("copySelectedInbox").classList.add("disabled");
       }
@@ -185,8 +167,7 @@ export const copySelectedFiles = (e) => {
 
   if (details) {
     details.forEach((detailTable) => {
-      const selected =
-        $(detailTable).DataTable().rows({ selected: true }).data();
+      const selected = $(detailTable).DataTable().rows({ selected: true }).data();
 
       selectedAll = [...selectedAll, ...selected.toArray()];
     });

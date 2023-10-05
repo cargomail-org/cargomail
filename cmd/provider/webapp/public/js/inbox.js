@@ -10,40 +10,22 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 
-import {
-  getHistoryId,
-  setHistoryId,
-  threadsRefresh,
-} from "/public/js/threads_refresh.js";
+import { getHistoryId, setHistoryId, threadsRefresh } from "/public/js/threads_refresh.js";
 import { createThreadRow } from "/public/js/thread_row.js";
 import { sentTable } from "/public/js/sent.js";
 
 import { clearForm as composeClearForm } from "/public/js/compose.js";
-import {
-  parsePayload,
-  composePayload,
-  createSubjectSnippet,
-  createPlainContentSnippet,
-} from "/public/js/utils.js";
-import {
-  messageListResponse,
-  getThreads,
-  createThreadTable,
-  destroyThreadTable,
-} from "/public/js/thread.js";
+import { parsePayload, composePayload, createSubjectSnippet, createPlainContentSnippet } from "/public/js/utils.js";
+import { messageListResponse, getThreads, createThreadTable, destroyThreadTable } from "/public/js/thread.js";
 
 let selectedIds = [];
 
 const username =
-  document.getElementById("profileForm").querySelector("#profileUsername")
-    .innerHTML +
+  document.getElementById("profileForm").querySelector("#profileUsername").innerHTML +
   "@" +
-  document.getElementById("profileForm").querySelector("#profileDomainName")
-    .innerHTML;
+  document.getElementById("profileForm").querySelector("#profileDomainName").innerHTML;
 
-const inboxConfirmDialog = new bootstrap.Modal(
-  document.querySelector("#inboxConfirmDialog")
-);
+const inboxConfirmDialog = new bootstrap.Modal(document.querySelector("#inboxConfirmDialog"));
 
 const inboxFormAlert = document.getElementById("inboxFormAlert");
 
@@ -110,13 +92,7 @@ export const inboxTable = new DataTable("#inboxTable", {
       render: (data, type, full, meta) => {
         const parsed = parsePayload(full.id, full.payload);
 
-        const renderHtml = createThreadRow(
-          "inbox",
-          type,
-          username,
-          full.messages,
-          parsed
-        );
+        const renderHtml = createThreadRow("inbox", type, username, full.messages, parsed);
 
         return renderHtml;
       },
@@ -156,26 +132,20 @@ export const inboxTable = new DataTable("#inboxTable", {
     [5, 10, 15, 25],
     [5, 10, 15, 25],
   ],
-  pageLength:
-    $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
+  pageLength: $(document).height() >= 700 ? ($(document).height() >= 900 ? 15 : 10) : 5,
   buttons: [
     // "pageLength",
     {
       text: "Refresh",
       action: function () {
         (async () => {
-          const response = await api(
-            inboxFormAlert.id,
-            200,
-            `${window.apiHost}/api/v1/messages/sync`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ historyId: getHistoryId() }),
-            }
-          );
+          const response = await api(inboxFormAlert.id, 200, `${window.apiHost}/api/v1/messages/sync`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ historyId: getHistoryId() }),
+          });
 
           if (response === false) {
             return;
@@ -224,10 +194,7 @@ inboxTable.on("click", "td.payload", (e) => {
     return;
   }
 
-  if (
-    e.target.classList.contains("bi-star") ||
-    e.target.classList.contains("bi-star-fill")
-  ) {
+  if (e.target.classList.contains("bi-star") || e.target.classList.contains("bi-star-fill")) {
     return;
   }
 
@@ -260,19 +227,14 @@ export const deleteInboxThreads = (e) => {
   inboxConfirmDialog.hide();
 
   (async () => {
-    const response = await api(
-      inboxFormAlert.id,
-      200,
-      `${window.apiHost}/api/v1/threads/trash`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedIds }),
-      }
-    );
+    const response = await api(inboxFormAlert.id, 200, `${window.apiHost}/api/v1/threads/trash`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ids: selectedIds }),
+    });
 
     if (response === false) {
       return;
@@ -302,19 +264,14 @@ export const deleteInboxThreads = (e) => {
 };
 
 export const deleteMessage = async (composeForm, id) => {
-  const response = await api(
-    composeForm.id,
-    200,
-    `${window.apiHost}/api/v1/messages/trash`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ids: [id] }),
-    }
-  );
+  const response = await api(composeForm.id, 200, `${window.apiHost}/api/v1/messages/trash`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ids: [id] }),
+  });
 
   if (response === false) {
     return;
