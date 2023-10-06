@@ -136,8 +136,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id5">
-        <rect class="BoundingBox" stroke="none" fill="none" x="16432" y="1959" width="4331" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="16910" y="2512"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SMTP or HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="16683" y="3020"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(JSON message)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="14957" y="1959" width="7286" height="1279"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="16912" y="2512"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SMTP or HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="15208" y="3020"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(JSON placeholder message)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -166,14 +166,14 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id8">
-        <rect class="BoundingBox" stroke="none" fill="none" x="3051" y="6401" width="4332" height="1280"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="3529" y="6955"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SMTP or HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="3302" y="7463"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(JSON message)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="3076" y="6402" width="7286" height="1279"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="5031" y="6955"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SMTP or HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="3327" y="7463"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(JSON placeholder message)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id9">
-        <rect class="BoundingBox" stroke="none" fill="none" x="33851" y="5429" width="3767" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="34102" y="5982"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">IMAP or HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="34297" y="6490"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(JSON msg.)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="33853" y="5229" width="3768" height="1787"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="34104" y="5782"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">IMAP or HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="34111" y="6290"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(JSON placeh.</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="35059" y="6798"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">msg.)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -240,7 +240,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id19">
-        <rect class="BoundingBox" stroke="none" fill="none" x="5622" y="8888" width="4437" height="1280"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="5622" y="8889" width="4437" height="1279"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7213" y="9442"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="5873" y="9950"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(post resources)</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -284,8 +284,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id26">
-        <rect class="BoundingBox" stroke="none" fill="none" x="28254" y="8869" width="3378" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="29316" y="9422"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="28505" y="9930"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(JSON msg.)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="27316" y="8869" width="5259" height="1279"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="29318" y="9422"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="27567" y="9930"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(JSON placeh. msg.)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -352,8 +352,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id35">
-        <rect class="BoundingBox" stroke="none" fill="none" x="33843" y="9273" width="3378" height="1280"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="34905" y="9826"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="34094" y="10334"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(JSON msg.)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="33854" y="9073" width="3755" height="1787"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="35104" y="9626"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="34105" y="10134"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(JSON placeh.</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="35053" y="10642"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">msg.)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -476,8 +476,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id53">
-        <rect class="BoundingBox" stroke="none" fill="none" x="5682" y="11689" width="4322" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7216" y="12242"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="5933" y="12750"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(get JSON msg.)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="5901" y="11689" width="3887" height="1788"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7218" y="12242"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="6686" y="12750"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(get JSON</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="6153" y="13258"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> </tspan></tspan><tspan class="TextPosition" x="6301" y="13258"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">placeh. msg.)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
