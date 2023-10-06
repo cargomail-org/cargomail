@@ -12,13 +12,12 @@
                 "STORAGE_PATH": "./storage/cargomail.org",
                 "DATABASE_PATH": "./storage/cargomail.org/database/cargomail.db",
                 "RESOURCES_PATH": "./storage/cargomail.org/resources/",
-                "MTA_CERT_PATH": "./storage/cargomail.org/certificates/server.crt",
-                "MTA_KEY_PATH": "./storage/cargomail.org/certificates/server.key",
-                "RTA_CERT_PATH": "./storage/cargomail.org/certificates/server.crt",
-                "RTA_KEY_PATH": "./storage/cargomail.org/certificates/server.key",
-                "PROVIDER_BIND": "127.0.0.1:8181",
-                "MTA_BIND": "127.0.0.1:2125",
-                "RTA_BIND": "127.0.0.1:2135",
+                "MAILBOX_CERT_PATH": "./storage/cargomail.org/certificates/server.crt",
+                "MAILBOX_KEY_PATH": "./storage/cargomail.org/certificates/server.key",
+                "EMAIL_CERT_PATH": "./storage/cargomail.org/certificates/server.crt",
+                "EMAIL_KEY_PATH": "./storage/cargomail.org/certificates/server.key",
+                "MAILBOX_BIND": "127.0.0.1:8181",
+                "EMAIL_BIND": "127.0.0.1:2125",
                 "COOKIE_SAME_SITE": "none",
                 "STAGE": "dev"
             }
@@ -34,13 +33,12 @@
                 "STORAGE_PATH": "./storage/federizer.org",
                 "DATABASE_PATH": "./storage/federizer.org/database/cargomail.db",
                 "RESOURCES_PATH": "./storage/federizer.org/resources/",
-                "MTA_CERT_PATH": "./storage/federizer.org/certificates/server.crt",
-                "MTA_KEY_PATH": "./storage/federizer.org/certificates/server.key",
-                "RTA_CERT_PATH": "./storage/federizer.org/certificates/server.crt",
-                "RTA_KEY_PATH": "./storage/federizer.org/certificates/server.key",
-                "PROVIDER_BIND": "127.0.0.2:8181",
-                "MTA_BIND": "127.0.0.2:2125",
-                "RTA_BIND": "127.0.0.2:2135",
+                "MAILBOX_CERT_PATH": "./storage/federizer.org/certificates/server.crt",
+                "MAILBOX_KEY_PATH": "./storage/federizer.org/certificates/server.key",
+                "EMAIL_CERT_PATH": "./storage/federizer.org/certificates/server.crt",
+                "EMAIL_KEY_PATH": "./storage/federizer.org/certificates/server.key",
+                "MAILBOX_BIND": "127.0.0.2:8181",
+                "EMAIL_BIND": "127.0.0.2:2125",
                 "COOKIE_SAME_SITE": "none",
                 "STAGE": "dev"
             }
@@ -56,13 +54,12 @@
                 "STORAGE_PATH": "./storage/umabox.org",
                 "DATABASE_PATH": "./storage/umabox.org/database/cargomail.db",
                 "RESOURCES_PATH": "./storage/umabox.org/resources/",
-                "MTA_CERT_PATH": "./storage/umabox.org/certificates/server.crt",
-                "MTA_KEY_PATH": "./storage/umabox.org/certificates/server.key",
-                "RTA_CERT_PATH": "./storage/umabox.org/certificates/server.crt",
-                "RTA_KEY_PATH": "./storage/umabox.org/certificates/server.key",
-                "PROVIDER_BIND": "127.0.0.3:8181",
-                "MTA_BIND": "127.0.0.3:2125",
-                "RTA_BIND": "127.0.0.3:2135",
+                "MAILBOX_CERT_PATH": "./storage/umabox.org/certificates/server.crt",
+                "MAILBOX_KEY_PATH": "./storage/umabox.org/certificates/server.key",
+                "EMAIL_CERT_PATH": "./storage/umabox.org/certificates/server.crt",
+                "EMAIL_KEY_PATH": "./storage/umabox.org/certificates/server.key",
+                "MAILBOX_BIND": "127.0.0.3:8181",
+                "EMAIL_BIND": "127.0.0.3:2125",
                 "COOKIE_SAME_SITE": "none",
                 "STAGE": "dev"
             }
@@ -72,7 +69,7 @@
             "name": "webapp",
             "request": "launch",
             "url": "http://127.0.0.1:8181/",
-            "webRoot": "${workspaceFolder}/cmd/provider/webapp"
+            "webRoot": "${workspaceFolder}/cmd/mailbox/webapp"
         }
     ]
 }

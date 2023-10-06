@@ -1,18 +1,17 @@
 package api
 
 import (
-	"cargomail/cmd/provider/api/helper"
+	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/repository"
 	"encoding/json"
-	"errors"
 	"net/http"
 )
 
-type ContactsApi struct {
-	contacts repository.ContactRepository
+type ThreadsApi struct {
+	threads repository.ThreadRepository
 }
 
-func (api *ContactsApi) Create() http.Handler {
+func (api *ThreadsApi) List() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -20,112 +19,27 @@ func (api *ContactsApi) Create() http.Handler {
 			return
 		}
 
-		var contact *repository.Contact
+		var folder repository.Folder
 
-		err := helper.Decoder(r.Body).Decode(&contact)
+		err := helper.Decoder(r.Body).Decode(&folder)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		contact, err = api.contacts.Create(user, contact)
-		if err != nil {
-			switch {
-			case errors.Is(err, repository.ErrDuplicateContact):
-				helper.ReturnErr(w, err, http.StatusBadRequest)
-			default:
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
+			if err.Error() != "EOF" {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
 			}
-			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusCreated, contact)
-	})
-}
-
-func (api *ContactsApi) List() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
-		if !ok {
-			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
-			return
-		}
-
-		contactHistory, err := api.contacts.List(user)
+		threadHistory, err := api.threads.List(user, folder.Folder)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, contactHistory)
+		helper.SetJsonResponse(w, http.StatusOK, threadHistory)
 	})
 }
 
-func (api *ContactsApi) Sync() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
-		if !ok {
-			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
-			return
-		}
-
-		var history *repository.History
-
-		err := helper.Decoder(r.Body).Decode(&history)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		contactHistory, err := api.contacts.Sync(user, history)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		helper.SetJsonResponse(w, http.StatusOK, contactHistory)
-	})
-}
-
-func (api *ContactsApi) Update() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
-		if !ok {
-			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
-			return
-		}
-
-		var contact *repository.Contact
-
-		err := helper.Decoder(r.Body).Decode(&contact)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		if contact.Id == "" {
-			http.Error(w, repository.ErrMissingIdField.Error(), http.StatusBadRequest)
-			return
-		}
-
-		contact, err = api.contacts.Update(user, contact)
-		if err != nil {
-			switch {
-			case errors.Is(err, repository.ErrContactNotFound):
-				helper.ReturnErr(w, err, http.StatusNotFound)
-			case errors.Is(err, repository.ErrDuplicateContact):
-				helper.ReturnErr(w, err, http.StatusBadRequest)
-			default:
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-			}
-			return
-		}
-
-		helper.SetJsonResponse(w, http.StatusOK, contact)
-	})
-}
-
-func (api *ContactsApi) Trash() http.Handler {
+func (api *ThreadsApi) Trash() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -155,7 +69,7 @@ func (api *ContactsApi) Trash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.contacts.Trash(user, idsString)
+		err = api.threads.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -165,7 +79,7 @@ func (api *ContactsApi) Trash() http.Handler {
 	})
 }
 
-func (api *ContactsApi) Untrash() http.Handler {
+func (api *ThreadsApi) Untrash() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -195,7 +109,7 @@ func (api *ContactsApi) Untrash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.contacts.Untrash(user, idsString)
+		err = api.threads.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -205,7 +119,7 @@ func (api *ContactsApi) Untrash() http.Handler {
 	})
 }
 
-func (api *ContactsApi) Delete() http.Handler {
+func (api *ThreadsApi) Delete() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -235,7 +149,7 @@ func (api *ContactsApi) Delete() http.Handler {
 
 		idsString := string(body)
 
-		err = api.contacts.Delete(user, idsString)
+		err = api.threads.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

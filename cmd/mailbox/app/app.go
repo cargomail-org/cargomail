@@ -1,7 +1,7 @@
 package app
 
 import (
-	"cargomail/cmd/provider/api/helper"
+	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"context"

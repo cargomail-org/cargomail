@@ -1,8 +1,8 @@
-package provider
+package mailbox
 
 import (
-	"cargomail/cmd/provider/api"
-	"cargomail/cmd/provider/app"
+	"cargomail/cmd/mailbox/api"
+	"cargomail/cmd/mailbox/app"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"context"
@@ -58,7 +58,7 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 	var fs http.Handler
 
 	if config.DevStage() {
-		fs = http.FileServer(http.Dir("cmd/provider/webapp"))
+		fs = http.FileServer(http.Dir("cmd/mailbox/webapp"))
 	} else {
 		fs = http.FileServer(http.FS(files))
 	}
@@ -72,7 +72,7 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 	router.Route("GET", "/snippets/drafts.page.html", http.StripPrefix("/", fs))
 	router.Route("GET", "/snippets/profile.page.html", http.StripPrefix("/", fs))
 
-	http1Server := &http.Server{Handler: router, Addr: config.Configuration.ProviderBind}
+	http1Server := &http.Server{Handler: router, Addr: config.Configuration.MailboxBind}
 	// http2.ConfigureServer(http1Server, &http2.Server{})
 
 	errs.Go(func() error {
@@ -84,12 +84,12 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 		if err != nil {
 			return err
 		}
-		log.Print("provider service shutdown gracefully")
+		log.Print("mailbox service shutdown gracefully")
 		return nil
 	})
 
 	errs.Go(func() error {
-		log.Printf("provider service is listening on http://%s", http1Server.Addr)
+		log.Printf("mailbox service is listening on http://%s", http1Server.Addr)
 		return http1Server.ListenAndServe()
 	})
 }

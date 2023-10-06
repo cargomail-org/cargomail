@@ -1,4 +1,4 @@
-package provider
+package mailbox
 
 import (
 	"cargomail/internal/config"

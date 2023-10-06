@@ -1,7 +1,7 @@
 package api
 
 import (
-	"cargomail/cmd/provider/api/helper"
+	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/repository"
 	"errors"
 	"net/http"

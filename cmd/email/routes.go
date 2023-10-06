@@ -1,4 +1,4 @@
-package rta
+package email
 
 import (
 	"net/http"

@@ -8,7 +8,7 @@ import (
 func (app *App) HomePage() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if config.DevStage() {
-			http.ServeFile(w, r, "cmd/provider/webapp/index.html")
+			http.ServeFile(w, r, "cmd/mailbox/webapp/index.html")
 		} else {
 			p, err := app.files.ReadFile("webapp/index.html")
 			if err != nil {
@@ -23,7 +23,7 @@ func (app *App) HomePage() http.Handler {
 func (app *App) LoginPage() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if config.DevStage() {
-			http.ServeFile(w, r, "cmd/provider/webapp/login.html")
+			http.ServeFile(w, r, "cmd/mailbox/webapp/login.html")
 		} else {
 			p, err := app.files.ReadFile("webapp/login.html")
 			if err != nil {
@@ -38,7 +38,7 @@ func (app *App) LoginPage() http.Handler {
 func (app *App) RegisterPage() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if config.DevStage() {
-			http.ServeFile(w, r, "cmd/provider/webapp/register.html")
+			http.ServeFile(w, r, "cmd/mailbox/webapp/register.html")
 		} else {
 			p, err := app.files.ReadFile("webapp/register.html")
 			if err != nil {

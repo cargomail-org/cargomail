@@ -1,7 +1,7 @@
 package api
 
 import (
-	"cargomail/cmd/provider/api/helper"
+	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"crypto/sha256"
@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
@@ -18,11 +19,11 @@ import (
 	"github.com/google/uuid"
 )
 
-type BlobsApi struct {
-	blobs repository.BlobRepository
+type FilesApi struct {
+	files repository.FileRepository
 }
 
-func (api *BlobsApi) Upload() http.Handler {
+func (api *FilesApi) Upload() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -36,9 +37,9 @@ func (api *BlobsApi) Upload() http.Handler {
 			return
 		}
 
-		uploadedBlobs := []*repository.Blob{}
+		uploadedFiles := []*repository.File{}
 
-		files := r.MultipartForm.File["blobs"]
+		files := r.MultipartForm.File["files"]
 		for i := range files {
 			file, err := files[i].Open()
 			if err != nil {
@@ -47,10 +48,10 @@ func (api *BlobsApi) Upload() http.Handler {
 			}
 			defer file.Close()
 
-			blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
+			filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
 
-			if _, err := os.Stat(blobsPath); errors.Is(err, os.ErrNotExist) {
-				err := os.MkdirAll(blobsPath, os.ModePerm)
+			if _, err := os.Stat(filesPath); errors.Is(err, os.ErrNotExist) {
+				err := os.MkdirAll(filesPath, os.ModePerm)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusInternalServerError)
 					return
@@ -59,119 +60,58 @@ func (api *BlobsApi) Upload() http.Handler {
 
 			uuid := uuid.NewString()
 
-			uploadedBlob := &repository.Blob{}
+			f, err := os.OpenFile(filepath.Join(filesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			defer f.Close()
 
-			// update should be by id
-			if r.Method == "PUT" {
-				if len(files[i].Filename) != 32 {
-					helper.ReturnErr(w, repository.ErrBlobWrongName, http.StatusBadRequest)
-					return
-				}
-
-				blob, err := api.blobs.GetBlobById(user, files[i].Filename)
-				if err != nil {
-					helper.ReturnErr(w, err, http.StatusNotFound)
-					return
-				}
-
-				if len(blob.Id) > 0 {
-					f, err := os.OpenFile(filepath.Join(blobsPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
-					if err != nil {
-						fmt.Println(err)
-						return
-					}
-					defer f.Close()
-
-					hash := sha256.New()
-					written, err := io.Copy(f, io.TeeReader(file, hash))
-					if err != nil {
-						helper.ReturnErr(w, err, http.StatusInternalServerError)
-						return
-					}
-
-					hashSum := hash.Sum(nil)
-					digest := b64.RawURLEncoding.EncodeToString(hashSum)
-
-					contentType := files[i].Header.Get("content-type")
-
-					uploadedBlob = &repository.Blob{
-						Id:          blob.Id,
-						Digest:      digest,
-						Size:        written,
-						ContentType: contentType,
-					}
-
-					uploadedBlob, err = api.blobs.Update(user, uploadedBlob)
-					if err != nil {
-						switch {
-						case errors.Is(err, repository.ErrBlobNotFound):
-							helper.ReturnErr(w, err, http.StatusNotFound)
-						default:
-							helper.ReturnErr(w, err, http.StatusInternalServerError)
-						}
-						return
-					}
-
-					os.Rename(filepath.Join(blobsPath, uuid), filepath.Join(blobsPath, digest))
-					if err != nil {
-						helper.ReturnErr(w, err, http.StatusInternalServerError)
-						return
-					}
-				}
-			} else {
-				f, err := os.OpenFile(filepath.Join(blobsPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				defer f.Close()
-
-				hash := sha256.New()
-				written, err := io.Copy(f, io.TeeReader(file, hash))
-				if err != nil {
-					helper.ReturnErr(w, err, http.StatusInternalServerError)
-					return
-				}
-
-				hashSum := hash.Sum(nil)
-				digest := b64.RawURLEncoding.EncodeToString(hashSum)
-
-				contentType := files[i].Header.Get("content-type")
-
-				uploadedBlob = &repository.Blob{
-					Digest:      digest,
-					Name:        files[i].Filename,
-					Size:        written,
-					ContentType: contentType,
-				}
-
-				uploadedBlob, err = api.blobs.Create(user, uploadedBlob)
-				if err != nil {
-					helper.ReturnErr(w, err, http.StatusInternalServerError)
-					return
-				}
-
-				os.Rename(filepath.Join(blobsPath, uuid), filepath.Join(blobsPath, digest))
-				if err != nil {
-					helper.ReturnErr(w, err, http.StatusInternalServerError)
-					return
-				}
+			hash := sha256.New()
+			written, err := io.Copy(f, io.TeeReader(file, hash))
+			if err != nil {
+				helper.ReturnErr(w, err, http.StatusInternalServerError)
+				return
 			}
 
-			if uploadedBlob != nil && (repository.Blob{}) != *uploadedBlob {
-				uploadedBlobs = append(uploadedBlobs, uploadedBlob)
+			hashSum := hash.Sum(nil)
+			digest := b64.RawURLEncoding.EncodeToString(hashSum)
+
+			contentType := files[i].Header.Get("content-type")
+
+			uploadedFile := &repository.File{
+				Digest:      digest,
+				Name:        files[i].Filename,
+				Size:        written,
+				ContentType: contentType,
+			}
+
+			uploadedFile, err = api.files.Create(user, uploadedFile)
+			if err != nil {
+				helper.ReturnErr(w, err, http.StatusInternalServerError)
+				return
+			}
+
+			os.Rename(filepath.Join(filesPath, uuid), filepath.Join(filesPath, digest))
+			if err != nil {
+				helper.ReturnErr(w, err, http.StatusInternalServerError)
+				return
+			}
+
+			if uploadedFile != nil && (repository.File{}) != *uploadedFile {
+				uploadedFiles = append(uploadedFiles, uploadedFile)
 			}
 		}
 
-		if len(uploadedBlobs) > 0 {
-			helper.SetJsonResponse(w, http.StatusCreated, uploadedBlobs)
+		if len(uploadedFiles) > 0 {
+			helper.SetJsonResponse(w, http.StatusCreated, uploadedFiles)
 		} else {
-			helper.SetJsonResponse(w, http.StatusOK, uploadedBlobs)
+			helper.SetJsonResponse(w, http.StatusOK, uploadedFiles)
 		}
 	})
 }
 
-func (api *BlobsApi) Download() http.Handler {
+func (api *FilesApi) Download() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -181,34 +121,46 @@ func (api *BlobsApi) Download() http.Handler {
 
 		digest := path.Base(r.URL.Path)
 
-		blob, err := api.blobs.GetBlobByDigest(user, digest)
+		file, err := api.files.GetFileByDigest(user, digest)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		if len(blob.Digest) == 0 {
-			helper.ReturnErr(w, repository.ErrBlobNotFound, http.StatusNotFound)
+		if len(file.Name) == 0 {
+			helper.ReturnErr(w, repository.ErrFileNotFound, http.StatusNotFound)
 			return
 		}
 
 		if r.Method == "HEAD" {
 			w.WriteHeader(http.StatusOK)
 		} else if r.Method == "GET" {
-			blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
+			asciiFileName, err := helper.ToAscii(file.Name)
+			if err != nil {
+				helper.ReturnErr(w, err, http.StatusInternalServerError)
+				return
+			}
 
-			blobPath := filepath.Join(blobsPath, digest)
-			w.Header().Set("Content-Type", blob.ContentType)
-			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", digest, digest))
+			urlEncodedFileName, err := url.Parse(file.Name)
+			if err != nil {
+				helper.ReturnErr(w, err, http.StatusInternalServerError)
+				return
+			}
 
-			blobPath = filepath.Clean(blobPath)
+			filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
 
-			http.ServeFile(w, r, blobPath)
+			filePath := filepath.Join(filesPath, digest)
+			w.Header().Set("Content-Type", "application/octet-stream")
+			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", asciiFileName, urlEncodedFileName))
+
+			filePath = filepath.Clean(filePath)
+
+			http.ServeFile(w, r, filePath)
 		}
 	})
 }
 
-func (api *BlobsApi) List() http.Handler {
+func (api *FilesApi) List() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -226,17 +178,17 @@ func (api *BlobsApi) List() http.Handler {
 			}
 		}
 
-		blobList, err := api.blobs.List(user, folder.Folder)
+		fileList, err := api.files.List(user, folder.Folder)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, blobList)
+		helper.SetJsonResponse(w, http.StatusOK, fileList)
 	})
 }
 
-func (api *BlobsApi) Sync() http.Handler {
+func (api *FilesApi) Sync() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -252,17 +204,17 @@ func (api *BlobsApi) Sync() http.Handler {
 			return
 		}
 
-		blobSync, err := api.blobs.Sync(user, history)
+		fileSync, err := api.files.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, blobSync)
+		helper.SetJsonResponse(w, http.StatusOK, fileSync)
 	})
 }
 
-func (api *BlobsApi) Trash() http.Handler {
+func (api *FilesApi) Trash() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -292,47 +244,7 @@ func (api *BlobsApi) Trash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.blobs.Trash(user, idsString)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
-	})
-}
-
-func (api *BlobsApi) Untrash() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
-		if !ok {
-			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
-			return
-		}
-
-		var ids repository.Ids
-
-		err := helper.Decoder(r.Body).Decode(&ids)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		if ids.Ids == nil {
-			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
-			return
-		}
-
-		// back to body
-		body, err := json.Marshal(ids)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		idsString := string(body)
-
-		err = api.blobs.Untrash(user, idsString)
+		err = api.files.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -342,7 +254,7 @@ func (api *BlobsApi) Untrash() http.Handler {
 	})
 }
 
-func (api *BlobsApi) Delete() http.Handler {
+func (api *FilesApi) Untrash() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -372,7 +284,47 @@ func (api *BlobsApi) Delete() http.Handler {
 
 		idsString := string(body)
 
-		_, err = api.blobs.Delete(user, idsString)
+		err = api.files.Untrash(user, idsString)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
+	})
+}
+
+func (api *FilesApi) Delete() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
+		var ids repository.Ids
+
+		err := helper.Decoder(r.Body).Decode(&ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if ids.Ids == nil {
+			http.Error(w, repository.ErrMissingIdsField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		// back to body
+		body, err := json.Marshal(ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		idsString := string(body)
+
+		_, err = api.files.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -380,10 +332,10 @@ func (api *BlobsApi) Delete() http.Handler {
 
 		//TODO remove if no reference
 
-		// blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
+		// filesPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.FilesFolder)
 
-		// for _, blob := range *blobs {
-		// 	_ = os.Remove(filepath.Join(blobsPath, blob.Digest))
+		// for _, file := range *files {
+		// 	_ = os.Remove(filepath.Join(filesPath, file.Digest))
 		// }
 
 		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
