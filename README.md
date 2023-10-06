@@ -8,9 +8,12 @@ This project is constantly evolving. You can download the latest revision (draft
 
 ## Architecture
 
-![Alt Cargomail architecture](whitepaper/alt_cargomail_architecture.png)
+![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
-## JSON email message
+![#b4c7dc](https://placehold.co/10x10/b4c7dc/b4c7dc.png) Email Provider (EP)
+![#f7d1d5](https://placehold.co/10x10/f7d1d5/f7d1d5.png) Mailbox Provider (MP)
+
+## JSON message
 
 ```yaml
 {
