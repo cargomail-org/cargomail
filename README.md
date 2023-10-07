@@ -13,8 +13,9 @@ This project is constantly evolving. You can download the latest revision (draft
 ![#b4c7dc](https://placehold.co/8x8/b4c7dc/b4c7dc.png) Email System
 ![#f7d1d5](https://placehold.co/8x8/f7d1d5/f7d1d5.png) Mailbox System
 
-## JSON message
+## JSON representation of email
 
+Here is a JSON email message with external bodies accessible via content-addressed URIs.
 ```yaml
 {
   "headers": {
@@ -36,20 +37,22 @@ This project is constantly evolving. You can download the latest revision (draft
       "parts": [
         {
           "headers": {
-            "Content-Transfer-Encoding": "base64",
-            "Content-Type": "text/plain; charset=UTF-8"
-          },
-          "body": {
-            "data": "SGkgYWxsLArCoApNZWV0aW5nIGF0IDRwbS4KClJlZ2FyZHMKCi1BbGljZQ=="
+            "Content-Disposition": "inline",
+            "Content-ID": "<aSQnmlBT6RndpDnwTSStJUVhlh9XL9_y2QXX42NhKuI>",
+            "Content-Type": [
+              "message/external-body; access-type=\"x-content-addressed-uri\"; hash-algorithm=\"sha256\"; size=\"42\"",
+              "text/plain; charset=UTF-8"
+            ]
           }
         },
         {
           "headers": {
-            "Content-Transfer-Encoding": "base64",
-            "Content-Type": "text/html; charset=UTF-8"
-          },
-          "body": {
-            "data": "PGRpdj5IaSBhbGwsPC9kaXY+PGRpdj4mbmJzcDs8L2Rpdj48ZGl2Pk1lZXRpbmcgYXQgPHN0cm9uZz40cG08L3N0cm9uZz4uPC9kaXY+PHA+UmVnYXJkczwvcD48ZGl2Pi1BbGljZTwvZGl2Pg=="
+            "Content-Disposition": "inline",
+            "Content-ID": "<Y_ION3g8WQuqGzhsDlVrhAgQ0D7AbXu9T-HSv3w--zY>",
+            "Content-Type": [
+              "message/external-body; access-type=\"x-content-addressed-uri\"; hash-algorithm=\"sha256\"; size=\"109\"",
+              "text/html; charset=UTF-8"
+            ]
           }
         }
       ]
