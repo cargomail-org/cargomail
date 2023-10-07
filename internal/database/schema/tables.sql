@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS "Session" (
 CREATE TABLE IF NOT EXISTS "Blob" (
     "id"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
-    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox, 3-spam
+    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox
     "digest"     	VARCHAR(32) NOT NULL,
     "name"          VARCHAR(255),
     "snippet"       VARCHAR(255),
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS "Blob" (
 CREATE TABLE IF NOT EXISTS "File" (
     "id"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
-    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox, 3-spam
+    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox
     "digest"     	VARCHAR(32) NOT NULL,
     "name"			TEXT NOT NULL,
     "path"			TEXT NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS "Message"
     "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,  
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
-    "folder"        INTEGER(2) NOT NULL,  -- 0-draft (reserved, not used), 1-sent, 2-inbox, 3-spam (reserved, not used)
+    "folder"        INTEGER(2) NOT NULL,  -- 0-draft (reserved, not used), 1-sent, 2-inbox
     "payload"       TEXT,                 -- json 'MessagePart' object
     "labelIds"      TEXT,                 -- json 'labelIds' array
     "sentAt"        TIMESTAMP,

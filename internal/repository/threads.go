@@ -191,8 +191,14 @@ func (r *ThreadRepository) Trash(user *User, ids string) error {
 	defer cancel()
 
 	if len(ids) > 0 {
+		tx, err := r.db.BeginTx(ctx, nil)
+		if err != nil {
+			return err
+		}
+		defer tx.Rollback()
+
 		query := `
-		UPDATE Message
+		UPDATE "Message"
 			SET "lastStmt" = 2,
 			"deviceId" = $1
 			WHERE "userId" = $2 AND
@@ -202,8 +208,26 @@ func (r *ThreadRepository) Trash(user *User, ids string) error {
 
 		args := []interface{}{prefixedDeviceId, user.Id, ids}
 
-		_, err := r.db.ExecContext(ctx, query, args...)
+		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
+			return err
+		}
+
+		query = `
+		UPDATE "Draft"
+			SET "lastStmt" = 2,
+			"deviceId" = $1
+			WHERE "userId" = $2 AND
+			payload->>'$.headers.X-Thread-ID' IN (SELECT value FROM json_each($3, '$.ids'));`
+
+		args = []interface{}{prefixedDeviceId, user.Id, ids}
+
+		_, err = tx.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
+		}
+
+		if err = tx.Commit(); err != nil {
 			return err
 		}
 	}
@@ -216,6 +240,12 @@ func (r *ThreadRepository) Untrash(user *User, ids string) error {
 	defer cancel()
 
 	if len(ids) > 0 {
+		tx, err := r.db.BeginTx(ctx, nil)
+		if err != nil {
+			return err
+		}
+		defer tx.Rollback()
+
 		query := `
 		UPDATE "Message"
 			SET "lastStmt" = 0,
@@ -227,8 +257,26 @@ func (r *ThreadRepository) Untrash(user *User, ids string) error {
 
 		args := []interface{}{prefixedDeviceId, user.Id, ids}
 
-		_, err := r.db.ExecContext(ctx, query, args...)
+		_, err = tx.ExecContext(ctx, query, args...)
 		if err != nil {
+			return err
+		}
+
+		query = `
+		UPDATE "Draft"
+			SET "lastStmt" = 0,
+			"deviceId" = $1
+			WHERE "userId" = $2 AND
+			payload->>'$.headers.X-Thread-ID' IN (SELECT value FROM json_each($3, '$.ids'));`
+
+		args = []interface{}{prefixedDeviceId, user.Id, ids}
+
+		_, err = tx.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
+		}
+
+		if err = tx.Commit(); err != nil {
 			return err
 		}
 	}
@@ -262,6 +310,32 @@ func (r ThreadRepository) Delete(user *User, ids string) error {
 
 		query = `
 		UPDATE "MessageDeleted"
+			SET "deviceId" = $1
+			WHERE "userId" = $2 AND
+			"id" IN (SELECT value FROM json_each($3, '$.ids'));`
+
+		args = []interface{}{user.DeviceId, user.Id, ids}
+
+		_, err = tx.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
+		}
+
+		query = `
+		DELETE
+			FROM "Draft"
+			WHERE "userId" = $1 AND
+			payload->>'$.headers.X-Thread-ID' IN (SELECT value FROM json_each($2, '$.ids'));`
+
+		args = []interface{}{user.Id, ids}
+
+		_, err = tx.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
+		}
+
+		query = `
+		UPDATE "DraftDeleted"
 			SET "deviceId" = $1
 			WHERE "userId" = $2 AND
 			"id" IN (SELECT value FROM json_each($3, '$.ids'));`

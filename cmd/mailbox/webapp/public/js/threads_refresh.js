@@ -1,4 +1,5 @@
 import { treatDupliciteMessage } from "/public/js/utils.js";
+import { draftsTable } from "/public/js/drafts.js";
 
 let historyId = 0;
 
@@ -165,13 +166,19 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         .draw();
     }
 
-    // delete affected drafts
+    if (threadId == composeXThreadIdInput.value) {
+      composeClearForm();
+    }
 
-    // do not clear compose!
-    // if (message.id == composeIdInput.value) ||
-    //    ((message.id == composeInReplyToInput.value) && (threadId == composeXThreadIdInput.value)) {
-    //   composeClearForm();
-    // }
+    // delete affected drafts
+    draftsTable.rows().every((index) => {
+      const row = draftsTable.row(index);
+      const data = row.data();
+
+      if (data.payload.headers["X-Thread-ID"] == threadId) {
+        draftsTable.rows(index).remove().draw();
+      }
+    });
   }
 
   for (const message of data.deleted || []) {
@@ -203,13 +210,19 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         .draw();
     }
 
-    // delete affected drafts
+    if (threadId == composeXThreadIdInput.value) {
+      composeClearForm();
+    }
 
-    // do not clear compose!
-    // if (message.id == composeIdInput.value) ||
-    //    ((message.id == composeInReplyToInput.value) && (threadId == composeXThreadIdInput.value)) {
-    //   composeClearForm();
-    // }
+    // delete affected drafts
+    draftsTable.rows().every((index) => {
+      const row = draftsTable.row(index);
+      const data = row.data();
+
+      if (data.payload.headers["X-Thread-ID"] == threadId) {
+        draftsTable.rows(index).remove().draw();
+      }
+    });
   }
 
   /*for (const message of data.updated || []) {

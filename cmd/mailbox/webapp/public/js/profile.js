@@ -1,4 +1,5 @@
-const profileForm = document.getElementById("profileForm");
+const profileForm = await waitForElement('#profileForm');
+// const profileForm = document.getElementById("profileForm");
 
 let profileUsername = "";
 let profileFullName = "";

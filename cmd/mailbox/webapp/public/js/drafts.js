@@ -31,7 +31,7 @@ const draftsFormAlert = document.getElementById("draftsFormAlert");
 
 const composeIdInput = document.getElementById("composeIdInput");
 
-const draftsTable = new DataTable("#draftsTable", {
+export const draftsTable = new DataTable("#draftsTable", {
   paging: true,
   responsive: {
     details: false,

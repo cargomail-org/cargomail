@@ -17,6 +17,7 @@ import { sentTable } from "/public/js/sent.js";
 import { clearForm as composeClearForm } from "/public/js/compose.js";
 import { parsePayload, composePayload, createSubjectSnippet, createPlainContentSnippet } from "/public/js/utils.js";
 import { messageListResponse, getThreads, createThreadTable, destroyThreadTable } from "/public/js/thread.js";
+import { draftsTable } from "/public/js/drafts.js";
 
 let selectedIds = [];
 
@@ -240,12 +241,20 @@ export const deleteInboxThreads = (e) => {
       return;
     }
 
-    // delete affected drafts
+    if (selectedIds.includes(composeXThreadIdInput.value)) {
+      composeClearForm();
+    }
 
-    // do not clear compose!
-    // if (selectedIds.includes(composeXThreadIdInput.value)) {
-    //   composeClearForm();
-    // }
+    // delete affected drafts
+    draftsTable.rows().every((index) => {
+      const row = draftsTable.row(index);
+      const data = row.data();
+      const threadId = data.payload.headers["X-Thread-ID"];
+
+      if (selectedIds.includes(threadId)) {
+        draftsTable.rows(index).remove().draw();
+      }
+    });
 
     inboxTable.rows(".selected").every(function (index) {
       const row = inboxTable.row(index);
