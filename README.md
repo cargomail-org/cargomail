@@ -2,9 +2,16 @@
 
 Please do not use the code from this repo, as it is unlikely to function properly.
 
+## Introduction
+
+Despite the importance of email infrastructure, the whole ecosystem still relies on more than 40-year-old architecture and protocol design.
+While conceptually sound as a communication means, the email system is structurally obsolete and functionally deficient.
+
+The revised architecture of Cargomail eliminates the hassle of using the existing email infrastructure. The main benefit of using this architecture is the ability to send and receive a large number of email attachments of any size.
+
 ## White Paper
 
-This project is constantly evolving. You can download the latest revision (draft) of the whitepaper here: [Cargomail.pdf](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf). The revised architecture eliminates the hassle of using the existing email infrastructure.
+This project is constantly evolving. You can download the latest revision (draft) of the whitepaper here: [Cargomail.pdf](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf).
 
 ## Architecture
 
@@ -12,6 +19,8 @@ This project is constantly evolving. You can download the latest revision (draft
 
 ![#b4c7dc](https://placehold.co/8x8/b4c7dc/b4c7dc.png) Email System
 ![#f7d1d5](https://placehold.co/8x8/f7d1d5/f7d1d5.png) Mailbox System
+
+This architecture separates the mailbox from the email address and uses a push-pull mechanism to enable data exchange between mailboxes.
 
 ## Placeholder email message
 
