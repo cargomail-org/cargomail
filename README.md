@@ -20,23 +20,23 @@ This project is constantly evolving. You can download the latest revision (draft
 ![#b4c7dc](https://placehold.co/8x8/b4c7dc/b4c7dc.png) Email System
 ![#f7d1d5](https://placehold.co/8x8/f7d1d5/f7d1d5.png) Mailbox System
 
-This architecture separates the mailbox from the email address and uses a push-pull mechanism to enable data exchange between mailboxes.
+This architecture separates the mailbox from the email address and uses a push-pull mechanism to enable data exchange between resource mailboxes.
 
-## Placeholder email message
+## Placeholder Message
 
-Here is a placeholder email message in JSON format with external bodies accessible via content-addressed URIs.
+Here is a placeholder message in JSON format with external bodies accessible via content-addressed URIs.
 ```yaml
 {
   "headers": {
-    "X-Origin-Resource-Mailbox-URL": "mailbox.cargomail.org",
-    "X-Destination-Resource-Mailbox-URL": "mailbox.cargomail.org",
-    "From": "Alice Sanders <alice@cargomail.org>",
+    "X-Origin-Resource-Mailbox-URL": "mailbox.foo.com",
+    "X-Destination-Resource-Mailbox-URL": "mailbox.bar.com",
+    "From": "Alice Sanders <alice@foo.com>",
     "Subject": "Meeting",
-    "To": "Bob Sanders <bob@cargomail.org>",
-    "Cc": "Carol <carol@cargomail.org>, Daniel <dan@cargomail.org>",
+    "To": "Bob Sanders <bob@bar.com>",
+    "Cc": "Carol <carol@bar.com>, Daniel <dan@bar.com>",
     "Date": "Tue Sep 19 20:52:05 CEST 2023",
-    "Message-ID": "<b07d0cdf-c6f4-4f67-b24c-cc847a4c2df4@cargomail.org>",
-    "X-Thread-ID": "<68fb9177-6853-466a-8f7d-c96fbb885f81@cargomail.org>",
+    "Message-ID": "<b07d0cdf-c6f4-4f67-b24c-cc847a4c2df4@foo.com>",
+    "X-Thread-ID": "<68fb9177-6853-466a-8f7d-c96fbb885f81@foo.com>",
     "Content-Type": "multipart/mixed"},
   "parts": [
     {
