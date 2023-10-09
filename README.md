@@ -4,10 +4,11 @@ Please do not use the code from this repo, as it is unlikely to function properl
 
 ## Introduction
 
-Despite the importance of email infrastructure, the whole ecosystem still relies on more than 40-year-old architecture and protocol design.
+Despite the importance of email infrastructure, the whole ecosystem still relies on more than 40-year-old push-based architecture and protocol design.
 While conceptually sound as a communication means, the email system is structurally obsolete and functionally deficient.
 
-The revised architecture of Cargomail eliminates the hassle of using the existing email infrastructure. The main benefit of using this architecture is the ability to send and receive a large number of email attachments of any size.
+Cargomail uses push-pull data transfer architecture.
+The main benefit of using this architecture is the ability to send and receive a large number of email attachments of any size.
 
 ## White Paper
 
