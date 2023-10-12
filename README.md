@@ -16,12 +16,12 @@ This project is constantly evolving. You can download the latest revision (draft
 
 ## Architecture
 
+The Cargomail architecture separates mailboxes from email addresses. It uses a push-pull mechanism that facilitates data exchange between mailboxes. This mechanism has the potential to deal better with end-to-end encryption and large attachments when compared to push-only systems.
+
 ![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
 ![#b4c7dc](https://placehold.co/8x8/b4c7dc/b4c7dc.png) Push System
 ![#f7d1d5](https://placehold.co/8x8/f7d1d5/f7d1d5.png) Pull System
-
-This architecture separates the mailbox from the email address and uses a push-pull mechanism to enable data exchange between resource mailboxes.
 
 #### *Key Points*
 
