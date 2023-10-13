@@ -18,9 +18,6 @@ The Cargomail architecture separates the mailbox from the email address. It uses
 
 ![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
-![#b4c7dc](https://placehold.co/8x8/b4c7dc/b4c7dc.png) Push layer — requests from a sender to recipients
-![#f7d1d5](https://placehold.co/8x8/f7d1d5/f7d1d5.png) Pull layer — requests from recipients to the sender
-
 #### _Key Points_
 
 • Each email consists of an envelope, a <i>placeholder message</i> created in the <i>resource mailbox</i>, and related external bodies stored in the same <i>resource mailbox</i>.
