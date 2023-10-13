@@ -6,7 +6,7 @@ Please do not use the code from this repo, as it is unlikely to function properl
 
 Despite the importance of email infrastructure, the whole ecosystem still relies on more than 40-year-old push-based architecture and protocol design. While conceptually sound as a communication means, the email system is structurally obsolete and functionally deficient.
 
-Cargomail uses an architecture with push and pull data transfer layers. The main benefit of using this architecture is the ability to send and receive a large number of email attachments of any size.
+Cargomail uses an architecture with push and pull request layers. The main benefit of using this architecture is the ability to send and receive a large number of email attachments of any size.
 
 ## White Paper
 
@@ -14,12 +14,12 @@ This project is constantly evolving. You can download the latest revision (draft
 
 ## Architecture
 
-The Cargomail architecture separates mailboxes from email addresses. It uses a push-then-pull mechanism through different routes to facilitate data exchange between mailboxes. This mechanism has the potential to deal better with <i>end-to-end encryption</i><sup>1</sup> and large attachments when compared to push-only systems.
+The Cargomail architecture separates mailboxes from email addresses. It uses a push-then-pull request mechanism via different routes to facilitate data exchange between mailboxes. This mechanism has the potential to deal better with <i>end-to-end encryption</i><sup>1</sup> and large attachments when compared to push-only systems.
 
 ![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
-![#b4c7dc](https://placehold.co/8x8/b4c7dc/b4c7dc.png) Push layer
-![#f7d1d5](https://placehold.co/8x8/f7d1d5/f7d1d5.png) Pull layer
+![#b4c7dc](https://placehold.co/8x8/b4c7dc/b4c7dc.png) Push layer — requests from a sender to recipients
+![#f7d1d5](https://placehold.co/8x8/f7d1d5/f7d1d5.png) Pull layer — requests from recipients to the sender
 
 #### _Key Points_
 
