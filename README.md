@@ -14,7 +14,7 @@ This project is constantly evolving. You can download the latest revision (draft
 
 ## Architecture
 
-The Cargomail architecture separates the mailbox from the email address. It uses a push-then-pull request mechanism via different routes to facilitate data exchange between mailboxes. This mechanism has the potential to deal better with <i>end-to-end encryption</i><sup>1</sup> and large attachments when compared to push-only systems.
+The Cargomail architecture separates the mailbox from the email address. It uses a push-then-pull request mechanism via different routes to streamline data exchange between mailboxes. This mechanism has the potential to address privacy and attachment issues more effectively than push-only systems. Additionally, it facilitates <i>end-to-end encryption</i><sup>1</sup> by providing an added pull layer.
 
 ![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
