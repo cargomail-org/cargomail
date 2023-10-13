@@ -18,14 +18,14 @@ The Cargomail architecture separates mailboxes from email addresses. It uses a p
 
 ![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
-![#b4c7dc](https://placehold.co/8x8/b4c7dc/b4c7dc.png) Push System
-![#f7d1d5](https://placehold.co/8x8/f7d1d5/f7d1d5.png) Pull System
+![#b4c7dc](https://placehold.co/8x8/b4c7dc/b4c7dc.png) Push layer
+![#f7d1d5](https://placehold.co/8x8/f7d1d5/f7d1d5.png) Pull layer
 
 #### _Key Points_
 
 • Each email consists of an envelope, a <i>placeholder message</i> created in the <i>resource mailbox</i>, and related external bodies stored in the same <i>resource mailbox</i>.
 
-• The resources owned by the sender, stored in the origin <i>resource mailbox</i>, are temporarily shared with recipients. Following a successful sharing process, a <i>placeholder message</i> is sent to each recipient through the push system. The <i>placeholder message</i> contains the origin <i>resource mailbox</i> URL, the cryptographic hash values of the referenced resources (Content-IDs), and the category of correspondence, e.g., personal, business, or healthcare (see Appendix A for a <i>placeholder message</i> example).
+• The resources owned by the sender, stored in the origin <i>resource mailbox</i>, are temporarily shared with recipients. Following a successful sharing process, a <i>placeholder message</i> is sent to each recipient through the push layer. The <i>placeholder message</i> contains the origin <i>resource mailbox</i> URL, the cryptographic hash values of the referenced resources (Content-IDs), and the category of correspondence, e.g., personal, business, or healthcare (see Appendix A for a <i>placeholder message</i> example).
 
 • After receiving the <i>placeholder message</i>, the recipient's <i>resource broker</i> determines (according to the user's preferences and the category of correspondence) which destination <i>resource mailbox</i> will be used for communication. Once the destination <i>resource mailbox</i> is determined, the <i>resource broker</i> adds the header with the <i>destination resource</i> mailbox URL to the <i>placeholder message</i> and posts it to the relevant destination <i>resource mailbox</i> using the GRIP authentication mechanism.
 
