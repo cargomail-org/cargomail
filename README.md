@@ -14,7 +14,7 @@ This project is constantly evolving. You can download the latest revision (draft
 
 ## Architecture
 
-The Cargomail architecture separates the mailbox from the email address. It uses a push-then-pull request mechanism via different routes to streamline data exchange between mailboxes. This mechanism has the potential to address privacy and attachment issues more effectively than push-only systems. The added pull layer facilitates end-to-end encryption<sup>1</sup>.
+The Cargomail architecture separates the mailbox from the email address. It uses a push-then-pull request mechanism<sup>1</sup> via different routes to streamline data exchange between mailboxes. This mechanism has the potential to address privacy and attachment issues more effectively than push-only systems. The added pull layer facilitates end-to-end encryption<sup>2</sup>.
 
 ![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
@@ -28,7 +28,8 @@ The Cargomail architecture separates the mailbox from the email address. It uses
 
 • The <i>resource transfer agent</i> at the destination server gets the origin <i>resource mailbox</i> URL and the cryptographic hash values of the referenced resources in the <i>placeholder message</i>. Using the GRIP authentication mechanism, the agent tries to retrieve the external resources from the origin <i>resource mailbox</i>. After successful authentication, the data is retrieved and stored in the destination <i>resource mailbox</i>. Finally, the <i>email application</i> downloads the relevant data from the destination <i>resource mailbox</i> and reconstructs the original message according to the <i>placeholder message</i> template.
 
-<sup>1</sup>This implementation does not use end-to-end encryption and instead uses encryption at rest.
+<sup>1</sup>This implementation does not use the SMTP/DKIM push layer as mentioned in the [whitepaper](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf) and instead uses the HTTP/GRIP push layer.
+<sup>2</sup>This implementation does not use end-to-end encryption and instead uses encryption at rest.
 
 ## Appendix A—Placeholder Message
 
