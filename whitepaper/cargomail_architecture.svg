@@ -66,7 +66,7 @@
   </font>
  </defs>
  <defs class="TextShapeIndex">
-  <g ooo:slide="id1" ooo:id-list="id3 id4 id5 id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23 id24 id25 id26 id27 id28 id29 id30 id31 id32 id33 id34 id35 id36 id37 id38 id39 id40 id41 id42 id43 id44 id45 id46 id47 id48 id49 id50 id51 id52 id53 id54"/>
+  <g ooo:slide="id1" ooo:id-list="id3 id4 id5 id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23 id24 id25 id26 id27 id28 id29 id30 id31 id32 id33 id34 id35 id36 id37 id38 id39 id40 id41 id42 id43 id44 id45 id46 id47 id48 id49 id50 id51 id52 id53 id54 id55"/>
  </defs>
  <defs class="EmbeddedBulletChars">
   <g id="bullet-char-template-57356" transform="scale(0.00048828125,-0.00048828125)">
@@ -481,6 +481,13 @@
        <g id="id54">
         <rect class="BoundingBox" stroke="none" fill="none" x="1698" y="14788" width="13044" height="772"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="1949" y="15342"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Pull layer</tspan></tspan><tspan class="TextPosition" x="4489" y="15342"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> — requests from recipients to the sender</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape">
+       <g id="id55">
+        <rect class="BoundingBox" stroke="none" fill="none" x="20390" y="4687" width="3177" height="840"/>
+        <path fill="none" stroke="rgb(0,0,0)" d="M 23565,5525 L 20662,4828"/>
+        <path fill="rgb(0,0,0)" stroke="none" d="M 20647,4979 L 20390,4763 20717,4687 20647,4979 Z"/>
        </g>
       </g>
      </g>
