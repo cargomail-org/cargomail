@@ -14,7 +14,7 @@ This project is constantly evolving. You can download the latest revision of the
 
 ## Architecture
 
-The Cargomail architecture separates the mailbox from the email address. It uses a push-then-pull request mechanism<sup>1</sup> via distinct routes to enable data exchange between mailboxes.  The origin and destination of push requests differ from the origin and destination of pull requests. This mechanism has the potential to address privacy and attachment issues more effectively than push-pull systems with shared origin and destination. The added pull layer facilitates end-to-end encryption<sup>2</sup>.
+The Cargomail architecture separates the mailbox from the email address. It uses a mechanism of push-then-pull requests<sup>1</sup> over different routes to enable data exchange between mailboxes. The origin and destination of push requests differ from the origin and destination of pull requests. This mechanism has the potential to address privacy and attachment issues more effectively than push-pull systems with shared origin and destination. The added pull layer facilitates end-to-end encryption<sup>2</sup>.
 
 ![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
@@ -28,7 +28,7 @@ The Cargomail architecture separates the mailbox from the email address. It uses
 
 • The <i>resource transfer agent</i> at the destination server gets the origin <i>resource mailbox</i> URL and the cryptographic hash values of the referenced resources in the <i>placeholder message</i>. Using the GRIP authentication mechanism, the agent tries to retrieve the external resources from the origin <i>resource mailbox</i>. After successful authentication, the data is retrieved and stored in the destination <i>resource mailbox</i>. Finally, the <i>email application</i> downloads the relevant data from the destination <i>resource mailbox</i> and reconstructs the original message according to the <i>placeholder message</i> template.
 
-<sup>1</sup>This implementation does not use the SMTP/DKIM push layer as specified in the [whitepaper](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf) and instead uses the HTTP/GRIP push layer.
+<sup>1</sup>While the [whitepaper](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf) implies the use of  SMTP/DKIM protocols at the push layer, this implementation uses HTTP/GRIP protocols at both layers.
 
 <sup>2</sup>End-to-end encryption is not part of this implementation; encryption at rest is used instead.
 
