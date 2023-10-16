@@ -84,12 +84,12 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 		if err != nil {
 			return err
 		}
-		log.Print("mailbox service shutdown gracefully")
+		log.Print("mailbox (pull layer) service shutdown gracefully")
 		return nil
 	})
 
 	errs.Go(func() error {
-		log.Printf("mailbox service is listening on http://%s", http1Server.Addr)
+		log.Printf("mailbox (pull layer) service is listening on http://%s", http1Server.Addr)
 		return http1Server.ListenAndServe()
 	})
 }

@@ -47,12 +47,12 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 		if err != nil {
 			return err
 		}
-		log.Print("email service shutdown gracefully")
+		log.Print("email (push layer) service shutdown gracefully")
 		return nil
 	})
 
 	errs.Go(func() error {
-		log.Printf("email service is listening on https://%s", http1Server.Addr)
+		log.Printf("email (push layer) service is listening on https://%s", http1Server.Addr)
 		return http1Server.ListenAndServeTLS(config.Configuration.EmailCertPath, config.Configuration.EmailKeyPath)
 	})
 }
