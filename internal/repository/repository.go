@@ -78,6 +78,9 @@ type Repository struct {
 	Threads  ThreadRepository
 }
 
+const KeySize int = 32
+const IvSize int = 16
+
 func NewRepository(db *sql.DB) Repository {
 	return Repository{
 		Blobs:    BlobRepository{db: db},

@@ -176,14 +176,14 @@ func (api *BlobsApi) Upload() http.Handler {
 				}
 				defer f.Close()
 
-				key := make([]byte, KeySize)
+				key := make([]byte, repository.KeySize)
 				_, err = rand.Read(key)
 				if err != nil {
 					fmt.Println(err)
 					return
 				}
 
-				iv := make([]byte, IvSize)
+				iv := make([]byte, repository.IvSize)
 				_, err = rand.Read(iv)
 				if err != nil {
 					fmt.Println(err)
