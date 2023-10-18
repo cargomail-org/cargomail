@@ -22,6 +22,7 @@ CREATE TRIGGER IF NOT EXISTS "BlobBeforeUpdate"
         -- "snippet",
         "path",
         -- "size",
+        "metadata",
         "contentType"
     ON "Blob"
     FOR EACH ROW

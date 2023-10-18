@@ -21,6 +21,7 @@ CREATE TRIGGER IF NOT EXISTS "FileBeforeUpdate"
         "name",
         "path",
         "size",
+        "metadata",
         "contentType"
     ON "File"
     FOR EACH ROW

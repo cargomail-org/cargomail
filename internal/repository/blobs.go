@@ -3,6 +3,8 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"database/sql/driver"
+	"encoding/json"
 	"errors"
 	"reflect"
 	"time"
@@ -12,22 +14,28 @@ type BlobRepository struct {
 	db *sql.DB
 }
 
+type BlobMetadata struct {
+	Key string `json:"key"`
+	Iv  string `json:"iv"`
+}
+
 type Blob struct {
-	Id          string     `json:"id"`
-	UserId      int64      `json:"-"`
-	Folder      int16      `json:"folder"`
-	Digest      string     `json:"digest"`
-	Name        string     `json:"name"`
-	Snippet     string     `json:"snippet"`
-	Path        string     `json:"-"`
-	Size        int64      `json:"size"`
-	ContentType string     `json:"contentType"`
-	CreatedAt   Timestamp  `json:"createdAt"`
-	ModifiedAt  *Timestamp `json:"modifiedAt"`
-	TimelineId  int64      `json:"-"`
-	HistoryId   int64      `json:"-"`
-	LastStmt    int        `json:"-"`
-	DeviceId    *string    `json:"-"`
+	Id          string        `json:"id"`
+	UserId      int64         `json:"-"`
+	Folder      int16         `json:"folder"`
+	Digest      string        `json:"digest"`
+	Name        string        `json:"name"`
+	Snippet     string        `json:"snippet"`
+	Path        string        `json:"-"`
+	Size        int64         `json:"size"`
+	Metadata    *BlobMetadata `json:"-"`
+	ContentType string        `json:"contentType"`
+	CreatedAt   Timestamp     `json:"createdAt"`
+	ModifiedAt  *Timestamp    `json:"modifiedAt"`
+	TimelineId  int64         `json:"-"`
+	HistoryId   int64         `json:"-"`
+	LastStmt    int           `json:"-"`
+	DeviceId    *string       `json:"-"`
 }
 
 type BlobDeleted struct {
@@ -48,6 +56,19 @@ type BlobSync struct {
 	BlobsUpdated  []*Blob        `json:"updated"`
 	BlobsTrashed  []*Blob        `json:"trashed"`
 	BlobsDeleted  []*BlobDeleted `json:"deleted"`
+}
+
+func (v BlobMetadata) Value() (driver.Value, error) {
+	return json.Marshal(v)
+}
+
+func (v *BlobMetadata) Scan(value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	return json.Unmarshal(b, &v)
 }
 
 func (b *Blob) Scan() []interface{} {
@@ -78,15 +99,15 @@ func (r BlobRepository) Create(user *User, blob *Blob) (*Blob, error) {
 
 	query := `
 		INSERT INTO
-			"Blob" ("userId", "deviceId", "folder", "digest", "name", "snippet", "path", "contentType", "size")
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+			"Blob" ("userId", "deviceId", "folder", "digest", "name", "snippet", "path", "contentType", "size", "metadata")
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
 	folder := 0
 
-	args := []interface{}{user.Id, prefixedDeviceId, folder, blob.Digest, blob.Name, blob.Snippet, blob.Path, blob.ContentType, blob.Size}
+	args := []interface{}{user.Id, prefixedDeviceId, folder, blob.Digest, blob.Name, blob.Snippet, blob.Path, blob.ContentType, blob.Size, blob.Metadata}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 	if err != nil {
@@ -382,7 +403,7 @@ func (r BlobRepository) Update(user *User, blob *Blob) (*Blob, error) {
 	SELECT *
 		FROM "Blob"
 		WHERE "userId" = $1 AND
-		"id" = $1 AND		
+		"id" = $2 AND		
 		"lastStmt" <> 2;`
 
 	args = []interface{}{user.Id, blob.Id}

@@ -41,6 +41,7 @@ var (
 	ErrMissingPayloadField      = errors.New("missing 'payload' field")
 	ErrMissingHeadersField      = errors.New("missing 'headers' field")
 	ErrMissingStateField        = errors.New("missing state field(s)")
+	ErrWrongResourceDigest      = errors.New("wrong resource digest")
 )
 
 type History struct {

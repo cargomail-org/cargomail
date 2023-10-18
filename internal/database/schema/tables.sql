@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS "Blob" (
     "snippet"       VARCHAR(255),
     "path"			TEXT NOT NULL,
     "size"			INTEGER NOT NULL,
+    "metadata"      TEXT,                 -- json object
     "contentType"	TEXT NOT NULL,
     "createdAt"		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "modifiedAt"	TIMESTAMP,
@@ -44,6 +45,7 @@ CREATE TABLE IF NOT EXISTS "File" (
     "name"			TEXT NOT NULL,
     "path"			TEXT NOT NULL,
     "size"			INTEGER NOT NULL,
+    "metadata"      TEXT,                 -- json object
     "contentType"	TEXT NOT NULL,
     "createdAt"		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "modifiedAt"	TIMESTAMP,

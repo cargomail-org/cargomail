@@ -3,6 +3,9 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
 	"reflect"
 	"time"
 )
@@ -11,21 +14,27 @@ type FileRepository struct {
 	db *sql.DB
 }
 
+type FileMetadata struct {
+	Key    string `json:"key"`
+	Iv     string `json:"iv"`
+}
+
 type File struct {
-	Id          string     `json:"id"`
-	UserId      int64      `json:"-"`
-	Folder      int16      `json:"folder"`
-	Digest      string     `json:"digest"`
-	Name        string     `json:"name"`
-	Path        string     `json:"-"`
-	Size        int64      `json:"size"`
-	ContentType string     `json:"contentType"`
-	CreatedAt   Timestamp  `json:"createdAt"`
-	ModifiedAt  *Timestamp `json:"modifiedAt"`
-	TimelineId  int64      `json:"-"`
-	HistoryId   int64      `json:"-"`
-	LastStmt    int        `json:"-"`
-	DeviceId    *string    `json:"-"`
+	Id          string        `json:"id"`
+	UserId      int64         `json:"-"`
+	Folder      int16         `json:"folder"`
+	Digest      string        `json:"digest"`
+	Name        string        `json:"name"`
+	Path        string        `json:"-"`
+	Size        int64         `json:"size"`
+	Metadata    *FileMetadata `json:"-"`
+	ContentType string        `json:"contentType"`
+	CreatedAt   Timestamp     `json:"createdAt"`
+	ModifiedAt  *Timestamp    `json:"modifiedAt"`
+	TimelineId  int64         `json:"-"`
+	HistoryId   int64         `json:"-"`
+	LastStmt    int           `json:"-"`
+	DeviceId    *string       `json:"-"`
 }
 
 type FileDeleted struct {
@@ -45,6 +54,19 @@ type FileSync struct {
 	FilesInserted []*File        `json:"inserted"`
 	FilesTrashed  []*File        `json:"trashed"`
 	FilesDeleted  []*FileDeleted `json:"deleted"`
+}
+
+func (v FileMetadata) Value() (driver.Value, error) {
+	return json.Marshal(v)
+}
+
+func (v *FileMetadata) Scan(value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	return json.Unmarshal(b, &v)
 }
 
 func (f *File) Scan() []interface{} {
@@ -75,15 +97,15 @@ func (r FileRepository) Create(user *User, file *File) (*File, error) {
 
 	query := `
 		INSERT INTO
-			"File" ("userId", "deviceId", "folder", "digest", "name", "path", "contentType", "size")
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+			"File" ("userId", "deviceId", "folder", "digest", "name", "path", "contentType", "size", "metadata")
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
 	folder := 0
 
-	args := []interface{}{user.Id, prefixedDeviceId, folder, file.Digest, file.Name, file.Path, file.ContentType, file.Size}
+	args := []interface{}{user.Id, prefixedDeviceId, folder, file.Digest, file.Name, file.Path, file.ContentType, file.Size, file.Metadata}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
 	if err != nil {

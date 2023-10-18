@@ -798,8 +798,8 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 
 			query := `
 			INSERT INTO
-				"File" ("userId", "deviceId", "folder", "digest", "name", "path", "contentType", "size")
-				 SELECT (SELECT "id" FROM "User" WHERE "username" = $1), NULL, $2, "digest", "name", "path", "contentType", "size"
+				"File" ("userId", "deviceId", "folder", "digest", "name", "path", "contentType", "size", "metadata")
+				 SELECT (SELECT "id" FROM "User" WHERE "username" = $1), NULL, $2, "digest", "name", "path", "contentType", "size", "metadata"
 					FROM "File"
 					WHERE "userId" = $3 AND
 						  "digest" = $4 AND

@@ -27,6 +27,9 @@ type Api struct {
 	Threads  ThreadsApi
 }
 
+const KeySize int = 32
+const IvSize int = 16
+
 func NewApi(params ApiParams) Api {
 	return Api{
 		Health:   HealthApi{},
