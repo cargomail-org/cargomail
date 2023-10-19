@@ -5,6 +5,7 @@ import (
 	"cargomail/cmd/mailbox/app"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
+	"cargomail/internal/storage"
 	"context"
 	"database/sql"
 	"embed"
@@ -36,6 +37,7 @@ type service struct {
 
 func NewService(params *ServiceParams) (service, error) {
 	repository := repository.NewRepository(params.DB)
+	storage := storage.NewStorage(repository)
 
 	return service{
 		app: app.NewApp(
@@ -46,6 +48,7 @@ func NewService(params *ServiceParams) (service, error) {
 		api: api.NewApi(
 			api.ApiParams{
 				Repository: repository,
+				Storage:    storage,
 			}),
 	}, nil
 }

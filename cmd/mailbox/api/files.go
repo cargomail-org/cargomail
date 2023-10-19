@@ -4,9 +4,9 @@ import (
 	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
+	"cargomail/internal/storage"
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/rand"
 	"crypto/sha256"
 	b64 "encoding/base64"
 	"encoding/json"
@@ -23,7 +23,8 @@ import (
 )
 
 type FilesApi struct {
-	files repository.FileRepository
+	fileDepository repository.FileDepository
+	fileStore      storage.FileStore
 }
 
 func (api *FilesApi) Upload() http.Handler {
@@ -63,87 +64,7 @@ func (api *FilesApi) Upload() http.Handler {
 
 			uuid := uuid.NewString()
 
-			f, err := os.OpenFile(filepath.Join(filesPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-			defer f.Close()
-
-			key := make([]byte, repository.KeySize)
-			_, err = rand.Read(key)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-
-			iv := make([]byte, repository.IvSize)
-			_, err = rand.Read(iv)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-
-			aes, err := aes.NewCipher(key)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-
-			stream := cipher.NewCTR(aes, iv)
-
-			pipeReader, pipeWriter := io.Pipe()
-			writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
-
-			// do the encryption in a goroutine
-			go func() {
-				_, err := io.Copy(writer, file)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				defer writer.Close()
-			}()
-
-			hash := sha256.New()
-			
-			_, err = hash.Write(iv)
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			written, err := io.Copy(f, io.TeeReader(pipeReader, hash))
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			hashSum := hash.Sum(nil)
-			digest := b64.RawURLEncoding.EncodeToString(hashSum)
-
-			fileMetadata := &repository.FileMetadata{
-				Key: b64.RawURLEncoding.EncodeToString(key),
-				Iv:  b64.RawURLEncoding.EncodeToString(iv),
-			}
-
-			contentType := files[i].Header.Get("content-type")
-
-			uploadedFile := &repository.File{
-				Digest:      digest,
-				Name:        files[i].Filename,
-				Size:        written,
-				Metadata:    fileMetadata,
-				ContentType: contentType,
-			}
-
-			uploadedFile, err = api.files.Create(user, uploadedFile)
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			os.Rename(filepath.Join(filesPath, uuid), filepath.Join(filesPath, digest))
+			uploadedFile, err := api.fileStore.Create(user, file, filesPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
@@ -172,7 +93,7 @@ func (api *FilesApi) Download() http.Handler {
 
 		digest := path.Base(r.URL.Path)
 
-		file, err := api.files.GetFileByDigest(user, digest)
+		file, err := api.fileDepository.GetByDigest(user, digest)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -297,7 +218,7 @@ func (api *FilesApi) List() http.Handler {
 			}
 		}
 
-		fileList, err := api.files.List(user, folder.Folder)
+		fileList, err := api.fileDepository.List(user, folder.Folder)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -323,7 +244,7 @@ func (api *FilesApi) Sync() http.Handler {
 			return
 		}
 
-		fileSync, err := api.files.Sync(user, history)
+		fileSync, err := api.fileDepository.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -363,7 +284,7 @@ func (api *FilesApi) Trash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.files.Trash(user, idsString)
+		err = api.fileDepository.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -403,7 +324,7 @@ func (api *FilesApi) Untrash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.files.Untrash(user, idsString)
+		err = api.fileDepository.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -443,7 +364,7 @@ func (api *FilesApi) Delete() http.Handler {
 
 		idsString := string(body)
 
-		_, err = api.files.Delete(user, idsString)
+		_, err = api.fileDepository.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

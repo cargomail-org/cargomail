@@ -8,7 +8,7 @@ import (
 )
 
 type MessagesApi struct {
-	messages repository.MessageRepository
+	messageDepository repository.MessageDepository
 }
 
 func (api *MessagesApi) List() http.Handler {
@@ -29,7 +29,7 @@ func (api *MessagesApi) List() http.Handler {
 			}
 		}
 
-		messageHistory, err := api.messages.List(user, folder.Folder)
+		messageHistory, err := api.messageDepository.List(user, folder.Folder)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -55,7 +55,7 @@ func (api *MessagesApi) Sync() http.Handler {
 			return
 		}
 
-		messageHistory, err := api.messages.Sync(user, history)
+		messageHistory, err := api.messageDepository.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -93,7 +93,7 @@ func (api *MessagesApi) Update() http.Handler {
 			return
 		}
 
-		err = api.messages.Update(user, &state)
+		err = api.messageDepository.Update(user, &state)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -133,7 +133,7 @@ func (api *MessagesApi) Trash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.messages.Trash(user, idsString)
+		err = api.messageDepository.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -173,7 +173,7 @@ func (api *MessagesApi) Untrash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.messages.Untrash(user, idsString)
+		err = api.messageDepository.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -213,7 +213,7 @@ func (api *MessagesApi) Delete() http.Handler {
 
 		idsString := string(body)
 
-		err = api.messages.Delete(user, idsString)
+		err = api.messageDepository.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

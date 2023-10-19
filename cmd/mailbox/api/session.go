@@ -13,8 +13,8 @@ import (
 )
 
 type SessionApi struct {
-	user    repository.UserRepository
-	session repository.SessionRepository
+	userDepository    repository.UserDepository
+	sessionDepository repository.SessionDepository
 }
 
 type credentials struct {
@@ -67,7 +67,7 @@ func (api *UserApi) Register() http.Handler {
 			return
 		}
 
-		err = api.user.Create(user)
+		err = api.userDepository.Create(user)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrUsernameAlreadyTaken):
@@ -93,7 +93,7 @@ func (api *SessionApi) Login() http.Handler {
 			return
 		}
 
-		user, err := api.user.GetByUsername(input.Username)
+		user, err := api.userDepository.GetByUsername(input.Username)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrUsernameNotFound):
@@ -116,7 +116,7 @@ func (api *SessionApi) Login() http.Handler {
 		}
 
 		ttl := config.DefaultSessionTTL
-		session, err := api.session.New(user.Id, ttl, repository.ScopeAuthentication)
+		session, err := api.sessionDepository.New(user.Id, ttl, repository.ScopeAuthentication)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -200,7 +200,7 @@ func (api *SessionApi) Logout() http.Handler {
 
 		sessionId := cookie.Value
 
-		err = api.session.Remove(user, sessionId)
+		err = api.sessionDepository.Remove(user, sessionId)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusNotFound)
 			return

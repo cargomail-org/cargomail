@@ -8,6 +8,16 @@ import (
 	"time"
 )
 
+type ContactDepository interface {
+	Create(user *User, contact *Contact) (*Contact, error)
+	List(user *User) (*ContactList, error)
+	Sync(user *User, history *History) (*ContactSync, error)
+	Update(user *User, contact *Contact) (*Contact, error)
+	Trash(user *User, ids string) error
+	Untrash(user *User, ids string) error
+	Delete(user *User, ids string) error
+}
+
 type ContactRepository struct {
 	db *sql.DB
 }

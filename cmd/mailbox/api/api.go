@@ -4,6 +4,7 @@ import (
 	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
+	"cargomail/internal/storage"
 	"context"
 	"errors"
 	"net/http"
@@ -12,6 +13,7 @@ import (
 
 type ApiParams struct {
 	Repository repository.Repository
+	Storage    storage.Storage
 }
 
 type Api struct {
@@ -30,15 +32,15 @@ type Api struct {
 func NewApi(params ApiParams) Api {
 	return Api{
 		Health:   HealthApi{},
-		Blobs:    BlobsApi{blobs: params.Repository.Blobs},
-		Files:    FilesApi{files: params.Repository.Files},
+		Blobs:    BlobsApi{blobDepository: params.Repository.Blobs, blobStore: params.Storage.Blobs},
+		Files:    FilesApi{fileDepository: params.Repository.Files, fileStore: params.Storage.Files},
 		Auth:     AuthApi{},
-		Session:  SessionApi{user: params.Repository.User, session: params.Repository.Session},
-		User:     UserApi{user: params.Repository.User},
-		Contacts: ContactsApi{contacts: params.Repository.Contacts},
-		Drafts:   DraftsApi{drafts: params.Repository.Drafts},
-		Messages: MessagesApi{messages: params.Repository.Messages},
-		Threads:  ThreadsApi{threads: params.Repository.Threads},
+		Session:  SessionApi{userDepository: params.Repository.User, sessionDepository: params.Repository.Session},
+		User:     UserApi{userDepository: params.Repository.User},
+		Contacts: ContactsApi{contactDepository: params.Repository.Contacts},
+		Drafts:   DraftsApi{draftDepository: params.Repository.Drafts},
+		Messages: MessagesApi{messageDepository: params.Repository.Messages},
+		Threads:  ThreadsApi{threadDepository: params.Repository.Threads},
 	}
 }
 
@@ -69,7 +71,7 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 			return
 		}
 
-		user, err := api.User.user.GetBySession(repository.ScopeAuthentication, sessionId)
+		user, err := api.User.userDepository.GetBySession(repository.ScopeAuthentication, sessionId)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrUsernameNotFound):
@@ -105,7 +107,7 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 		sessionCookie.Expires = time.Now().Add(ttl)
 		sessionCookie.Path = "/"
 
-		updated, err := api.Session.session.UpdateIfOlderThan5Minutes(user, sessionCookie.Value, sessionCookie.Expires)
+		updated, err := api.Session.sessionDepository.UpdateIfOlderThan5Minutes(user, sessionCookie.Value, sessionCookie.Expires)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

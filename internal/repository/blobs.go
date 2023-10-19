@@ -10,6 +10,18 @@ import (
 	"time"
 )
 
+type BlobDepository interface {
+	Create(user *User, blob *Blob) (*Blob, error)
+	List(user *User, folder int) (*BlobList, error)
+	Sync(user *User, history *History) (*BlobSync, error)
+	Update(user *User, blob *Blob) (*Blob, error)
+	Trash(user *User, ids string) error
+	Untrash(user *User, ids string) error
+	Delete(user *User, ids string) (*[]Blob, error)
+	GetById(user *User, id string) (*Blob, error)
+	GetByDigest(user *User, digest string) (*Blob, error)
+}
+
 type BlobRepository struct {
 	db *sql.DB
 }
@@ -525,7 +537,7 @@ func (r BlobRepository) Delete(user *User, ids string) (*[]Blob, error) {
 	return &blobs, nil
 }
 
-func (r BlobRepository) GetBlobById(user *User, id string) (*Blob, error) {
+func (r BlobRepository) GetById(user *User, id string) (*Blob, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -551,7 +563,7 @@ func (r BlobRepository) GetBlobById(user *User, id string) (*Blob, error) {
 	return blob, nil
 }
 
-func (r BlobRepository) GetBlobByDigest(user *User, digest string) (*Blob, error) {
+func (r BlobRepository) GetByDigest(user *User, digest string) (*Blob, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

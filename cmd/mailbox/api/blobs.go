@@ -4,9 +4,9 @@ import (
 	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
+	"cargomail/internal/storage"
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/rand"
 	"crypto/sha256"
 	b64 "encoding/base64"
 	"encoding/json"
@@ -22,7 +22,8 @@ import (
 )
 
 type BlobsApi struct {
-	blobs repository.BlobRepository
+	blobDepository repository.BlobDepository
+	blobStore      storage.BlobStore
 }
 
 func (api *BlobsApi) Upload() http.Handler {
@@ -71,7 +72,7 @@ func (api *BlobsApi) Upload() http.Handler {
 					return
 				}
 
-				blob, err := api.blobs.GetBlobById(user, files[i].Filename)
+				blob, err := api.blobDepository.GetById(user, files[i].Filename)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusNotFound)
 					return
@@ -146,7 +147,7 @@ func (api *BlobsApi) Upload() http.Handler {
 						ContentType: contentType,
 					}
 
-					uploadedBlob, err = api.blobs.Update(user, uploadedBlob)
+					uploadedBlob, err = api.blobDepository.Update(user, uploadedBlob)
 					if err != nil {
 						switch {
 						case errors.Is(err, repository.ErrBlobNotFound):
@@ -169,87 +170,7 @@ func (api *BlobsApi) Upload() http.Handler {
 					_ = os.Remove(filepath.Join(blobsPath, blobDigestToRemove))
 				}
 			} else {
-				f, err := os.OpenFile(filepath.Join(blobsPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				defer f.Close()
-
-				key := make([]byte, repository.KeySize)
-				_, err = rand.Read(key)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-
-				iv := make([]byte, repository.IvSize)
-				_, err = rand.Read(iv)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-
-				aes, err := aes.NewCipher(key)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-
-				stream := cipher.NewCTR(aes, iv)
-
-				pipeReader, pipeWriter := io.Pipe()
-				writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
-
-				// do the encryption in a goroutine
-				go func() {
-					_, err := io.Copy(writer, file)
-					if err != nil {
-						fmt.Println(err)
-						return
-					}
-					defer writer.Close()
-				}()
-
-				hash := sha256.New()
-
-				_, err = hash.Write(iv)
-				if err != nil {
-					helper.ReturnErr(w, err, http.StatusInternalServerError)
-					return
-				}
-
-				written, err := io.Copy(f, io.TeeReader(pipeReader, hash))
-				if err != nil {
-					helper.ReturnErr(w, err, http.StatusInternalServerError)
-					return
-				}
-
-				hashSum := hash.Sum(nil)
-				digest := b64.RawURLEncoding.EncodeToString(hashSum)
-
-				blobMetadata := &repository.BlobMetadata{
-					Key: b64.RawURLEncoding.EncodeToString(key),
-					Iv:  b64.RawURLEncoding.EncodeToString(iv),
-				}
-
-				contentType := files[i].Header.Get("content-type")
-
-				uploadedBlob = &repository.Blob{
-					Digest:      digest,
-					Name:        files[i].Filename,
-					Size:        written,
-					Metadata:    blobMetadata,
-					ContentType: contentType,
-				}
-
-				uploadedBlob, err = api.blobs.Create(user, uploadedBlob)
-				if err != nil {
-					helper.ReturnErr(w, err, http.StatusInternalServerError)
-					return
-				}
-
-				os.Rename(filepath.Join(blobsPath, uuid), filepath.Join(blobsPath, digest))
+				uploadedBlob, err = api.blobStore.Create(user, file, blobsPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusInternalServerError)
 					return
@@ -279,7 +200,7 @@ func (api *BlobsApi) Download() http.Handler {
 
 		digest := path.Base(r.URL.Path)
 
-		blob, err := api.blobs.GetBlobByDigest(user, digest)
+		blob, err := api.blobDepository.GetByDigest(user, digest)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -392,7 +313,7 @@ func (api *BlobsApi) List() http.Handler {
 			}
 		}
 
-		blobList, err := api.blobs.List(user, folder.Folder)
+		blobList, err := api.blobDepository.List(user, folder.Folder)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -418,7 +339,7 @@ func (api *BlobsApi) Sync() http.Handler {
 			return
 		}
 
-		blobSync, err := api.blobs.Sync(user, history)
+		blobSync, err := api.blobDepository.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -458,7 +379,7 @@ func (api *BlobsApi) Trash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.blobs.Trash(user, idsString)
+		err = api.blobDepository.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -498,7 +419,7 @@ func (api *BlobsApi) Untrash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.blobs.Untrash(user, idsString)
+		err = api.blobDepository.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -538,7 +459,7 @@ func (api *BlobsApi) Delete() http.Handler {
 
 		idsString := string(body)
 
-		_, err = api.blobs.Delete(user, idsString)
+		_, err = api.blobDepository.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

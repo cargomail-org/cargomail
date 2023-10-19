@@ -10,6 +10,15 @@ import (
 	"time"
 )
 
+type MessageDepository interface {
+	List(user *User, folder int) (*MessageList, error)
+	Sync(user *User, history *History) (*MessageSync, error)
+	Update(user *User, state *State) error
+	Trash(user *User, ids string) error
+	Untrash(user *User, ids string) error
+	Delete(user *User, ids string) error
+}
+
 type MessageRepository struct {
 	db *sql.DB
 }

@@ -7,6 +7,13 @@ import (
 	"time"
 )
 
+type SessionDepository interface {
+	New(userID int64, ttl time.Duration, scope string) (*Session, error)
+	Insert(session *Session) error
+	UpdateIfOlderThan5Minutes(user *User, id string, expiry time.Time) (bool, error)
+	Remove(user *User, id string) error
+}
+
 const (
 	ScopeActivation     = "activation"
 	ScopeAuthentication = "authentication"

@@ -10,6 +10,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type UserDepository interface {
+	Create(user *User) error
+	UpdateProfile(user *User) (*UserProfile, error)
+	GetProfile(username string) (*UserProfile, error)
+	GetByUsername(username string) (*User, error)
+	GetBySession(sessionScope, id string) (*User, error)
+}
+
 type UserRepository struct {
 	db *sql.DB
 }

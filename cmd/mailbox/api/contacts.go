@@ -9,7 +9,7 @@ import (
 )
 
 type ContactsApi struct {
-	contacts repository.ContactRepository
+	contactDepository repository.ContactDepository
 }
 
 func (api *ContactsApi) Create() http.Handler {
@@ -28,7 +28,7 @@ func (api *ContactsApi) Create() http.Handler {
 			return
 		}
 
-		contact, err = api.contacts.Create(user, contact)
+		contact, err = api.contactDepository.Create(user, contact)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrDuplicateContact):
@@ -51,7 +51,7 @@ func (api *ContactsApi) List() http.Handler {
 			return
 		}
 
-		contactHistory, err := api.contacts.List(user)
+		contactHistory, err := api.contactDepository.List(user)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -77,7 +77,7 @@ func (api *ContactsApi) Sync() http.Handler {
 			return
 		}
 
-		contactHistory, err := api.contacts.Sync(user, history)
+		contactHistory, err := api.contactDepository.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -108,7 +108,7 @@ func (api *ContactsApi) Update() http.Handler {
 			return
 		}
 
-		contact, err = api.contacts.Update(user, contact)
+		contact, err = api.contactDepository.Update(user, contact)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrContactNotFound):
@@ -155,7 +155,7 @@ func (api *ContactsApi) Trash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.contacts.Trash(user, idsString)
+		err = api.contactDepository.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -195,7 +195,7 @@ func (api *ContactsApi) Untrash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.contacts.Untrash(user, idsString)
+		err = api.contactDepository.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -235,7 +235,7 @@ func (api *ContactsApi) Delete() http.Handler {
 
 		idsString := string(body)
 
-		err = api.contacts.Delete(user, idsString)
+		err = api.contactDepository.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

@@ -10,13 +10,24 @@ import (
 	"time"
 )
 
+type FileDepository interface {
+	Create(user *User, file *File) (*File, error)
+	List(user *User, folder int) (*FileList, error)
+	Sync(user *User, history *History) (*FileSync, error)
+	Trash(user *User, ids string) error
+	Untrash(user *User, ids string) error
+	Delete(user *User, ids string) (*[]File, error)
+	GetById(user *User, id string) (*File, error)
+	GetByDigest(user *User, digest string) (*File, error)
+}
+
 type FileRepository struct {
 	db *sql.DB
 }
 
 type FileMetadata struct {
-	Key    string `json:"key"`
-	Iv     string `json:"iv"`
+	Key string `json:"key"`
+	Iv  string `json:"iv"`
 }
 
 type File struct {
@@ -432,7 +443,7 @@ func (r FileRepository) Delete(user *User, ids string) (*[]File, error) {
 	return &files, nil
 }
 
-func (r FileRepository) GetFileById(user *User, id string) (*File, error) {
+func (r FileRepository) GetById(user *User, id string) (*File, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -458,7 +469,7 @@ func (r FileRepository) GetFileById(user *User, id string) (*File, error) {
 	return file, nil
 }
 
-func (r FileRepository) GetFileByDigest(user *User, digest string) (*File, error) {
+func (r FileRepository) GetByDigest(user *User, digest string) (*File, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

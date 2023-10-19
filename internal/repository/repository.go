@@ -68,14 +68,14 @@ type State struct {
 }
 
 type Repository struct {
-	Blobs    BlobRepository
-	Files    FileRepository
-	Session  SessionRepository
-	User     UserRepository
-	Contacts ContactRepository
-	Drafts   DraftRepository
-	Messages MessageRepository
-	Threads  ThreadRepository
+	Blobs    BlobDepository
+	Files    FileDepository
+	Session  SessionDepository
+	User     UserDepository
+	Contacts ContactDepository
+	Drafts   DraftDepository
+	Messages MessageDepository
+	Threads  ThreadDepository
 }
 
 const KeySize int = 32
@@ -83,14 +83,14 @@ const IvSize int = 16
 
 func NewRepository(db *sql.DB) Repository {
 	return Repository{
-		Blobs:    BlobRepository{db: db},
-		Files:    FileRepository{db: db},
-		Session:  SessionRepository{db: db},
-		User:     UserRepository{db: db},
-		Contacts: ContactRepository{db: db},
-		Drafts:   DraftRepository{db: db},
-		Messages: MessageRepository{db: db},
-		Threads:  ThreadRepository{db: db},
+		Blobs:    &BlobRepository{db: db},
+		Files:    &FileRepository{db: db},
+		Session:  &SessionRepository{db: db},
+		User:     &UserRepository{db: db},
+		Contacts: &ContactRepository{db: db},
+		Drafts:   &DraftRepository{db: db},
+		Messages: &MessageRepository{db: db},
+		Threads:  &ThreadRepository{db: db},
 	}
 }
 

@@ -13,6 +13,17 @@ import (
 	"github.com/google/uuid"
 )
 
+type DraftDepository interface {
+	Create(user *User, draft *Draft) (*Draft, error)
+	List(user *User) (*DraftList, error)
+	Sync(user *User, history *History) (*DraftSync, error)
+	Update(user *User, draft *Draft) (*Draft, error)
+	Trash(user *User, ids string) error
+	Untrash(user *User, ids string) error
+	Delete(user *User, ids string) error
+	Send(user *User, draft *Draft) (*Message, error)
+}
+
 type DraftRepository struct {
 	db *sql.DB
 }

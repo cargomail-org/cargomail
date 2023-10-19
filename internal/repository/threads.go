@@ -10,6 +10,13 @@ import (
 	"time"
 )
 
+type ThreadDepository interface {
+	List(user *User, folder int) (*ThreadList, error)
+	Trash(user *User, ids string) error
+	Untrash(user *User, ids string) error
+	Delete(user *User, ids string) error
+}
+
 type ThreadRepository struct {
 	db *sql.DB
 }
@@ -99,6 +106,7 @@ func (c *Thread) Scan() []interface{} {
 	return columns
 }
 
+//* TODO (this select is incomplete)
 func (r *ThreadRepository) List(user *User, folder int) (*ThreadList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()

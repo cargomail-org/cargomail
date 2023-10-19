@@ -8,7 +8,7 @@ import (
 )
 
 type ThreadsApi struct {
-	threads repository.ThreadRepository
+	threadDepository repository.ThreadDepository
 }
 
 func (api *ThreadsApi) List() http.Handler {
@@ -29,7 +29,7 @@ func (api *ThreadsApi) List() http.Handler {
 			}
 		}
 
-		threadHistory, err := api.threads.List(user, folder.Folder)
+		threadHistory, err := api.threadDepository.List(user, folder.Folder)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -69,7 +69,7 @@ func (api *ThreadsApi) Trash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.threads.Trash(user, idsString)
+		err = api.threadDepository.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -109,7 +109,7 @@ func (api *ThreadsApi) Untrash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.threads.Untrash(user, idsString)
+		err = api.threadDepository.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -149,7 +149,7 @@ func (api *ThreadsApi) Delete() http.Handler {
 
 		idsString := string(body)
 
-		err = api.threads.Delete(user, idsString)
+		err = api.threadDepository.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
