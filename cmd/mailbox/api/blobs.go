@@ -5,14 +5,9 @@ import (
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"cargomail/internal/storage"
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/sha256"
-	b64 "encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
 	"path"
@@ -79,75 +74,7 @@ func (api *BlobsApi) Upload() http.Handler {
 				}
 
 				if len(blob.Id) > 0 {
-					f, err := os.OpenFile(filepath.Join(blobsPath, uuid), os.O_WRONLY|os.O_CREATE, 0666)
-					if err != nil {
-						fmt.Println(err)
-						return
-					}
-					defer f.Close()
-
-					blobDigestToRemove := blob.Digest
-
-					key, err := b64.RawURLEncoding.DecodeString(blob.Metadata.Key)
-					if err != nil {
-						helper.ReturnErr(w, err, http.StatusInternalServerError)
-						return
-					}
-
-					iv, err := b64.RawURLEncoding.DecodeString(blob.Metadata.Iv)
-					if err != nil {
-						helper.ReturnErr(w, err, http.StatusInternalServerError)
-						return
-					}
-
-					aes, err := aes.NewCipher(key)
-					if err != nil {
-						fmt.Println(err)
-						return
-					}
-
-					stream := cipher.NewCTR(aes, iv)
-
-					pipeReader, pipeWriter := io.Pipe()
-					writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
-
-					// do the encryption in a goroutine
-					go func() {
-						_, err := io.Copy(writer, file)
-						if err != nil {
-							fmt.Println(err)
-							return
-						}
-						defer writer.Close()
-					}()
-
-					hash := sha256.New()
-
-					_, err = hash.Write(iv)
-					if err != nil {
-						helper.ReturnErr(w, err, http.StatusInternalServerError)
-						return
-					}
-
-					written, err := io.Copy(f, io.TeeReader(pipeReader, hash))
-					if err != nil {
-						helper.ReturnErr(w, err, http.StatusInternalServerError)
-						return
-					}
-
-					hashSum := hash.Sum(nil)
-					digest := b64.RawURLEncoding.EncodeToString(hashSum)
-
-					contentType := files[i].Header.Get("content-type")
-
-					uploadedBlob = &repository.Blob{
-						Id:          blob.Id,
-						Digest:      digest,
-						Size:        written,
-						ContentType: contentType,
-					}
-
-					uploadedBlob, err = api.useBlobRepository.Update(user, uploadedBlob)
+					uploadedBlob, err = api.useBlobStorage.Rewrite(user, blob, file, blobsPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
 					if err != nil {
 						switch {
 						case errors.Is(err, repository.ErrBlobNotFound):
@@ -157,20 +84,9 @@ func (api *BlobsApi) Upload() http.Handler {
 						}
 						return
 					}
-
-					os.Rename(filepath.Join(blobsPath, uuid), filepath.Join(blobsPath, digest))
-					if err != nil {
-						helper.ReturnErr(w, err, http.StatusInternalServerError)
-						return
-					}
-
-					blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
-
-					// delete the old blob
-					_ = os.Remove(filepath.Join(blobsPath, blobDigestToRemove))
 				}
 			} else {
-				uploadedBlob, err = api.useBlobStorage.Create(user, file, blobsPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
+				uploadedBlob, err = api.useBlobStorage.Store(user, file, blobsPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusInternalServerError)
 					return
@@ -222,73 +138,9 @@ func (api *BlobsApi) Download() http.Handler {
 
 			blobPath = filepath.Clean(blobPath)
 
-			out, err := os.Open(blobPath)
+			err = api.useBlobStorage.Load(w, blob, blobPath)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-			defer out.Close()
-
-			key, err := b64.RawURLEncoding.DecodeString(blob.Metadata.Key)
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			iv, err := b64.RawURLEncoding.DecodeString(blob.Metadata.Iv)
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			hash := sha256.New()
-
-			_, err = hash.Write(iv)
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			if _, err := io.Copy(hash, out); err != nil {
-				fmt.Println(err)
-				return
-			}
-
-			hashSum := hash.Sum(nil)
-			digest := b64.RawURLEncoding.EncodeToString(hashSum)
-
-			if digest != blob.Digest {
-				helper.ReturnErr(w, repository.ErrWrongResourceDigest, http.StatusInternalServerError)
-				return
-			}
-
-			out.Seek(0, io.SeekStart)
-
-			aes, err := aes.NewCipher(key)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-
-			stream := cipher.NewCTR(aes, iv)
-
-			pipeReader, pipeWriter := io.Pipe()
-			writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
-
-			// do the decryption in a goroutine
-			go func() {
-				// _, err := io.Copy(writer, io.TeeReader(out, hash))
-				_, err := io.Copy(writer, out)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				defer writer.Close()
-			}()
-
-			_, err = io.Copy(w, pipeReader)
-			if err != nil {
-				fmt.Println(err)
 				return
 			}
 		}

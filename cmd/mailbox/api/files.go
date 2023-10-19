@@ -5,14 +5,9 @@ import (
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"cargomail/internal/storage"
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/sha256"
-	b64 "encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -64,7 +59,7 @@ func (api *FilesApi) Upload() http.Handler {
 
 			uuid := uuid.NewString()
 
-			uploadedFile, err := api.useFileStorage.Create(user, file, filesPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
+			uploadedFile, err := api.useFileStorage.Store(user, file, filesPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
@@ -127,73 +122,9 @@ func (api *FilesApi) Download() http.Handler {
 
 			filePath = filepath.Clean(filePath)
 
-			out, err := os.Open(filePath)
+			err = api.useFileStorage.Load(w, file, filePath)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-			defer out.Close()
-
-			key, err := b64.RawURLEncoding.DecodeString(file.Metadata.Key)
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			iv, err := b64.RawURLEncoding.DecodeString(file.Metadata.Iv)
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			hash := sha256.New()
-
-			_, err = hash.Write(iv)
-			if err != nil {
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
-				return
-			}
-
-			if _, err := io.Copy(hash, out); err != nil {
-				fmt.Println(err)
-				return
-			}
-
-			hashSum := hash.Sum(nil)
-			digest := b64.RawURLEncoding.EncodeToString(hashSum)
-
-			if digest != file.Digest {
-				helper.ReturnErr(w, repository.ErrWrongResourceDigest, http.StatusInternalServerError)
-				return
-			}
-
-			out.Seek(0, io.SeekStart)
-
-			aes, err := aes.NewCipher(key)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-
-			stream := cipher.NewCTR(aes, iv)
-
-			pipeReader, pipeWriter := io.Pipe()
-			writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
-
-			// do the decryption in a goroutine
-			go func() {
-				// _, err := io.Copy(writer, io.TeeReader(out, hash))
-				_, err := io.Copy(writer, out)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				defer writer.Close()
-			}()
-
-			_, err = io.Copy(w, pipeReader)
-			if err != nil {
-				fmt.Println(err)
 				return
 			}
 		}
