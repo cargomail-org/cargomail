@@ -8,7 +8,7 @@ import (
 )
 
 type UserApi struct {
-	userDepository repository.UserDepository
+	useUserRepository repository.UseUserRepository
 }
 
 func (api *UserApi) Profile() http.Handler {
@@ -25,7 +25,7 @@ func (api *UserApi) Profile() http.Handler {
 				return
 			}
 
-			profile, err := api.userDepository.UpdateProfile(user)
+			profile, err := api.useUserRepository.UpdateProfile(user)
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
@@ -33,7 +33,7 @@ func (api *UserApi) Profile() http.Handler {
 
 			helper.SetJsonResponse(w, http.StatusOK, profile)
 		} else if r.Method == "GET" {
-			profile, err := api.userDepository.GetProfile(user.Username)
+			profile, err := api.useUserRepository.GetProfile(user.Username)
 			if err != nil {
 				switch {
 				case errors.Is(err, repository.ErrUsernameNotFound):

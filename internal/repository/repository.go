@@ -68,14 +68,14 @@ type State struct {
 }
 
 type Repository struct {
-	Blobs    BlobDepository
-	Files    FileDepository
-	Session  SessionDepository
-	User     UserDepository
-	Contacts ContactDepository
-	Drafts   DraftDepository
-	Messages MessageDepository
-	Threads  ThreadDepository
+	Blobs    UseBlobRepository
+	Files    UseFileRepository
+	Session  UseSessionRepository
+	User     UseUserRepository
+	Contacts UseContactRepository
+	Drafts   UseDraftRepository
+	Messages UseMessageRepository
+	Threads  UseThreadRepository
 }
 
 const KeySize int = 32

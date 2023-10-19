@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type ContactDepository interface {
+type UseContactRepository interface {
 	Create(user *User, contact *Contact) (*Contact, error)
 	List(user *User) (*ContactList, error)
 	Sync(user *User, history *History) (*ContactSync, error)

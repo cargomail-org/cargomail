@@ -10,7 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type UserDepository interface {
+type UseUserRepository interface {
 	Create(user *User) error
 	UpdateProfile(user *User) (*UserProfile, error)
 	GetProfile(username string) (*UserProfile, error)

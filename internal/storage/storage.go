@@ -5,8 +5,8 @@ import (
 )
 
 type Storage struct {
-	Blobs BlobStore
-	Files FileStore
+	Blobs UseBlobStorage
+	Files UseFileStorage
 }
 
 func NewStorage(repository repository.Repository) Storage {

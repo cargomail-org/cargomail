@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type FileDepository interface {
+type UseFileRepository interface {
 	Create(user *User, file *File) (*File, error)
 	List(user *User, folder int) (*FileList, error)
 	Sync(user *User, history *History) (*FileSync, error)

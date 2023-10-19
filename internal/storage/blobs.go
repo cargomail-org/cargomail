@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 )
 
-type BlobStore interface {
+type UseBlobStorage interface {
 	Create(user *repository.User, file multipart.File, blobsPath, uuid, filename, contentType string) (*repository.Blob, error)
 	// Update(user *repository.User, file multipart.File, blobsPath, uuid, filename, contentType string) (*repository.Blob, error)
 	// List(context.Context, int) (*repository.BlobList, error)

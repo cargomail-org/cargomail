@@ -10,7 +10,7 @@ import (
 )
 
 type DraftsApi struct {
-	draftDepository repository.DraftDepository
+	useDraftRepository repository.UseDraftRepository
 }
 
 func (api *DraftsApi) Create() http.Handler {
@@ -29,7 +29,7 @@ func (api *DraftsApi) Create() http.Handler {
 			return
 		}
 
-		draft, err = api.draftDepository.Create(user, draft)
+		draft, err = api.useDraftRepository.Create(user, draft)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -47,7 +47,7 @@ func (api *DraftsApi) List() http.Handler {
 			return
 		}
 
-		draftHistory, err := api.draftDepository.List(user)
+		draftHistory, err := api.useDraftRepository.List(user)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -73,7 +73,7 @@ func (api *DraftsApi) Sync() http.Handler {
 			return
 		}
 
-		draftHistory, err := api.draftDepository.Sync(user, history)
+		draftHistory, err := api.useDraftRepository.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -114,7 +114,7 @@ func (api *DraftsApi) Update() http.Handler {
 			return
 		}
 
-		draft, err = api.draftDepository.Update(user, draft)
+		draft, err = api.useDraftRepository.Update(user, draft)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrDraftNotFound):
@@ -159,7 +159,7 @@ func (api *DraftsApi) Trash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.draftDepository.Trash(user, idsString)
+		err = api.useDraftRepository.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -199,7 +199,7 @@ func (api *DraftsApi) Untrash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.draftDepository.Untrash(user, idsString)
+		err = api.useDraftRepository.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -239,7 +239,7 @@ func (api *DraftsApi) Delete() http.Handler {
 
 		idsString := string(body)
 
-		err = api.draftDepository.Delete(user, idsString)
+		err = api.useDraftRepository.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -280,7 +280,7 @@ func (api *DraftsApi) Send() http.Handler {
 			return
 		}
 
-		message, err := api.draftDepository.Send(user, draft)
+		message, err := api.useDraftRepository.Send(user, draft)
 		if err != nil {
 			recipientsNotFoundError := &repository.RecipientsNotFoundError{}
 

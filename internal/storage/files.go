@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 )
 
-type FileStore interface {
+type UseFileStorage interface {
 	Create(user *repository.User, file multipart.File, filesPath, uuid, filename, contentType string) (*repository.File, error)
 	// List(*repository.User, ) (*repository.FileList, error)
 }

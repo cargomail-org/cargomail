@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type DraftDepository interface {
+type UseDraftRepository interface {
 	Create(user *User, draft *Draft) (*Draft, error)
 	List(user *User) (*DraftList, error)
 	Sync(user *User, history *History) (*DraftSync, error)

@@ -22,8 +22,8 @@ import (
 )
 
 type BlobsApi struct {
-	blobDepository repository.BlobDepository
-	blobStore      storage.BlobStore
+	useBlobRepository repository.UseBlobRepository
+	useBlobStorage    storage.UseBlobStorage
 }
 
 func (api *BlobsApi) Upload() http.Handler {
@@ -72,7 +72,7 @@ func (api *BlobsApi) Upload() http.Handler {
 					return
 				}
 
-				blob, err := api.blobDepository.GetById(user, files[i].Filename)
+				blob, err := api.useBlobRepository.GetById(user, files[i].Filename)
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusNotFound)
 					return
@@ -147,7 +147,7 @@ func (api *BlobsApi) Upload() http.Handler {
 						ContentType: contentType,
 					}
 
-					uploadedBlob, err = api.blobDepository.Update(user, uploadedBlob)
+					uploadedBlob, err = api.useBlobRepository.Update(user, uploadedBlob)
 					if err != nil {
 						switch {
 						case errors.Is(err, repository.ErrBlobNotFound):
@@ -170,7 +170,7 @@ func (api *BlobsApi) Upload() http.Handler {
 					_ = os.Remove(filepath.Join(blobsPath, blobDigestToRemove))
 				}
 			} else {
-				uploadedBlob, err = api.blobStore.Create(user, file, blobsPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
+				uploadedBlob, err = api.useBlobStorage.Create(user, file, blobsPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
 				if err != nil {
 					helper.ReturnErr(w, err, http.StatusInternalServerError)
 					return
@@ -200,7 +200,7 @@ func (api *BlobsApi) Download() http.Handler {
 
 		digest := path.Base(r.URL.Path)
 
-		blob, err := api.blobDepository.GetByDigest(user, digest)
+		blob, err := api.useBlobRepository.GetByDigest(user, digest)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -313,7 +313,7 @@ func (api *BlobsApi) List() http.Handler {
 			}
 		}
 
-		blobList, err := api.blobDepository.List(user, folder.Folder)
+		blobList, err := api.useBlobRepository.List(user, folder.Folder)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -339,7 +339,7 @@ func (api *BlobsApi) Sync() http.Handler {
 			return
 		}
 
-		blobSync, err := api.blobDepository.Sync(user, history)
+		blobSync, err := api.useBlobRepository.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -379,7 +379,7 @@ func (api *BlobsApi) Trash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.blobDepository.Trash(user, idsString)
+		err = api.useBlobRepository.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -419,7 +419,7 @@ func (api *BlobsApi) Untrash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.blobDepository.Untrash(user, idsString)
+		err = api.useBlobRepository.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -459,7 +459,7 @@ func (api *BlobsApi) Delete() http.Handler {
 
 		idsString := string(body)
 
-		_, err = api.blobDepository.Delete(user, idsString)
+		_, err = api.useBlobRepository.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return

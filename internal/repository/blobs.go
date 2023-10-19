@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type BlobDepository interface {
+type UseBlobRepository interface {
 	Create(user *User, blob *Blob) (*Blob, error)
 	List(user *User, folder int) (*BlobList, error)
 	Sync(user *User, history *History) (*BlobSync, error)

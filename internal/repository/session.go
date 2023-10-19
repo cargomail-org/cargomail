@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type SessionDepository interface {
+type UseSessionRepository interface {
 	New(userID int64, ttl time.Duration, scope string) (*Session, error)
 	Insert(session *Session) error
 	UpdateIfOlderThan5Minutes(user *User, id string, expiry time.Time) (bool, error)

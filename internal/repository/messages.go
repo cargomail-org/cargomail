@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type MessageDepository interface {
+type UseMessageRepository interface {
 	List(user *User, folder int) (*MessageList, error)
 	Sync(user *User, history *History) (*MessageSync, error)
 	Update(user *User, state *State) error

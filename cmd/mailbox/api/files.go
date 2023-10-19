@@ -23,8 +23,8 @@ import (
 )
 
 type FilesApi struct {
-	fileDepository repository.FileDepository
-	fileStore      storage.FileStore
+	useFileRepository repository.UseFileRepository
+	useFileStorage    storage.UseFileStorage
 }
 
 func (api *FilesApi) Upload() http.Handler {
@@ -64,7 +64,7 @@ func (api *FilesApi) Upload() http.Handler {
 
 			uuid := uuid.NewString()
 
-			uploadedFile, err := api.fileStore.Create(user, file, filesPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
+			uploadedFile, err := api.useFileStorage.Create(user, file, filesPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
 			if err != nil {
 				helper.ReturnErr(w, err, http.StatusInternalServerError)
 				return
@@ -93,7 +93,7 @@ func (api *FilesApi) Download() http.Handler {
 
 		digest := path.Base(r.URL.Path)
 
-		file, err := api.fileDepository.GetByDigest(user, digest)
+		file, err := api.useFileRepository.GetByDigest(user, digest)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -218,7 +218,7 @@ func (api *FilesApi) List() http.Handler {
 			}
 		}
 
-		fileList, err := api.fileDepository.List(user, folder.Folder)
+		fileList, err := api.useFileRepository.List(user, folder.Folder)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
@@ -244,7 +244,7 @@ func (api *FilesApi) Sync() http.Handler {
 			return
 		}
 
-		fileSync, err := api.fileDepository.Sync(user, history)
+		fileSync, err := api.useFileRepository.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -284,7 +284,7 @@ func (api *FilesApi) Trash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.fileDepository.Trash(user, idsString)
+		err = api.useFileRepository.Trash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -324,7 +324,7 @@ func (api *FilesApi) Untrash() http.Handler {
 
 		idsString := string(body)
 
-		err = api.fileDepository.Untrash(user, idsString)
+		err = api.useFileRepository.Untrash(user, idsString)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -364,7 +364,7 @@ func (api *FilesApi) Delete() http.Handler {
 
 		idsString := string(body)
 
-		_, err = api.fileDepository.Delete(user, idsString)
+		_, err = api.useFileRepository.Delete(user, idsString)
 		if err != nil {
 			helper.ReturnErr(w, err, http.StatusInternalServerError)
 			return
