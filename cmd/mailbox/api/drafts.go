@@ -3,6 +3,7 @@ package api
 import (
 	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/repository"
+	"cargomail/internal/storage"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 
 type DraftsApi struct {
 	useDraftRepository repository.UseDraftRepository
+	useDraftStorage    storage.UseDraftStorage
 }
 
 func (api *DraftsApi) Create() http.Handler {
@@ -29,7 +31,7 @@ func (api *DraftsApi) Create() http.Handler {
 			return
 		}
 
-		draft, err = api.useDraftRepository.Create(user, draft)
+		draft, err = api.useDraftStorage.Create(user, draft)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -47,13 +49,13 @@ func (api *DraftsApi) List() http.Handler {
 			return
 		}
 
-		draftHistory, err := api.useDraftRepository.List(user)
+		draftList, err := api.useDraftStorage.List(user)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		helper.SetJsonResponse(w, http.StatusOK, draftHistory)
+		helper.SetJsonResponse(w, http.StatusOK, draftList)
 	})
 }
 
@@ -114,7 +116,7 @@ func (api *DraftsApi) Update() http.Handler {
 			return
 		}
 
-		draft, err = api.useDraftRepository.Update(user, draft)
+		draft, err = api.useDraftStorage.Update(user, draft)
 		if err != nil {
 			switch {
 			case errors.Is(err, repository.ErrDraftNotFound):

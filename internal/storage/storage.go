@@ -5,13 +5,15 @@ import (
 )
 
 type Storage struct {
-	Blobs UseBlobStorage
-	Files UseFileStorage
+	Blobs  UseBlobStorage
+	Files  UseFileStorage
+	Drafts UseDraftStorage
 }
 
 func NewStorage(repository repository.Repository) Storage {
 	return Storage{
-		Blobs: &BlobStorage{repository},
-		Files: &FileStorage{repository},
+		Blobs:  &BlobStorage{repository},
+		Files:  &FileStorage{repository},
+		Drafts: &DraftStorage{repository},
 	}
 }
