@@ -20,7 +20,7 @@ The Cargomail architecture separates the mailbox from the email address. It uses
 
 #### *Key Points*
 
-• Each email consists of an envelope, a <i>placeholder message</i> created in the <i>resource mailbox</i>, and related external bodies stored in the same <i>resource mailbox</i>. The <i>placeholder message</i> also acts as an access control list to external bodies.
+• Each email consists of an envelope, a <i>placeholder message</i> created in the <i>resource mailbox</i>, and related external resources (message bodies) stored in the same <i>resource mailbox</i>. The <i>placeholder message</i> also acts as an access control list to external resources.
 
 • The resources owned by the sender, stored in the origin <i>resource mailbox</i>, are temporarily shared with recipients. Following a successful sharing process, a <i>placeholder message</i> is sent to each recipient through the push layer. The <i>placeholder message</i> contains the origin <i>resource mailbox</i> URL, the cryptographic hash values of the referenced resources (Content-IDs), and the category of correspondence, e.g., personal, business, or healthcare (see Appendix A for a <i>placeholder message</i> example).
 
