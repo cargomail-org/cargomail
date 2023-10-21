@@ -30,6 +30,16 @@ BEGIN
     SELECT RAISE(ABORT, 'Update not allowed');
 END;
 
+CREATE TRIGGER IF NOT EXISTS "BlobBeforeUpdateDraftId"
+    BEFORE UPDATE OF
+        "draftId"
+    ON "Blob"
+    FOR EACH ROW
+    WHEN new."draftId" IS NOT NULL
+BEGIN
+    SELECT RAISE(ABORT, 'Update of "draftId" (except to NULL) is not allowed');
+END;
+
 CREATE TRIGGER IF NOT EXISTS "BlobAfterUpdate"
     AFTER UPDATE OF
         "digest",

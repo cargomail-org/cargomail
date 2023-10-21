@@ -21,6 +21,7 @@ type DraftStorage struct {
 func (s *DraftStorage) Create(user *repository.User, draft *repository.Draft) (*repository.Draft, error) {
 	return s.repository.Drafts.Create(user, draft)
 }
+
 func (s *DraftStorage) List(user *repository.User) (*repository.DraftList, error) {
 	return s.repository.Drafts.List(user)
 }

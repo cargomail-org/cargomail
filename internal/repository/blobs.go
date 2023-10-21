@@ -34,6 +34,7 @@ type BlobMetadata struct {
 type Blob struct {
 	Id          string        `json:"id"`
 	UserId      int64         `json:"-"`
+	DraftId     *int64        `json:"-"`
 	Folder      int16         `json:"folder"`
 	Digest      string        `json:"digest"`
 	Name        string        `json:"name"`
@@ -111,15 +112,15 @@ func (r BlobRepository) Create(user *User, blob *Blob) (*Blob, error) {
 
 	query := `
 		INSERT INTO
-			"Blob" ("userId", "deviceId", "folder", "digest", "name", "snippet", "path", "contentType", "size", "metadata")
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+			"Blob" ("userId", "draftId", "deviceId", "folder", "digest", "name", "snippet", "path", "contentType", "size", "metadata")
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 			RETURNING * ;`
 
 	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
 
 	folder := 0
 
-	args := []interface{}{user.Id, prefixedDeviceId, folder, blob.Digest, blob.Name, blob.Snippet, blob.Path, blob.ContentType, blob.Size, blob.Metadata}
+	args := []interface{}{user.Id, blob.DraftId, prefixedDeviceId, folder, blob.Digest, blob.Name, blob.Snippet, blob.Path, blob.ContentType, blob.Size, blob.Metadata}
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 	if err != nil {
