@@ -35,6 +35,56 @@ func (s *DraftStorage) Create(user *repository.User, draft *repository.Draft) (*
 }
 
 func (s *DraftStorage) Update(user *repository.User, draft *repository.Draft) (*repository.Draft, error) {
+	body := &bytes.Buffer{}
+	multipartWriter := multipart.NewWriter(body)
+
+	var parseParts func(parts []*repository.MessagePart) error
+	parseParts = func(parts []*repository.MessagePart) error {
+		var err error
+
+		for i := range parts {
+			var data []byte
+
+			contentDisposition, _ := parts[i].Headers["Content-Disposition"].(string)
+
+			if contentDisposition == "inline" {
+
+				contentTransferEncoding, _ := parts[i].Headers["Content-Transfer-Encoding"].(string)
+
+				if contentTransferEncoding == "base64" {
+					data, err = b64.StdEncoding.DecodeString(parts[i].Body.Data)
+					if err != nil {
+						return err
+					}
+				} else {
+					data = []byte(parts[i].Body.Data)
+				}
+
+				dataReader := bytes.NewReader(data)
+
+				contentType, ok := parts[i].Headers["Content-Type"].(string)
+				if !ok {
+					return repository.ErrMissingContentType
+				}
+
+				mimeHeader := make(textproto.MIMEHeader)
+				mimeHeader.Set("Content-Disposition", contentDisposition)
+				mimeHeader.Set("Content-Type", contentType)
+				mimeHeader.Set("Content-Length", strconv.FormatInt(int64(dataReader.Size()), 10))
+
+				part, err := multipartWriter.CreatePart(mimeHeader)
+				if err != nil {
+					return err
+				}
+
+				io.Copy(part, dataReader)
+			}
+
+			err = parseParts(parts[i].Parts)
+		}
+		return err
+	}
+
 	if draft.Payload == nil {
 		return nil, repository.ErrEmptyPayload
 	}
@@ -48,47 +98,9 @@ func (s *DraftStorage) Update(user *repository.User, draft *repository.Draft) (*
 		}
 	}
 
-	body := &bytes.Buffer{}
-	multipartWriter := multipart.NewWriter(body)
-
-	for i := range draft.Payload.Parts {
-		var data []byte
-		var err error
-
-		contentDisposition, _ := draft.Payload.Parts[i].Headers["Content-Disposition"].(string)
-
-		if contentDisposition == "inline" {
-
-			contentTransferEncoding, _ := draft.Payload.Parts[i].Headers["Content-Transfer-Encoding"].(string)
-
-			if contentTransferEncoding == "base64" {
-				data, err = b64.StdEncoding.DecodeString(draft.Payload.Parts[i].Body.Data)
-				if err != nil {
-					return nil, err
-				}
-			} else {
-				data = []byte(draft.Payload.Parts[i].Body.Data)
-			}
-
-			dataReader := bytes.NewReader(data)
-
-			contentType, ok := draft.Payload.Parts[i].Headers["Content-Type"].(string)
-			if !ok {
-				return nil, repository.ErrMissingContentType
-			}
-
-			mimeHeader := make(textproto.MIMEHeader)
-			mimeHeader.Set("Content-Disposition", contentDisposition)
-			mimeHeader.Set("Content-Type", contentType)
-			mimeHeader.Set("Content-Length", strconv.FormatInt(int64(dataReader.Size()), 10))
-
-			part, err := multipartWriter.CreatePart(mimeHeader)
-			if err != nil {
-				return nil, err
-			}
-
-			io.Copy(part, dataReader)
-		}
+	err := parseParts(draft.Payload.Parts)
+	if err != nil {
+		return nil, err
 	}
 
 	multipartWriter.Close()
