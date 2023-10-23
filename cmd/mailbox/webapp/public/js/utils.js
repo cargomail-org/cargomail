@@ -602,6 +602,7 @@ export const composePayload = (parsed) => {
     if (parsed.plainContent) {
       plainTextPart = {
         headers: {
+          "Content-Disposition": "inline",
           "Content-Type": "text/plain; charset=UTF-8",
           "Content-Transfer-Encoding": "base64",
         },
@@ -612,6 +613,7 @@ export const composePayload = (parsed) => {
     if (parsed.htmlContent) {
       htmlTextPart = {
         headers: {
+          "Content-Disposition": "inline",
           "Content-Type": "text/html; charset=UTF-8",
           "Content-Transfer-Encoding": "base64",
         },

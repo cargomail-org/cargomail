@@ -14,6 +14,6 @@ func NewStorage(repository repository.Repository) Storage {
 	return Storage{
 		Blobs:  &BlobStorage{repository},
 		Files:  &FileStorage{repository},
-		Drafts: &DraftStorage{repository},
+		Drafts: &DraftStorage{repository, BlobStorage{repository}},
 	}
 }

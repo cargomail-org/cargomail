@@ -60,37 +60,10 @@ func (api *BlobsApi) Upload() http.Handler {
 
 			uploadedBlob := &repository.Blob{}
 
-			// update should be by id
-			if r.Method == "PUT" {
-				if len(files[i].Filename) != 32 {
-					helper.ReturnErr(w, repository.ErrBlobWrongName, http.StatusBadRequest)
-					return
-				}
-
-				blob, err := api.useBlobRepository.GetById(user, files[i].Filename)
-				if err != nil {
-					helper.ReturnErr(w, err, http.StatusNotFound)
-					return
-				}
-
-				if len(blob.Id) > 0 {
-					uploadedBlob, err = api.useBlobStorage.Rewrite(user, blob, file, blobsPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
-					if err != nil {
-						switch {
-						case errors.Is(err, repository.ErrBlobNotFound):
-							helper.ReturnErr(w, err, http.StatusNotFound)
-						default:
-							helper.ReturnErr(w, err, http.StatusInternalServerError)
-						}
-						return
-					}
-				}
-			} else {
-				uploadedBlob, err = api.useBlobStorage.Store(user, file, blobsPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
-				if err != nil {
-					helper.ReturnErr(w, err, http.StatusInternalServerError)
-					return
-				}
+			uploadedBlob, err = api.useBlobStorage.Store(user, file, blobsPath, uuid, files[i].Filename, files[i].Header.Get("content-type"))
+			if err != nil {
+				helper.ReturnErr(w, err, http.StatusInternalServerError)
+				return
 			}
 
 			if uploadedBlob != nil && (repository.Blob{}) != *uploadedBlob {

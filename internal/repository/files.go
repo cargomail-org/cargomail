@@ -16,7 +16,7 @@ type UseFileRepository interface {
 	Sync(user *User, history *History) (*FileSync, error)
 	Trash(user *User, ids string) error
 	Untrash(user *User, ids string) error
-	Delete(user *User, ids string) (*[]File, error)
+	Delete(user *User, ids string) ([]*File, error)
 	GetById(user *User, id string) (*File, error)
 	GetByDigest(user *User, digest string) (*File, error)
 }
@@ -388,11 +388,11 @@ func (r *FileRepository) Untrash(user *User, ids string) error {
 	return nil
 }
 
-func (r FileRepository) Delete(user *User, ids string) (*[]File, error) {
+func (r FileRepository) Delete(user *User, ids string) ([]*File, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	files := []File{}
+	files := []*File{}
 
 	if len(ids) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
@@ -415,12 +415,12 @@ func (r FileRepository) Delete(user *User, ids string) (*[]File, error) {
 		err = tx.QueryRowContext(ctx, query, args...).Scan(file.Scan()...)
 		if err != nil {
 			if err.Error() == "sql: no rows in result set" {
-				return &[]File{}, nil
+				return []*File{}, nil
 			}
 			return nil, err
 		}
 
-		files = append(files, file)
+		files = append(files, &file)
 
 		query = `
 		UPDATE "FileDeleted"
@@ -440,7 +440,7 @@ func (r FileRepository) Delete(user *User, ids string) (*[]File, error) {
 		}
 	}
 
-	return &files, nil
+	return files, nil
 }
 
 func (r FileRepository) GetById(user *User, id string) (*File, error) {

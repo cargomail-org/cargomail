@@ -17,7 +17,8 @@ type UseBlobRepository interface {
 	Update(user *User, blob *Blob) (*Blob, error)
 	Trash(user *User, ids string) error
 	Untrash(user *User, ids string) error
-	Delete(user *User, ids string) (*[]Blob, error)
+	Delete(user *User, ids string) ([]*Blob, error)
+	CleanAndCreate(user *User, blobs []*Blob, ids string) ([]*Blob, []*Blob, error)
 	GetById(user *User, id string) (*Blob, error)
 	GetByDigest(user *User, digest string) (*Blob, error)
 }
@@ -34,7 +35,7 @@ type BlobMetadata struct {
 type Blob struct {
 	Id          string        `json:"id"`
 	UserId      int64         `json:"-"`
-	DraftId     *int64        `json:"-"`
+	DraftId     *string       `json:"-"`
 	Folder      int16         `json:"folder"`
 	Digest      string        `json:"digest"`
 	Name        string        `json:"name"`
@@ -483,11 +484,11 @@ func (r *BlobRepository) Untrash(user *User, ids string) error {
 	return nil
 }
 
-func (r BlobRepository) Delete(user *User, ids string) (*[]Blob, error) {
+func (r BlobRepository) Delete(user *User, ids string) ([]*Blob, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	blobs := []Blob{}
+	blobs := []*Blob{}
 
 	if len(ids) > 0 {
 		tx, err := r.db.BeginTx(ctx, nil)
@@ -510,12 +511,12 @@ func (r BlobRepository) Delete(user *User, ids string) (*[]Blob, error) {
 		err = tx.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 		if err != nil {
 			if err.Error() == "sql: no rows in result set" {
-				return &[]Blob{}, nil
+				return []*Blob{}, nil
 			}
 			return nil, err
 		}
 
-		blobs = append(blobs, blob)
+		blobs = append(blobs, &blob)
 
 		query = `
 		UPDATE "BlobDeleted"
@@ -535,7 +536,88 @@ func (r BlobRepository) Delete(user *User, ids string) (*[]Blob, error) {
 		}
 	}
 
-	return &blobs, nil
+	return blobs, nil
+}
+
+func (r BlobRepository) CleanAndCreate(user *User, blobs []*Blob, draftId string) ([]*Blob, []*Blob, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer tx.Rollback()
+
+	removedBlobs := []*Blob{}
+	createdBlobs := []*Blob{}
+
+	if len(draftId) > 0 {
+
+		query := `
+		DELETE
+			FROM "Blob"
+			WHERE "userId" = $1 AND
+			"draftId" = $2
+			RETURNING * ;`
+
+		args := []interface{}{user.Id, draftId}
+
+		rows, err := tx.QueryContext(ctx, query, args...)
+		if err != nil {
+			if err.Error() != "sql: no rows in result set" {
+				return nil, nil, err
+			}
+		}
+
+		defer rows.Close()
+
+		for rows.Next() {
+			var removedBlob Blob
+
+			err := rows.Scan(removedBlob.Scan()...)
+
+			if err != nil {
+				return nil, nil, err
+			}
+
+			removedBlobs = append(removedBlobs, &removedBlob)
+		}
+
+		if err = rows.Err(); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	query := `
+		INSERT INTO
+			"Blob" ("userId", "draftId", "deviceId", "folder", "digest", "name", "snippet", "path", "contentType", "size", "metadata")
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+			RETURNING * ;`
+
+	prefixedDeviceId := getPrefixedDeviceId(user.DeviceId)
+
+	folder := 0
+
+	for i := range blobs {
+		blob := Blob{}
+
+		args := []interface{}{user.Id, blobs[i].DraftId, prefixedDeviceId, folder, blobs[i].Digest, blobs[i].Name, blobs[i].Snippet, blobs[i].Path, blobs[i].ContentType, blobs[i].Size, blobs[i].Metadata}
+
+		err = tx.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		createdBlobs = append(createdBlobs, &blob)
+
+	}
+
+	if err = tx.Commit(); err != nil {
+		return nil, nil, err
+	}
+
+	return removedBlobs, createdBlobs, nil
 }
 
 func (r BlobRepository) GetById(user *User, id string) (*Blob, error) {

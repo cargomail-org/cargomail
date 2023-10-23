@@ -135,7 +135,6 @@ func (svc *service) routes(r *Router) {
 	r.Route("POST", "/api/v1/blobs/upload", svc.api.Authenticate(svc.api.Blobs.Upload()))
 	r.Route("POST", "/api/v1/blobs/list", svc.api.Authenticate(svc.api.Blobs.List()))
 	r.Route("POST", "/api/v1/blobs/sync", svc.api.Authenticate(svc.api.Blobs.Sync()))
-	r.Route("PUT", "/api/v1/blobs/upload", svc.api.Authenticate(svc.api.Blobs.Upload()))
 	r.Route("HEAD", "/api/v1/blobs/", svc.api.Authenticate(svc.api.Blobs.Download()))
 	r.Route("GET", "/api/v1/blobs/", svc.api.Authenticate(svc.api.Blobs.Download()))
 	r.Route("POST", "/api/v1/blobs/trash", svc.api.Authenticate(svc.api.Blobs.Trash()))
