@@ -8,10 +8,8 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	b64 "encoding/base64"
-	"fmt"
 	"io"
 	"mime/multipart"
-	"net/http"
 	"os"
 	"path/filepath"
 
@@ -21,7 +19,7 @@ import (
 type UseBlobStorage interface {
 	Store(user *repository.User, file multipart.File, blobsPath, uuid, filename, contentType string) (*repository.Blob, error)
 	CleanAndStoreMultipart(user *repository.User, draftId string, body *multipart.Reader, blobsPath string) ([]*repository.Blob, error)
-	Load(w http.ResponseWriter, blob *repository.Blob, blobPath string) error
+	Load(w io.Writer, blob *repository.Blob, blobPath string) error
 }
 
 type BlobStorage struct {
@@ -213,7 +211,7 @@ func (s *BlobStorage) CleanAndStoreMultipart(user *repository.User, draftId stri
 	return createdBlobs, nil
 }
 
-func (s *BlobStorage) Load(w http.ResponseWriter, blob *repository.Blob, blobPath string) error {
+func (s *BlobStorage) Load(w io.Writer, blob *repository.Blob, blobPath string) error {
 	out, err := os.Open(blobPath)
 	if err != nil {
 		return err
@@ -273,7 +271,6 @@ func (s *BlobStorage) Load(w http.ResponseWriter, blob *repository.Blob, blobPat
 
 	_, err = io.Copy(w, pipeReader)
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 

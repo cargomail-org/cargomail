@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 type UseDraftStorage interface {
@@ -101,6 +102,7 @@ func (s *DraftStorage) ComposePlaceholderMessage(user *repository.User, draft *r
 	multipartWriter := multipart.NewWriter(body)
 
 	var parseParts func(parts []*repository.MessagePart) error
+
 	parseParts = func(parts []*repository.MessagePart) error {
 		var err error
 
@@ -177,6 +179,7 @@ func (s *DraftStorage) ComposePlaceholderMessage(user *repository.User, draft *r
 	// create a placeholder message
 
 	var updateParts func(parts []*repository.MessagePart) error
+
 	updateParts = func(parts []*repository.MessagePart) error {
 		var err error
 
@@ -224,5 +227,75 @@ func (s *DraftStorage) ComposePlaceholderMessage(user *repository.User, draft *r
 
 func (s *DraftStorage) ParsePlaceholderMessage(user *repository.User, drafts []*repository.Draft) ([]*repository.Draft, error) {
 	// TODO parse the placeholder message
+	for i := range drafts {
+		// create message
+
+		var updateParts func(parts []*repository.MessagePart) error
+
+		updateParts = func(parts []*repository.MessagePart) error {
+			var err error
+
+			for j := range parts {
+				contentDisposition, _ := parts[j].Headers["Content-Disposition"].(string)
+
+				if contentDisposition == "inline" {
+					contentTypes, ok := parts[j].Headers["Content-Type"].([]interface{})
+					if ok {
+						digest, ok := parts[j].Headers["Content-ID"].(string)
+						if ok {
+							v := strings.SplitAfter(digest, "<")
+							if len(v) > 0 {
+								digest = strings.TrimRight(v[1], ">")
+							}
+
+							for k := range parts[j].Headers {
+								if k != "Content-Disposition" {
+									delete(parts[j].Headers, k)
+								}
+							}
+
+							blob, err := s.repository.Blobs.GetByDigest(user, digest)
+							if err != nil {
+								return err
+							}
+
+							blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
+							blobPath := filepath.Join(blobsPath, digest)
+
+							buf := new(bytes.Buffer)
+
+							err = s.blobStorage.Load(buf, blob, blobPath)
+							if err != nil {
+								return err
+							}
+
+							data := b64.StdEncoding.EncodeToString(buf.Bytes())
+							if err != nil {
+								return err
+							}
+
+							body := &repository.Body{
+								Data: data,
+							}
+
+							parts[j].Body = body
+
+							parts[j].Headers["Content-Transfer-Encoding"] = "base64"
+							parts[j].Headers["Content-Type"] = contentTypes[1].(string)
+						}
+					}
+				}
+
+				err = updateParts(parts[j].Parts)
+			}
+			return err
+		}
+
+		err := updateParts(drafts[i].Payload.Parts)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return drafts, nil
 }

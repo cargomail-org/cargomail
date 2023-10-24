@@ -104,8 +104,8 @@ func (api *BlobsApi) Download() http.Handler {
 			w.WriteHeader(http.StatusOK)
 		} else if r.Method == "GET" {
 			blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
-
 			blobPath := filepath.Join(blobsPath, digest)
+			
 			w.Header().Set("Content-Type", blob.ContentType)
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q; filename*=UTF-8''%s", digest, digest))
 
