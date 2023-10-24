@@ -10,7 +10,6 @@ import (
 	b64 "encoding/base64"
 	"fmt"
 	"io"
-	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -122,8 +121,6 @@ func (s *BlobStorage) CleanAndStoreMultipart(user *repository.User, draftId stri
 		}
 
 		header := part.Header
-
-		log.Printf("header: %v", header)
 
 		uuid := uuid.NewString()
 

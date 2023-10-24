@@ -344,7 +344,9 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
         return;
       }
 
-      draftsTable.row(`#${response.id}`).data(response).draw();
+      // the placeholder message is in the response
+
+      draftsTable.row(`#${draft.id}`).data(draft).draw();
     } else {
       const error = "record not found";
 
@@ -378,13 +380,17 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
       return;
     }
 
+    // the placeholder message is in the response
+
     const composeIdInput = document.getElementById("composeIdInput");
 
     composeIdInput.value = response.id;
     composeIdInput.dispatchEvent(new Event("input"));
     composeIdInput.dispatchEvent(new Event("change"));
 
-    draftsTable.row.add(response);
+    draft.id = response.id;
+
+    draftsTable.row.add(draft);
     draftsTable.draw();
   }
 };
@@ -426,10 +432,12 @@ export const sendDraft = async (composeForm, id, reply, parsed) => {
         return;
       }
 
+      // the placeholder message is in the response
+
       draftsTable.rows(`#${id}`).remove().draw();
       draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);
 
-      threadsRefresh(sentTable, inboxTable, { inserted: [response] });
+      threadsRefresh(sentTable, inboxTable, { inserted: [draft] });
 
       composeClearForm();
     } else {

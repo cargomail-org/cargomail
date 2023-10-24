@@ -7,7 +7,6 @@ import (
 	b64 "encoding/base64"
 	"errors"
 	"io"
-	"log"
 	"mime/multipart"
 	"net/textproto"
 	"os"
@@ -112,7 +111,50 @@ func (s *DraftStorage) Update(user *repository.User, draft *repository.Draft) (*
 		return nil, err
 	}
 
-	log.Printf("uploadedBlobs: %v", uploadedBlobs)
+	// create a placeholder message
+
+	var updateParts func(parts []*repository.MessagePart) error
+	updateParts = func(parts []*repository.MessagePart) error {
+		var err error
+
+		j := 0
+
+		for i := range parts {
+			contentDisposition, _ := parts[i].Headers["Content-Disposition"].(string)
+
+			if contentDisposition == "inline" {
+				parts[i].Body = nil
+
+				for k := range parts[i].Headers {
+					if k != "Content-Disposition" {
+						delete(parts[i].Headers, k)
+					}
+				}
+
+				size := strconv.FormatInt(uploadedBlobs[j].Size, 10)
+
+				type ContentTypes []string
+
+				var contentTypes ContentTypes
+
+				contentTypes = append(contentTypes, `message/external-body; access-type="x-content-addressed-uri"; hash-algorithm="sha256"; size="`+size+`"`)
+				contentTypes = append(contentTypes, uploadedBlobs[j].ContentType)
+
+				parts[i].Headers["Content-ID"] = `<` + uploadedBlobs[j].Digest + `>`
+				parts[i].Headers["Content-Type"] = contentTypes
+
+				j++
+			}
+
+			err = updateParts(parts[i].Parts)
+		}
+		return err
+	}
+
+	err = updateParts(draft.Payload.Parts)
+	if err != nil {
+		return nil, err
+	}
 
 	draft, err = s.repository.Drafts.Update(user, draft)
 	if err != nil {
