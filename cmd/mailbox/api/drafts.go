@@ -75,7 +75,7 @@ func (api *DraftsApi) Sync() http.Handler {
 			return
 		}
 
-		draftHistory, err := api.useDraftRepository.Sync(user, history)
+		draftHistory, err := api.useDraftStorage.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

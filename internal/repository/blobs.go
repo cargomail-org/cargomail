@@ -602,7 +602,13 @@ func (r BlobRepository) CleanAndCreate(user *User, blobs []*Blob, draftId string
 	for i := range blobs {
 		blob := Blob{}
 
-		args := []interface{}{user.Id, blobs[i].DraftId, prefixedDeviceId, folder, blobs[i].Digest, blobs[i].Name, blobs[i].Snippet, blobs[i].Path, blobs[i].ContentType, blobs[i].Size, blobs[i].Metadata}
+		blobDraftId := blobs[i].DraftId
+		
+		if *blobDraftId == "" {
+			blobDraftId = nil
+		}
+
+		args := []interface{}{user.Id, blobDraftId, prefixedDeviceId, folder, blobs[i].Digest, blobs[i].Name, blobs[i].Snippet, blobs[i].Path, blobs[i].ContentType, blobs[i].Size, blobs[i].Metadata}
 
 		err = tx.QueryRowContext(ctx, query, args...).Scan(blob.Scan()...)
 		if err != nil {
