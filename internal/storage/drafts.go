@@ -16,14 +16,15 @@ import (
 
 type UseDraftStorage interface {
 	Create(user *repository.User, draft *repository.Draft) (*repository.Draft, error)
-	Update(user *repository.User, draft *repository.Draft) (*repository.Draft, error)
 	List(user *repository.User) (*repository.DraftList, error)
+	Sync(user *repository.User, history *repository.History) (*repository.DraftSync, error)
+	Update(user *repository.User, draft *repository.Draft) (*repository.Draft, error)
 	// Trash(user *repository.User, ids string) error
 	// Untrash(user *repository.User, ids string) error
 	// Delete(user *repository.User, ids string) error
 	// Send(user *repository.User, draft *repository.Draft) (*repository.Message, error)
 	ComposePlaceholderMessage(user *repository.User, draft *repository.Draft) (*repository.Draft, error)
-	ParsePlaceholderMessage(user *repository.User, draftList *repository.DraftList) (*repository.DraftList, error)
+	ParsePlaceholderMessage(user *repository.User, drafts []*repository.Draft) ([]*repository.Draft, error)
 }
 
 type DraftStorage struct {
@@ -40,6 +41,52 @@ func (s *DraftStorage) Create(user *repository.User, draft *repository.Draft) (*
 	return s.repository.Drafts.Create(user, draft)
 }
 
+func (s *DraftStorage) List(user *repository.User) (*repository.DraftList, error) {
+	draftList, err := s.repository.Drafts.List(user)
+	if err != nil {
+		return nil, err
+	}
+
+	drafts, err := s.ParsePlaceholderMessage(user, draftList.Drafts)
+	if err != nil {
+		return nil, err
+	}
+
+	draftList.Drafts = drafts
+
+	return draftList, err
+}
+
+func (s *DraftStorage) Sync(user *repository.User, history *repository.History) (*repository.DraftSync, error) {
+	draftList, err := s.repository.Drafts.Sync(user, history)
+	if err != nil {
+		return nil, err
+	}
+
+	drafts, err := s.ParsePlaceholderMessage(user, draftList.DraftsInserted)
+	if err != nil {
+		return nil, err
+	}
+
+	draftList.DraftsInserted = drafts
+
+	drafts, err = s.ParsePlaceholderMessage(user, draftList.DraftsUpdated)
+	if err != nil {
+		return nil, err
+	}
+
+	draftList.DraftsUpdated = drafts
+
+	drafts, err = s.ParsePlaceholderMessage(user, draftList.DraftsTrashed)
+	if err != nil {
+		return nil, err
+	}
+
+	draftList.DraftsTrashed = drafts
+
+	return draftList, err
+}
+
 func (s *DraftStorage) Update(user *repository.User, draft *repository.Draft) (*repository.Draft, error) {
 	draft, err := s.ComposePlaceholderMessage(user, draft)
 	if err != nil {
@@ -47,15 +94,6 @@ func (s *DraftStorage) Update(user *repository.User, draft *repository.Draft) (*
 	}
 
 	return s.repository.Drafts.Update(user, draft)
-}
-
-func (s *DraftStorage) List(user *repository.User) (*repository.DraftList, error) {
-	draftList, err := s.repository.Drafts.List(user)
-	if err != nil {
-		return nil, err
-	}
-
-	return s.ParsePlaceholderMessage(user, draftList)
 }
 
 func (s *DraftStorage) ComposePlaceholderMessage(user *repository.User, draft *repository.Draft) (*repository.Draft, error) {
@@ -184,7 +222,7 @@ func (s *DraftStorage) ComposePlaceholderMessage(user *repository.User, draft *r
 	return draft, err
 }
 
-func (s *DraftStorage) ParsePlaceholderMessage(user *repository.User, draftList *repository.DraftList) (*repository.DraftList, error) {
+func (s *DraftStorage) ParsePlaceholderMessage(user *repository.User, drafts []*repository.Draft) ([]*repository.Draft, error) {
 	// TODO parse the placeholder message
-	return draftList, nil
+	return drafts, nil
 }
