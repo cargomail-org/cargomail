@@ -346,6 +346,8 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
 
       // the placeholder message is in the response
 
+      draft.updatedAt = response.updatedAt;
+
       draftsTable.row(`#${draft.id}`).data(draft).draw();
     } else {
       const error = "record not found";
@@ -389,6 +391,7 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
     composeIdInput.dispatchEvent(new Event("change"));
 
     draft.id = response.id;
+    draft.createdAt = response.createdAt;
 
     draftsTable.row.add(draft);
     draftsTable.draw();
@@ -433,6 +436,8 @@ export const sendDraft = async (composeForm, id, reply, parsed) => {
       }
 
       // the placeholder message is in the response
+
+      draft.updatedAt = response.updatedAt;
 
       draftsTable.rows(`#${id}`).remove().draw();
       draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);
