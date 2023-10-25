@@ -45,6 +45,8 @@ const composeRemoveConfirmDialog = new bootstrap.Modal(document.querySelector("#
 
 const composeDiscardConfirmDialog = new bootstrap.Modal(document.querySelector("#composeDiscardConfirmDialog"));
 
+let placeholderMessage = {};
+
 let draft = {};
 // let lastDraftId = database.getLastDraftId(); // localStorage.getItem("lastDraftId");
 
@@ -483,6 +485,8 @@ export const removeAttachments = (e) => {
 export const clearForm = () => {
   ignoreOnChange = true;
 
+  placeholderMessage = {};
+
   $("#toInput")[0].selectize.clear();
   $("#ccInput")[0].selectize.clear();
   $("#bccInput")[0].selectize.clear();
@@ -686,12 +690,14 @@ const formPopulated = async (cmd) => {
   }
 
   if (cmd == "upsert") {
-    await upsertDraftsPage(composeForm, composeIdInput.value, reply, parsed);
+    placeholderMessage = await upsertDraftsPage(composeForm, composeIdInput.value, reply, parsed);
   } else if (cmd == "send") {
+    placeholderMessage = await upsertDraftsPage(composeForm, composeIdInput.value, reply, parsed);
     await draftsSendDraft(composeForm, composeIdInput.value, reply, parsed);
   } else {
     throw new Error(`Unknown command ${cmd} (should be 'upsert or 'send'`);
   }
+  console.log(placeholderMessage);
 };
 
 export const composeAddItems = (save, items) => {

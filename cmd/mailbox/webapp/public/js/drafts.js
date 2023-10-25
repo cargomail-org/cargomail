@@ -341,7 +341,7 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
       });
 
       if (response === false) {
-        return;
+        return {};
       }
 
       // the placeholder message is in the response
@@ -349,6 +349,8 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
       draft.updatedAt = response.updatedAt;
 
       draftsTable.row(`#${draft.id}`).data(draft).draw();
+
+      return response;
     } else {
       const error = "record not found";
 
@@ -360,6 +362,8 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
           </div>`
       );
     }
+    
+    return {}
   } else {
     // insert
     const draft = { payload: composePayload(parsed) };
@@ -379,7 +383,7 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
     });
 
     if (response === false) {
-      return;
+      return {};
     }
 
     // the placeholder message is in the response
@@ -395,6 +399,8 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
 
     draftsTable.row.add(draft);
     draftsTable.draw();
+
+    return response;
   }
 };
 

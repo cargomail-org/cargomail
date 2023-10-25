@@ -78,12 +78,15 @@ func (s *DraftStorage) Sync(user *repository.User, history *repository.History) 
 
 	draftList.DraftsUpdated = drafts
 
-	drafts, err = s.ParsePlaceholderMessage(user, draftList.DraftsTrashed)
-	if err != nil {
-		return nil, err
-	}
+	// TODO implement Untrash
+	// drafts, err = s.ParsePlaceholderMessage(user, draftList.Untrashed)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	draftList.DraftsTrashed = drafts
+	// draftList.DraftsUntrashed = drafts
+
+	// otherwise for trashed and deleted do nothing i.e. return the placeholder message
 
 	return draftList, err
 }
