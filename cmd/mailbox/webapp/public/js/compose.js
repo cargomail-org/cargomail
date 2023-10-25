@@ -47,7 +47,7 @@ const composeDiscardConfirmDialog = new bootstrap.Modal(document.querySelector("
 
 let placeholderMessage = {};
 
-let draft = {};
+// let draft = {};
 // let lastDraftId = database.getLastDraftId(); // localStorage.getItem("lastDraftId");
 
 // if (lastDraftId && lastDraftId.length > 0) {
@@ -693,7 +693,10 @@ const formPopulated = async (cmd) => {
     placeholderMessage = await upsertDraftsPage(composeForm, composeIdInput.value, reply, parsed);
   } else if (cmd == "send") {
     placeholderMessage = await upsertDraftsPage(composeForm, composeIdInput.value, reply, parsed);
-    await draftsSendDraft(composeForm, composeIdInput.value, reply, parsed);
+    if (placeholderMessage && Object.keys(placeholderMessage).length > 0) {
+      // • this is the last point where you can sign a placeholder message
+      await draftsSendDraft(composeForm, composeIdInput.value, reply, parsed, placeholderMessage);
+    }
   } else {
     throw new Error(`Unknown command ${cmd} (should be 'upsert or 'send'`);
   }

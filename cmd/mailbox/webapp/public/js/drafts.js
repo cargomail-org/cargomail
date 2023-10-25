@@ -362,13 +362,13 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
           </div>`
       );
     }
-    
-    return {}
+
+    return {};
   } else {
     // insert
     const draft = { payload: composePayload(parsed) };
 
-    if (reply) {
+    if (reply && Object.keys(reply).length > 0) {
       draft.payload.headers["In-Reply-To"] = reply.inReplyTo;
       draft.payload.headers["References"] = reply.references;
       draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
@@ -404,12 +404,11 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
   }
 };
 
-export const sendDraft = async (composeForm, id, reply, parsed) => {
+export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessage) => {
   const alert = composeForm.querySelector('div[name="sendDraftsPageAlert"]');
   if (alert) alert.remove();
 
   if (id) {
-    // update & send
     const index = draftsTable.column(0).data().toArray().indexOf(id);
 
     if (index >= 0) {
@@ -422,7 +421,7 @@ export const sendDraft = async (composeForm, id, reply, parsed) => {
       if (data.createdAt) draft.createdAt = data.createdAt;
       if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
 
-      if (reply) {
+      if (reply && Object.keys(reply).length > 0) {
         draft.payload.headers["In-Reply-To"] = reply.inReplyTo;
         draft.payload.headers["References"] = reply.references;
         draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
@@ -434,7 +433,7 @@ export const sendDraft = async (composeForm, id, reply, parsed) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(draft),
+        body: JSON.stringify(placeholderMessage),
       });
 
       if (response === false) {
@@ -444,6 +443,9 @@ export const sendDraft = async (composeForm, id, reply, parsed) => {
       // the placeholder message is in the response
 
       draft.updatedAt = response.updatedAt;
+      draft.folder = response.folder;
+      draft.payload.headers["Message-ID"] = response.payload.headers["Message-ID"];
+      draft.payload.headers["X-Thread-ID"] = response.payload.headers["X-Thread-ID"];
 
       draftsTable.rows(`#${id}`).remove().draw();
       draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);

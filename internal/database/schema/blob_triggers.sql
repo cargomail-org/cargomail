@@ -16,7 +16,7 @@ CREATE TRIGGER IF NOT EXISTS "BlobBeforeUpdate"
     BEFORE UPDATE OF
         "id",
         "userId",
-        "folder",
+        -- "folder",
         -- "digest",
         -- "name",
         -- "snippet",
