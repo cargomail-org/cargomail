@@ -39,7 +39,7 @@ func NewApi(params ApiParams) Api {
 		User:     UserApi{useUserRepository: params.Repository.User},
 		Contacts: ContactsApi{useContactRepository: params.Repository.Contacts},
 		Drafts:   DraftsApi{useDraftRepository: params.Repository.Drafts, useDraftStorage: params.Storage.Drafts},
-		Messages: MessagesApi{useMessageRepository: params.Repository.Messages},
+		Messages: MessagesApi{useMessageRepository: params.Repository.Messages, useMessageStorage: params.Storage.Messages},
 		Threads:  ThreadsApi{useThreadRepository: params.Repository.Threads},
 	}
 }

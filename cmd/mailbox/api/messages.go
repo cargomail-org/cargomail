@@ -3,12 +3,14 @@ package api
 import (
 	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/repository"
+	"cargomail/internal/storage"
 	"encoding/json"
 	"net/http"
 )
 
 type MessagesApi struct {
 	useMessageRepository repository.UseMessageRepository
+	useMessageStorage    storage.UseMessageStorage
 }
 
 func (api *MessagesApi) List() http.Handler {
@@ -29,7 +31,7 @@ func (api *MessagesApi) List() http.Handler {
 			}
 		}
 
-		messageHistory, err := api.useMessageRepository.List(user, folder.Folder)
+		messageHistory, err := api.useMessageStorage.List(user, folder.Folder)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -55,7 +57,7 @@ func (api *MessagesApi) Sync() http.Handler {
 			return
 		}
 
-		messageHistory, err := api.useMessageRepository.Sync(user, history)
+		messageHistory, err := api.useMessageStorage.Sync(user, history)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

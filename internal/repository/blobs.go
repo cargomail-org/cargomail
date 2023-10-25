@@ -39,7 +39,7 @@ type Blob struct {
 	Folder      int16         `json:"folder"`
 	Digest      string        `json:"digest"`
 	Name        string        `json:"name"`
-	Snippet     string        `json:"snippet"`
+	Snippet     *string       `json:"snippet"`
 	Path        string        `json:"-"`
 	Size        int64         `json:"size"`
 	Metadata    *BlobMetadata `json:"-"`
@@ -603,7 +603,7 @@ func (r BlobRepository) CleanAndCreate(user *User, blobs []*Blob, draftId string
 		blob := Blob{}
 
 		blobDraftId := blobs[i].DraftId
-		
+
 		if *blobDraftId == "" {
 			blobDraftId = nil
 		}
