@@ -25,7 +25,7 @@ type UseDraftStorage interface {
 	// Delete(user *repository.User, ids string) error
 	// Send(user *repository.User, draft *repository.Draft) (*repository.Message, error)
 	ComposePlaceholderMessage(user *repository.User, draft *repository.Draft) (*repository.Draft, error)
-	ParsePlaceholderMessage(user *repository.User, drafts []*repository.Draft) ([]*repository.Draft, error)
+	ParsePlaceholderMessage(user *repository.User, draftsOrMessages interface{}) (interface{}, error)
 }
 
 type DraftStorage struct {
@@ -53,7 +53,7 @@ func (s *DraftStorage) List(user *repository.User) (*repository.DraftList, error
 		return nil, err
 	}
 
-	draftList.Drafts = drafts
+	draftList.Drafts = drafts.([]*repository.Draft)
 
 	return draftList, err
 }
@@ -69,14 +69,14 @@ func (s *DraftStorage) Sync(user *repository.User, history *repository.History) 
 		return nil, err
 	}
 
-	draftList.DraftsInserted = drafts
+	draftList.DraftsInserted = drafts.([]*repository.Draft)
 
 	drafts, err = s.ParsePlaceholderMessage(user, draftList.DraftsUpdated)
 	if err != nil {
 		return nil, err
 	}
 
-	draftList.DraftsUpdated = drafts
+	draftList.DraftsUpdated = drafts.([]*repository.Draft)
 
 	// TODO implement Untrash
 	// drafts, err = s.ParsePlaceholderMessage(user, draftList.Untrashed)
@@ -228,77 +228,89 @@ func (s *DraftStorage) ComposePlaceholderMessage(user *repository.User, draft *r
 	return draft, err
 }
 
-func (s *DraftStorage) ParsePlaceholderMessage(user *repository.User, drafts []*repository.Draft) ([]*repository.Draft, error) {
-	// TODO parse the placeholder message
-	for i := range drafts {
-		// create message
+func (s *DraftStorage) ParsePlaceholderMessage(user *repository.User, draftsOrMessages interface{}) (interface{}, error) {
+	var updateParts func(parts []*repository.MessagePart) error
 
-		var updateParts func(parts []*repository.MessagePart) error
+	updateParts = func(parts []*repository.MessagePart) error {
+		var err error
 
-		updateParts = func(parts []*repository.MessagePart) error {
-			var err error
+		for j := range parts {
+			contentDisposition, _ := parts[j].Headers["Content-Disposition"].(string)
 
-			for j := range parts {
-				contentDisposition, _ := parts[j].Headers["Content-Disposition"].(string)
-
-				if contentDisposition == "inline" {
-					contentTypes, ok := parts[j].Headers["Content-Type"].([]interface{})
+			if contentDisposition == "inline" {
+				contentTypes, ok := parts[j].Headers["Content-Type"].([]interface{})
+				if ok {
+					digest, ok := parts[j].Headers["Content-ID"].(string)
 					if ok {
-						digest, ok := parts[j].Headers["Content-ID"].(string)
-						if ok {
-							v := strings.SplitAfter(digest, "<")
-							if len(v) > 0 {
-								digest = strings.TrimRight(v[1], ">")
-							}
-
-							for k := range parts[j].Headers {
-								if k != "Content-Disposition" {
-									delete(parts[j].Headers, k)
-								}
-							}
-
-							blob, err := s.repository.Blobs.GetByDigest(user, digest)
-							if err != nil {
-								return err
-							}
-
-							blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
-							blobPath := filepath.Join(blobsPath, digest)
-
-							buf := new(bytes.Buffer)
-
-							err = s.blobStorage.Load(buf, blob, blobPath)
-							if err != nil {
-								return err
-							}
-
-							data := b64.StdEncoding.EncodeToString(buf.Bytes())
-							if err != nil {
-								return err
-							}
-
-							body := &repository.Body{
-								Data: data,
-							}
-
-							parts[j].Body = body
-
-							parts[j].Headers["Content-Transfer-Encoding"] = "base64"
-							parts[j].Headers["Content-Type"] = contentTypes[1].(string)
+						v := strings.SplitAfter(digest, "<")
+						if len(v) > 0 {
+							digest = strings.TrimRight(v[1], ">")
 						}
+
+						for k := range parts[j].Headers {
+							if k != "Content-Disposition" {
+								delete(parts[j].Headers, k)
+							}
+						}
+
+						blob, err := s.repository.Blobs.GetByDigest(user, digest)
+						if err != nil {
+							return err
+						}
+
+						blobsPath := filepath.Join(config.Configuration.ResourcesPath, config.Configuration.BlobsFolder)
+						blobPath := filepath.Join(blobsPath, digest)
+
+						buf := new(bytes.Buffer)
+
+						err = s.blobStorage.Load(buf, blob, blobPath)
+						if err != nil {
+							return err
+						}
+
+						data := b64.StdEncoding.EncodeToString(buf.Bytes())
+						if err != nil {
+							return err
+						}
+
+						body := &repository.Body{
+							Data: data,
+						}
+
+						parts[j].Body = body
+
+						parts[j].Headers["Content-Transfer-Encoding"] = "base64"
+						parts[j].Headers["Content-Type"] = contentTypes[1].(string)
 					}
 				}
-
-				err = updateParts(parts[j].Parts)
 			}
-			return err
-		}
 
-		err := updateParts(drafts[i].Payload.Parts)
-		if err != nil {
-			return nil, err
+			err = updateParts(parts[j].Parts)
 		}
+		return err
 	}
 
-	return drafts, nil
+	if drafts, ok := draftsOrMessages.([]*repository.Draft); ok {
+		for i := range drafts {
+			err := updateParts(drafts[i].Payload.Parts)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		return draftsOrMessages, nil
+	}
+
+	if messages, ok := draftsOrMessages.([]*repository.Message); ok {
+		for i := range messages {
+			err := updateParts(messages[i].Payload.Parts)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		return draftsOrMessages, nil
+	}
+
+	return nil, repository.ErrUnknownMessageType
 }
