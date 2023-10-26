@@ -23,7 +23,7 @@ func (s *MessageStorage) List(user *repository.User, folder int) (*repository.Me
 		return nil, err
 	}
 
-	messageList.Messages = messages.([]*repository.Message)
+	messageList.Messages = messages
 
 	return messageList, err
 }
@@ -39,14 +39,14 @@ func (s *MessageStorage) Sync(user *repository.User, history *repository.History
 		return nil, err
 	}
 
-	messageList.MessagesInserted = messages.([]*repository.Message)
+	messageList.MessagesInserted = messages
 
 	messages, err = ParsePlaceholderMessage(user, s.repository, s.blobStorage, messageList.MessagesUpdated)
 	if err != nil {
 		return nil, err
 	}
 
-	messageList.MessagesUpdated = messages.([]*repository.Message)
+	messageList.MessagesUpdated = messages
 
 	// TODO implement Untrash
 	// messages, err = s.ParsePlaceholderMessage(user, s.repository, s.blobStorage, messageList.Untrashed)

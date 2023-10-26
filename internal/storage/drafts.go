@@ -51,7 +51,7 @@ func (s *DraftStorage) List(user *repository.User) (*repository.DraftList, error
 		return nil, err
 	}
 
-	draftList.Drafts = drafts.([]*repository.Draft)
+	draftList.Drafts = drafts
 
 	return draftList, err
 }
@@ -67,14 +67,14 @@ func (s *DraftStorage) Sync(user *repository.User, history *repository.History) 
 		return nil, err
 	}
 
-	draftList.DraftsInserted = drafts.([]*repository.Draft)
+	draftList.DraftsInserted = drafts
 
 	drafts, err = ParsePlaceholderMessage(user, s.repository, s.blobStorage, draftList.DraftsUpdated)
 	if err != nil {
 		return nil, err
 	}
 
-	draftList.DraftsUpdated = drafts.([]*repository.Draft)
+	draftList.DraftsUpdated = drafts
 
 	// TODO implement Untrash
 	// drafts, err = s.ParsePlaceholderMessage(user, s.repository, s.blobStorage, draftList.Untrashed)

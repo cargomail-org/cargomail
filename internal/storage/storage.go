@@ -18,14 +18,18 @@ type Storage struct {
 
 func NewStorage(repository repository.Repository) Storage {
 	return Storage{
-		Blobs:  &BlobStorage{repository},
-		Files:  &FileStorage{repository},
-		Drafts: &DraftStorage{repository, BlobStorage{repository}},
+		Blobs:    &BlobStorage{repository},
+		Files:    &FileStorage{repository},
+		Drafts:   &DraftStorage{repository, BlobStorage{repository}},
 		Messages: &MessageStorage{repository, BlobStorage{repository}},
 	}
 }
 
-func ParsePlaceholderMessage(user *repository.User, repo repository.Repository, blobStorage BlobStorage, draftsOrMessages interface{}) (interface{}, error) {
+type GenericMessage interface {
+	repository.Draft | repository.Message
+}
+
+func ParsePlaceholderMessage[M GenericMessage](user *repository.User, repo repository.Repository, blobStorage BlobStorage, genericMessages []*M) ([]*M, error) {
 	var updateParts func(parts []*repository.MessagePart) error
 
 	updateParts = func(parts []*repository.MessagePart) error {
@@ -87,7 +91,7 @@ func ParsePlaceholderMessage(user *repository.User, repo repository.Repository, 
 		return err
 	}
 
-	if drafts, ok := draftsOrMessages.([]*repository.Draft); ok {
+	if drafts, ok := any(genericMessages).([]*repository.Draft); ok {
 		for i := range drafts {
 			err := updateParts(drafts[i].Payload.Parts)
 			if err != nil {
@@ -95,10 +99,10 @@ func ParsePlaceholderMessage(user *repository.User, repo repository.Repository, 
 			}
 		}
 
-		return draftsOrMessages, nil
+		return genericMessages, nil
 	}
 
-	if messages, ok := draftsOrMessages.([]*repository.Message); ok {
+	if messages, ok := any(genericMessages).([]*repository.Message); ok {
 		for i := range messages {
 			err := updateParts(messages[i].Payload.Parts)
 			if err != nil {
@@ -106,7 +110,7 @@ func ParsePlaceholderMessage(user *repository.User, repo repository.Repository, 
 			}
 		}
 
-		return draftsOrMessages, nil
+		return genericMessages, nil
 	}
 
 	return nil, repository.ErrUnknownMessageType
