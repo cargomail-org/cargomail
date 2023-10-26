@@ -700,7 +700,7 @@ const formPopulated = async (cmd) => {
   } else {
     throw new Error(`Unknown command ${cmd} (should be 'upsert or 'send'`);
   }
-  console.log(placeholderMessage);
+  // console.log(placeholderMessage);
 };
 
 export const composeAddItems = (save, items) => {

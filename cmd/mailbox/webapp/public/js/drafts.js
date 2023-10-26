@@ -326,7 +326,7 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
       if (data.createdAt) draft.createdAt = data.createdAt;
       if (data.modifiedAt) draft.modifiedAt = data.modifiedAt;
 
-      if (reply) {
+      if (reply && Object.keys(reply).length > 0) {
         draft.payload.headers["In-Reply-To"] = reply.inReplyTo;
         draft.payload.headers["References"] = reply.references;
         draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
