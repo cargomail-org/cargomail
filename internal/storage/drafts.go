@@ -90,7 +90,12 @@ func (s *DraftStorage) Sync(user *repository.User, history *repository.History) 
 }
 
 func (s *DraftStorage) Update(user *repository.User, draft *repository.Draft) (*repository.Draft, error) {
-	draft, err := s.ComposePlaceholderMessage(user, draft)
+	_, err := s.repository.Drafts.GetById(user, draft.Id)
+	if err != nil {
+		return nil, err
+	}
+	
+	draft, err = s.ComposePlaceholderMessage(user, draft)
 	if err != nil {
 		return nil, err
 	}

@@ -21,6 +21,7 @@ type UseDraftRepository interface {
 	Trash(user *User, ids string) error
 	Untrash(user *User, ids string) error
 	Delete(user *User, ids string) error
+	GetById(user *User, id string) (*Draft, error)
 	Send(user *User, draft *Draft) (*Message, error)
 }
 
@@ -538,6 +539,32 @@ func (r DraftRepository) Delete(user *User, ids string) error {
 	}
 
 	return nil
+}
+
+func (r DraftRepository) GetById(user *User, id string) (*Draft, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	query := `
+		SELECT *
+			FROM "Draft"
+			WHERE "userId" = $1 AND
+				"id" = $2 AND
+				"lastStmt" < 2;`
+
+	draft := &Draft{}
+
+	args := []interface{}{user.Id, id}
+
+	err := r.db.QueryRowContext(ctx, query, args...).Scan(draft.Scan()...)
+	if err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			return &Draft{}, ErrDraftNotFound
+		}
+		return &Draft{}, err
+	}
+
+	return draft, nil
 }
 
 func validSender(user *User, str string) bool {
