@@ -154,7 +154,7 @@ a:not([class*="btn"]):hover {
 }
 
 td.payload,
-td.threads-payload {
+td.messages-payload {
   cursor: pointer;
 }
 
@@ -187,11 +187,11 @@ table.thread-sent-table.dataTable thead th {
   font-weight: 400;
 }
 
-table.thread-inbox-table.dataTable tr.dt-hasChild td.threads-payload {
+table.thread-inbox-table.dataTable tr.dt-hasChild td.messages-payload {
   border-bottom-width: 0px;
 }
 
-table.thread-inbox-table.dataTable tr.dt-hasChild td.threads-payload {
+table.thread-inbox-table.dataTable tr.dt-hasChild td.messages-payload {
   border-bottom-width: 0px;
 }
 

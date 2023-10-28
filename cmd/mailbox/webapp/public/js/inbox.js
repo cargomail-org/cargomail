@@ -16,7 +16,8 @@ import { sentTable } from "/public/js/sent.js";
 
 import { clearForm as composeClearForm } from "/public/js/compose.js";
 import { parsePayload, composePayload, createSubjectSnippet, createPlainContentSnippet } from "/public/js/utils.js";
-import { messageListResponse, getThreads, createThreadTable, destroyThreadTable } from "/public/js/thread.js";
+import { messageListResponse, createMessageTable, destroyMessageTable } from "/public/js/message.js";
+import { getThreads } from "/public/js/thread.js";
 import { draftsTable } from "/public/js/drafts.js";
 
 let selectedIds = [];
@@ -204,14 +205,14 @@ inboxTable.on("click", "td.payload", (e) => {
 
   if (row.child.isShown()) {
     // This row is already open - close it
-    destroyThreadTable("inbox", inboxTable, row);
+    destroyMessageTable("inbox", inboxTable, row);
     tr.classList.remove("shown");
   } else {
     if (inboxTable.row(".shown").length) {
       $(".payload", inboxTable.row(".shown").node()).click();
     }
     // Open this row
-    createThreadTable("inbox", row);
+    createMessageTable("inbox", row);
     tr.classList.add("shown");
   }
 });
