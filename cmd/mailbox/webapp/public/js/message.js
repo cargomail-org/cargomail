@@ -53,7 +53,7 @@ export const createMessageTable = (view, row) => {
     return;
   }
 
-  // Initialise as a DataTable
+  // Initialize as a DataTable
   const messagesTable = table.DataTable({
     info: false,
     paging: false,
@@ -273,12 +273,12 @@ export const createMessageTable = (view, row) => {
     }
   });
 
-  // Display it the child row
+  // Display the child row
   row.child(table).show();
 };
 
 export const destroyMessageTable = (view, parentTable, row) => {
-  const table = $("table", row.child());
+  const table = $(`.message-${view}-table`, row.child());
 
   table.detach();
   table.DataTable().destroy();

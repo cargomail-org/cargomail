@@ -44,7 +44,7 @@ export const showDetail = (view, row) => {
     </form>
     `);
 
-  // Initialise as a DataTable
+  // Initialize as a DataTable
   const detailTable = $(form)
     .find(`.detail-${view}-table`)
     .DataTable({
@@ -109,7 +109,7 @@ export const showDetail = (view, row) => {
   // detailTable.rows.add(parsed.attachments);
   // detailTable.draw();
 
-  // Display it the child row
+  // Display the child row
   row.child(form).show();
 
   detailTable.on("select.dt deselect.dt", (e) => {

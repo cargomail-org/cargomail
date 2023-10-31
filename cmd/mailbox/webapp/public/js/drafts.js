@@ -442,15 +442,20 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
 
       // the placeholder message is in the response
 
-      draft.updatedAt = response.updatedAt;
-      draft.folder = response.folder;
-      draft.payload.headers["Message-ID"] = response.payload.headers["Message-ID"];
-      draft.payload.headers["X-Thread-ID"] = response.payload.headers["X-Thread-ID"];
+      const sent = JSON.parse(JSON.stringify(draft));
+      sent.id = response.id;
+      sent.createdAt = response.createdAt;
+      sent.folder = response.folder;
+      sent.payload.headers["Message-ID"] = response.payload.headers["Message-ID"];
+      sent.payload.headers["X-Thread-ID"] = response.payload.headers["X-Thread-ID"];
+
+      // console.log("draft", draft);
+      // console.log("sent", sent);
 
       draftsTable.rows(`#${id}`).remove().draw();
       draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);
 
-      threadsRefresh(sentTable, inboxTable, { inserted: [draft] });
+      threadsRefresh(sentTable, inboxTable, { inserted: [sent] });
 
       composeClearForm();
     } else {

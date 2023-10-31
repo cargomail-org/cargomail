@@ -57,6 +57,14 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
           treatDupliciteMessage(threadDataInbox, view, message, dupliciteInboxIndex);
         } else {
           threadDataInbox.messages.push(message);
+
+          const child = inboxTable.row("#" + threadId).child();
+
+          if (child) {
+            const messageTable = $(`.message-inbox-table`, child);
+
+            messageTable.DataTable().rows.add([message]).draw();
+          }
         }
 
         // threadDataInbox.createdAt = createdAt;
@@ -69,6 +77,14 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
           treatDupliciteMessage(threadDataSent, view, message, dupliciteSentIndex);
         } else {
           threadDataSent.messages.push(message);
+
+          const child = sentTable.row("#" + threadId).child();
+
+          if (child) {
+            const messageTable = $(`.message-sent-table`, child);
+
+            messageTable.DataTable().rows.add([message]).draw();
+          }
         }
 
         threadDataSent.createdAt = createdAt;
@@ -100,6 +116,14 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
           treatDupliciteMessage(threadDataSent, view, message, dupliciteSentIndex);
         } else {
           threadDataSent.messages.push(message);
+
+          const child = sentTable.row("#" + threadId).child();
+
+          if (child) {
+            const messageTable = $(`.message-sent-table`, child);
+
+            messageTable.DataTable().rows.add([message]).draw();
+          }
         }
 
         // threadDataSent.createdAt = createdAt;
@@ -112,6 +136,14 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
           treatDupliciteMessage(threadDataInbox, view, message, dupliciteInboxIndex);
         } else {
           threadDataInbox.messages.push(message);
+
+          const child = inboxTable.row("#" + threadId).child();
+
+          if (child) {
+            const messageTable = $(`.message-inbox-table`, child);
+
+            messageTable.DataTable().rows.add([message]).draw();
+          }
         }
 
         threadDataInbox.createdAt = createdAt;
@@ -186,7 +218,7 @@ const messageRemoved = (inboxTable, sentTable, message) => {
     const child = inboxTable.row("#" + threadId).child();
 
     if (child) {
-      const messageTable = $("table", child);
+      const messageTable = $(`.message-inbox-table`, child);
 
       messageTable
         .DataTable()
@@ -200,7 +232,7 @@ const messageRemoved = (inboxTable, sentTable, message) => {
     const child = sentTable.row("#" + threadId).child();
 
     if (child) {
-      const messageTable = $("table", child);
+      const messageTable = $(`.message-sent-table`, child);
 
       messageTable
         .DataTable()
@@ -291,4 +323,3 @@ const messageRemoved = (inboxTable, sentTable, message) => {
     // });
   }
 };
-
