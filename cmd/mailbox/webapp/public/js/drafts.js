@@ -446,6 +446,7 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
       sent.id = response.id;
       sent.createdAt = response.createdAt;
       sent.folder = response.folder;
+      sent.payload.headers["Date"] = response.payload.headers["Date"];
       sent.payload.headers["Message-ID"] = response.payload.headers["Message-ID"];
       sent.payload.headers["X-Thread-ID"] = response.payload.headers["X-Thread-ID"];
 
