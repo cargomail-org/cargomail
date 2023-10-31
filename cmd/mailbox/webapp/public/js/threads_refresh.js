@@ -138,11 +138,11 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
   }
 
   for (const message of data.trashed || []) {
-    refreshTables(inboxTable, sentTable, message);
+    messageRemoved(inboxTable, sentTable, message);
   }
 
   for (const message of data.deleted || []) {
-    refreshTables(inboxTable, sentTable, message);
+    messageRemoved(inboxTable, sentTable, message);
   }
 
   /*for (const message of data.updated || []) {
@@ -165,7 +165,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
     }*/
 };
 
-const refreshTables = (inboxTable, sentTable, message) => {
+const messageRemoved = (inboxTable, sentTable, message) => {
   const messageId = message.id;
 
   const threadDataInbox = inboxTable
