@@ -138,176 +138,11 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
   }
 
   for (const message of data.trashed || []) {
-    const threadId = message.payload.headers["X-Thread-ID"];
-
-    const threadDataInbox = inboxTable
-      .rows()
-      .data()
-      .toArray()
-      .find((thread) => thread.threadId == threadId);
-
-    const threadDataSent = sentTable
-      .rows()
-      .data()
-      .toArray()
-      .find((thread) => thread.threadId == threadId);
-
-    if (threadDataInbox) {
-      inboxTable
-        .row("#" + threadId)
-        .remove()
-        .draw();
-    }
-
-    if (threadDataSent) {
-      sentTable
-        .row("#" + threadId)
-        .remove()
-        .draw();
-    }
-
-    if (threadId == composeXThreadIdInput.value) {
-      composeClearForm();
-    }
-
-    // delete affected drafts
-    draftsTable.rows().every((index) => {
-      const row = draftsTable.row(index);
-      const data = row.data();
-
-      if (data.payload.headers["X-Thread-ID"] == threadId) {
-        draftsTable.rows(index).remove().draw();
-      }
-    });
+    refreshTables(inboxTable, sentTable, message);
   }
 
   for (const message of data.deleted || []) {
-    const messageId = message.id;
-
-    const threadDataInbox = inboxTable
-      .rows()
-      .data()
-      .toArray()
-      .find((thread) => thread.messages.find((message) => message.id == messageId));
-
-    const threadDataSent = sentTable
-      .rows()
-      .data()
-      .toArray()
-      .find((thread) => thread.messages.find((message) => message.id == messageId));
-
-    const threadId = threadDataInbox?.threadId || threadDataSent?.threadId;
-
-    if (threadDataInbox) {
-      const child = inboxTable.row("#" + threadId).child();
-
-      if (child) {
-        const messageTable = $("table", child);
-
-        messageTable
-          .DataTable()
-          .row("#" + messageId)
-          .remove()
-          .draw();
-      }
-    }
-
-    if (threadDataSent) {
-      const child = sentTable.row("#" + threadId).child();
-
-      if (child) {
-        const messageTable = $("table", child);
-
-        messageTable
-          .DataTable()
-          .row("#" + messageId)
-          .remove()
-          .draw();
-      }
-    }
-
-    let inboxThreadRemoved = false;
-    let sentThreadRemoved = false;
-
-    const inboxThread = inboxTable
-      .data()
-      .toArray()
-      .find((thread) => thread.messages.find((message) => message.id == messageId));
-
-    if (inboxThread?.messages?.length > 0) {
-      inboxThread.messages = inboxThread.messages.filter((message) => message.id != messageId);
-
-      if (inboxThread.messages?.length > 0) {
-        const inboxFolderMessages = inboxThread.messages.filter((message) => message.folder == 2);
-
-        if (inboxFolderMessages?.length > 0) {
-          inboxTable
-            .row("#" + threadId)
-            .invalidate()
-            .draw();
-        } else {
-          inboxTable
-            .row("#" + threadId)
-            .remove()
-            .draw();
-          inboxThreadRemoved = true;
-        }
-      } else {
-        inboxTable
-          .row("#" + threadId)
-          .remove()
-          .draw();
-        inboxThreadRemoved = true;
-      }
-    }
-
-    const sentThread = sentTable
-      .data()
-      .toArray()
-      .find((thread) => thread.messages.find((message) => message.id == messageId));
-
-    if (sentThread?.messages?.length > 0) {
-      sentThread.messages = sentThread.messages.filter((message) => message.id != messageId);
-
-      if (sentThread.messages?.length > 0) {
-        const sentFolderMessages = sentThread.messages.filter((message) => message.folder == 1);
-
-        if (sentFolderMessages?.length > 0) {
-          sentTable
-            .row("#" + threadId)
-            .invalidate()
-            .draw();
-        } else {
-          sentTable
-            .row("#" + threadId)
-            .remove()
-            .draw();
-          sentThreadRemoved = true;
-        }
-      } else {
-        sentTable
-          .row("#" + threadId)
-          .remove()
-          .draw();
-        sentThreadRemoved = true;
-      }
-    }
-
-    if (inboxThreadRemoved && sentThreadRemoved) {
-      // if (threadId == composeXThreadIdInput.value) {
-      //   composeClearForm();
-      // }
-
-      //// delete affected drafts
-      // draftsTable.rows().every((index) => {
-      //   const row = draftsTable.row(index);
-      //   const data = row.data();
-
-      //   if (data.payload.headers["X-Thread-ID"] == threadId) {
-      //     draftsTable.rows(index).remove().draw();
-      //   }
-      // });
-    }
+    refreshTables(inboxTable, sentTable, message);
   }
 
   /*for (const message of data.updated || []) {
@@ -329,3 +164,131 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
       }
     }*/
 };
+
+const refreshTables = (inboxTable, sentTable, message) => {
+  const messageId = message.id;
+
+  const threadDataInbox = inboxTable
+    .rows()
+    .data()
+    .toArray()
+    .find((thread) => thread.messages.find((message) => message.id == messageId));
+
+  const threadDataSent = sentTable
+    .rows()
+    .data()
+    .toArray()
+    .find((thread) => thread.messages.find((message) => message.id == messageId));
+
+  const threadId = threadDataInbox?.threadId || threadDataSent?.threadId;
+
+  if (threadDataInbox) {
+    const child = inboxTable.row("#" + threadId).child();
+
+    if (child) {
+      const messageTable = $("table", child);
+
+      messageTable
+        .DataTable()
+        .row("#" + messageId)
+        .remove()
+        .draw();
+    }
+  }
+
+  if (threadDataSent) {
+    const child = sentTable.row("#" + threadId).child();
+
+    if (child) {
+      const messageTable = $("table", child);
+
+      messageTable
+        .DataTable()
+        .row("#" + messageId)
+        .remove()
+        .draw();
+    }
+  }
+
+  let inboxThreadRemoved = false;
+  let sentThreadRemoved = false;
+
+  const inboxThread = inboxTable
+    .data()
+    .toArray()
+    .find((thread) => thread.messages.find((message) => message.id == messageId));
+
+  if (inboxThread?.messages?.length > 0) {
+    inboxThread.messages = inboxThread.messages.filter((message) => message.id != messageId);
+
+    if (inboxThread.messages?.length > 0) {
+      const inboxFolderMessages = inboxThread.messages.filter((message) => message.folder == 2);
+
+      if (inboxFolderMessages?.length > 0) {
+        inboxTable
+          .row("#" + threadId)
+          .invalidate()
+          .draw();
+      } else {
+        inboxTable
+          .row("#" + threadId)
+          .remove()
+          .draw();
+        inboxThreadRemoved = true;
+      }
+    } else {
+      inboxTable
+        .row("#" + threadId)
+        .remove()
+        .draw();
+      inboxThreadRemoved = true;
+    }
+  }
+
+  const sentThread = sentTable
+    .data()
+    .toArray()
+    .find((thread) => thread.messages.find((message) => message.id == messageId));
+
+  if (sentThread?.messages?.length > 0) {
+    sentThread.messages = sentThread.messages.filter((message) => message.id != messageId);
+
+    if (sentThread.messages?.length > 0) {
+      const sentFolderMessages = sentThread.messages.filter((message) => message.folder == 1);
+
+      if (sentFolderMessages?.length > 0) {
+        sentTable
+          .row("#" + threadId)
+          .invalidate()
+          .draw();
+      } else {
+        sentTable
+          .row("#" + threadId)
+          .remove()
+          .draw();
+        sentThreadRemoved = true;
+      }
+    } else {
+      sentTable
+        .row("#" + threadId)
+        .remove()
+        .draw();
+      sentThreadRemoved = true;
+    }
+  }
+
+  if (inboxThreadRemoved && sentThreadRemoved) {
+    // if (threadId == composeXThreadIdInput.value) {
+    //   composeClearForm();
+    // }
+    //// delete affected drafts
+    // draftsTable.rows().every((index) => {
+    //   const row = draftsTable.row(index);
+    //   const data = row.data();
+    //   if (data.payload.headers["X-Thread-ID"] == threadId) {
+    //     draftsTable.rows(index).remove().draw();
+    //   }
+    // });
+  }
+};
+
