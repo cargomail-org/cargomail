@@ -676,11 +676,11 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		threadIdValue = "<" + uuid.NewString() + "@" + config.Configuration.DomainName + ">"
 	}
 
-	message := &Message{}
+	returnMessage := &Message{}
 
 	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
-		return message, err
+		return returnMessage, err
 	}
 	defer tx.Rollback()
 
@@ -733,7 +733,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 		folder,
 		draft.Payload}
 
-	err = tx.QueryRowContext(ctx, query, args...).Scan(message.Scan()...)
+	err = tx.QueryRowContext(ctx, query, args...).Scan(returnMessage.Scan()...)
 	if err != nil {
 		return nil, err
 	}
@@ -857,10 +857,11 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	}
 
 	var recipientsNotFound []string
-	returnMessage := &Message{}
 
 	// simple send
 	for _, recipient := range recipients {
+		message := &Message{}
+
 		query = `
 		INSERT
 			INTO "Message" ("userId",
@@ -926,8 +927,6 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 
 		}
 
-		
-
 		// access to files
 		for _, contentId := range fileContentIds {
 			folder := 2 // inbox
@@ -949,10 +948,6 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 				return nil, err
 			}
 
-		}
-
-		if username == user.Username {
-			returnMessage = message
 		}
 	}
 
