@@ -278,7 +278,7 @@ export const createMessageTable = (view, row) => {
 };
 
 export const destroyMessageTable = (view, parentTable, row) => {
-  const table = $(`message-${view}-table`, row.child());
+  const table = $("table", row.child());
 
   table.detach();
   table.DataTable().destroy();
@@ -294,4 +294,3 @@ export const destroyMessageTable = (view, parentTable, row) => {
 };
 
 export const messageListResponse = await getMessages();
-
