@@ -35,9 +35,11 @@ export const treatDupliciteMessage = (thread, view, message, duplicateIndex) => 
       } else if (view == 0 || view == 2) {
         // overwrite the sent with the received
         thread.messages[duplicateIndex] = message;
+        return 1;
       } else if (view == -1) {
         // allow the duplicate
         thread.messages.push(message);
+        return 2;
       } else {
         // ignore the duplicate
         console.log("the found duplicate ignored");
@@ -47,11 +49,13 @@ export const treatDupliciteMessage = (thread, view, message, duplicateIndex) => 
       if (view == 1) {
         // overwrite the received with the sent
         thread.messages[duplicateIndex] = message;
+        return 1;
       } else if (view == 0 || view == 2) {
         // ignore the sent
       } else if (view == -1) {
         // allow the duplicate
         thread.messages.push(message);
+        return 2;
       } else {
         // ignore the duplicate
         console.log("the found duplicate ignored");
@@ -59,22 +63,27 @@ export const treatDupliciteMessage = (thread, view, message, duplicateIndex) => 
     } else if (thread.messages[duplicateIndex].folder == 0 || message.folder == 0) {
       // ok! it's a draft, allow the duplicate
       thread.messages.push(message);
+      return 2;
     } else if (view == -1) {
       // ok! allow the duplicate
       thread.messages.push(message);
+      return 2;
     } else {
       // wrong! allow the duplicate and log about it
       thread.messages.push(message);
       console.log("the found duplicate ignored");
+      return 2;
     }
   } else {
     if (thread.messages[duplicateIndex].folder == 0 || message.folder == 0) {
       // ok! it's a draft, allow the duplicate
       thread.messages.push(message);
+      return 2;
     } else {
       // wrong! allow the duplicate and log about it
       thread.messages.push(message);
       console.log("the found duplicate ignored");
+      return 2;
     }
   }
 };

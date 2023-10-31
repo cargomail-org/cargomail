@@ -52,17 +52,29 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
 
     if (message.folder == 1) {
       if (threadDataInbox) {
+        const child = inboxTable.row("#" + threadId).child();
         if (dupliciteInboxIndex >= 0) {
           const view = 2;
-          treatDupliciteMessage(threadDataInbox, view, message, dupliciteInboxIndex);
+          const rslt = treatDupliciteMessage(threadDataInbox, view, message, dupliciteInboxIndex);
+          if (rslt == 2) {
+            if (child) {
+              const messageTable = $(`.message-inbox-table`, child);
+              messageTable.DataTable().rows.add([message]).draw();
+            }
+          } else if (rslt == 1) {
+            if (child) {
+              const messageTable = $(`.message-inbox-table`, child);
+              messageTable
+                .DataTable()
+                .row("#" + message.id)
+                .invalidate()
+                .draw();
+            }
+          }
         } else {
           threadDataInbox.messages.push(message);
-
-          const child = inboxTable.row("#" + threadId).child();
-
           if (child) {
             const messageTable = $(`.message-inbox-table`, child);
-
             messageTable.DataTable().rows.add([message]).draw();
           }
         }
@@ -72,14 +84,27 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
       }
 
       if (threadDataSent) {
+        const child = sentTable.row("#" + threadId).child();
         if (dupliciteSentIndex >= 0) {
           const view = 1;
-          treatDupliciteMessage(threadDataSent, view, message, dupliciteSentIndex);
+          const rslt = treatDupliciteMessage(threadDataSent, view, message, dupliciteSentIndex);
+          if (rslt == 2) {
+            if (child) {
+              const messageTable = $(`.message-sent-table`, child);
+              messageTable.DataTable().rows.add([message]).draw();
+            }
+          } else if (rslt == 1) {
+            if (child) {
+              const messageTable = $(`.message-sent-table`, child);
+              messageTable
+                .DataTable()
+                .row("#" + message.id)
+                .invalidate()
+                .draw();
+            }
+          }
         } else {
           threadDataSent.messages.push(message);
-
-          const child = sentTable.row("#" + threadId).child();
-
           if (child) {
             const messageTable = $(`.message-sent-table`, child);
 
@@ -111,17 +136,29 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
 
     if (message.folder == 2) {
       if (threadDataSent) {
+        const child = sentTable.row("#" + threadId).child();
         if (dupliciteSentIndex >= 0) {
           const view = 1;
-          treatDupliciteMessage(threadDataSent, view, message, dupliciteSentIndex);
+          const rslt = treatDupliciteMessage(threadDataSent, view, message, dupliciteSentIndex);
+          if (rslt == 2) {
+            if (child) {
+              const messageTable = $(`.message-sent-table`, child);
+              messageTable.DataTable().rows.add([message]).draw();
+            }
+          } else if (rslt == 1) {
+            if (child) {
+              const messageTable = $(`.message-sent-table`, child);
+              messageTable
+                .DataTable()
+                .row("#" + message.id)
+                .invalidate()
+                .draw();
+            }
+          }
         } else {
           threadDataSent.messages.push(message);
-
-          const child = sentTable.row("#" + threadId).child();
-
           if (child) {
             const messageTable = $(`.message-sent-table`, child);
-
             messageTable.DataTable().rows.add([message]).draw();
           }
         }
@@ -131,17 +168,29 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
       }
 
       if (threadDataInbox) {
+        const child = inboxTable.row("#" + threadId).child();
         if (dupliciteInboxIndex >= 0) {
           const view = 2;
-          treatDupliciteMessage(threadDataInbox, view, message, dupliciteInboxIndex);
+          const rslt = treatDupliciteMessage(threadDataInbox, view, message, dupliciteInboxIndex);
+          if (rslt == 2) {
+            if (child) {
+              const messageTable = $(`.message-inbox-table`, child);
+              messageTable.DataTable().rows.add([message]).draw();
+            }
+          } else if (rslt == 1) {
+            if (child) {
+              const messageTable = $(`.message-inbox-table`, child);
+              messageTable
+                .DataTable()
+                .row("#" + message.id)
+                .invalidate()
+                .draw();
+            }
+          }
         } else {
           threadDataInbox.messages.push(message);
-
-          const child = inboxTable.row("#" + threadId).child();
-
           if (child) {
             const messageTable = $(`.message-inbox-table`, child);
-
             messageTable.DataTable().rows.add([message]).draw();
           }
         }
