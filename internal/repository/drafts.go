@@ -857,6 +857,7 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	}
 
 	var recipientsNotFound []string
+	returnMessage := &Message{}
 
 	// simple send
 	for _, recipient := range recipients {
@@ -949,6 +950,10 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 			}
 
 		}
+
+		if username == user.Username {
+			returnMessage = message
+		}
 	}
 
 	query = `
@@ -992,17 +997,17 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 	}
 
 	if err = tx.Commit(); err != nil {
-		return message, err
+		return nil, err
 	}
 
 	if len(recipientsNotFound) > 0 {
-		return message, &RecipientsNotFoundError{
+		return returnMessage, &RecipientsNotFoundError{
 			Recipients: recipientsNotFound,
 			Err:        ErrRecipientNotFound,
 		}
 	}
 
-	message.Folder = 1 // sent
+	returnMessage.Folder = 1 // sent
 
-	return message, nil
+	return returnMessage, nil
 }
