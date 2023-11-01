@@ -116,19 +116,22 @@ export const getParticipantsFrom = (username, messages) => {
 
     const participant = parseNameAndEmail(parsed.from);
 
-    const participantName = participant.email == username ? "me" : participant.name || participant.email.split("@")[0];
+    const participantName = {
+      name: participant.email == username ? "me" : participant.name || participant.email.split("@")[0],
+      unread: message.unread,
+    };
 
-    if (message.unread) {
-      participants.set(participant.email, `<b>${participantName}</b>`);
-    } else {
-      participants.set(participant.email, participantName);
+    if ((participants.get(participant.email))?.unread) {
+      participantName.unread = true;
     }
+
+    participants.set(participant.email, participantName);
   }
 
   let displayParticipants = "";
 
   for (const participant of Array.from(participants).reverse()) {
-    const displayPerson = participant[1];
+    const displayPerson = participant[1].unread ? `<b>${participant[1].name}</b>` : participant[1].name;
 
     if (displayParticipants) {
       displayParticipants = `${displayPerson}, ${displayParticipants}`;
