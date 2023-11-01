@@ -127,8 +127,28 @@ export const showDetail = (view, row) => {
   });
 
   setTimeout(() => {
-    if (form[0].clientHeight > 0 && rowData.unread) {
+    if (form[0].isConnected && rowData.unread) {
       rowData.unread = false;
+
+      const inboxTable = $(`#inboxTable`);
+      const sentTable = $(`#sentTable`);
+      const messagesInboxTable = $(`.message-inbox-table`);
+      const messagesSentTable = $(`.message-sent-table`);
+
+      inboxTable.DataTable().rows().invalidate().draw();
+      sentTable.DataTable().rows().invalidate().draw();
+
+      messagesInboxTable
+        .DataTable()
+        .row("#" + rowData.id)
+        .invalidate()
+        .draw();
+
+      messagesSentTable
+        .DataTable()
+        .row("#" + rowData.id)
+        .invalidate()
+        .draw();
     }
   }, SEEN_TIMEOUT);
 };
