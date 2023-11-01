@@ -110,10 +110,12 @@ func ParsePlaceholderMessage[M GenericMessage](user *repository.User, repo repos
 
 	if messages, ok := any(genericMessages).([]*repository.Message); ok {
 		for i := range messages {
-			err := updateParts(messages[i].Payload.Parts)
-			if err != nil {
-				return nil, err
-			}
+			updateParts(messages[i].Payload.Parts)
+			// e.g. the resource file not found => ignore error
+			// err := updateParts(messages[i].Payload.Parts)
+			// if err != nil {
+			// 	return nil, err
+			// }
 		}
 
 		return genericMessages, nil

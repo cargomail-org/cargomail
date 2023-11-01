@@ -214,6 +214,7 @@ func (s *BlobStorage) CleanAndStoreMultipart(user *repository.User, draftId stri
 func (s *BlobStorage) Load(w io.Writer, blob *repository.Blob, blobPath string) error {
 	out, err := os.Open(blobPath)
 	if err != nil {
+		// the resource file not found
 		return err
 	}
 	defer out.Close()

@@ -1,6 +1,8 @@
 import { treatDupliciteMessage } from "/public/js/utils.js";
 import { draftsTable } from "/public/js/drafts.js";
 
+import $ from "jquery";
+
 let historyId = 0;
 
 export const getHistoryId = () => {
@@ -226,24 +228,57 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
     messageRemoved(inboxTable, sentTable, message);
   }
 
-  /*for (const message of data.updated || []) {
-      if (message.folder == 1) {
-        // https://datatables.net/forums/discussion/59343/duplicate-data-in-the-data-table
-        const notFound =
-          sentTable.column(0).data().toArray().indexOf(message.id) === -1; // !!! must be
-        if (notFound) {
-          sentTable.row.add(message);
-        } else {
-          sentTable.row(`#${message.id}`).data(message);
-  
-          if (message.id == composeIdInput.value) {
-            const parsed = parsePayload(message.id, message.payload);
-  
-            composePopulateForm(false, message.id, parsed);
-          }
-        }
-      }
-    }*/
+  for (const message of data.updated || []) {
+    const threadId = message.payload.headers["X-Thread-ID"];
+
+    const threadDataInbox = inboxTable
+      .rows()
+      .data()
+      .toArray()
+      .find((thread) => thread.threadId == threadId);
+
+    const threadDataSent = sentTable
+      .rows()
+      .data()
+      .toArray()
+      .find((thread) => thread.threadId == threadId);
+
+    const inboxMessage = threadDataInbox?.messages.find((item) => {
+      return item.id == message.id;
+    });
+
+    const sentMessage = threadDataSent?.messages.find((item) => {
+      return item.id == message.id;
+    });
+
+    if (inboxMessage) {
+      inboxMessage.unread = message.unread;
+      inboxMessage.starred = message.starred;
+    }
+
+    if (sentMessage) {
+      sentMessage.unread = message.unread;
+      sentMessage.starred = message.starred;
+    }
+
+    inboxTable.rows().invalidate().draw();
+    sentTable.rows().invalidate().draw();
+
+    const messagesInboxTable = $(`.message-inbox-table`);
+    const messagesSentTable = $(`.message-sent-table`);
+
+    messagesInboxTable
+      .DataTable()
+      .row("#" + message.id)
+      .invalidate()
+      .draw();
+
+    messagesSentTable
+      .DataTable()
+      .row("#" + message.id)
+      .invalidate()
+      .draw();
+  }
 };
 
 const messageRemoved = (inboxTable, sentTable, message) => {
