@@ -261,8 +261,8 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
       sentMessage.starred = message.starred;
     }
 
-    inboxTable.rows().invalidate().draw();
-    sentTable.rows().invalidate().draw();
+    inboxTable.row("#" + threadId).invalidate().draw(false);
+    sentTable.row("#" + threadId).invalidate().draw(false);
 
     const messagesInboxTable = $(`.message-inbox-table`);
     const messagesSentTable = $(`.message-sent-table`);
@@ -271,13 +271,13 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
       .DataTable()
       .row("#" + message.id)
       .invalidate()
-      .draw();
+      .draw(false);
 
     messagesSentTable
       .DataTable()
       .row("#" + message.id)
       .invalidate()
-      .draw();
+      .draw(false);
   }
 };
 

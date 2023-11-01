@@ -34,6 +34,7 @@ const sentFormAlert = document.getElementById("sentFormAlert");
 const composeXThreadIdInput = document.getElementById("composeXThreadIdInput");
 
 export const sentTable = new DataTable("#sentTable", {
+  stateSave: false,
   paging: true,
   responsive: {
     details: false,

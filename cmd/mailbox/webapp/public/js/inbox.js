@@ -34,6 +34,7 @@ const inboxFormAlert = document.getElementById("inboxFormAlert");
 const composeXThreadIdInput = document.getElementById("composeXThreadIdInput");
 
 export const inboxTable = new DataTable("#inboxTable", {
+  stateSave: false,
   paging: true,
   responsive: {
     details: false,

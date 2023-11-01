@@ -190,6 +190,7 @@ uploadForm.onsubmit = async (e) => {
 };
 
 const filesTable = new DataTable("#filesTable", {
+  stateSave: false,
   paging: true,
   responsive: {
     details: false,

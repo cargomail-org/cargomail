@@ -143,25 +143,28 @@ export const showDetail = (view, row) => {
 
         rowData.unread = false;
 
+        const threadId = rowData.payload.headers["X-Thread-ID"];
+
         const inboxTable = $(`#inboxTable`);
         const sentTable = $(`#sentTable`);
+
+        inboxTable.DataTable().row("#" + threadId).invalidate().draw(false);
+        sentTable.DataTable().row("#" + threadId).invalidate().draw(false);
+
         const messagesInboxTable = $(`.message-inbox-table`);
         const messagesSentTable = $(`.message-sent-table`);
-
-        inboxTable.DataTable().rows().invalidate().draw();
-        sentTable.DataTable().rows().invalidate().draw();
 
         messagesInboxTable
           .DataTable()
           .row("#" + rowData.id)
           .invalidate()
-          .draw();
+          .draw(false);
 
         messagesSentTable
           .DataTable()
           .row("#" + rowData.id)
           .invalidate()
-          .draw();
+          .draw(false);
       })();
     }
   }, SEEN_TIMEOUT);
