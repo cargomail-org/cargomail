@@ -15,6 +15,8 @@ import { parsePayload, composePayload, createSubjectSnippet, createPlainContentS
 
 import { composeAddItems } from "/public/js/compose.js";
 
+const SEEN_TIMEOUT = 2000;
+
 export const showDetail = (view, row) => {
   const rowData = row.data();
 
@@ -123,6 +125,12 @@ export const showDetail = (view, row) => {
       selectedRows(view, dataTable);
     }
   });
+
+  setTimeout(() => {
+    if (form[0].clientHeight > 0 && rowData.unread) {
+      rowData.unread = false;
+    }
+  }, SEEN_TIMEOUT);
 };
 
 export const selectedRows = (view, dataTable) => {

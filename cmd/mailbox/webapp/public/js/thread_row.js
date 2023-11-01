@@ -15,7 +15,9 @@ import { getProfileUsername } from "/public/js/profile.js";
 
 const MAX_DISPLAYED_ATTACHMENTS = 3;
 
-export const createThreadRow = (view, type, username, messages, parsed) => {
+export const createThreadRow = (view, type, username, full) => {
+  const parsed = parsePayload(full.id, full.payload);
+  const messages = full.messages;
   const messagesCount = messages?.length || 0;
 
   let participants;
@@ -29,9 +31,14 @@ export const createThreadRow = (view, type, username, messages, parsed) => {
   const link = `${window.apiHost}/api/v1/files/`;
   const attachmentLinks = [];
 
+  let unread = false;
   let moreAttachments = 0;
 
   for (const message of messages) {
+    if (message.unread && !unread) {
+      unread = true;
+    }
+
     const parsedMessage = parsePayload(message.id, message.payload);
 
     for (const attachment of parsedMessage.attachments) {
@@ -54,8 +61,12 @@ export const createThreadRow = (view, type, username, messages, parsed) => {
 
   const lastPlainContent = parsePayload(lastMessage.id, lastMessage.payload).plainContent || "";
 
-  const subject = type === "display" ? createSubjectSnippet(parsed.subject) : parsed.subject;
+  let subject = type === "display" ? createSubjectSnippet(parsed.subject) : parsed.subject;
   let plainContent = type === "display" ? createPlainContentSnippet(lastPlainContent) : lastPlainContent;
+
+  if (type === "display" && subject && unread) {
+    subject = `<b>${subject}</b>`;
+  }
 
   if (plainContent) {
     plainContent = `<span style="color: gray;">${plainContent.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>`;
@@ -76,6 +87,10 @@ export const createThreadRow = (view, type, username, messages, parsed) => {
 
   if (!content) {
     content = "(no subject)";
+    
+    if (type === "display" && content && unread) {
+      content = `<b>${content}</b>`;
+    }
   }
 
   let renderAttachmentLinks = "";

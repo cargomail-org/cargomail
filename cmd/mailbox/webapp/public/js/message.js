@@ -94,11 +94,7 @@ export const createMessageTable = (view, row) => {
         className: "messages-payload",
         orderable: false,
         render: (data, type, full, meta) => {
-          const parsed = parsePayload(full.id, full.payload);
-
-          const renderHtml = createMessageRow(full.id, parsed);
-
-          return renderHtml;
+          return createMessageRow(full);
         },
       },
       {

@@ -92,11 +92,7 @@ export const sentTable = new DataTable("#sentTable", {
       className: "payload",
       orderable: false,
       render: (data, type, full, meta) => {
-        const parsed = parsePayload(full.id, full.payload);
-
-        const renderHtml = createThreadRow("sent", type, username, full.messages, parsed);
-
-        return renderHtml;
+        return createThreadRow("sent", type, username, full);
       },
     },
     {

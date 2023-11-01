@@ -1,6 +1,7 @@
 import { parseNameAndEmail, parseInitialsAndName, parseDisplayDate, getRecipientsShort } from "/public/js/utils.js";
 import { threeDotIcon, attachmentIcon, starredIcon, unstarredIcon } from "/public/js/icons.js";
 
+import { parsePayload } from "/public/js/utils.js";
 import { getProfileUsername } from "/public/js/profile.js";
 
 // https://codepen.io/sergiopedercini/pen/RLJYLj/
@@ -18,10 +19,25 @@ function stringToHslColor(str, s, l) {
   return "hsl(" + 0 + ", " + 0 + "%, " + 0 + "%)";
 }
 
-export const createMessageRow = (id, parsed) => {
+export const createMessageRow = (full) => {
+  const id = full.id;
+  const parsed = parsePayload(full.id, full.payload);
   const person = parseNameAndEmail(parsed.from);
   const displayPerson = parseInitialsAndName(person);
   const displayDate = parseDisplayDate(parsed.date);
+
+  let displayPersonName = displayPerson.name;
+  let personEmail = person.email;
+
+  if (full.unread) {
+    if (displayPersonName) {
+      displayPersonName = `<b>${displayPersonName}</b>`;
+    }
+
+    if (personEmail) {
+      personEmail = `<b>${personEmail}</b>`;
+    }
+  }
 
   const htmlDropdownMenu = `    
     <div class="message-row-dropdown">
@@ -53,8 +69,8 @@ export const createMessageRow = (id, parsed) => {
           <div class="message-row-content">
               <div class="message-row-header">
                   <div class="message-row-person">
-                      <div class="message-row-fullname">${displayPerson.name}</div>
-                      <div class="message-row-email">${person.email}</div>
+                      <div class="message-row-fullname">${displayPersonName}</div>
+                      <div class="message-row-email">${personEmail}</div>
                   </div>    
                   <div class="message-row-space-1"></div>
                   <div class="message-row-attch">${parsed.attachments.length > 0 ? attachmentIcon : ""}</div>

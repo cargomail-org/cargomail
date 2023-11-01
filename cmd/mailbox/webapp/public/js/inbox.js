@@ -92,11 +92,7 @@ export const inboxTable = new DataTable("#inboxTable", {
       className: "payload",
       orderable: false,
       render: (data, type, full, meta) => {
-        const parsed = parsePayload(full.id, full.payload);
-
-        const renderHtml = createThreadRow("inbox", type, username, full.messages, parsed);
-
-        return renderHtml;
+       return createThreadRow("inbox", type, username, full);
       },
     },
     {

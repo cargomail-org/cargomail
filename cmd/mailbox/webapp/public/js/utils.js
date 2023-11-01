@@ -20,6 +20,26 @@ export const b64DecodeUtf8 = (base64) => {
   return decoder.decode(bytes);
 };
 
+// https://stackoverflow.com/questions/879152/how-do-i-make-javascript-beep
+export const beep = (frequency = 666, duration = 63, volume = 0.09) => {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  gainNode.gain.value = volume;
+  oscillator.frequency.value = frequency;
+  oscillator.type = "square";
+
+  oscillator.start();
+
+  setTimeout(function () {
+    oscillator.stop();
+  }, duration);
+};
+
 export const treatDupliciteMessage = (thread, view, message, duplicateIndex) => {
   const parsed = parsePayload(message.id, message.payload);
   const from = parseNameAndEmail(parsed.from);
@@ -95,7 +115,14 @@ export const getParticipantsFrom = (username, messages) => {
     const parsed = parsePayload(message.id, message.payload);
 
     const participant = parseNameAndEmail(parsed.from);
-    participants.set(participant.email, participant.name);
+
+    const participantName = participant.name || participant.email.split("@")[0];
+
+    if (message.unread) {
+      participants.set(participant.email, `<b>${participantName}</b>`);
+    } else {
+      participants.set(participant.email, participantName);
+    }
   }
 
   let displayParticipants = "";
