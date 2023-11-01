@@ -128,27 +128,41 @@ export const showDetail = (view, row) => {
 
   setTimeout(() => {
     if (form[0].isConnected && rowData.unread) {
-      rowData.unread = false;
+      (async () => {
+        const response = await api(null, 200, `${window.apiHost}/api/v1/messages`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: [rowData.id], unread: false }),
+        });
 
-      const inboxTable = $(`#inboxTable`);
-      const sentTable = $(`#sentTable`);
-      const messagesInboxTable = $(`.message-inbox-table`);
-      const messagesSentTable = $(`.message-sent-table`);
+        if (response === false) {
+          return;
+        }
 
-      inboxTable.DataTable().rows().invalidate().draw();
-      sentTable.DataTable().rows().invalidate().draw();
+        rowData.unread = false;
 
-      messagesInboxTable
-        .DataTable()
-        .row("#" + rowData.id)
-        .invalidate()
-        .draw();
+        const inboxTable = $(`#inboxTable`);
+        const sentTable = $(`#sentTable`);
+        const messagesInboxTable = $(`.message-inbox-table`);
+        const messagesSentTable = $(`.message-sent-table`);
 
-      messagesSentTable
-        .DataTable()
-        .row("#" + rowData.id)
-        .invalidate()
-        .draw();
+        inboxTable.DataTable().rows().invalidate().draw();
+        sentTable.DataTable().rows().invalidate().draw();
+
+        messagesInboxTable
+          .DataTable()
+          .row("#" + rowData.id)
+          .invalidate()
+          .draw();
+
+        messagesSentTable
+          .DataTable()
+          .row("#" + rowData.id)
+          .invalidate()
+          .draw();
+      })();
     }
   }, SEEN_TIMEOUT);
 };
