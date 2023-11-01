@@ -116,7 +116,7 @@ export const getParticipantsFrom = (username, messages) => {
 
     const participant = parseNameAndEmail(parsed.from);
 
-    const participantName = participant.name || participant.email.split("@")[0];
+    const participantName = participant.email == username ? "me" : participant.name || participant.email.split("@")[0];
 
     if (message.unread) {
       participants.set(participant.email, `<b>${participantName}</b>`);
@@ -128,7 +128,7 @@ export const getParticipantsFrom = (username, messages) => {
   let displayParticipants = "";
 
   for (const participant of Array.from(participants).reverse()) {
-    const displayPerson = participant[0] == username ? "me" : participant[1] || participant[0];
+    const displayPerson = participant[1];
 
     if (displayParticipants) {
       displayParticipants = `${displayPerson}, ${displayParticipants}`;

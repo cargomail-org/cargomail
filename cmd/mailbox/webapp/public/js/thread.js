@@ -1,4 +1,5 @@
 import { messageListResponse } from "/public/js/message.js";
+import { treatDupliciteMessage } from "/public/js/utils.js"
 
 // folder -1 means all, where 0=draft (reserved, not used), 1=sent, 2=inbox, 3=spam (reserved, not used)
 export const getThreads = (folder = -1) => {
