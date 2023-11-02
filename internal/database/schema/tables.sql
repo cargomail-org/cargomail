@@ -122,6 +122,26 @@ CREATE TABLE IF NOT EXISTS "Contact" (
     "deviceId"      VARCHAR(32)
 );
 
+-- push layer: sending a placeholder message from the sender to the destination
+CREATE TABLE IF NOT EXISTS "MessageQueue" (
+    "id"            VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY, 
+    "message"       TEXT,                 -- json 'Message' object
+    "sender"        TEXT,
+    "destination"   TEXT,
+    "snoozedAt"     TIMESTAMP,
+    "retriesNum"	INTEGER(4) NOT NULL DEFAULT 0
+);
+
+-- pull layer: resource (identified by the digest) retrieval from the origin by the recipient
+CREATE TABLE IF NOT EXISTS "ResourceQueue" (
+    "id"            VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY, 
+    "digest"        TEXT,
+    "recipient"     TEXT,                
+    "origin"        TEXT,
+    "snoozedAt"     TIMESTAMP,
+    "retriesNum"	INTEGER(4) NOT NULL DEFAULT 0
+);
+
 CREATE TABLE IF NOT EXISTS "BlobDeleted" (
     "id"			VARCHAR(32) NOT NULL PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
