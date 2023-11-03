@@ -16,7 +16,6 @@
    <glyph unicode="—" horiz-adv-x="1826" d="M 110,690 L 1938,690 1938,432 110,432 110,690 Z"/>
    <glyph unicode="y" horiz-adv-x="1297" d="M 25,1120 L 383,1120 684,360 940,1120 1298,1120 827,-106 C 780,-231 725,-318 662,-368 599,-417 515,-442 412,-442 L 205,-442 205,-207 317,-207 C 378,-207 422,-197 450,-178 477,-159 499,-124 514,-74 L 524,-43 25,1120 Z"/>
    <glyph unicode="x" horiz-adv-x="1271" d="M 455,573 L 51,1120 430,1120 659,788 891,1120 1270,1120 866,575 1290,0 911,0 659,354 410,0 31,0 455,573 Z"/>
-   <glyph unicode="w" horiz-adv-x="1774" d="M 72,1120 L 420,1120 608,348 797,1120 1096,1120 1284,356 1473,1120 1821,1120 1526,0 1135,0 946,770 758,0 367,0 72,1120 Z"/>
    <glyph unicode="u" horiz-adv-x="1138" d="M 160,436 L 160,1120 520,1120 520,1008 C 520,947 520,871 519,780 518,688 518,627 518,596 518,506 520,441 525,402 530,362 538,333 549,315 564,292 583,274 607,261 630,248 657,242 688,242 763,242 821,271 864,328 907,385 928,465 928,567 L 928,1120 1286,1120 1286,0 928,0 928,162 C 874,97 817,49 757,18 696,-13 630,-29 557,-29 428,-29 329,11 262,90 194,169 160,285 160,436 Z"/>
    <glyph unicode="t" horiz-adv-x="928" d="M 563,1438 L 563,1120 932,1120 932,864 563,864 563,389 C 563,337 573,302 594,284 615,265 656,256 717,256 L 901,256 901,0 594,0 C 453,0 353,30 294,89 235,148 205,248 205,389 L 205,864 27,864 27,1120 205,1120 205,1438 563,1438 Z"/>
    <glyph unicode="s" horiz-adv-x="1060" d="M 1047,1085 L 1047,813 C 970,845 896,869 825,885 754,901 686,909 623,909 555,909 505,901 472,884 439,867 422,840 422,805 422,776 435,754 460,739 485,724 529,712 594,705 L 657,696 C 840,673 964,634 1027,581 1090,528 1122,444 1122,330 1122,211 1078,121 990,61 902,1 771,-29 596,-29 522,-29 446,-23 367,-12 288,0 206,18 123,41 L 123,313 C 194,278 268,252 343,235 418,218 494,209 571,209 641,209 694,219 729,238 764,257 782,286 782,324 782,356 770,380 746,396 721,411 673,423 600,432 L 537,440 C 378,460 266,497 202,551 138,605 106,687 106,797 106,916 147,1004 228,1061 309,1118 434,1147 602,1147 668,1147 737,1142 810,1132 883,1122 962,1106 1047,1085 Z"/>
@@ -263,8 +262,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id5">
-        <rect class="BoundingBox" stroke="none" fill="none" x="13704" y="1859" width="9797" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="17673" y="2412"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="13956" y="2920"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(post email with placeholder message)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="15018" y="1859" width="7163" height="1279"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="17670" y="2412"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="15269" y="2920"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(post placeholder message)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
