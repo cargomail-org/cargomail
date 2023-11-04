@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS "Blob" (
     "id"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
     "draftId" 	    INTEGER REFERENCES "Draft" ON DELETE CASCADE,
-    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox
+    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox, 3-in-progress
     "digest"     	VARCHAR(32) NOT NULL,
     "name"          VARCHAR(255),
     "snippet"       VARCHAR(255),
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS "Blob" (
 CREATE TABLE IF NOT EXISTS "File" (
     "id"			VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY,
     "userId" 		INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,
-    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox
+    "folder"        INTEGER(2) NOT NULL,  -- 0-draft, 1-sent, 2-inbox, 3-in-progress
     "digest"     	VARCHAR(32) NOT NULL,
     "name"			TEXT NOT NULL,
     "path"			TEXT NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS "Message"
     "userId" 	    INTEGER NOT NULL REFERENCES "User" ON DELETE CASCADE,  
     "unread"        BOOLEAN NOT NULL DEFAULT TRUE, 
     "starred"       BOOLEAN NOT NULL DEFAULT FALSE,
-    "folder"        INTEGER(2) NOT NULL,  -- 0-draft (reserved, not used), 1-sent, 2-inbox
+    "folder"        INTEGER(2) NOT NULL,  -- 0-draft (reserved, not used), 1-sent, 2-inbox, 3-in-progress
     "payload"       TEXT,                 -- json 'MessagePart' object
     "labelIds"      TEXT,                 -- json 'labelIds' array
     "sentAt"        TIMESTAMP,
@@ -122,17 +122,17 @@ CREATE TABLE IF NOT EXISTS "Contact" (
     "deviceId"      VARCHAR(32)
 );
 
--- push layer: sending a placeholder message from the sender to the destination
-/*CREATE TABLE IF NOT EXISTS "MessageQueue" (
+-- push layer: sending a placeholder message from a sender to recipients
+CREATE TABLE IF NOT EXISTS "MessageQueue" (
     "id"            VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY, 
     "message"       TEXT,                 -- json 'Message' object
     "sender"        TEXT,
     "destination"   TEXT,
     "snoozedAt"     TIMESTAMP,
     "retriesNum"	INTEGER(4) NOT NULL DEFAULT 0
-);*/
+);
 
--- pull layer: resource (identified by the digest) retrieval from the origin by the recipient
+-- pull layer: resource (identified by the digest) retrieval from the sender by the recipient
 /*CREATE TABLE IF NOT EXISTS "ResourceQueue" (
     "id"            VARCHAR(32) NOT NULL DEFAULT (lower(hex(randomblob(16)))) PRIMARY KEY, 
     "digest"        TEXT,
