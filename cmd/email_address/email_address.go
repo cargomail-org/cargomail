@@ -37,6 +37,7 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 	svc.routes(mux)
 
 	http1Server := &http.Server{Handler: mux, Addr: config.Configuration.EmailAddressBind}
+	http1ServerTLS := &http.Server{Handler: mux, Addr: config.Configuration.EmailAddressBindTLS}
 
 	errs.Go(func() error {
 		<-ctx.Done()
@@ -47,12 +48,30 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 		if err != nil {
 			return err
 		}
-		log.Print("email address (push layer) service shutdown gracefully")
+		log.Print("email address (push layer) http service shutdown gracefully")
 		return nil
 	})
 
 	errs.Go(func() error {
-		log.Printf("email address (push layer) service is listening on https://%s", http1Server.Addr)
-		return http1Server.ListenAndServeTLS(config.Configuration.EmailAddressCertPath, config.Configuration.EmailAddressKeyPath)
+		<-ctx.Done()
+		gracefulStop, cancelShutdown := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancelShutdown()
+
+		err := http1ServerTLS.Shutdown(gracefulStop)
+		if err != nil {
+			return err
+		}
+		log.Print("email address (push layer) https service shutdown gracefully")
+		return nil
+	})
+
+	errs.Go(func() error {
+		log.Printf("email address (push layer) http service is listening on http://%s", http1Server.Addr)
+		return http1Server.ListenAndServe()
+	})
+
+	errs.Go(func() error {
+		log.Printf("email address (push layer) https service is listening on https://%s", http1ServerTLS.Addr)
+		return http1ServerTLS.ListenAndServeTLS(config.Configuration.EmailAddressCertPath, config.Configuration.EmailAddressKeyPath)
 	})
 }

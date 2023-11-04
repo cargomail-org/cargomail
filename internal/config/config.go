@@ -27,12 +27,14 @@ type Config = struct {
 	ResourcesPath        string `yaml:"resources_path"`
 	BlobsFolder          string `yaml:"blobsFolder"`
 	FilesFolder          string `yaml:"filesFolder"`
-	MailboxCertPath      string `yaml:"mailboxCertPath"`
-	MailboxKeyPath       string `yaml:"mailboxKeyPath"`
 	EmailAddressCertPath string `yaml:"emailAddressCertPath"`
 	EmailAddressKeyPath  string `yaml:"emailAddressKeyPath"`
-	MailboxBind          string `yaml:"mailboxBind"`
 	EmailAddressBind     string `yaml:"emailAddressBind"`
+	EmailAddressBindTLS  string `yaml:"emailAddressBindTLS"`
+	MailboxCertPath      string `yaml:"mailboxCertPath"`
+	MailboxKeyPath       string `yaml:"mailboxKeyPath"`
+	MailboxBind          string `yaml:"mailboxBind"`
+	MailboxBindTLS       string `yaml:"mailboxBindTLS"`
 	CookieSameSite       string `yaml:"cookieSameSite"`
 	Stage                string `yaml:"stage"`
 	// SessionTTL       time.Duration

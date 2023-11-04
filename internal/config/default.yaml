@@ -2,11 +2,13 @@ domainName: ${DOMAIN_NAME}
 storagePath: ${STORAGE_PATH}
 databasePath: ${DATABASE_PATH}
 resourcesPath: ${RESOURCES_PATH}
-mailboxCertPath: ${MAILBOX_CERT_PATH}
-mailboxPeyPath: ${MAILBOX_KEY_PATH}
 emailAddressCertPath: ${EMAIL_ADDRESS_CERT_PATH}
 emailAddressPeyPath: ${EMAIL_ADDRESS_KEY_PATH}
-mailboxBind: ${MAILBOX_BIND}
 emailAddressBind: ${EMAIL_ADDRESS_BIND}
+emailAddressBindTLS: ${EMAIL_ADDRESS_BIND_TLS}
+mailboxCertPath: ${MAILBOX_CERT_PATH}
+mailboxPeyPath: ${MAILBOX_KEY_PATH}
+mailboxBind: ${MAILBOX_BIND}
+mailboxBindTLS: ${MAILBOX_BIND_TLS}
 cookieSameSite: ${COOKIE_SAME_SITE}
 
