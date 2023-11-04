@@ -1,7 +1,7 @@
-package email
+package email_address
 
 import (
-	"cargomail/cmd/email/api"
+	"cargomail/cmd/email_address/api"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"context"

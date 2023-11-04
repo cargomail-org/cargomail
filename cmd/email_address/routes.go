@@ -1,4 +1,4 @@
-package email
+package email_address
 
 import (
 	"net/http"
