@@ -14,10 +14,10 @@
                 "RESOURCES_PATH": "./storage/cargomail.org/resources/",
                 "MAILBOX_CERT_PATH": "./storage/cargomail.org/certificates/server.crt",
                 "MAILBOX_KEY_PATH": "./storage/cargomail.org/certificates/server.key",
-                "EMAIL_CERT_PATH": "./storage/cargomail.org/certificates/server.crt",
-                "EMAIL_KEY_PATH": "./storage/cargomail.org/certificates/server.key",
+                "EMAIL_ADDRESS_CERT_PATH": "./storage/cargomail.org/certificates/server.crt",
+                "EMAIL_ADDRESS_KEY_PATH": "./storage/cargomail.org/certificates/server.key",
                 "MAILBOX_BIND": "127.0.0.1:8181",
-                "EMAIL_BIND": "127.0.0.1:2125",
+                "EMAIL_ADDRESS_BIND": "127.0.0.1:2125",
                 "COOKIE_SAME_SITE": "none",
                 "STAGE": "dev"
             }
@@ -35,10 +35,10 @@
                 "RESOURCES_PATH": "./storage/federizer.org/resources/",
                 "MAILBOX_CERT_PATH": "./storage/federizer.org/certificates/server.crt",
                 "MAILBOX_KEY_PATH": "./storage/federizer.org/certificates/server.key",
-                "EMAIL_CERT_PATH": "./storage/federizer.org/certificates/server.crt",
-                "EMAIL_KEY_PATH": "./storage/federizer.org/certificates/server.key",
+                "EMAIL_ADDRESS_CERT_PATH": "./storage/federizer.org/certificates/server.crt",
+                "EMAIL_ADDRESS_KEY_PATH": "./storage/federizer.org/certificates/server.key",
                 "MAILBOX_BIND": "127.0.0.2:8181",
-                "EMAIL_BIND": "127.0.0.2:2125",
+                "EMAIL_ADDRESS_BIND": "127.0.0.2:2125",
                 "COOKIE_SAME_SITE": "none",
                 "STAGE": "dev"
             }
@@ -56,10 +56,10 @@
                 "RESOURCES_PATH": "./storage/umabox.org/resources/",
                 "MAILBOX_CERT_PATH": "./storage/umabox.org/certificates/server.crt",
                 "MAILBOX_KEY_PATH": "./storage/umabox.org/certificates/server.key",
-                "EMAIL_CERT_PATH": "./storage/umabox.org/certificates/server.crt",
-                "EMAIL_KEY_PATH": "./storage/umabox.org/certificates/server.key",
+                "EMAIL_ADDRESS_CERT_PATH": "./storage/umabox.org/certificates/server.crt",
+                "EMAIL_ADDRESS_KEY_PATH": "./storage/umabox.org/certificates/server.key",
                 "MAILBOX_BIND": "127.0.0.3:8181",
-                "EMAIL_BIND": "127.0.0.3:2125",
+                "EMAIL_ADDRESS_BIND": "127.0.0.3:2125",
                 "COOKIE_SAME_SITE": "none",
                 "STAGE": "dev"
             }

@@ -21,20 +21,20 @@ var (
 )
 
 type Config = struct {
-	DomainName      string `yaml:"domainName"`
-	StoragePath     string `yaml:"storagePath"`
-	DatabasePath    string `yaml:"databasePath"`
-	ResourcesPath   string `yaml:"resources_path"`
-	BlobsFolder     string `yaml:"blobsFolder"`
-	FilesFolder     string `yaml:"filesFolder"`
-	MailboxCertPath string `yaml:"mailboxCertPath"`
-	MailboxKeyPath  string `yaml:"mailboxKeyPath"`
-	EmailCertPath   string `yaml:"emailCertPath"`
-	EmailKeyPath    string `yaml:"emailKeyPath"`
-	MailboxBind     string `yaml:"mailboxBind"`
-	EmailBind       string `yaml:"emailBind"`
-	CookieSameSite  string `yaml:"cookieSameSite"`
-	Stage           string `yaml:"stage"`
+	DomainName           string `yaml:"domainName"`
+	StoragePath          string `yaml:"storagePath"`
+	DatabasePath         string `yaml:"databasePath"`
+	ResourcesPath        string `yaml:"resources_path"`
+	BlobsFolder          string `yaml:"blobsFolder"`
+	FilesFolder          string `yaml:"filesFolder"`
+	MailboxCertPath      string `yaml:"mailboxCertPath"`
+	MailboxKeyPath       string `yaml:"mailboxKeyPath"`
+	EmailAddressCertPath string `yaml:"emailAddressCertPath"`
+	EmailAddressKeyPath  string `yaml:"emailAddressKeyPath"`
+	MailboxBind          string `yaml:"mailboxBind"`
+	EmailAddressBind     string `yaml:"emailAddressBind"`
+	CookieSameSite       string `yaml:"cookieSameSite"`
+	Stage                string `yaml:"stage"`
 	// SessionTTL       time.Duration
 }
 

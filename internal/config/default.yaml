@@ -4,9 +4,9 @@ databasePath: ${DATABASE_PATH}
 resourcesPath: ${RESOURCES_PATH}
 mailboxCertPath: ${MAILBOX_CERT_PATH}
 mailboxPeyPath: ${MAILBOX_KEY_PATH}
-emailCertPath: ${EMAIL_CERT_PATH}
-emailPeyPath: ${EMAIL_KEY_PATH}
+emailAddressCertPath: ${EMAIL_ADDRESS_CERT_PATH}
+emailAddressPeyPath: ${EMAIL_ADDRESS_KEY_PATH}
 mailboxBind: ${MAILBOX_BIND}
-emailBind: ${EMAIL_BIND}
+emailAddressBind: ${EMAIL_ADDRESS_BIND}
 cookieSameSite: ${COOKIE_SAME_SITE}
 

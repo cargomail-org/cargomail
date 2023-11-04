@@ -4,8 +4,8 @@ databasePath: ./storage/cargomail.org/database/cargomail.db
 resourcesPath: ./storage/cargomail.org/resources/
 mailboxCertPath: ./storage/cargomail.org/certificates/server.crt
 mailboxKeyPath: ./storage/cargomail.org/certificates/server.key
-emailCertPath: ./storage/cargomail.org/certificates/server.crt
-emailKeyPath: ./storage/cargomail.org/certificates/server.key
+emailAddressCertPath: ./storage/cargomail.org/certificates/server.crt
+emailAddressKeyPath: ./storage/cargomail.org/certificates/server.key
 mailboxBind: 127.0.0.1:8181
-emailBind: 127.0.0.1:2125
+emailAddressBind: 127.0.0.1:2125
 cookieSameSite: strict
