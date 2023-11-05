@@ -8,22 +8,11 @@ import (
 	"cargomail/internal/storage"
 	"context"
 	"database/sql"
-	"embed"
 	"log"
 	"net/http"
 	"time"
 
 	"golang.org/x/sync/errgroup"
-)
-
-const (
-	webappDir = "webapp"
-	publicDir = "public"
-)
-
-var (
-	//go:embed webapp/*
-	files embed.FS
 )
 
 type ServiceParams struct {
@@ -43,7 +32,6 @@ func NewService(params *ServiceParams) (service, error) {
 		app: app.NewApp(
 			app.AppParams{
 				Repository: repository,
-				Files:      files,
 			}),
 		api: api.NewApi(
 			api.ApiParams{
@@ -58,25 +46,8 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 
 	svc.routes(router)
 
-	var fs http.Handler
-
-	if config.DevStage() {
-		fs = http.FileServer(http.Dir("cmd/mailbox/webapp"))
-	} else {
-		fs = http.FileServer(http.FS(files))
-	}
-
-	router.Route("GET", "/"+publicDir+"/", http.StripPrefix("/", fs))
-	router.Route("GET", "/snippets/compose.page.html", http.StripPrefix("/", fs))
-	router.Route("GET", "/snippets/contacts.page.html", http.StripPrefix("/", fs))
-	router.Route("GET", "/snippets/files.page.html", http.StripPrefix("/", fs))
-	router.Route("GET", "/snippets/inbox.page.html", http.StripPrefix("/", fs))
-	router.Route("GET", "/snippets/sent.page.html", http.StripPrefix("/", fs))
-	router.Route("GET", "/snippets/drafts.page.html", http.StripPrefix("/", fs))
-	router.Route("GET", "/snippets/profile.page.html", http.StripPrefix("/", fs))
-
-	http1Server := &http.Server{Handler: router, Addr: config.Configuration.MailboxBind}
-	http1ServerTLS := &http.Server{Handler: router, Addr: config.Configuration.MailboxBindTLS}
+	http1Server := &http.Server{Handler: router, Addr: config.Configuration.MailboxServiceBind}
+	http1ServerTLS := &http.Server{Handler: router, Addr: config.Configuration.MailboxServiceBindTLS}
 	// http2.ConfigureServer(http1Server, &http2.Server{})
 
 	errs.Go(func() error {
@@ -112,6 +83,6 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 
 	errs.Go(func() error {
 		log.Printf("mailbox (pull layer) https service is listening on https://%s", http1ServerTLS.Addr)
-		return http1ServerTLS.ListenAndServeTLS(config.Configuration.MailboxCertPath, config.Configuration.MailboxKeyPath)
+		return http1ServerTLS.ListenAndServeTLS(config.Configuration.MailboxServiceCertPath, config.Configuration.MailboxServiceKeyPath)
 	})
 }

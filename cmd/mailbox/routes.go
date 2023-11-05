@@ -92,25 +92,25 @@ func (t *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (svc *service) routes(r *Router) {
 	// App
-	r.Route("GET", "/", http.StripPrefix("/", svc.app.Authenticate(svc.app.HomePage())))
-	r.Route("GET", "/login", svc.app.LoginPage())
-	r.Route("GET", "/logout", svc.app.Authenticate(svc.app.Logout()))
-	r.Route("GET", "/register", svc.app.RegisterPage())
-	// r.Route("GET", "/auth/authenticate", svc.app.Session.Authenticate())
+	// r.Route("GET", "/", http.StripPrefix("/", svc.app.Authenticate(svc.app.HomePage())))
+	// r.Route("GET", "/login", svc.app.LoginPage())
+	// r.Route("GET", "/logout", svc.app.Authenticate(svc.app.Logout()))
+	// r.Route("GET", "/register", svc.app.RegisterPage())
+	// // r.Route("GET", "/auth/authenticate", svc.app.Session.Authenticate())
 
 	// Health API
 	r.Route("GET", "/api/v1/health", svc.api.Health.Healthcheck())
 
 	// Auth API
-	r.Route("GET", "/api/v1/auth/info", svc.api.Auth.Info())
-	r.Route("GET", "/api/v1/auth/userinfo", svc.api.Authenticate(svc.api.Auth.Info()))
-	r.Route("POST", "/api/v1/auth/register", svc.api.User.Register())
-	r.Route("POST", "/api/v1/auth/authenticate", svc.api.Session.Login())
-	r.Route("POST", "/api/v1/auth/logout", svc.api.Authenticate(svc.api.Session.Logout()))
+	// r.Route("GET", "/api/v1/auth/info", svc.api.Auth.Info())
+	// r.Route("GET", "/api/v1/auth/userinfo", svc.api.Authenticate(svc.api.Auth.Info()))
+	// r.Route("POST", "/api/v1/auth/register", svc.api.User.Register())
+	// r.Route("POST", "/api/v1/auth/authenticate", svc.api.Session.Login())
+	// r.Route("POST", "/api/v1/auth/logout", svc.api.Authenticate(svc.api.Session.Logout()))
 
 	// User API
-	r.Route("PUT", "/api/v1/user/profile", svc.api.Authenticate(svc.api.User.Profile()))
-	r.Route("GET", "/api/v1/user/profile", svc.api.Authenticate(svc.api.User.Profile()))
+	// r.Route("PUT", "/api/v1/user/profile", svc.api.Authenticate(svc.api.User.Profile()))
+	// r.Route("GET", "/api/v1/user/profile", svc.api.Authenticate(svc.api.User.Profile()))
 
 	// Contacts API
 	r.Route("POST", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.Create()))

@@ -1,1 +1,0 @@
-Use the website `https://jsitor.com/profile/1token` to run the scripts.

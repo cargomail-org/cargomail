@@ -21,22 +21,22 @@ var (
 )
 
 type Config = struct {
-	DomainName           string `yaml:"domainName"`
-	StoragePath          string `yaml:"storagePath"`
-	DatabasePath         string `yaml:"databasePath"`
-	ResourcesPath        string `yaml:"resources_path"`
-	BlobsFolder          string `yaml:"blobsFolder"`
-	FilesFolder          string `yaml:"filesFolder"`
-	EmailAddressCertPath string `yaml:"emailAddressCertPath"`
-	EmailAddressKeyPath  string `yaml:"emailAddressKeyPath"`
-	EmailAddressBind     string `yaml:"emailAddressBind"`
-	EmailAddressBindTLS  string `yaml:"emailAddressBindTLS"`
-	MailboxCertPath      string `yaml:"mailboxCertPath"`
-	MailboxKeyPath       string `yaml:"mailboxKeyPath"`
-	MailboxBind          string `yaml:"mailboxBind"`
-	MailboxBindTLS       string `yaml:"mailboxBindTLS"`
-	CookieSameSite       string `yaml:"cookieSameSite"`
-	Stage                string `yaml:"stage"`
+	DomainName             string `yaml:"domainName"`
+	StoragePath            string `yaml:"storagePath"`
+	DatabasePath           string `yaml:"databasePath"`
+	ResourcesPath          string `yaml:"resources_path"`
+	BlobsFolder            string `yaml:"blobsFolder"`
+	FilesFolder            string `yaml:"filesFolder"`
+	MailServiceCertPath    string `yaml:"mailServiceCertPath"`
+	MailServiceKeyPath     string `yaml:"mailServiceKeyPath"`
+	MailServiceBind        string `yaml:"mailServiceBind"`
+	MailServiceBindTLS     string `yaml:"mailServiceBindTLS"`
+	MailboxServiceCertPath string `yaml:"mailboxServiceCertPath"`
+	MailboxServiceKeyPath  string `yaml:"mailboxServiceKeyPath"`
+	MailboxServiceBind     string `yaml:"mailboxServiceBind"`
+	MailboxServiceBindTLS  string `yaml:"mailboxServiceBindTLS"`
+	CookieSameSite         string `yaml:"cookieSameSite"`
+	Stage                  string `yaml:"stage"`
 	// SessionTTL       time.Duration
 }
 

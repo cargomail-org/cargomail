@@ -1,7 +1,7 @@
 package cargomail
 
 import (
-	"cargomail/cmd/email_address"
+	"cargomail/cmd/mail"
 	"cargomail/cmd/mailbox"
 	"cargomail/internal/config"
 	"cargomail/internal/database"
@@ -34,6 +34,16 @@ func Start() error {
 
 	database.Init(db)
 
+	// mail (push layer) service
+	mailService, err := mail.NewService(
+		&mail.ServiceParams{
+			DB: db,
+		})
+	if err != nil {
+		log.Fatal(err)
+	}
+	mailService.Serve(ctx, errs)
+
 	// mailbox (pull layer) service
 	mailboxService, err := mailbox.NewService(
 		&mailbox.ServiceParams{
@@ -43,13 +53,6 @@ func Start() error {
 		log.Fatal(err)
 	}
 	mailboxService.Serve(ctx, errs)
-
-	// email address (push layer) service
-	emailAddressService := email_address.NewService(
-		&email_address.ServiceParams{
-			DB: db,
-		})
-	emailAddressService.Serve(ctx, errs)
 
 	go func() error {
 		stop := make(chan os.Signal, 1)
