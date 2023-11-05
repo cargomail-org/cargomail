@@ -16,6 +16,7 @@
    <glyph unicode="—" horiz-adv-x="1826" d="M 110,690 L 1938,690 1938,432 110,432 110,690 Z"/>
    <glyph unicode="y" horiz-adv-x="1297" d="M 25,1120 L 383,1120 684,360 940,1120 1298,1120 827,-106 C 780,-231 725,-318 662,-368 599,-417 515,-442 412,-442 L 205,-442 205,-207 317,-207 C 378,-207 422,-197 450,-178 477,-159 499,-124 514,-74 L 524,-43 25,1120 Z"/>
    <glyph unicode="x" horiz-adv-x="1271" d="M 455,573 L 51,1120 430,1120 659,788 891,1120 1270,1120 866,575 1290,0 911,0 659,354 410,0 31,0 455,573 Z"/>
+   <glyph unicode="v" horiz-adv-x="1298" d="M 31,1120 L 389,1120 668,346 946,1120 1305,1120 864,0 471,0 31,1120 Z"/>
    <glyph unicode="u" horiz-adv-x="1138" d="M 160,436 L 160,1120 520,1120 520,1008 C 520,947 520,871 519,780 518,688 518,627 518,596 518,506 520,441 525,402 530,362 538,333 549,315 564,292 583,274 607,261 630,248 657,242 688,242 763,242 821,271 864,328 907,385 928,465 928,567 L 928,1120 1286,1120 1286,0 928,0 928,162 C 874,97 817,49 757,18 696,-13 630,-29 557,-29 428,-29 329,11 262,90 194,169 160,285 160,436 Z"/>
    <glyph unicode="t" horiz-adv-x="928" d="M 563,1438 L 563,1120 932,1120 932,864 563,864 563,389 C 563,337 573,302 594,284 615,265 656,256 717,256 L 901,256 901,0 594,0 C 453,0 353,30 294,89 235,148 205,248 205,389 L 205,864 27,864 27,1120 205,1120 205,1438 563,1438 Z"/>
    <glyph unicode="s" horiz-adv-x="1060" d="M 1047,1085 L 1047,813 C 970,845 896,869 825,885 754,901 686,909 623,909 555,909 505,901 472,884 439,867 422,840 422,805 422,776 435,754 460,739 485,724 529,712 594,705 L 657,696 C 840,673 964,634 1027,581 1090,528 1122,444 1122,330 1122,211 1078,121 990,61 902,1 771,-29 596,-29 522,-29 446,-23 367,-12 288,0 206,18 123,41 L 123,313 C 194,278 268,252 343,235 418,218 494,209 571,209 641,209 694,219 729,238 764,257 782,286 782,324 782,356 770,380 746,396 721,411 673,423 600,432 L 537,440 C 378,460 266,497 202,551 138,605 106,687 106,797 106,916 147,1004 228,1061 309,1118 434,1147 602,1147 668,1147 737,1142 810,1132 883,1122 962,1106 1047,1085 Z"/>
@@ -59,13 +60,11 @@
    <glyph unicode="2" horiz-adv-x="1086" d="M 590,283 L 1247,283 1247,0 162,0 162,283 707,764 C 756,808 792,851 815,893 838,935 850,979 850,1024 850,1094 827,1150 780,1193 733,1236 670,1257 592,1257 532,1257 466,1244 395,1219 324,1193 247,1155 166,1104 L 166,1432 C 253,1461 338,1483 423,1498 508,1513 591,1520 672,1520 851,1520 990,1481 1089,1402 1188,1323 1237,1214 1237,1073 1237,992 1216,916 1174,846 1132,775 1044,681 909,563 L 590,283 Z"/>
    <glyph unicode="1" horiz-adv-x="1085" d="M 240,266 L 580,266 580,1231 231,1159 231,1421 578,1493 944,1493 944,266 1284,266 1284,0 240,0 240,266 Z"/>
    <glyph unicode="." horiz-adv-x="398" d="M 209,387 L 569,387 569,0 209,0 209,387 Z"/>
-   <glyph unicode=")" horiz-adv-x="609" d="M 164,-270 C 249,-111 313,44 356,195 399,346 420,496 420,643 420,790 399,940 356,1091 313,1242 249,1396 164,1554 L 461,1554 C 562,1391 638,1234 687,1085 736,935 760,787 760,641 760,495 736,348 687,200 638,51 563,-105 461,-270 L 164,-270 Z"/>
-   <glyph unicode="(" horiz-adv-x="636" d="M 772,-270 L 475,-270 C 373,-105 298,51 249,200 200,348 176,495 176,641 176,787 201,935 250,1085 299,1234 374,1391 475,1554 L 772,1554 C 687,1396 623,1242 580,1091 537,940 516,790 516,643 516,496 537,346 580,195 622,44 686,-111 772,-270 Z"/>
    <glyph unicode=" " horiz-adv-x="714"/>
   </font>
  </defs>
  <defs class="TextShapeIndex">
-  <g ooo:slide="id1" ooo:id-list="id3 id4 id5 id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23 id24 id25 id26 id27 id28 id29 id30 id31 id32 id33 id34 id35 id36 id37 id38 id39 id40 id41 id42 id43 id44 id45 id46 id47 id48 id49 id50 id51 id52"/>
+  <g ooo:slide="id1" ooo:id-list="id3 id4 id5 id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23 id24 id25 id26 id27 id28 id29 id30 id31 id32 id33 id34 id35 id36 id37 id38 id39 id40 id41 id42 id43 id44 id45 id46 id47 id48 id49 id50 id51 id52 id53 id54 id55 id56"/>
  </defs>
  <defs class="EmbeddedBulletChars">
   <g id="bullet-char-template-57356" transform="scale(0.00048828125,-0.00048828125)">
@@ -184,7 +183,7 @@
          <path style="fill:url(#pattern1)" d="M 34330,4842 L 31701,4842 31701,1769 36959,1769 36959,4842 34330,4842 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" d="M 34330,4842 L 31701,4842 31701,1769 36959,1769 36959,4842 34330,4842 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="32143" y="2290"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Push Layer (dest.)</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="33017" y="2290"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Push Layer</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -256,7 +255,7 @@
          <path style="fill:url(#pattern2)" d="M 2796,4842 L 167,4842 167,1769 5425,1769 5425,4842 2796,4842 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" d="M 2796,4842 L 167,4842 167,1769 5425,1769 5425,4842 2796,4842 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="518" y="2290"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Push Layer (origin)</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="1483" y="2290"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Push Layer</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1093,7 +1092,7 @@
          <path style="fill:url(#pattern3)" d="M 13169,12732 L 9829,12732 9829,9049 16509,9049 16509,12732 13169,12732 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-dasharray="160" stroke-linejoin="miter" d="M 13169,12732 L 9829,12732 9829,9049 16509,9049 16509,12732 13169,12732 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="11115" y="9599"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Pull Layer (dest.)</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="11989" y="9599"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Pull Layer</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1148,123 +1147,129 @@
          <path style="fill:url(#pattern4)" d="M 13165,11734 L 9964,11734 9964,10058 16365,10058 16365,11734 13165,11734 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 13165,11734 L 9964,11734 9964,10058 16365,10058 16365,11734 13165,11734 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="10283" y="10811"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">origin Resource Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="11185" y="11319"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.foo.com</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="11053" y="10811"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Resource Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="11185" y="11319"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.foo.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id14">
-        <rect class="BoundingBox" stroke="none" fill="none" x="439" y="3037" width="4726" height="1562"/>
-        <path fill="rgb(180,199,220)" stroke="none" d="M 2802,4585 L 452,4585 452,3050 5151,3050 5151,4585 2802,4585 Z"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="439" y="2637" width="4726" height="1962"/>
+        <path fill="rgb(180,199,220)" stroke="none" d="M 2802,4585 L 452,4585 452,2650 5151,2650 5151,4585 2802,4585 Z"/>
         <g>
          <defs>
-          <pattern id="pattern5" x="452" y="3050" width="4700" height="1536" patternUnits="userSpaceOnUse">
-           <g transform="translate(-452,-3050)">
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3298" x2="700" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3598" x2="1000" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3898" x2="1300" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="4198" x2="1600" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="4498" x2="1900" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="665" y1="4585" x2="2200" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="965" y1="4585" x2="2500" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1265" y1="4585" x2="2800" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1565" y1="4585" x2="3100" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1865" y1="4585" x2="3400" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2165" y1="4585" x2="3700" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2465" y1="4585" x2="4000" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2765" y1="4585" x2="4300" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3065" y1="4585" x2="4600" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3365" y1="4585" x2="4900" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3665" y1="4585" x2="5151" y2="3099"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3965" y1="4585" x2="5151" y2="3399"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4265" y1="4585" x2="5151" y2="3699"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4565" y1="4585" x2="5151" y2="3999"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4865" y1="4585" x2="5151" y2="4299"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4952" y1="3050" x2="5151" y2="3249"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4652" y1="3050" x2="5151" y2="3549"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4352" y1="3050" x2="5151" y2="3849"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4052" y1="3050" x2="5151" y2="4149"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3752" y1="3050" x2="5151" y2="4449"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3452" y1="3050" x2="4987" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3152" y1="3050" x2="4687" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2852" y1="3050" x2="4387" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2552" y1="3050" x2="4087" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2252" y1="3050" x2="3787" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1952" y1="3050" x2="3487" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1652" y1="3050" x2="3187" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1352" y1="3050" x2="2887" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1052" y1="3050" x2="2587" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="752" y1="3050" x2="2287" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3050" x2="1987" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3350" x2="1687" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3650" x2="1387" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3950" x2="1087" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="4250" x2="787" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="4550" x2="487" y2="4585"/>
+          <pattern id="pattern5" x="452" y="2650" width="4700" height="1936" patternUnits="userSpaceOnUse">
+           <g transform="translate(-452,-2650)">
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="2898" x2="700" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3198" x2="1000" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3498" x2="1300" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3798" x2="1600" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="4098" x2="1900" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="4398" x2="2200" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="565" y1="4585" x2="2500" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="865" y1="4585" x2="2800" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1165" y1="4585" x2="3100" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1465" y1="4585" x2="3400" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1765" y1="4585" x2="3700" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2065" y1="4585" x2="4000" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2365" y1="4585" x2="4300" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2665" y1="4585" x2="4600" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2965" y1="4585" x2="4900" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3265" y1="4585" x2="5151" y2="2699"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3565" y1="4585" x2="5151" y2="2999"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3865" y1="4585" x2="5151" y2="3299"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4165" y1="4585" x2="5151" y2="3599"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4465" y1="4585" x2="5151" y2="3899"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4765" y1="4585" x2="5151" y2="4199"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="5065" y1="4585" x2="5151" y2="4499"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4952" y1="2650" x2="5151" y2="2849"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4652" y1="2650" x2="5151" y2="3149"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4352" y1="2650" x2="5151" y2="3449"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="4052" y1="2650" x2="5151" y2="3749"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3752" y1="2650" x2="5151" y2="4049"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3452" y1="2650" x2="5151" y2="4349"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="3152" y1="2650" x2="5087" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2852" y1="2650" x2="4787" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2552" y1="2650" x2="4487" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="2252" y1="2650" x2="4187" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1952" y1="2650" x2="3887" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1652" y1="2650" x2="3587" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1352" y1="2650" x2="3287" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="1052" y1="2650" x2="2987" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="752" y1="2650" x2="2687" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="2650" x2="2387" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="2950" x2="2087" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3250" x2="1787" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3550" x2="1487" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="3850" x2="1187" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="4150" x2="887" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="452" y1="4450" x2="587" y2="4585"/>
            </g>
           </pattern>
          </defs>
-         <path style="fill:url(#pattern5)" d="M 2802,4585 L 452,4585 452,3050 5151,3050 5151,4585 2802,4585 Z"/>
+         <path style="fill:url(#pattern5)" d="M 2802,4585 L 452,4585 452,2650 5151,2650 5151,4585 2802,4585 Z"/>
         </g>
-        <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 2802,4585 L 452,4585 452,3050 5151,3050 5151,4585 2802,4585 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="1107" y="3732"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Address</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="1078" y="4240"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">alice@foo.com</tspan></tspan></tspan></text>
+        <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 2802,4585 L 452,4585 452,2650 5151,2650 5151,4585 2802,4585 Z"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="1107" y="3532"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Address</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="1078" y="4040"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">alice@foo.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id15">
-        <rect class="BoundingBox" stroke="none" fill="none" x="31963" y="3037" width="4726" height="1562"/>
-        <path fill="rgb(180,199,220)" stroke="none" d="M 34326,4585 L 31976,4585 31976,3050 36675,3050 36675,4585 34326,4585 Z"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="31963" y="2637" width="4726" height="1962"/>
+        <path fill="rgb(180,199,220)" stroke="none" d="M 34326,4585 L 31976,4585 31976,2650 36675,2650 36675,4585 34326,4585 Z"/>
         <g>
          <defs>
-          <pattern id="pattern6" x="31976" y="3050" width="4700" height="1536" patternUnits="userSpaceOnUse">
-           <g transform="translate(-31976,-3050)">
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3298" x2="32224" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3598" x2="32524" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3898" x2="32824" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="4198" x2="33124" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="4498" x2="33424" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32189" y1="4585" x2="33724" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32489" y1="4585" x2="34024" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32789" y1="4585" x2="34324" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33089" y1="4585" x2="34624" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33389" y1="4585" x2="34924" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33689" y1="4585" x2="35224" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33989" y1="4585" x2="35524" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34289" y1="4585" x2="35824" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34589" y1="4585" x2="36124" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34889" y1="4585" x2="36424" y2="3050"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35189" y1="4585" x2="36675" y2="3099"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35489" y1="4585" x2="36675" y2="3399"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35789" y1="4585" x2="36675" y2="3699"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="36089" y1="4585" x2="36675" y2="3999"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="36389" y1="4585" x2="36675" y2="4299"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="36476" y1="3050" x2="36675" y2="3249"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="36176" y1="3050" x2="36675" y2="3549"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35876" y1="3050" x2="36675" y2="3849"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35576" y1="3050" x2="36675" y2="4149"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35276" y1="3050" x2="36675" y2="4449"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34976" y1="3050" x2="36511" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34676" y1="3050" x2="36211" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34376" y1="3050" x2="35911" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34076" y1="3050" x2="35611" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33776" y1="3050" x2="35311" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33476" y1="3050" x2="35011" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33176" y1="3050" x2="34711" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32876" y1="3050" x2="34411" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32576" y1="3050" x2="34111" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32276" y1="3050" x2="33811" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3050" x2="33511" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3350" x2="33211" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3650" x2="32911" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3950" x2="32611" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="4250" x2="32311" y2="4585"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="4550" x2="32011" y2="4585"/>
+          <pattern id="pattern6" x="31976" y="2650" width="4700" height="1936" patternUnits="userSpaceOnUse">
+           <g transform="translate(-31976,-2650)">
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="2898" x2="32224" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3198" x2="32524" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3498" x2="32824" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3798" x2="33124" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="4098" x2="33424" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="4398" x2="33724" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32089" y1="4585" x2="34024" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32389" y1="4585" x2="34324" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32689" y1="4585" x2="34624" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32989" y1="4585" x2="34924" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33289" y1="4585" x2="35224" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33589" y1="4585" x2="35524" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33889" y1="4585" x2="35824" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34189" y1="4585" x2="36124" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34489" y1="4585" x2="36424" y2="2650"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34789" y1="4585" x2="36675" y2="2699"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35089" y1="4585" x2="36675" y2="2999"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35389" y1="4585" x2="36675" y2="3299"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35689" y1="4585" x2="36675" y2="3599"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35989" y1="4585" x2="36675" y2="3899"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="36289" y1="4585" x2="36675" y2="4199"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="36589" y1="4585" x2="36675" y2="4499"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="36476" y1="2650" x2="36675" y2="2849"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="36176" y1="2650" x2="36675" y2="3149"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35876" y1="2650" x2="36675" y2="3449"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35576" y1="2650" x2="36675" y2="3749"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="35276" y1="2650" x2="36675" y2="4049"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34976" y1="2650" x2="36675" y2="4349"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34676" y1="2650" x2="36611" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34376" y1="2650" x2="36311" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="34076" y1="2650" x2="36011" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33776" y1="2650" x2="35711" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33476" y1="2650" x2="35411" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="33176" y1="2650" x2="35111" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32876" y1="2650" x2="34811" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32576" y1="2650" x2="34511" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="32276" y1="2650" x2="34211" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="2650" x2="33911" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="2950" x2="33611" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3250" x2="33311" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3550" x2="33011" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="3850" x2="32711" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="4150" x2="32411" y2="4585"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31976" y1="4450" x2="32111" y2="4585"/>
            </g>
           </pattern>
          </defs>
-         <path style="fill:url(#pattern6)" d="M 34326,4585 L 31976,4585 31976,3050 36675,3050 36675,4585 34326,4585 Z"/>
+         <path style="fill:url(#pattern6)" d="M 34326,4585 L 31976,4585 31976,2650 36675,2650 36675,4585 34326,4585 Z"/>
         </g>
-        <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 34326,4585 L 31976,4585 31976,3050 36675,3050 36675,4585 34326,4585 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="32631" y="3732"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Address</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="32722" y="4240"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">bob@bar.com</tspan></tspan></tspan></text>
+        <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 34326,4585 L 31976,4585 31976,2650 36675,2650 36675,4585 34326,4585 Z"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="32631" y="3532"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Address</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="32722" y="4040"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">bob@bar.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1347,7 +1352,7 @@
          <path style="fill:url(#pattern7)" d="M 23805,12732 L 20465,12732 20465,9049 27145,9049 27145,12732 23805,12732 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-dasharray="160" stroke-linejoin="miter" d="M 23805,12732 L 20465,12732 20465,9049 27145,9049 27145,12732 23805,12732 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="21660" y="9599"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Pull Layer (origin)</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="22625" y="9599"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Pull Layer</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1663,7 +1668,7 @@
          <path style="fill:url(#pattern8)" d="M 23810,12580 L 20609,12580 20609,10904 27010,10904 27010,12580 23810,12580 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 23810,12580 L 20609,12580 20609,10904 27010,10904 27010,12580 23810,12580 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="21019" y="11657"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">dest. Resource Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="21847" y="12165"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.bar.com</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="21698" y="11657"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Resource Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="21847" y="12165"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.bar.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2201,6 +2206,30 @@
        <g id="id52">
         <rect class="BoundingBox" stroke="none" fill="none" x="25288" y="7417" width="5288" height="772"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="25539" y="7970"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GRIP authentication</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape">
+       <g id="id53">
+        <rect class="BoundingBox" stroke="none" fill="none" x="1078" y="915" width="3370" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="1328" y="1468"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mail service</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape">
+       <g id="id54">
+        <rect class="BoundingBox" stroke="none" fill="none" x="32679" y="915" width="3371" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="32929" y="1468"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mail service</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape">
+       <g id="id55">
+        <rect class="BoundingBox" stroke="none" fill="none" x="11044" y="8215" width="4242" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="11294" y="8768"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox service</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape">
+       <g id="id56">
+        <rect class="BoundingBox" stroke="none" fill="none" x="21645" y="8215" width="4242" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="21895" y="8768"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox service</tspan></tspan></tspan></text>
        </g>
       </g>
      </g>
