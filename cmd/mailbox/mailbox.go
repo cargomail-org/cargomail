@@ -2,7 +2,6 @@ package mailbox
 
 import (
 	"cargomail/cmd/mailbox/api"
-	"cargomail/cmd/mailbox/app"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
 	"cargomail/internal/storage"
@@ -20,7 +19,6 @@ type ServiceParams struct {
 }
 
 type service struct {
-	app app.App
 	api api.Api
 }
 
@@ -29,10 +27,6 @@ func NewService(params *ServiceParams) (service, error) {
 	storage := storage.NewStorage(repository)
 
 	return service{
-		app: app.NewApp(
-			app.AppParams{
-				Repository: repository,
-			}),
 		api: api.NewApi(
 			api.ApiParams{
 				Repository: repository,
