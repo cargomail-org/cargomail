@@ -251,7 +251,7 @@ func (api *DraftsApi) Delete() http.Handler {
 	})
 }
 
-func (api *DraftsApi) Send() http.Handler {
+func (api *DraftsApi) Convert() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -282,7 +282,7 @@ func (api *DraftsApi) Send() http.Handler {
 			return
 		}
 
-		message, err := api.useDraftRepository.Send(user, draft)
+		message, err := api.useDraftRepository.Convert(user, draft)
 		if err != nil {
 			recipientsNotFoundError := &repository.RecipientsNotFoundError{}
 

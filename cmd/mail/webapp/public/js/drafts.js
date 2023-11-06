@@ -427,7 +427,7 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
         draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
       }
 
-      const response = await api(composeForm.id, 200, `${window.mailboxApiHost}/api/v1/drafts/send`, {
+      const response = await api(composeForm.id, 200, `${window.mailboxApiHost}/api/v1/drafts/convert`, {
         method: "POST",
         headers: {
           Accept: "application/json",

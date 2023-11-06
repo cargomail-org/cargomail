@@ -12,7 +12,7 @@ type UseDraftStorage interface {
 	// Trash(user *repository.User, ids string) error
 	// Untrash(user *repository.User, ids string) error
 	// Delete(user *repository.User, ids string) error
-	// Send(user *repository.User, draft *repository.Draft) (*repository.Message, error)
+	// Convert(user *repository.User, draft *repository.Draft) (*repository.Message, error)
 }
 
 type DraftStorage struct {
