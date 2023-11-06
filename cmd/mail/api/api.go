@@ -4,6 +4,7 @@ import (
 	"cargomail/cmd/mail/api/helper"
 	"cargomail/internal/config"
 	"cargomail/internal/repository"
+	"cargomail/internal/storage"
 	"context"
 	"errors"
 	"net/http"
@@ -12,21 +13,24 @@ import (
 
 type ApiParams struct {
 	Repository repository.Repository
+	Storage    storage.Storage
 }
 
 type Api struct {
-	Health  HealthApi
-	Auth    AuthApi
-	Session SessionApi
-	User    UserApi
+	Health   HealthApi
+	Auth     AuthApi
+	Session  SessionApi
+	User     UserApi
+	Messages MessagesApi
 }
 
 func NewApi(params ApiParams) Api {
 	return Api{
-		Health:  HealthApi{},
-		Auth:    AuthApi{},
-		Session: SessionApi{useUserRepository: params.Repository.User, useSessionRepository: params.Repository.Session},
-		User:    UserApi{useUserRepository: params.Repository.User},
+		Health:   HealthApi{},
+		Auth:     AuthApi{},
+		Session:  SessionApi{useUserRepository: params.Repository.User, useSessionRepository: params.Repository.Session},
+		User:     UserApi{useUserRepository: params.Repository.User},
+		Messages: MessagesApi{useMessageRepository: params.Repository.Messages, useMessageStorage: params.Storage.Messages},
 	}
 }
 

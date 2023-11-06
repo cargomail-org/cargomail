@@ -17,6 +17,7 @@ type UseMessageRepository interface {
 	Trash(user *User, ids string) error
 	Untrash(user *User, ids string) error
 	Delete(user *User, ids string) error
+	Send(user *User, draft *Message) error
 }
 
 type MessageRepository struct {
@@ -41,7 +42,7 @@ type Message struct {
 	ReceivedAt *Timestamp   `json:"receivedAt"`
 	SnoozedAt  *Timestamp   `json:"snoozedAt"`
 	CreatedAt  Timestamp    `json:"createdAt"`
-	ModifiedAt *Timestamp   `json:"-"`
+	ModifiedAt *Timestamp   `json:"modifiedAt"`
 	TimelineId int64        `json:"-"`
 	HistoryId  int64        `json:"-"`
 	LastStmt   int          `json:"-"`
@@ -505,5 +506,9 @@ func (r MessageRepository) Delete(user *User, ids string) error {
 		}
 	}
 
+	return nil
+}
+
+func (r MessageRepository) Send(user *User, message *Message) error {
 	return nil
 }

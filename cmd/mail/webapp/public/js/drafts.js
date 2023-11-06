@@ -427,7 +427,7 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
         draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
       }
 
-      const response = await api(composeForm.id, 200, `${window.mailboxApiHost}/api/v1/drafts/convert`, {
+      let response = await api(composeForm.id, 200, `${window.mailboxApiHost}/api/v1/drafts/convert`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -442,23 +442,37 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
 
       // the placeholder message is in the response
 
-      const sent = JSON.parse(JSON.stringify(draft));
-      sent.id = response.id;
-      sent.createdAt = response.createdAt;
-      sent.folder = response.folder;
-      sent.payload.headers["Date"] = response.payload.headers["Date"];
-      sent.payload.headers["Message-ID"] = response.payload.headers["Message-ID"];
-      sent.payload.headers["X-Thread-ID"] = response.payload.headers["X-Thread-ID"];
+      const sentDraft = JSON.parse(JSON.stringify(draft));
+      sentDraft.id = response.id;
+      sentDraft.createdAt = response.createdAt;
+      sentDraft.folder = response.folder;
+      sentDraft.payload.headers["Date"] = response.payload.headers["Date"];
+      sentDraft.payload.headers["Message-ID"] = response.payload.headers["Message-ID"];
+      sentDraft.payload.headers["X-Thread-ID"] = response.payload.headers["X-Thread-ID"];
 
       // console.log("draft", draft);
-      // console.log("sent", sent);
+      // console.log("sentDraft", sentDraft);
 
       draftsTable.rows(`#${id}`).remove().draw();
       draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);
 
-      threadsRefresh(sentTable, inboxTable, { inserted: [sent] });
+      threadsRefresh(sentTable, inboxTable, { inserted: [sentDraft] });
 
       composeClearForm();
+
+      // TODO add placeholderMessage to local queue in case of unavailable API
+      response = await api(composeForm.id, 200, `${window.mailApiHost}/api/v1/messages/send`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(placeholderMessage),
+      });
+
+      if (response === false) {
+        return;
+      }
     } else {
       const error = "record not found";
 

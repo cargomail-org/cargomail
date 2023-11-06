@@ -75,7 +75,7 @@
             "name": "webapp",
             "request": "launch",
             "url": "http://127.0.0.1:8181/",
-            "webRoot": "${workspaceFolder}/cmd/mailbox/webapp"
+            "webRoot": "${workspaceFolder}/cmd/mail/webapp"
         }
     ]
 }

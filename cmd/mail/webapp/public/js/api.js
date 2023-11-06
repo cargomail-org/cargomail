@@ -56,11 +56,30 @@ const api = async (parentId, status, url, options) => {
 
   try {
     const result = await fetch(url, options);
+    const resultClone = result.clone();
 
     warning = result.headers.get("X-Warning");
 
     if (options.method != "HEAD") {
-      response = await parseJSON(result);
+      try {
+        response = await parseJSON(result);
+      } catch (error) {
+        // ignore & log error
+        console.log(error);
+
+        let text;
+
+        try {
+          text = await resultClone.text();
+        } catch (error) {
+          // ignore & log error
+          console.log(error);
+        }
+        
+        if (text) {
+          throw new Error(text);
+        }
+      }
     }
 
     if (!url.endsWith("/sync") && result.status == 500) {
@@ -76,7 +95,7 @@ const api = async (parentId, status, url, options) => {
     }
 
     if (result.status != status) {
-      const error = new Error(result.statusText);
+      const error = new Error(`${result.status} (${result.statusText})`);
       error.response = response;
       throw error;
     }
