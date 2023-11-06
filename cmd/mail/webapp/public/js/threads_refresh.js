@@ -261,13 +261,31 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
       sentMessage.starred = message.starred;
     }
 
-    inboxTable.row("#" + $.escapeSelector(threadId)).invalidate().draw(false);
-    sentTable.row("#" + $.escapeSelector(threadId)).invalidate().draw(false);
+    inboxTable
+      .row("#" + $.escapeSelector(threadId))
+      .invalidate()
+      .draw(false);
+    sentTable
+      .row("#" + $.escapeSelector(threadId))
+      .invalidate()
+      .draw(false);
 
     const messagesInboxTable = $(`.message-inbox-table`);
     const messagesSentTable = $(`.message-sent-table`);
 
-    messagesInboxTable
+    const inboxMessageRowFullname = messagesInboxTable.find(".message-row-fullname");
+    if (inboxMessageRowFullname.length > 0) {
+      // strip HTML tags
+      inboxMessageRowFullname[0].innerHTML = inboxMessageRowFullname[0].innerHTML.replace(/<\/?[^>]+(>|$)/g, "");
+    }
+
+    const sentMessageRowFullname = messagesSentTable.find(".message-row-fullname");
+    if (sentMessageRowFullname.length > 0) {
+      // strip HTML tags
+      sentMessageRowFullname[0].innerHTML = sentMessageRowFullname[0].innerHTML.replace(/<\/?[^>]+(>|$)/g, "");
+    }
+
+    /*messagesInboxTable
       .DataTable()
       .row("#" + message.id)
       .invalidate()
@@ -277,7 +295,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
       .DataTable()
       .row("#" + message.id)
       .invalidate()
-      .draw(false);
+      .draw(false);*/
   }
 };
 

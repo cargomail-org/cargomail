@@ -94,7 +94,9 @@ export const createMessageTable = (view, row) => {
         className: "messages-payload",
         orderable: false,
         render: (data, type, full, meta) => {
-          return createMessageRow(full);
+          const api = new $.fn.dataTable.Api(meta.settings);
+          const childIsShown = api.row(meta.row).child.isShown();
+          return createMessageRow(childIsShown, full);
         },
       },
       {

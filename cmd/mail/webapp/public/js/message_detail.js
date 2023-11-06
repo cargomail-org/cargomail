@@ -162,7 +162,19 @@ export const showDetail = (view, row) => {
         const messagesInboxTable = $(`.message-inbox-table`);
         const messagesSentTable = $(`.message-sent-table`);
 
-        messagesInboxTable
+        const inboxMessageRowFullname = messagesInboxTable.find(".message-row-fullname");
+        if (inboxMessageRowFullname.length > 0) {
+          // strip HTML tags
+          inboxMessageRowFullname[0].innerHTML = inboxMessageRowFullname[0].innerHTML.replace(/<\/?[^>]+(>|$)/g, "");
+        }
+
+        const sentMessageRowFullname = messagesSentTable.find(".message-row-fullname");
+        if (sentMessageRowFullname.length > 0) {
+          // strip HTML tags
+          sentMessageRowFullname[0].innerHTML = sentMessageRowFullname[0].innerHTML.replace(/<\/?[^>]+(>|$)/g, "");
+        }
+
+        /*messagesInboxTable
           .DataTable()
           .row("#" + rowData.id)
           .invalidate()
@@ -172,7 +184,7 @@ export const showDetail = (view, row) => {
           .DataTable()
           .row("#" + rowData.id)
           .invalidate()
-          .draw(false);
+          .draw(false);*/
       })();
     }
   }, SEEN_TIMEOUT);

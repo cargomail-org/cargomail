@@ -19,7 +19,7 @@ function stringToHslColor(str, s, l) {
   return "hsl(" + 0 + ", " + 0 + "%, " + 0 + "%)";
 }
 
-export const createMessageRow = (full) => {
+export const createMessageRow = (childIsShown, full) => {
   const id = full.id;
   const parsed = parsePayload(full.id, full.payload);
   const person = parseNameAndEmail(parsed.from);
@@ -40,7 +40,7 @@ export const createMessageRow = (full) => {
   }
 
   const htmlDropdownMenu = `    
-    <div class="message-row-dropdown">
+    <div class="message-row-dropdown" ${childIsShown ? 'style="display: block;"' : 'style="display: none;"'}>
         <button class="btn button-dropdown m-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           ${threeDotIcon}
         </button>
@@ -78,8 +78,8 @@ export const createMessageRow = (full) => {
                   <div class="message-row-starred">${unstarredIcon}</div>
                   ${htmlDropdownMenu}
               </div>
-              <div class="message-row-message">${parsed.plainContent}</div>
-              <div class="message-row-recipients">${recipients}</div>
+              <div class="message-row-message" ${childIsShown ? 'style="display: none;"' : 'style="display: block;"'}>${parsed.plainContent}</div>
+              <div class="message-row-recipients" ${childIsShown ? 'style="display: block;"' : 'style="display: none;"'}>${recipients}</div>
           </div>
       </div>
     `;

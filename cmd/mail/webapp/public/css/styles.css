@@ -153,6 +153,11 @@ a:not([class*="btn"]):hover {
   --bs-table-bg: transparent;
 }
 
+th.messages-payload {
+  font-size: 1.3em;
+  font-weight: 400;
+}
+
 td.payload,
 td.messages-payload {
   cursor: pointer;
