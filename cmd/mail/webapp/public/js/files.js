@@ -323,12 +323,12 @@ const filesTable = new DataTable("#filesTable", {
 $(window).resize(function () {
   if ($(this).height() >= "700") {
     if ($(this).height() >= "900") {
-      filesTable.page.len(15).draw();
+      filesTable.page.len(15).draw(false);
     } else {
-      filesTable.page.len(10).draw();
+      filesTable.page.len(10).draw(false);
     }
   } else {
-    filesTable.page.len(5).draw();
+    filesTable.page.len(5).draw(false);
   }
 });
 

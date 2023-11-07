@@ -186,12 +186,12 @@ export const draftsTable = new DataTable("#draftsTable", {
 $(window).resize(function () {
   if ($(this).height() >= "700") {
     if ($(this).height() >= "900") {
-      draftsTable.page.len(15).draw();
+      draftsTable.page.len(15).draw(false);
     } else {
-      draftsTable.page.len(10).draw();
+      draftsTable.page.len(10).draw(false);
     }
   } else {
-    draftsTable.page.len(5).draw();
+    draftsTable.page.len(5).draw(false);
   }
 });
 

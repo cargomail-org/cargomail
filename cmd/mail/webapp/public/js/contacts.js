@@ -155,12 +155,12 @@ const contactsTable = new DataTable("#contactsTable", {
 $(window).resize(function () {
   if ($(this).height() >= "700") {
     if ($(this).height() >= "900") {
-      contactsTable.page.len(15).draw();
+      contactsTable.page.len(15).draw(false);
     } else {
-      contactsTable.page.len(10).draw();
+      contactsTable.page.len(10).draw(false);
     }
   } else {
-    contactsTable.page.len(5).draw();
+    contactsTable.page.len(5).draw(false);
   }
 });
 

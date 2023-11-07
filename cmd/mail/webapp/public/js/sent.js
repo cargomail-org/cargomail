@@ -179,12 +179,12 @@ export const sentTable = new DataTable("#sentTable", {
 $(window).resize(function () {
   if ($(this).height() >= "700") {
     if ($(this).height() >= "900") {
-      sentTable.page.len(15).draw();
+      sentTable.page.len(15).draw(false);
     } else {
-      sentTable.page.len(10).draw();
+      sentTable.page.len(10).draw(false);
     }
   } else {
-    sentTable.page.len(5).draw();
+    sentTable.page.len(5).draw(false);
   }
 });
 

@@ -179,12 +179,12 @@ export const inboxTable = new DataTable("#inboxTable", {
 $(window).resize(function () {
   if ($(this).height() >= "700") {
     if ($(this).height() >= "900") {
-      inboxTable.page.len(15).draw();
+      inboxTable.page.len(15).draw(false);
     } else {
-      inboxTable.page.len(10).draw();
+      inboxTable.page.len(10).draw(false);
     }
   } else {
-    inboxTable.page.len(5).draw();
+    inboxTable.page.len(5).draw(false);
   }
 });
 

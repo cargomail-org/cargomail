@@ -425,12 +425,12 @@ const composeTable = new DataTable("#composeTable", {
 $(window).resize(function () {
   if ($(this).height() >= "900") {
     if ($(this).height() >= "1100") {
-      composeTable.page.len(15).draw();
+      composeTable.page.len(15).draw(false);
     } else {
-      composeTable.page.len(10).draw();
+      composeTable.page.len(10).draw(false);
     }
   } else {
-    composeTable.page.len(5).draw();
+    composeTable.page.len(5).draw(false);
   }
 });
 
