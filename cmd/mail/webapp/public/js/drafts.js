@@ -461,6 +461,8 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
       composeClearForm();
 
       // TODO add placeholderMessage to local queue in case of unavailable API
+      // e.g. https://stackoverflow.com/questions/46175660/fetch-retry-request-on-failure
+      // or even better - use service worker
       response = await api(composeForm.id, 200, `${window.mailApiHost}/api/v1/messages/send`, {
         method: "POST",
         headers: {
