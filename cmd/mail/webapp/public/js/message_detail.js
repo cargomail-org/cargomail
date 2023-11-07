@@ -162,16 +162,41 @@ export const showDetail = (view, row) => {
         const messagesInboxTable = $(`.message-inbox-table`);
         const messagesSentTable = $(`.message-sent-table`);
 
+        const inboxMessageRowIndex = messagesInboxTable
+          .DataTable()
+          .row("#" + rowData.id)
+          .index();
+
+        const sentMessageRowIndex = messagesSentTable
+          .DataTable()
+          .row("#" + rowData.id)
+          .index();
+
         const inboxMessageRowFullname = messagesInboxTable.find(".message-row-fullname");
-        if (inboxMessageRowFullname.length > 0) {
+        if (inboxMessageRowFullname.length > inboxMessageRowIndex) {
           // strip HTML tags
-          inboxMessageRowFullname[0].innerHTML = inboxMessageRowFullname[0].innerHTML.replace(/<\/?[^>]+(>|$)/g, "");
+          inboxMessageRowFullname[inboxMessageRowIndex].innerHTML = inboxMessageRowFullname[
+            inboxMessageRowIndex
+          ].innerHTML.replace(/<\/?[^>]+(>|$)/g, "");
+          if (rowData.unread) {
+            inboxMessageRowFullname[
+              inboxMessageRowIndex
+            ].innerHTML = `<b>${inboxMessageRowFullname[inboxMessageRowIndex].innerHTML}</b>`;
+          }
         }
 
         const sentMessageRowFullname = messagesSentTable.find(".message-row-fullname");
-        if (sentMessageRowFullname.length > 0) {
+        if (sentMessageRowFullname.length > sentMessageRowIndex) {
           // strip HTML tags
-          sentMessageRowFullname[0].innerHTML = sentMessageRowFullname[0].innerHTML.replace(/<\/?[^>]+(>|$)/g, "");
+          sentMessageRowFullname[sentMessageRowIndex].innerHTML = sentMessageRowFullname[sentMessageRowIndex].innerHTML.replace(
+            /<\/?[^>]+(>|$)/g,
+            ""
+          );
+          if (rowData.unread) {
+            sentMessageRowFullname[
+              sentMessageRowIndex
+            ].innerHTML = `<b>${sentMessageRowFullname[sentMessageRowIndex].innerHTML}</b>`;
+          }
         }
 
         /*messagesInboxTable
