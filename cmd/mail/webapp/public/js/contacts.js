@@ -202,7 +202,7 @@ export const contactsTableRefresh = (data) => {
 
   setComposeContacts(contactsTable.rows().data().toArray());
 
-  contactsTable.draw();
+  contactsTable.draw(false);
 };
 
 export const showContactsFormDialog = (e) => {
@@ -274,7 +274,7 @@ export const submitFormContact = async (e) => {
       return;
     }
 
-    contactsTable.row.add(response).draw();
+    contactsTable.row.add(response).draw(false);
   } else if (formData.id.length == 32) {
     // edit
     const response = await api(form.id, 200, `${window.mailboxApiHost}/api/v1/contacts`, {
@@ -289,7 +289,7 @@ export const submitFormContact = async (e) => {
       return;
     }
 
-    contactsTable.row(`#${response.id}`).data(response).draw();
+    contactsTable.row(`#${response.id}`).data(response).draw(false);
   }
 
   contactsFormDialog.hide();
@@ -316,7 +316,7 @@ export const deleteContacts = (e) => {
       return;
     }
 
-    contactsTable.rows(".selected").remove().draw();
+    contactsTable.rows(".selected").remove().draw(false);
     contactsTable.buttons([".contacts-edit"]).enable(false);
     contactsTable.buttons([".contacts-delete"]).enable(false);
 

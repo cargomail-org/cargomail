@@ -250,7 +250,7 @@ export const deleteSentThreads = (e) => {
       const threadId = data.payload.headers["X-Thread-ID"];
 
       if (selectedIds.includes(threadId)) {
-        draftsTable.rows(index).remove().draw();
+        draftsTable.rows(index).remove().draw(false);
       }
     });
 
@@ -265,9 +265,9 @@ export const deleteSentThreads = (e) => {
       }
     });
 
-    inboxTable.draw();
+    inboxTable.draw(false);
 
-    sentTable.rows(".selected").remove().draw();
+    sentTable.rows(".selected").remove().draw(false);
     sentTable.buttons([".sent-delete"]).enable(false);
   })();
 };
@@ -287,7 +287,7 @@ export const deleteMessage = async (composeForm, id) => {
     return;
   }
 
-  sentTable.rows(`#${id}`).remove().draw();
+  sentTable.rows(`#${id}`).remove().draw(false);
   sentTable.buttons([".sent-delete"]).enable(sentTable.rows().count() > 0);
 
   composeClearForm();

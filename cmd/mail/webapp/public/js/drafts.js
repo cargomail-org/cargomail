@@ -257,7 +257,7 @@ export const draftsTableRefresh = (data) => {
     }
   }
 
-  draftsTable.draw();
+  draftsTable.draw(false);
 };
 
 export const deleteDraftsMessages = (e) => {
@@ -283,7 +283,7 @@ export const deleteDraftsMessages = (e) => {
       composeClearForm();
     }
 
-    draftsTable.rows(".selected").remove().draw();
+    draftsTable.rows(".selected").remove().draw(false);
     draftsTable.buttons([".drafts-delete"]).enable(false);
   })();
 };
@@ -302,7 +302,7 @@ export const deleteDraft = async (composeForm, id) => {
     return;
   }
 
-  draftsTable.rows(`#${id}`).remove().draw();
+  draftsTable.rows(`#${id}`).remove().draw(false);
   draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);
 
   composeClearForm();
@@ -348,7 +348,7 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
 
       draft.updatedAt = response.updatedAt;
 
-      draftsTable.row(`#${draft.id}`).data(draft).draw();
+      draftsTable.row(`#${draft.id}`).data(draft).draw(false);
 
       return response;
     } else {
@@ -398,7 +398,7 @@ export const upsertDraftsPage = async (composeForm, id, reply, parsed) => {
     draft.createdAt = response.createdAt;
 
     draftsTable.row.add(draft);
-    draftsTable.draw();
+    draftsTable.draw(false);
 
     return response;
   }
@@ -453,7 +453,7 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
       // console.log("draft", draft);
       // console.log("sentDraft", sentDraft);
 
-      draftsTable.rows(`#${id}`).remove().draw();
+      draftsTable.rows(`#${id}`).remove().draw(false);
       draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);
 
       threadsRefresh(sentTable, inboxTable, { inserted: [sentDraft] });

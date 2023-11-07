@@ -61,7 +61,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
           if (rslt == 2) {
             if (child) {
               const messageTable = $(`.message-inbox-table`, child);
-              messageTable.DataTable().rows.add([message]).draw();
+              messageTable.DataTable().rows.add([message]).draw(false);
             }
           } else if (rslt == 1) {
             if (child) {
@@ -70,14 +70,14 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
                 .DataTable()
                 .row("#" + message.id)
                 .invalidate()
-                .draw();
+                .draw(false);
             }
           }
         } else {
           threadDataInbox.messages.push(message);
           if (child) {
             const messageTable = $(`.message-inbox-table`, child);
-            messageTable.DataTable().rows.add([message]).draw();
+            messageTable.DataTable().rows.add([message]).draw(false);
           }
         }
 
@@ -93,7 +93,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
           if (rslt == 2) {
             if (child) {
               const messageTable = $(`.message-sent-table`, child);
-              messageTable.DataTable().rows.add([message]).draw();
+              messageTable.DataTable().rows.add([message]).draw(false);
             }
           } else if (rslt == 1) {
             if (child) {
@@ -102,7 +102,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
                 .DataTable()
                 .row("#" + message.id)
                 .invalidate()
-                .draw();
+                .draw(false);
             }
           }
         } else {
@@ -110,7 +110,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
           if (child) {
             const messageTable = $(`.message-sent-table`, child);
 
-            messageTable.DataTable().rows.add([message]).draw();
+            messageTable.DataTable().rows.add([message]).draw(false);
           }
         }
 
@@ -120,7 +120,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         if (threadDataInbox) {
           const newThreadData = JSON.parse(JSON.stringify(threadDataInbox));
           newThreadData.createdAt = createdAt;
-          sentTable.rows.add([newThreadData]).draw();
+          sentTable.rows.add([newThreadData]).draw(false);
         } else {
           const newThreadData = {
             threadId,
@@ -128,12 +128,12 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
             createdAt,
             messages: [message],
           };
-          sentTable.rows.add([newThreadData]).draw();
+          sentTable.rows.add([newThreadData]).draw(false);
         }
       }
 
-      sentTable.draw();
-      inboxTable.draw();
+      sentTable.draw(false);
+      inboxTable.draw(false);
     }
 
     if (message.folder == 2) {
@@ -145,7 +145,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
           if (rslt == 2) {
             if (child) {
               const messageTable = $(`.message-sent-table`, child);
-              messageTable.DataTable().rows.add([message]).draw();
+              messageTable.DataTable().rows.add([message]).draw(false);
             }
           } else if (rslt == 1) {
             if (child) {
@@ -154,14 +154,14 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
                 .DataTable()
                 .row("#" + message.id)
                 .invalidate()
-                .draw();
+                .draw(false);
             }
           }
         } else {
           threadDataSent.messages.push(message);
           if (child) {
             const messageTable = $(`.message-sent-table`, child);
-            messageTable.DataTable().rows.add([message]).draw();
+            messageTable.DataTable().rows.add([message]).draw(false);
           }
         }
 
@@ -177,7 +177,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
           if (rslt == 2) {
             if (child) {
               const messageTable = $(`.message-inbox-table`, child);
-              messageTable.DataTable().rows.add([message]).draw();
+              messageTable.DataTable().rows.add([message]).draw(false);
             }
           } else if (rslt == 1) {
             if (child) {
@@ -186,14 +186,14 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
                 .DataTable()
                 .row("#" + message.id)
                 .invalidate()
-                .draw();
+                .draw(false);
             }
           }
         } else {
           threadDataInbox.messages.push(message);
           if (child) {
             const messageTable = $(`.message-inbox-table`, child);
-            messageTable.DataTable().rows.add([message]).draw();
+            messageTable.DataTable().rows.add([message]).draw(false);
           }
         }
 
@@ -203,7 +203,7 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
         if (threadDataSent) {
           const newThreadData = JSON.parse(JSON.stringify(threadDataSent));
           newThreadData.createdAt = createdAt;
-          inboxTable.rows.add([newThreadData]).draw();
+          inboxTable.rows.add([newThreadData]).draw(false);
         } else {
           const newThreadData = {
             threadId,
@@ -211,12 +211,12 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
             createdAt,
             messages: [message],
           };
-          inboxTable.rows.add([newThreadData]).draw();
+          inboxTable.rows.add([newThreadData]).draw(false);
         }
       }
 
-      sentTable.draw();
-      inboxTable.draw();
+      sentTable.draw(false);
+      inboxTable.draw(false);
     }
   }
 
@@ -326,7 +326,7 @@ const messageRemoved = (inboxTable, sentTable, message) => {
         .DataTable()
         .row("#" + messageId)
         .remove()
-        .draw();
+        .draw(false);
     }
   }
 
@@ -340,7 +340,7 @@ const messageRemoved = (inboxTable, sentTable, message) => {
         .DataTable()
         .row("#" + messageId)
         .remove()
-        .draw();
+        .draw(false);
     }
   }
 
@@ -362,19 +362,19 @@ const messageRemoved = (inboxTable, sentTable, message) => {
         inboxTable
           .row("#" + $.escapeSelector(threadId))
           .invalidate()
-          .draw();
+          .draw(false);
       } else {
         inboxTable
           .row("#" + $.escapeSelector(threadId))
           .remove()
-          .draw();
+          .draw(false);
         inboxThreadRemoved = true;
       }
     } else {
       inboxTable
         .row("#" + $.escapeSelector(threadId))
         .remove()
-        .draw();
+        .draw(false);
       inboxThreadRemoved = true;
     }
   }
@@ -394,19 +394,19 @@ const messageRemoved = (inboxTable, sentTable, message) => {
         sentTable
           .row("#" + $.escapeSelector(threadId))
           .invalidate()
-          .draw();
+          .draw(false);
       } else {
         sentTable
           .row("#" + $.escapeSelector(threadId))
           .remove()
-          .draw();
+          .draw(false);
         sentThreadRemoved = true;
       }
     } else {
       sentTable
         .row("#" + $.escapeSelector(threadId))
         .remove()
-        .draw();
+        .draw(false);
       sentThreadRemoved = true;
     }
   }
@@ -420,7 +420,7 @@ const messageRemoved = (inboxTable, sentTable, message) => {
     //   const row = draftsTable.row(index);
     //   const data = row.data();
     //   if (data.payload.headers["X-Thread-ID"] == threadId) {
-    //     draftsTable.rows(index).remove().draw();
+    //     draftsTable.rows(index).remove().draw(false);
     //   }
     // });
   }

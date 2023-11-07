@@ -109,7 +109,7 @@ export const showDetail = (view, row) => {
 
   // detailTable.clear();
   // detailTable.rows.add(parsed.attachments);
-  // detailTable.draw();
+  // detailTable.draw(false);
 
   // Display the child row
   row.child(form).show();

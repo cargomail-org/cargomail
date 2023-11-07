@@ -168,7 +168,7 @@ uploadForm.onsubmit = async (e) => {
         for (let j = 0; j < uploadedMultipartFiles.length; j++) {
           filesTable.row.add(uploadedMultipartFiles[j]);
         }
-        filesTable.draw();
+        filesTable.draw(false);
       }
     } catch (error) {
       abortAllUploads();
@@ -368,7 +368,7 @@ export const filesTableRefresh = (data) => {
     }
   }
 
-  filesTable.draw();
+  filesTable.draw(false);
 };
 
 export const deleteFiles = (e) => {
@@ -390,7 +390,7 @@ export const deleteFiles = (e) => {
       return;
     }
 
-    filesTable.rows(".selected").remove().draw();
+    filesTable.rows(".selected").remove().draw(false);
     filesTable.buttons([".files-delete"]).enable(false);
   })();
 };

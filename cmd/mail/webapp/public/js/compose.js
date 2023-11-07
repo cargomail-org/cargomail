@@ -460,7 +460,7 @@ export const removeAttachments = (e) => {
 
   composeRemoveConfirmDialog.hide();
 
-  composeTable.rows(".selected").remove().draw();
+  composeTable.rows(".selected").remove().draw(false);
   composeTable.buttons([".files-delete"]).enable(false);
 
   attachmentList.length = 0;
@@ -519,7 +519,7 @@ export const clearForm = () => {
 
   attachmentList.length = 0;
   composeTable.clear();
-  composeTable.draw();
+  composeTable.draw(false);
 
   ignoreOnChange = false;
 };
@@ -640,7 +640,7 @@ export const populateForm = async (save, id, parsed) => {
     await formPopulated("upsert");
   }
 
-  composeTable.draw();
+  composeTable.draw(false);
 };
 
 const formPopulated = async (cmd) => {
