@@ -81,6 +81,7 @@ type Repository struct {
 	Threads  UseThreadRepository
 }
 
+const SaltSize int = 32
 const KeySize int = 32
 const IvSize int = 16
 

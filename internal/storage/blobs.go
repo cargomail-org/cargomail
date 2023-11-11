@@ -33,6 +33,12 @@ func (s *BlobStorage) Store(user *repository.User, file multipart.File, blobsPat
 	}
 	defer f.Close()
 
+	salt := make([]byte, repository.SaltSize)
+	_, err = rand.Read(salt)
+	if err != nil {
+		return nil, err
+	}
+
 	key := make([]byte, repository.KeySize)
 	_, err = rand.Read(key)
 	if err != nil {
@@ -67,7 +73,7 @@ func (s *BlobStorage) Store(user *repository.User, file multipart.File, blobsPat
 
 	hash := sha256.New()
 
-	_, err = hash.Write(iv)
+	_, err = hash.Write(salt)
 	if err != nil {
 		return nil, err
 	}
@@ -81,8 +87,9 @@ func (s *BlobStorage) Store(user *repository.User, file multipart.File, blobsPat
 	digest := b64.RawURLEncoding.EncodeToString(hashSum)
 
 	blobMetadata := &repository.BlobMetadata{
-		Key: b64.RawURLEncoding.EncodeToString(key),
-		Iv:  b64.RawURLEncoding.EncodeToString(iv),
+		Salt: b64.RawURLEncoding.EncodeToString(salt),
+		Key:  b64.RawURLEncoding.EncodeToString(key),
+		Iv:   b64.RawURLEncoding.EncodeToString(iv),
 	}
 
 	uploadedBlob := &repository.Blob{
@@ -128,6 +135,12 @@ func (s *BlobStorage) CleanAndStoreMultipart(user *repository.User, draftId stri
 		}
 		defer f.Close()
 
+		salt := make([]byte, repository.SaltSize)
+		_, err = rand.Read(salt)
+		if err != nil {
+			return nil, err
+		}
+
 		key := make([]byte, repository.KeySize)
 		_, err = rand.Read(key)
 		if err != nil {
@@ -162,7 +175,7 @@ func (s *BlobStorage) CleanAndStoreMultipart(user *repository.User, draftId stri
 
 		hash := sha256.New()
 
-		_, err = hash.Write(iv)
+		_, err = hash.Write(salt)
 		if err != nil {
 			return nil, err
 		}
@@ -175,8 +188,9 @@ func (s *BlobStorage) CleanAndStoreMultipart(user *repository.User, draftId stri
 		hashSum := hash.Sum(nil)
 		digest := b64.RawURLEncoding.EncodeToString(hashSum)
 		blobMetadata := &repository.BlobMetadata{
-			Key: b64.RawURLEncoding.EncodeToString(key),
-			Iv:  b64.RawURLEncoding.EncodeToString(iv),
+			Salt: b64.RawURLEncoding.EncodeToString(salt),
+			Key:  b64.RawURLEncoding.EncodeToString(key),
+			Iv:   b64.RawURLEncoding.EncodeToString(iv),
 		}
 		contentType := header.Values("Content-Type")
 
@@ -219,6 +233,11 @@ func (s *BlobStorage) Load(w io.Writer, blob *repository.Blob, blobPath string) 
 	}
 	defer out.Close()
 
+	salt, err := b64.RawURLEncoding.DecodeString(blob.Metadata.Salt)
+	if err != nil {
+		return err
+	}
+
 	key, err := b64.RawURLEncoding.DecodeString(blob.Metadata.Key)
 	if err != nil {
 		return err
@@ -231,7 +250,7 @@ func (s *BlobStorage) Load(w io.Writer, blob *repository.Blob, blobPath string) 
 
 	hash := sha256.New()
 
-	_, err = hash.Write(iv)
+	_, err = hash.Write(salt)
 	if err != nil {
 		return err
 	}

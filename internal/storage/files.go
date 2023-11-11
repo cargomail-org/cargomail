@@ -30,6 +30,12 @@ func (s *FileStorage) Store(user *repository.User, file multipart.File, filesPat
 	}
 	defer f.Close()
 
+	salt := make([]byte, repository.SaltSize)
+	_, err = rand.Read(salt)
+	if err != nil {
+		return nil, err
+	}
+
 	key := make([]byte, repository.KeySize)
 	_, err = rand.Read(key)
 	if err != nil {
@@ -64,7 +70,7 @@ func (s *FileStorage) Store(user *repository.User, file multipart.File, filesPat
 
 	hash := sha256.New()
 
-	_, err = hash.Write(iv)
+	_, err = hash.Write(salt)
 	if err != nil {
 		return nil, err
 	}
@@ -78,8 +84,9 @@ func (s *FileStorage) Store(user *repository.User, file multipart.File, filesPat
 	digest := b64.RawURLEncoding.EncodeToString(hashSum)
 
 	fileMetadata := &repository.FileMetadata{
-		Key: b64.RawURLEncoding.EncodeToString(key),
-		Iv:  b64.RawURLEncoding.EncodeToString(iv),
+		Salt: b64.RawURLEncoding.EncodeToString(salt),
+		Key:  b64.RawURLEncoding.EncodeToString(key),
+		Iv:   b64.RawURLEncoding.EncodeToString(iv),
 	}
 
 	uploadedFile := &repository.File{
@@ -110,6 +117,11 @@ func (s *FileStorage) Load(w http.ResponseWriter, file *repository.File, filePat
 	}
 	defer out.Close()
 
+	salt, err := b64.RawURLEncoding.DecodeString(file.Metadata.Salt)
+	if err != nil {
+		return err
+	}
+
 	key, err := b64.RawURLEncoding.DecodeString(file.Metadata.Key)
 	if err != nil {
 		return err
@@ -122,7 +134,7 @@ func (s *FileStorage) Load(w http.ResponseWriter, file *repository.File, filePat
 
 	hash := sha256.New()
 
-	_, err = hash.Write(iv)
+	_, err = hash.Write(salt)
 	if err != nil {
 		return err
 	}
