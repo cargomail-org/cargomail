@@ -48,7 +48,42 @@ func (s *FileStorage) Store(user *repository.User, file multipart.File, filesPat
 		return nil, err
 	}
 
+	hash := sha256.New()
+
+	_, err = hash.Write(salt)
+	if err != nil {
+		return nil, err
+	}
+
 	aes, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	stream := cipher.NewCTR(aes, iv)
+
+	pipeReader, pipeWriter := io.Pipe()
+	writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
+
+	// do the encryption in a goroutine
+	go func() {
+		_, err := io.Copy(writer, io.TeeReader(file, hash))
+		if err != nil {
+			pipeWriter.CloseWithError(err)
+			return
+		}
+		defer pipeWriter.Close()
+	}()
+
+	written, err := io.Copy(f, pipeReader)
+	if err != nil {
+		return nil, err
+	}
+
+	hashSum := hash.Sum(nil)
+	digest := b64.RawURLEncoding.EncodeToString(hashSum)
+
+	/*aes, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +116,7 @@ func (s *FileStorage) Store(user *repository.User, file multipart.File, filesPat
 	}
 
 	hashSum := hash.Sum(nil)
-	digest := b64.RawURLEncoding.EncodeToString(hashSum)
+	digest := b64.RawURLEncoding.EncodeToString(hashSum)*/
 
 	fileMetadata := &repository.FileMetadata{
 		Salt: b64.RawURLEncoding.EncodeToString(salt),
@@ -132,7 +167,69 @@ func (s *FileStorage) Load(w http.ResponseWriter, file *repository.File, filePat
 		return err
 	}
 
+	aes, err := aes.NewCipher(key)
+	if err != nil {
+		return err
+	}
+
+	stream := cipher.NewCTR(aes, iv)
+
+	pipeReader, pipeWriter := io.Pipe()
+	writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
+
+	// do the encryption in a goroutine
+	go func() {
+		_, err := io.Copy(writer, out)
+		if err != nil {
+			pipeWriter.CloseWithError(err)
+			return
+		}
+		defer pipeWriter.Close()
+	}()
+
 	hash := sha256.New()
+
+	_, err = hash.Write(salt)
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(hash, pipeReader)
+	if err != nil {
+		return err
+	}
+
+	hashSum := hash.Sum(nil)
+	digest := b64.RawURLEncoding.EncodeToString(hashSum)
+
+	if digest != file.Digest {
+		return repository.ErrWrongResourceDigest
+	}
+
+	// do it once more (no way to avoid it)
+	out.Seek(0, io.SeekStart)
+
+	stream2 := cipher.NewCTR(aes, iv)
+
+	pipeReader2, pipeWriter2 := io.Pipe()
+	writer2 := &cipher.StreamWriter{S: stream2, W: pipeWriter2}
+
+	// do the encryption in a goroutine
+	go func() {
+		_, err := io.Copy(writer2, out)
+		if err != nil {
+			pipeWriter2.CloseWithError(err)
+			return
+		}
+		defer pipeWriter2.Close()
+	}()
+
+	_, err = io.Copy(w, pipeReader2)
+	if err != nil {
+		return err
+	}
+
+	/*hash := sha256.New()
 
 	_, err = hash.Write(salt)
 	if err != nil {
@@ -176,7 +273,7 @@ func (s *FileStorage) Load(w http.ResponseWriter, file *repository.File, filePat
 	_, err = io.Copy(w, pipeReader)
 	if err != nil {
 		return err
-	}
+	}*/
 
 	return nil
 }
