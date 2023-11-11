@@ -43,7 +43,6 @@ const getMessages = async () => {
 };
 
 export const createMessageTable = (view, row) => {
-  // This is the table we'll convert into a DataTable
   const table = $(`<table class="table message-${view}-table" width="100%"/>`);
 
   const rowData = row.data();

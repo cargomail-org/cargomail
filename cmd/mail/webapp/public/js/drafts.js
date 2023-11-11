@@ -427,7 +427,7 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
         draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
       }
 
-      let response = await api(composeForm.id, 200, `${window.mailboxApiHost}/api/v1/drafts/convert`, {
+      let response = await api(composeForm.id, 200, `${window.mailboxApiHost}/api/v1/drafts/send`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -450,31 +450,12 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
       sentDraft.payload.headers["Message-ID"] = response.payload.headers["Message-ID"];
       sentDraft.payload.headers["X-Thread-ID"] = response.payload.headers["X-Thread-ID"];
 
-      // console.log("draft", draft);
-      // console.log("sentDraft", sentDraft);
-
       draftsTable.rows(`#${id}`).remove().draw(false);
       draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);
 
       threadsRefresh(sentTable, inboxTable, { inserted: [sentDraft] });
 
       composeClearForm();
-
-      // TODO add placeholderMessage to local queue in case of unavailable API
-      // e.g. https://stackoverflow.com/questions/46175660/fetch-retry-request-on-failure
-      // or even better - use service worker
-      response = await api(composeForm.id, 200, `${window.mailApiHost}/api/v1/messages/send`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(placeholderMessage),
-      });
-
-      if (response === false) {
-        return;
-      }
     } else {
       const error = "record not found";
 
