@@ -148,6 +148,36 @@ export const showDetail = (view, row) => {
         const inboxTable = $(`#inboxTable`);
         const sentTable = $(`#sentTable`);
 
+        const threadDataInbox = inboxTable
+          .DataTable()
+          .rows()
+          .data()
+          .toArray()
+          .find((thread) => thread.threadId == threadId);
+
+        const threadDataSent = sentTable
+          .DataTable()
+          .rows()
+          .data()
+          .toArray()
+          .find((thread) => thread.threadId == threadId);
+
+        const inboxMessage = threadDataInbox?.messages.find((item) => {
+          return item.id == rowData.id;
+        });
+
+        const sentMessage = threadDataSent?.messages.find((item) => {
+          return item.id == rowData.id;
+        });
+
+        if (inboxMessage) {
+          inboxMessage.unread = rowData.unread;
+        }
+
+        if (sentMessage) {
+          sentMessage.unread = rowData.unread;
+        }
+
         inboxTable
           .DataTable()
           .row("#" + $.escapeSelector(threadId))
