@@ -243,6 +243,16 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
       .toArray()
       .find((thread) => thread.threadId == threadId);
 
+    if (!threadDataInbox & (message.folder == 2)) {
+      threadsRefresh(sentTable, inboxTable, { inserted: [message] });
+      return;
+    }
+
+    if (!threadDataSent & (message.folder == 1)) {
+      threadsRefresh(sentTable, inboxTable, { inserted: [message] });
+      return;
+    }
+
     const inboxMessage = threadDataInbox?.messages.find((item) => {
       return item.id == message.id;
     });
@@ -254,11 +264,21 @@ export const threadsRefresh = (sentTable, inboxTable, data) => {
     if (inboxMessage) {
       inboxMessage.unread = message.unread;
       inboxMessage.starred = message.starred;
+    } else {
+      if (message.folder == 2) {
+        threadsRefresh(sentTable, inboxTable, { inserted: [message] });
+        return;
+      }
     }
 
     if (sentMessage) {
       sentMessage.unread = message.unread;
       sentMessage.starred = message.starred;
+    } else {
+      if (message.folder == 1) {
+        threadsRefresh(sentTable, inboxTable, { inserted: [message] });
+        return;
+      }
     }
 
     inboxTable
