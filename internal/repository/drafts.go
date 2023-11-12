@@ -906,48 +906,50 @@ func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
 
 		// access to blobs
 		for _, contentId := range blobContentIds {
-			folder := 2 // inbox
+			if len(username) > 0 {
+				folder := 2 // inbox
 
-			query := `
-					INSERT INTO
-						"Blob" ("userId", "deviceId", "folder", "digest", "name", "path", "contentType", "size", "metadata")
-						 SELECT (SELECT "id" FROM "User" WHERE "username" = $1), NULL, $2, "digest", "name", "path", "contentType", "size", "metadata"
-							FROM "Blob"
-							WHERE "userId" = $3 AND
-								  "digest" = $4 AND
-								  "lastStmt" < 2
-								  LIMIT 1;`
+				query := `
+						INSERT INTO
+							"Blob" ("userId", "deviceId", "folder", "digest", "name", "path", "contentType", "size", "metadata")
+							 SELECT (SELECT "id" FROM "User" WHERE "username" = $1), NULL, $2, "digest", "name", "path", "contentType", "size", "metadata"
+								FROM "Blob"
+								WHERE "userId" = $3 AND
+									  "digest" = $4 AND
+									  "lastStmt" < 2
+									  LIMIT 1;`
 
-			args := []interface{}{username, folder, user.Id, contentId}
+				args := []interface{}{username, folder, user.Id, contentId}
 
-			_, err := tx.ExecContext(ctx, query, args...)
-			if err != nil {
-				return nil, err
+				_, err := tx.ExecContext(ctx, query, args...)
+				if err != nil {
+					return nil, err
+				}
 			}
-
 		}
 
 		// access to files
 		for _, contentId := range fileContentIds {
-			folder := 2 // inbox
+			if len(username) > 0 {
+				folder := 2 // inbox
 
-			query := `
-			INSERT INTO
-				"File" ("userId", "deviceId", "folder", "digest", "name", "path", "contentType", "size", "metadata")
-				 SELECT (SELECT "id" FROM "User" WHERE "username" = $1), NULL, $2, "digest", "name", "path", "contentType", "size", "metadata"
-					FROM "File"
-					WHERE "userId" = $3 AND
-						  "digest" = $4 AND
-						  "lastStmt" < 2
-						  LIMIT 1;`
+				query := `
+				INSERT INTO
+					"File" ("userId", "deviceId", "folder", "digest", "name", "path", "contentType", "size", "metadata")
+					 SELECT (SELECT "id" FROM "User" WHERE "username" = $1), NULL, $2, "digest", "name", "path", "contentType", "size", "metadata"
+						FROM "File"
+						WHERE "userId" = $3 AND
+							  "digest" = $4 AND
+							  "lastStmt" < 2
+							  LIMIT 1;`
 
-			args := []interface{}{username, folder, user.Id, contentId}
+				args := []interface{}{username, folder, user.Id, contentId}
 
-			_, err := tx.ExecContext(ctx, query, args...)
-			if err != nil {
-				return nil, err
+				_, err := tx.ExecContext(ctx, query, args...)
+				if err != nil {
+					return nil, err
+				}
 			}
-
 		}
 	}
 
