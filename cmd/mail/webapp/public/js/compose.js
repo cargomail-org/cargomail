@@ -694,7 +694,7 @@ const formPopulated = async (cmd) => {
   } else if (cmd == "send") {
     placeholderMessage = await upsertDraftsPage(composeForm, composeIdInput.value, reply, parsed);
     if (placeholderMessage && Object.keys(placeholderMessage).length > 0) {
-      // • this is the last point where you can sign a placeholder message
+      // here, you can sign a placeholder message body
       await draftsSendDraft(composeForm, composeIdInput.value, reply, parsed, placeholderMessage);
     }
   } else {

@@ -427,8 +427,8 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
         draft.payload.headers["X-Thread-ID"] = reply.xThreadId;
       }
 
-      let response = await api(composeForm.id, 200, `${window.mailboxApiHost}/api/v1/drafts/send`, {
-        method: "POST",
+      const response = await api(composeForm.id, 200, `${window.mailboxApiHost}/api/v1/drafts/send`, {
+          method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -440,20 +440,18 @@ export const sendDraft = async (composeForm, id, reply, parsed, placeholderMessa
         return;
       }
 
-      // the placeholder message is in the response
-
-      const sentDraft = JSON.parse(JSON.stringify(draft));
-      sentDraft.id = response.id;
-      sentDraft.createdAt = response.createdAt;
-      sentDraft.folder = response.folder;
-      sentDraft.payload.headers["Date"] = response.payload.headers["Date"];
-      sentDraft.payload.headers["Message-ID"] = response.payload.headers["Message-ID"];
-      sentDraft.payload.headers["X-Thread-ID"] = response.payload.headers["X-Thread-ID"];
+      const sentMessage = JSON.parse(JSON.stringify(draft));
+      sentMessage.id = response.id;
+      sentMessage.createdAt = response.createdAt;
+      sentMessage.folder = response.folder;
+      sentMessage.payload.headers["Date"] = response.payload.headers["Date"];
+      sentMessage.payload.headers["Message-ID"] = response.payload.headers["Message-ID"];
+      sentMessage.payload.headers["X-Thread-ID"] = response.payload.headers["X-Thread-ID"];
 
       draftsTable.rows(`#${id}`).remove().draw(false);
       draftsTable.buttons([".drafts-delete"]).enable(draftsTable.rows().count() > 0);
 
-      threadsRefresh(sentTable, inboxTable, { inserted: [sentDraft] });
+      threadsRefresh(sentTable, inboxTable, { inserted: [sentMessage] });
 
       composeClearForm();
     } else {

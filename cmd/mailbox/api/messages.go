@@ -224,3 +224,38 @@ func (api *MessagesApi) Delete() http.Handler {
 		helper.SetJsonResponse(w, http.StatusOK, map[string]string{"status": "OK"})
 	})
 }
+
+func (api *MessagesApi) Send() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		if !ok {
+			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
+			return
+		}
+
+		var message *repository.Message
+
+		err := helper.Decoder(r.Body).Decode(&message)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if message.Id == "" {
+			http.Error(w, repository.ErrMissingIdField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if message.Payload == nil {
+			http.Error(w, repository.ErrMissingPayloadField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if message.Payload.Headers == nil {
+			http.Error(w, repository.ErrMissingHeadersField.Error(), http.StatusBadRequest)
+			return
+		}
+
+		helper.SetJsonResponse(w, http.StatusOK, message)
+	})
+}
