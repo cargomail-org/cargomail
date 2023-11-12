@@ -256,6 +256,9 @@ func (api *MessagesApi) Send() http.Handler {
 			return
 		}
 
+		// TODO post the placeholder message to the mail service
+		//
+
 		helper.SetJsonResponse(w, http.StatusOK, message)
 	})
 }

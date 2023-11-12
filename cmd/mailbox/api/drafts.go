@@ -299,6 +299,9 @@ func (api *DraftsApi) Send() http.Handler {
 			return
 		}
 	ok:
+		// TODO post the placeholder message to the mail service
+		//
+
 		helper.SetJsonResponse(w, http.StatusOK, message)
 	})
 }
