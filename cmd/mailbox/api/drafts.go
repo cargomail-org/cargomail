@@ -2,6 +2,7 @@ package api
 
 import (
 	"cargomail/cmd/mailbox/api/helper"
+	"cargomail/internal/mailbox/agent"
 	"cargomail/internal/repository"
 	"cargomail/internal/storage"
 	"encoding/json"
@@ -11,8 +12,9 @@ import (
 )
 
 type DraftsApi struct {
-	useDraftRepository repository.UseDraftRepository
-	useDraftStorage    storage.UseDraftStorage
+	useDraftRepository      repository.UseDraftRepository
+	useDraftStorage         storage.UseDraftStorage
+	useMessageTransferAgent agent.UseMessageTransferAgent
 }
 
 func (api *DraftsApi) Create() http.Handler {
@@ -301,6 +303,7 @@ func (api *DraftsApi) Send() http.Handler {
 	ok:
 		// TODO post the placeholder message to the mail service
 		//
+		// api.useMessageTransferAgent.Send()
 
 		helper.SetJsonResponse(w, http.StatusOK, message)
 	})

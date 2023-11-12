@@ -3,6 +3,7 @@ package api
 import (
 	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/config"
+	"cargomail/internal/mailbox/agent"
 	"cargomail/internal/repository"
 	"cargomail/internal/storage"
 	"context"
@@ -14,6 +15,7 @@ import (
 type ApiParams struct {
 	Repository repository.Repository
 	Storage    storage.Storage
+	Agent      agent.Agent
 }
 
 type Api struct {
@@ -38,8 +40,8 @@ func NewApi(params ApiParams) Api {
 		Session:  SessionApi{useUserRepository: params.Repository.User, useSessionRepository: params.Repository.Session},
 		User:     UserApi{useUserRepository: params.Repository.User},
 		Contacts: ContactsApi{useContactRepository: params.Repository.Contacts},
-		Drafts:   DraftsApi{useDraftRepository: params.Repository.Drafts, useDraftStorage: params.Storage.Drafts},
-		Messages: MessagesApi{useMessageRepository: params.Repository.Messages, useMessageStorage: params.Storage.Messages},
+		Drafts:   DraftsApi{useDraftRepository: params.Repository.Drafts, useDraftStorage: params.Storage.Drafts, useMessageTransferAgent: params.Agent.MessageTransfer},
+		Messages: MessagesApi{useMessageRepository: params.Repository.Messages, useMessageStorage: params.Storage.Messages, useMessageTransferAgent: params.Agent.MessageTransfer},
 		Threads:  ThreadsApi{useThreadRepository: params.Repository.Threads},
 	}
 }
