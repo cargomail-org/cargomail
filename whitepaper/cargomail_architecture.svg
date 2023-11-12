@@ -57,11 +57,12 @@
    <glyph unicode="2" horiz-adv-x="1086" d="M 590,283 L 1247,283 1247,0 162,0 162,283 707,764 C 756,808 792,851 815,893 838,935 850,979 850,1024 850,1094 827,1150 780,1193 733,1236 670,1257 592,1257 532,1257 466,1244 395,1219 324,1193 247,1155 166,1104 L 166,1432 C 253,1461 338,1483 423,1498 508,1513 591,1520 672,1520 851,1520 990,1481 1089,1402 1188,1323 1237,1214 1237,1073 1237,992 1216,916 1174,846 1132,775 1044,681 909,563 L 590,283 Z"/>
    <glyph unicode="1" horiz-adv-x="1085" d="M 240,266 L 580,266 580,1231 231,1159 231,1421 578,1493 944,1493 944,266 1284,266 1284,0 240,0 240,266 Z"/>
    <glyph unicode="." horiz-adv-x="398" d="M 209,387 L 569,387 569,0 209,0 209,387 Z"/>
+   <glyph unicode="+" horiz-adv-x="1297" d="M 977,1284 L 977,760 1499,760 1499,524 977,524 977,0 739,0 739,524 217,524 217,760 739,760 739,1284 977,1284 Z"/>
    <glyph unicode=" " horiz-adv-x="714"/>
   </font>
  </defs>
  <defs class="TextShapeIndex">
-  <g ooo:slide="id1" ooo:id-list="id3 id4 id5 id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23 id24 id25 id26 id27 id28 id29 id30 id31 id32 id33 id34 id35 id36 id37 id38 id39 id40 id41 id42 id43 id44 id45 id46 id47 id48 id49 id50 id51"/>
+  <g ooo:slide="id1" ooo:id-list="id3 id4 id5 id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23 id24 id25 id26 id27 id28 id29 id30 id31 id32 id33 id34 id35 id36 id37 id38 id39 id40 id41 id42 id43 id44 id45 id46 id47 id48 id49 id50 id51 id52"/>
  </defs>
  <defs class="EmbeddedBulletChars">
   <g id="bullet-char-template-57356" transform="scale(0.00048828125,-0.00048828125)">
@@ -1206,7 +1207,7 @@
          <path style="fill:url(#pattern4)" d="M 13366,11982 L 10165,11982 10165,10306 16566,10306 16566,11982 13366,11982 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 13366,11982 L 10165,11982 10165,10306 16566,10306 16566,11982 13366,11982 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="12431" y="10805"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="11386" y="11313"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.foo.com</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="13049" y="11821"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RS</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="12431" y="10805"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="11386" y="11313"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.foo.com</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="12234" y="11821"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RS + RRA</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1335,7 +1336,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id14">
-        <rect class="BoundingBox" stroke="none" fill="none" x="5811" y="9862" width="4048" height="1280"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="5811" y="9863" width="4048" height="1279"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="6905" y="10416"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">1. HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="6062" y="10924"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post resources</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -1634,7 +1635,7 @@
          <path style="fill:url(#pattern9)" d="M 24005,11980 L 20804,11980 20804,10304 27205,10304 27205,11980 24005,11980 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 24005,11980 L 20804,11980 20804,10304 27205,10304 27205,11980 24005,11980 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23070" y="10803"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="22042" y="11311"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.bar.com</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23688" y="11819"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RS</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23070" y="10803"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="22042" y="11311"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.bar.com</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="22873" y="11819"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RS + RRA</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2463,8 +2464,14 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id51">
-        <rect class="BoundingBox" stroke="none" fill="none" x="28471" y="14589" width="6270" height="771"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="28721" y="15142"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RS</tspan></tspan><tspan class="TextPosition" x="29991" y="15142"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">— Resource Server</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="28471" y="14289" width="6270" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="28721" y="14842"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RS</tspan></tspan><tspan class="TextPosition" x="29991" y="14842"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">— Resource Server</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape">
+       <g id="id52">
+        <rect class="BoundingBox" stroke="none" fill="none" x="28471" y="14965" width="8429" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="28721" y="15518"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RRA</tspan></tspan><tspan class="TextPosition" x="29991" y="15518"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">— Resource Retrieval Agent</tspan></tspan></tspan></text>
        </g>
       </g>
      </g>
