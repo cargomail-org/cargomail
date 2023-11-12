@@ -29,8 +29,8 @@ type BlobRepository struct {
 
 type BlobMetadata struct {
 	Salt string `json:"salt"`
-	Key  string `json:"key"`
-	Iv   string `json:"iv"`
+	Key  string `json:"key,omitempty"`
+	Iv   string `json:"iv,omitempty"`
 }
 
 type Blob struct {

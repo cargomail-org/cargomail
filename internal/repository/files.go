@@ -27,8 +27,8 @@ type FileRepository struct {
 
 type FileMetadata struct {
 	Salt string `json:"salt"`
-	Key  string `json:"key"`
-	Iv   string `json:"iv"`
+	Key  string `json:"key,omitempty"`
+	Iv   string `json:"iv,omitempty"`
 }
 
 type File struct {

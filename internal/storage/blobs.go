@@ -86,41 +86,6 @@ func (s *BlobStorage) Store(user *repository.User, file multipart.File, blobsPat
 	hashSum := hash.Sum(nil)
 	digest := b64.RawURLEncoding.EncodeToString(hashSum)
 
-	/*aes, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
-	}
-
-	stream := cipher.NewCTR(aes, iv)
-
-	pipeReader, pipeWriter := io.Pipe()
-	writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
-
-	// do the encryption in a goroutine
-	go func() {
-		_, err := io.Copy(writer, file)
-		if err != nil {
-			pipeWriter.CloseWithError(err)
-			return
-		}
-		pipeWriter.Close()
-	}()
-
-	hash := sha256.New()
-
-	_, err = hash.Write(salt)
-	if err != nil {
-		return nil, err
-	}
-
-	written, err := io.Copy(f, io.TeeReader(pipeReader, hash))
-	if err != nil {
-		return nil, err
-	}
-
-	hashSum := hash.Sum(nil)
-	digest := b64.RawURLEncoding.EncodeToString(hashSum)*/
-
 	blobMetadata := &repository.BlobMetadata{
 		Salt: b64.RawURLEncoding.EncodeToString(salt),
 		Key:  b64.RawURLEncoding.EncodeToString(key),
@@ -222,41 +187,6 @@ func (s *BlobStorage) CleanAndStoreMultipart(user *repository.User, draftId stri
 	
 		hashSum := hash.Sum(nil)
 		digest := b64.RawURLEncoding.EncodeToString(hashSum)
-
-		/*aes, err := aes.NewCipher(key)
-		if err != nil {
-			return nil, err
-		}
-
-		stream := cipher.NewCTR(aes, iv)
-
-		pipeReader, pipeWriter := io.Pipe()
-		writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
-
-		// do the encryption in a goroutine
-		go func() {
-			_, err := io.Copy(writer, part)
-			if err != nil {
-				pipeWriter.CloseWithError(err)
-				return
-			}
-			pipeWriter.Close()
-		}()
-
-		hash := sha256.New()
-
-		_, err = hash.Write(salt)
-		if err != nil {
-			return nil, err
-		}
-
-		written, err := io.Copy(f, io.TeeReader(pipeReader, hash))
-		if err != nil {
-			return nil, err
-		}
-
-		hashSum := hash.Sum(nil)
-		digest := b64.RawURLEncoding.EncodeToString(hashSum)*/
 
 		blobMetadata := &repository.BlobMetadata{
 			Salt: b64.RawURLEncoding.EncodeToString(salt),
@@ -380,52 +310,6 @@ func (s *BlobStorage) Load(w io.Writer, blob *repository.Blob, blobPath string) 
 	if err != nil {
 		return err
 	}
-
-	/*hash := sha256.New()
-
-	_, err = hash.Write(salt)
-	if err != nil {
-		return err
-	}
-
-	if _, err := io.Copy(hash, out); err != nil {
-		return err
-	}
-
-	hashSum := hash.Sum(nil)
-	digest := b64.RawURLEncoding.EncodeToString(hashSum)
-
-	if digest != blob.Digest {
-		return repository.ErrWrongResourceDigest
-	}
-
-	out.Seek(0, io.SeekStart)
-
-	aes, err := aes.NewCipher(key)
-	if err != nil {
-		return err
-	}
-
-	stream := cipher.NewCTR(aes, iv)
-
-	pipeReader, pipeWriter := io.Pipe()
-	writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
-
-	// do the decryption in a goroutine
-	go func() {
-		// _, err := io.Copy(writer, io.TeeReader(out, hash))
-		_, err := io.Copy(writer, out)
-		if err != nil {
-			pipeWriter.CloseWithError(err)
-			return
-		}
-		pipeWriter.Close()
-	}()
-
-	_, err = io.Copy(w, pipeReader)
-	if err != nil {
-		return err
-	}*/
 
 	return nil
 }
