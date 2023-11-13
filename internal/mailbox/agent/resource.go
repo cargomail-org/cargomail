@@ -2,19 +2,19 @@ package agent
 
 import "cargomail/internal/repository"
 
-type UseResourceRetrievalAgent interface {
-	DownloadBlob(user *repository.User, blob *repository.Blob) (*repository.Blob, error)
-	DownloadFile(user *repository.User, file *repository.File) (*repository.File, error)
+type UseResourceFetchAgent interface {
+	FetchBlob(user *repository.User, blob *repository.Blob) (*repository.Blob, error)
+	FetchFile(user *repository.User, file *repository.File) (*repository.File, error)
 }
 
-type ResourceRetrievalAgent struct {
-	repository  repository.Repository
+type ResourceFetchAgent struct {
+	repository repository.Repository
 }
 
-func (a *ResourceRetrievalAgent) DownloadBlob(user *repository.User, blob *repository.Blob) (*repository.Blob, error) {
+func (a *ResourceFetchAgent) FetchBlob(user *repository.User, blob *repository.Blob) (*repository.Blob, error) {
 	return nil, nil
 }
 
-func (a *ResourceRetrievalAgent) DownloadFile(user *repository.User, file *repository.File) (*repository.File, error) {
+func (a *ResourceFetchAgent) FetchFile(user *repository.User, file *repository.File) (*repository.File, error) {
 	return nil, nil
 }
