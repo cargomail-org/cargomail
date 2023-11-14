@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+type contextKey string
+
+const UserContextKey = contextKey("user")
+
 type RecipientsNotFoundError struct {
 	Recipients []string
 	Err        error

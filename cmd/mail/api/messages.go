@@ -2,8 +2,7 @@ package api
 
 import (
 	"cargomail/cmd/mailbox/api/helper"
-	"cargomail/internal/repository"
-	"cargomail/internal/storage"
+	"cargomail/internal/mailbox/repository"
 	"errors"
 	"net/http"
 	"strings"
@@ -11,7 +10,6 @@ import (
 
 type MessagesApi struct {
 	useMessageRepository repository.UseMessageRepository
-	useMessageStorage    storage.UseMessageStorage
 }
 
 func (api *MessagesApi) Send() http.Handler {

@@ -1,6 +1,6 @@
 package storage
 
-import "cargomail/internal/repository"
+import "cargomail/internal/mailbox/repository"
 
 type UseMessageStorage interface {
 	List(user *repository.User, folder int) (*repository.MessageList, error)

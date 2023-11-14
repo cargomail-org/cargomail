@@ -1,8 +1,8 @@
 package storage
 
 import (
-	"cargomail/internal/config"
-	"cargomail/internal/repository"
+	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/shared/config"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
@@ -159,17 +159,17 @@ func (s *BlobStorage) CleanAndStoreMultipart(user *repository.User, draftId stri
 		if err != nil {
 			return nil, err
 		}
-	
+
 		aes, err := aes.NewCipher(key)
 		if err != nil {
 			return nil, err
 		}
-	
+
 		stream := cipher.NewCTR(aes, iv)
-	
+
 		pipeReader, pipeWriter := io.Pipe()
 		writer := &cipher.StreamWriter{S: stream, W: pipeWriter}
-	
+
 		// do the encryption in a goroutine
 		go func() {
 			_, err := io.Copy(writer, io.TeeReader(part, hash))
@@ -179,12 +179,12 @@ func (s *BlobStorage) CleanAndStoreMultipart(user *repository.User, draftId stri
 			}
 			defer pipeWriter.Close()
 		}()
-	
+
 		written, err := io.Copy(f, pipeReader)
 		if err != nil {
 			return nil, err
 		}
-	
+
 		hashSum := hash.Sum(nil)
 		digest := b64.RawURLEncoding.EncodeToString(hashSum)
 

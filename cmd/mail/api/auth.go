@@ -2,8 +2,8 @@ package api
 
 import (
 	"cargomail/cmd/mail/api/helper"
-	"cargomail/internal/config"
-	"cargomail/internal/repository"
+	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/shared/config"
 	"net/http"
 )
 

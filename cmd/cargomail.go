@@ -3,8 +3,8 @@ package cargomail
 import (
 	"cargomail/cmd/mail"
 	"cargomail/cmd/mailbox"
-	"cargomail/internal/config"
-	"cargomail/internal/database"
+	"cargomail/internal/shared/database"
+	"cargomail/internal/shared/config"
 	"context"
 	"database/sql"
 	"log"

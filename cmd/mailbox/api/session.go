@@ -1,7 +1,7 @@
 package api
 
 import (
-	"cargomail/internal/repository"
+	"cargomail/internal/mailbox/repository"
 )
 
 type SessionApi struct {

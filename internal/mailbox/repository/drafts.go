@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"cargomail/internal/config"
+	"cargomail/internal/shared/config"
 	"context"
 	"database/sql"
 	"errors"

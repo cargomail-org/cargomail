@@ -1,7 +1,7 @@
 package api
 
 import (
-	"cargomail/internal/config"
+	"cargomail/internal/shared/config"
 	"net/http"
 )
 

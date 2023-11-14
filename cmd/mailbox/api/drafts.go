@@ -3,8 +3,8 @@ package api
 import (
 	"cargomail/cmd/mailbox/api/helper"
 	"cargomail/internal/mailbox/agent"
-	"cargomail/internal/repository"
-	"cargomail/internal/storage"
+	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/mailbox/storage"
 	"encoding/json"
 	"errors"
 	"net/http"

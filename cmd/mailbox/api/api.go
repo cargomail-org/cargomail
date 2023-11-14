@@ -2,10 +2,10 @@ package api
 
 import (
 	"cargomail/cmd/mailbox/api/helper"
-	"cargomail/internal/config"
 	"cargomail/internal/mailbox/agent"
-	"cargomail/internal/repository"
-	"cargomail/internal/storage"
+	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/mailbox/storage"
+	"cargomail/internal/shared/config"
 	"context"
 	"errors"
 	"net/http"

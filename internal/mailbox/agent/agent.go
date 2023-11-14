@@ -1,6 +1,6 @@
 package agent
 
-import "cargomail/internal/repository"
+import "cargomail/internal/mailbox/repository"
 
 type Agent struct {
 	MessageTransfer UseMessageTransferAgent

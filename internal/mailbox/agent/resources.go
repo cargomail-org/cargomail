@@ -1,6 +1,6 @@
 package agent
 
-import "cargomail/internal/repository"
+import "cargomail/internal/mailbox/repository"
 
 type UseResourceFetchAgent interface {
 	FetchBlob(user *repository.User, blob *repository.Blob) (*repository.Blob, error)

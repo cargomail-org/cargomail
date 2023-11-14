@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"cargomail/internal/repository"
+	"cargomail/internal/mailbox/repository"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"

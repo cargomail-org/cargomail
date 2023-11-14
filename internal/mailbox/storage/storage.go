@@ -2,8 +2,8 @@ package storage
 
 import (
 	"bytes"
-	"cargomail/internal/config"
-	"cargomail/internal/repository"
+	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/shared/config"
 	b64 "encoding/base64"
 	"errors"
 	"io"

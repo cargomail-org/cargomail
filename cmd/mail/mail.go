@@ -3,8 +3,8 @@ package mail
 import (
 	"cargomail/cmd/mail/api"
 	"cargomail/cmd/mail/app"
-	"cargomail/internal/config"
-	"cargomail/internal/repository"
+	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/shared/config"
 	"context"
 	"database/sql"
 	"embed"

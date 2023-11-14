@@ -2,7 +2,7 @@ package api
 
 import (
 	"cargomail/cmd/mailbox/api/helper"
-	"cargomail/internal/repository"
+	"cargomail/internal/mailbox/repository"
 	"encoding/json"
 	"errors"
 	"net/http"

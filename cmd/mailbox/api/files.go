@@ -2,9 +2,9 @@ package api
 
 import (
 	"cargomail/cmd/mailbox/api/helper"
-	"cargomail/internal/config"
-	"cargomail/internal/repository"
-	"cargomail/internal/storage"
+	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/mailbox/storage"
+	"cargomail/internal/shared/config"
 	"encoding/json"
 	"errors"
 	"fmt"

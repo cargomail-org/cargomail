@@ -2,9 +2,9 @@ package mailbox
 
 import (
 	"cargomail/cmd/mailbox/api"
-	"cargomail/internal/config"
-	"cargomail/internal/repository"
-	"cargomail/internal/storage"
+	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/mailbox/storage"
+	"cargomail/internal/shared/config"
 	"context"
 	"database/sql"
 	"log"
