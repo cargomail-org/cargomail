@@ -227,7 +227,7 @@ func (api *MessagesApi) Delete() http.Handler {
 	})
 }
 
-func (api *MessagesApi) Send() http.Handler {
+func (api *MessagesApi) Submit() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -260,7 +260,7 @@ func (api *MessagesApi) Send() http.Handler {
 
 		// TODO post the placeholder message to the mail service
 		//
-		// api.useMessageTransferAgent.Send()
+		// api.useMessageTransferAgent.Submit()
 
 		helper.SetJsonResponse(w, http.StatusOK, message)
 	})

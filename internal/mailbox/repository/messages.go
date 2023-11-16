@@ -17,7 +17,7 @@ type UseMessageRepository interface {
 	Trash(user *User, ids string) error
 	Untrash(user *User, ids string) error
 	Delete(user *User, ids string) error
-	Send(user *User, draft *Message) error
+	Submit(user *User, draft *Message) error
 }
 
 type MessageRepository struct {
@@ -509,6 +509,6 @@ func (r MessageRepository) Delete(user *User, ids string) error {
 	return nil
 }
 
-func (r MessageRepository) Send(user *User, message *Message) error {
+func (r MessageRepository) Submit(user *User, message *Message) error {
 	return nil
 }

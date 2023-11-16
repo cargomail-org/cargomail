@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS "User" (
     "passwordHash"	TEXT NOT NULL,
     "firstName"		TEXT DEFAULT "",
     "lastName"		TEXT DEFAULT "",
+    "settings"      TEXT,                 -- json object
     "createdAt"		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

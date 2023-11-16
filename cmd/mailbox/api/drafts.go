@@ -253,7 +253,7 @@ func (api *DraftsApi) Delete() http.Handler {
 	})
 }
 
-func (api *DraftsApi) Send() http.Handler {
+func (api *DraftsApi) Submit() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
@@ -284,7 +284,7 @@ func (api *DraftsApi) Send() http.Handler {
 			return
 		}
 
-		message, err := api.useDraftRepository.Send(user, draft)
+		message, err := api.useDraftRepository.Submit(user, draft)
 		if err != nil {
 			recipientsNotFoundError := &repository.RecipientsNotFoundError{}
 
@@ -303,7 +303,7 @@ func (api *DraftsApi) Send() http.Handler {
 	ok:
 		// TODO post the placeholder message to the mail service
 		//
-		// api.useMessageTransferAgent.Send()
+		// api.useMessageTransferAgent.Submit()
 
 		helper.SetJsonResponse(w, http.StatusOK, message)
 	})

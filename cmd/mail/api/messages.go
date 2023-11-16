@@ -1,20 +1,18 @@
 package api
 
 import (
-	"cargomail/cmd/mailbox/api/helper"
+	"cargomail/cmd/mail/api/helper"
 	"cargomail/internal/mailbox/repository"
-	"errors"
 	"net/http"
-	"strings"
 )
 
 type MessagesApi struct {
 	useMessageRepository repository.UseMessageRepository
 }
 
-func (api *MessagesApi) Send() http.Handler {
+func (api *MessagesApi) Post() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		/*user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
 			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
 			return
@@ -43,23 +41,23 @@ func (api *MessagesApi) Send() http.Handler {
 			return
 		}
 
-		err = api.useMessageRepository.Send(user, message)
-		if err != nil {
-			recipientsNotFoundError := &repository.RecipientsNotFoundError{}
+		err = api.useMessageRepository.Post(user, message)
+			if err != nil {
+				recipientsNotFoundError := &repository.RecipientsNotFoundError{}
 
-			switch {
-			case errors.As(err, &recipientsNotFoundError):
-				warning := recipientsNotFoundError.Err.Error() + ": " + strings.Join(recipientsNotFoundError.Recipients, ", ")
-				w.Header().Set("X-Warning", string(warning))
-				goto ok
-			case errors.Is(err, repository.ErrMessageNotFound):
-				helper.ReturnErr(w, err, http.StatusNotFound)
-			default:
-				helper.ReturnErr(w, err, http.StatusInternalServerError)
+				switch {
+				case errors.As(err, &recipientsNotFoundError):
+					warning := recipientsNotFoundError.Err.Error() + ": " + strings.Join(recipientsNotFoundError.Recipients, ", ")
+					w.Header().Set("X-Warning", string(warning))
+					goto ok
+				case errors.Is(err, repository.ErrMessageNotFound):
+					helper.ReturnErr(w, err, http.StatusNotFound)
+				default:
+					helper.ReturnErr(w, err, http.StatusInternalServerError)
+				}
+				return
 			}
-			return
-		}
-	ok:
-		helper.SetJsonResponse(w, http.StatusOK, message)
+		ok:*/
+		helper.SetJsonResponse(w, http.StatusOK, nil)
 	})
 }

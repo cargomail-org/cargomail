@@ -131,7 +131,7 @@ func (svc *service) routes(r *Router) {
 	r.Route("POST", "/api/v1/drafts/trash", svc.api.Authenticate(svc.api.Drafts.Trash()))
 	r.Route("POST", "/api/v1/drafts/untrash", svc.api.Authenticate(svc.api.Drafts.Untrash()))
 	r.Route("DELETE", "/api/v1/drafts/delete", svc.api.Authenticate(svc.api.Drafts.Delete()))
-	r.Route("POST", "/api/v1/drafts/send", svc.api.Authenticate(svc.api.Drafts.Send()))
+	r.Route("POST", "/api/v1/drafts/submit", svc.api.Authenticate(svc.api.Drafts.Submit()))
 
 	// Messages API
 	r.Route("POST", "/api/v1/messages/list", svc.api.Authenticate(svc.api.Messages.List()))
@@ -140,7 +140,7 @@ func (svc *service) routes(r *Router) {
 	r.Route("POST", "/api/v1/messages/trash", svc.api.Authenticate(svc.api.Messages.Trash()))
 	r.Route("POST", "/api/v1/messages/untrash", svc.api.Authenticate(svc.api.Messages.Untrash()))
 	r.Route("DELETE", "/api/v1/messages/delete", svc.api.Authenticate(svc.api.Messages.Delete()))
-	r.Route("POST", "/api/v1/messages/send", svc.api.Authenticate(svc.api.Messages.Send()))
+	r.Route("POST", "/api/v1/messages/submit", svc.api.Authenticate(svc.api.Messages.Submit()))
 
 	// Threads API
 	r.Route("POST", "/api/v1/threads/list", svc.api.Authenticate(svc.api.Threads.List()))

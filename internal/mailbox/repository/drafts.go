@@ -22,7 +22,7 @@ type UseDraftRepository interface {
 	Untrash(user *User, ids string) error
 	Delete(user *User, ids string) error
 	GetById(user *User, id string) (*Draft, error)
-	Send(user *User, draft *Draft) (*Message, error)
+	Submit(user *User, draft *Draft) (*Message, error)
 }
 
 type DraftRepository struct {
@@ -607,7 +607,7 @@ func validRecipients(str string) (recipients []string, ok bool) {
 	return recipients, len(s) > 1
 }
 
-func (r DraftRepository) Send(user *User, draft *Draft) (*Message, error) {
+func (r DraftRepository) Submit(user *User, draft *Draft) (*Message, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
