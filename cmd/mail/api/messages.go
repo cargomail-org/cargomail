@@ -16,7 +16,7 @@ func (api *MessagesApi) Post() http.Handler {
 		if !ok {
 			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
 			return
-		}
+		}*/
 
 		var message *repository.Message
 
@@ -41,7 +41,7 @@ func (api *MessagesApi) Post() http.Handler {
 			return
 		}
 
-		err = api.useMessageRepository.Post(user, message)
+		/*err = api.useMessageRepository.Post(user, message)
 			if err != nil {
 				recipientsNotFoundError := &repository.RecipientsNotFoundError{}
 

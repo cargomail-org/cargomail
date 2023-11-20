@@ -10,9 +10,9 @@ import (
 )
 
 type MessagesApi struct {
-	useMessageRepository    repository.UseMessageRepository
-	useMessageStorage       storage.UseMessageStorage
-	useMessageTransferAgent agent.UseMessageTransferAgent
+	useMessageRepository      repository.UseMessageRepository
+	useMessageStorage         storage.UseMessageStorage
+	useMessageSubmissionAgent agent.UseMessageSubmissionAgent
 }
 
 func (api *MessagesApi) List() http.Handler {
@@ -229,7 +229,7 @@ func (api *MessagesApi) Delete() http.Handler {
 
 func (api *MessagesApi) Submit() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
 			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
 			return
@@ -258,10 +258,13 @@ func (api *MessagesApi) Submit() http.Handler {
 			return
 		}
 
-		// TODO post the placeholder message to the mail service
-		//
-		// api.useMessageTransferAgent.Submit()
+		response, err := api.useMessageSubmissionAgent.Post(user, message)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-		helper.SetJsonResponse(w, http.StatusOK, message)
+		// helper.SetJsonResponse(w, http.StatusOK, message)
+		helper.SetJsonResponse(w, response.StatusCode, message)
 	})
 }

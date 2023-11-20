@@ -12,9 +12,9 @@ import (
 )
 
 type DraftsApi struct {
-	useDraftRepository      repository.UseDraftRepository
-	useDraftStorage         storage.UseDraftStorage
-	useMessageTransferAgent agent.UseMessageTransferAgent
+	useDraftRepository        repository.UseDraftRepository
+	useDraftStorage           storage.UseDraftStorage
+	useMessageSubmissionAgent agent.UseMessageSubmissionAgent
 }
 
 func (api *DraftsApi) Create() http.Handler {
@@ -301,10 +301,13 @@ func (api *DraftsApi) Submit() http.Handler {
 			return
 		}
 	ok:
-		// TODO post the placeholder message to the mail service
-		//
-		// api.useMessageTransferAgent.Submit()
+		response, err := api.useMessageSubmissionAgent.Post(user, message)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-		helper.SetJsonResponse(w, http.StatusOK, message)
+		// helper.SetJsonResponse(w, http.StatusOK, message)
+		helper.SetJsonResponse(w, response.StatusCode, message)
 	})
 }

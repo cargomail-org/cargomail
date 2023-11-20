@@ -100,6 +100,7 @@ func (svc *service) routes(r *Router) {
 
 	// Health API
 	r.Route("GET", "/api/v1/health", svc.api.Health.Healthcheck())
+	r.Route("POST", "/api/v1/health", svc.api.Health.Healthcheck())
 
 	// Auth API
 	r.Route("GET", "/api/v1/auth/info", svc.api.Auth.Info())

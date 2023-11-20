@@ -949,7 +949,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id8">
-        <rect class="BoundingBox" stroke="none" fill="none" x="2853" y="8150" width="6774" height="1279"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="2853" y="8150" width="6774" height="1280"/>
         <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="4584" y="8703"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">3. HTTP mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="3104" y="9211"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -1571,7 +1571,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id23">
-        <rect class="BoundingBox" stroke="none" fill="none" x="16207" y="5893" width="5288" height="772"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="16207" y="5893" width="5288" height="771"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="16458" y="6446"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -1839,7 +1839,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id27">
-        <rect class="BoundingBox" stroke="none" fill="none" x="25708" y="5893" width="5288" height="772"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="25708" y="5893" width="5288" height="771"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="25959" y="6446"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -1907,7 +1907,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id34">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="16082" width="7583" height="772"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="16082" width="7583" height="771"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23177" y="16635"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RFA</tspan></tspan><tspan class="TextPosition" x="24447" y="16635"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">— Resource Fetch Agent</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -2016,7 +2016,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id38">
-        <rect class="BoundingBox" stroke="none" fill="none" x="7008" y="5893" width="5288" height="772"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="7008" y="5893" width="5288" height="771"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7259" y="6446"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -2028,7 +2028,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id40">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22915" y="13936" width="14153" height="772"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22915" y="13937" width="14153" height="771"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23166" y="14490"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aMSA, hMSA — (author/MHS) Message Submission Agent</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -2302,8 +2302,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id57">
-        <rect class="BoundingBox" stroke="none" fill="none" x="2638" y="7315" width="7904" height="771"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="2888" y="7868"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Submit Service (MSS)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="2116" y="7315" width="8945" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="2366" y="7868"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Submission Service (MSS)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">

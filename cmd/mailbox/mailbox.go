@@ -2,6 +2,7 @@ package mailbox
 
 import (
 	"cargomail/cmd/mailbox/api"
+	"cargomail/internal/mailbox/agent"
 	"cargomail/internal/mailbox/repository"
 	"cargomail/internal/mailbox/storage"
 	"cargomail/internal/shared/config"
@@ -25,12 +26,14 @@ type service struct {
 func NewService(params *ServiceParams) (service, error) {
 	repository := repository.NewRepository(params.DB)
 	storage := storage.NewStorage(repository)
+	agent := agent.NewAgent(repository)
 
 	return service{
 		api: api.NewApi(
 			api.ApiParams{
 				Repository: repository,
 				Storage:    storage,
+				Agent:      agent,
 			}),
 	}, nil
 }

@@ -93,6 +93,7 @@ func (t *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (svc *service) routes(r *Router) {
 	// Health API
 	r.Route("GET", "/api/v1/health", svc.api.Health.Healthcheck())
+	r.Route("POST", "/api/v1/health", svc.api.Health.Healthcheck())
 
 	// Contacts API
 	r.Route("POST", "/api/v1/contacts", svc.api.Authenticate(svc.api.Contacts.Create()))

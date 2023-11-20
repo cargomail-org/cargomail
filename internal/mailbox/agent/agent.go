@@ -1,15 +1,60 @@
 package agent
 
-import "cargomail/internal/mailbox/repository"
+import (
+	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/shared/config"
+	"crypto/tls"
+	"crypto/x509"
+	"log"
+	"net"
+	"net/http"
+	"time"
+)
 
 type Agent struct {
-	MessageTransfer UseMessageTransferAgent
-	ResourceFetch   UseResourceFetchAgent
+	MessageSubmission UseMessageSubmissionAgent
+	ResourceFetch     UseResourceFetchAgent
 }
 
 func NewAgent(repository repository.Repository) Agent {
+	certFile := config.Configuration.MailboxServiceCertPath
+	keyFile := config.Configuration.MailboxServiceKeyPath
+	// rootCertPath := config.Configuration.MailboxServiceRootCertPath
+
+	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// caCert, err := os.ReadFile(rootCertPath)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	caCertPool := x509.NewCertPool()
+	// caCertPool.AppendCertsFromPEM(caCert)
+
+	tlsConfig := &tls.Config{
+		Certificates:       []tls.Certificate{cert},
+		RootCAs:            caCertPool,
+		InsecureSkipVerify: true,
+	}
+
+	httpTransport := &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout: 2 * time.Second,
+		}).Dial,
+		TLSHandshakeTimeout: 2 * time.Second,
+		TLSClientConfig:     tlsConfig,
+	}
+
+	httpClient := &http.Client{
+		Timeout:   time.Second * 2,
+		Transport: httpTransport,
+	}
+
 	return Agent{
-		MessageTransfer: &MessageTransferAgent{repository},
-		ResourceFetch:   &ResourceFetchAgent{repository},
+		MessageSubmission: &MessageSubmissionAgent{repository, httpClient},
+		ResourceFetch:     &ResourceFetchAgent{repository},
 	}
 }

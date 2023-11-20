@@ -1,15 +1,42 @@
 package agent
 
-import "cargomail/internal/mailbox/repository"
+import (
+	"bytes"
+	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/shared/config"
+	"encoding/json"
+	"net/http"
+)
 
-type UseMessageTransferAgent interface {
-	Submit(user *repository.User, message *repository.Message) (*repository.Message, error)
+type UseMessageSubmissionAgent interface {
+	Post(user *repository.User, message *repository.Message) (*http.Response, error)
 }
 
-type MessageTransferAgent struct {
+type MessageSubmissionAgent struct {
 	repository repository.Repository
+	httpClient *http.Client
 }
 
-func (a *MessageTransferAgent) Submit(user *repository.User, message *repository.Message) (*repository.Message, error) {
-	return nil, nil
+func (a *MessageSubmissionAgent) Post(user *repository.User, message *repository.Message) (*http.Response, error) {
+	endpoint := "/api/v1/messages/post"
+	URL := "https://" + config.Configuration.MailServiceBindTLS + endpoint
+
+	messageJSON, err := json.Marshal(message)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", URL, bytes.NewBuffer(messageJSON))
+	if err != nil {
+		return nil, err
+	}
+
+	response, err := a.httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
+	return response, err
 }
