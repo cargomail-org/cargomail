@@ -229,7 +229,7 @@ func (api *MessagesApi) Delete() http.Handler {
 
 func (api *MessagesApi) Submit() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
+		_, ok := r.Context().Value(repository.UserContextKey).(*repository.User)
 		if !ok {
 			helper.ReturnErr(w, repository.ErrMissingUserContext, http.StatusInternalServerError)
 			return
@@ -258,7 +258,7 @@ func (api *MessagesApi) Submit() http.Handler {
 			return
 		}
 
-		response, err := api.useMessageSubmissionAgent.Post(user, message)
+		response, err := api.useMessageSubmissionAgent.Post(r.Context(), message)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

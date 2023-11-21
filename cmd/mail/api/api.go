@@ -1,9 +1,13 @@
 package api
 
 import (
+	"cargomail/cmd/mail/api/helper"
 	"cargomail/internal/mailbox/repository"
+	"cargomail/internal/shared/config"
 	"context"
+	"errors"
 	"net/http"
+	"time"
 )
 
 type ApiParams struct {
@@ -36,7 +40,7 @@ func (api *Api) contextSetUser(r *http.Request, user *repository.User) *http.Req
 // middleware
 func (api *Api) Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		/*sessionCookie, err := r.Cookie("sessionId")
+		sessionCookie, err := r.Cookie("sessionId")
 		if err != nil {
 			switch {
 			case errors.Is(err, http.ErrNoCookie):
@@ -106,7 +110,7 @@ func (api *Api) Authenticate(next http.Handler) http.Handler {
 
 				http.SetCookie(w, deviceIdCookie)
 			}
-		}*/
+		}
 
 		next.ServeHTTP(w, r)
 	})

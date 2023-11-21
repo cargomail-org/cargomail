@@ -301,7 +301,7 @@ func (api *DraftsApi) Submit() http.Handler {
 			return
 		}
 	ok:
-		response, err := api.useMessageSubmissionAgent.Post(user, message)
+		response, err := api.useMessageSubmissionAgent.Post(r.Context(), message)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

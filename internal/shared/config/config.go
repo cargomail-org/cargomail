@@ -22,6 +22,7 @@ var (
 
 type Config = struct {
 	DomainName             string `yaml:"domainName"`
+	DoHProviderHost        string `yaml:"dohProviderHost"`
 	StoragePath            string `yaml:"storagePath"`
 	DatabasePath           string `yaml:"databasePath"`
 	ResourcesPath          string `yaml:"resources_path"`

@@ -9,6 +9,7 @@
             "program": "main.go",
             "env": {
                 "DOMAIN_NAME": "cargomail.org",
+                "DOH_PROVIDER_HOST": "cloudflare-dns.com",
                 "STORAGE_PATH": "./storage/cargomail.org",
                 "DATABASE_PATH": "./storage/cargomail.org/database/cargomail.db",
                 "RESOURCES_PATH": "./storage/cargomail.org/resources/",
@@ -32,6 +33,7 @@
             "program": "main.go",
             "env": {
                 "DOMAIN_NAME": "federizer.org",
+                "DOH_PROVIDER_HOST": "cloudflare-dns.com",
                 "STORAGE_PATH": "./storage/federizer.org",
                 "DATABASE_PATH": "./storage/federizer.org/database/cargomail.db",
                 "RESOURCES_PATH": "./storage/federizer.org/resources/",
@@ -55,6 +57,7 @@
             "program": "main.go",
             "env": {
                 "DOMAIN_NAME": "umabox.org",
+                "DOH_PROVIDER_HOST": "cloudflare-dns.com",
                 "STORAGE_PATH": "./storage/umabox.org",
                 "DATABASE_PATH": "./storage/umabox.org/database/cargomail.db",
                 "RESOURCES_PATH": "./storage/umabox.org/resources/",

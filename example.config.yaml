@@ -1,4 +1,5 @@
 domainName: cargomail.org
+dohProviderHost: "cloudflare-dns.com"
 storagePath: ./storage/cargomail.org
 databasePath: ./storage/cargomail.org/database/cargomail.db
 resourcesPath: ./storage/cargomail.org/resources/

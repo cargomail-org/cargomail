@@ -49,12 +49,16 @@ func NewAgent(repository repository.Repository) Agent {
 	}
 
 	httpClient := &http.Client{
-		Timeout:   time.Second * 2,
+		Timeout:   time.Second * 4,
 		Transport: httpTransport,
 	}
 
+	dohClient := &http.Client{
+		Timeout:   time.Second * 4,
+	}
+
 	return Agent{
-		MessageSubmission: &MessageSubmissionAgent{repository, httpClient},
+		MessageSubmission: &MessageSubmissionAgent{repository, httpClient, dohClient},
 		ResourceFetch:     &ResourceFetchAgent{repository},
 	}
 }

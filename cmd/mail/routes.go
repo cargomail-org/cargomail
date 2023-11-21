@@ -114,5 +114,6 @@ func (svc *service) routes(r *Router) {
 	r.Route("GET", "/api/v1/user/profile", svc.api.Authenticate(svc.api.User.Profile()))
 
 	// Messages API
-	r.Route("POST", "/api/v1/messages/post", svc.api.Authenticate(svc.api.Messages.Post()))
+	// r.Route("POST", "/api/v1/messages/post", svc.api.Authenticate(svc.api.Messages.Post()))
+	r.Route("POST", "/api/v1/messages/post", svc.api.Messages.Post()) // missing auth !!!
 }

@@ -1,4 +1,5 @@
 domainName: ${DOMAIN_NAME}
+dohProviderHost: ${DOH_PROVIDER_HOST}
 storagePath: ${STORAGE_PATH}
 databasePath: ${DATABASE_PATH}
 resourcesPath: ${RESOURCES_PATH}
