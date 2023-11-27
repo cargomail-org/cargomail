@@ -21,23 +21,39 @@ var (
 )
 
 type Config = struct {
-	DomainName             string `yaml:"domainName"`
-	DoHProviderHost        string `yaml:"dohProviderHost"`
-	StoragePath            string `yaml:"storagePath"`
-	DatabasePath           string `yaml:"databasePath"`
-	ResourcesPath          string `yaml:"resources_path"`
-	BlobsFolder            string `yaml:"blobsFolder"`
-	FilesFolder            string `yaml:"filesFolder"`
-	MailServiceCertPath    string `yaml:"mailServiceCertPath"`
-	MailServiceKeyPath     string `yaml:"mailServiceKeyPath"`
-	MailServiceBind        string `yaml:"mailServiceBind"`
-	MailServiceBindTLS     string `yaml:"mailServiceBindTLS"`
-	MailboxServiceCertPath string `yaml:"mailboxServiceCertPath"`
-	MailboxServiceKeyPath  string `yaml:"mailboxServiceKeyPath"`
-	MailboxServiceBind     string `yaml:"mailboxServiceBind"`
-	MailboxServiceBindTLS  string `yaml:"mailboxServiceBindTLS"`
-	CookieSameSite         string `yaml:"cookieSameSite"`
-	Stage                  string `yaml:"stage"`
+	DomainName        string `yaml:"domainName"`
+	DoHProviderHost   string `yaml:"dohProviderHost"`
+	StoragePath       string `yaml:"storagePath"`
+	DatabasePath      string `yaml:"databasePath"`
+	ResourcesPath     string `yaml:"resources_path"`
+	BlobsFolder       string `yaml:"blobsFolder"`
+	FilesFolder       string `yaml:"filesFolder"`
+	MSSClientCertPath string `yaml:"mssClientCertPath"`
+	MSSClientKeyPath  string `yaml:"mssClientKeyPath"`
+	MSSServerCertPath string `yaml:"mssServerCertPath"`
+	MSSServerKeyPath  string `yaml:"mssServerKeyPath"`
+	MSSBind           string `yaml:"mssBind"`
+	MSSBindTLS        string `yaml:"mssBindTLS"`
+	MHSClientCertPath string `yaml:"mhsClientCertPath"`
+	MHSClientKeyPath  string `yaml:"mhsClientKeyPath"`
+	MHSServerCertPath string `yaml:"mhsServerCertPath"`
+	MHSServerKeyPath  string `yaml:"mhsServerKeyPath"`
+	MHSBind           string `yaml:"mhsBind"`
+	MHSBindTLS        string `yaml:"mhsBindTLS"`
+	MDSClientCertPath string `yaml:"mdsClientCertPath"`
+	MDSClientKeyPath  string `yaml:"mdsClientKeyPath"`
+	MDSServerCertPath string `yaml:"mdsServerCertPath"`
+	MDSServerKeyPath  string `yaml:"mdsServerKeyPath"`
+	MDSBind           string `yaml:"mdsBind"`
+	MDSBindTLS        string `yaml:"mdsBindTLS"`
+	RHSClientCertPath string `yaml:"rhsClientCertPath"`
+	RHSClientKeyPath  string `yaml:"rhsClientKeyPath"`
+	RHSServerCertPath string `yaml:"rhsServerCertPath"`
+	RHSServerKeyPath  string `yaml:"rhsServerKeyPath"`
+	RHSBind           string `yaml:"rhsBind"`
+	RHSBindTLS        string `yaml:"rhsBindTLS"`
+	CookieSameSite    string `yaml:"cookieSameSite"`
+	Stage             string `yaml:"stage"`
 	// SessionTTL       time.Duration
 }
 

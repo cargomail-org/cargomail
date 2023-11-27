@@ -43,8 +43,16 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 
 	svc.routes(router)
 
-	http1Server := &http.Server{Handler: router, Addr: config.Configuration.MailboxServiceBind}
-	http1ServerTLS := &http.Server{Handler: router, Addr: config.Configuration.MailboxServiceBindTLS}
+	mdsHttp1Server := &http.Server{Handler: router, Addr: config.Configuration.MDSBind}
+	mdsHttp1ServerTLS := &http.Server{Handler: router, Addr: config.Configuration.MDSBindTLS}
+	// http2.ConfigureServer(http1Server, &http2.Server{})
+
+	rhsRouter := NewRouter()
+
+	svc.routes(rhsRouter)
+
+	rhsHttp1Server := &http.Server{Handler: rhsRouter, Addr: config.Configuration.RHSBind}
+	rhsHttp1ServerTLS := &http.Server{Handler: rhsRouter, Addr: config.Configuration.RHSBindTLS}
 	// http2.ConfigureServer(http1Server, &http2.Server{})
 
 	errs.Go(func() error {
@@ -52,11 +60,11 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 		gracefulStop, cancelShutdown := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancelShutdown()
 
-		err := http1Server.Shutdown(gracefulStop)
+		err := mdsHttp1Server.Shutdown(gracefulStop)
 		if err != nil {
 			return err
 		}
-		log.Print("mailbox (pull layer) http service shutdown gracefully")
+		log.Print("http MDS shutdown gracefully")
 		return nil
 	})
 
@@ -65,21 +73,57 @@ func (svc *service) Serve(ctx context.Context, errs *errgroup.Group) {
 		gracefulStop, cancelShutdown := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancelShutdown()
 
-		err := http1ServerTLS.Shutdown(gracefulStop)
+		err := mdsHttp1ServerTLS.Shutdown(gracefulStop)
 		if err != nil {
 			return err
 		}
-		log.Print("mailbox (pull layer) https service shutdown gracefully")
+		log.Print("https MDS shutdown gracefully")
 		return nil
 	})
 
 	errs.Go(func() error {
-		log.Printf("mailbox (pull layer) http service is listening on http://%s", http1Server.Addr)
-		return http1Server.ListenAndServe()
+		<-ctx.Done()
+		gracefulStop, cancelShutdown := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancelShutdown()
+
+		err := rhsHttp1Server.Shutdown(gracefulStop)
+		if err != nil {
+			return err
+		}
+		log.Print("http RHS shutdown gracefully")
+		return nil
 	})
 
 	errs.Go(func() error {
-		log.Printf("mailbox (pull layer) https service is listening on https://%s", http1ServerTLS.Addr)
-		return http1ServerTLS.ListenAndServeTLS(config.Configuration.MailboxServiceCertPath, config.Configuration.MailboxServiceKeyPath)
+		<-ctx.Done()
+		gracefulStop, cancelShutdown := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancelShutdown()
+
+		err := rhsHttp1ServerTLS.Shutdown(gracefulStop)
+		if err != nil {
+			return err
+		}
+		log.Print("https RHS shutdown gracefully")
+		return nil
+	})
+
+	errs.Go(func() error {
+		log.Printf("http MDS is listening on http://%s", mdsHttp1Server.Addr)
+		return mdsHttp1Server.ListenAndServe()
+	})
+
+	errs.Go(func() error {
+		log.Printf("https MDS is listening on https://%s", mdsHttp1ServerTLS.Addr)
+		return mdsHttp1ServerTLS.ListenAndServeTLS(config.Configuration.MDSServerCertPath, config.Configuration.MDSServerKeyPath)
+	})
+
+	errs.Go(func() error {
+		log.Printf("http RHS is listening on http://%s", rhsHttp1Server.Addr)
+		return rhsHttp1Server.ListenAndServe()
+	})
+
+	errs.Go(func() error {
+		log.Printf("https RHS is listening on https://%s", rhsHttp1ServerTLS.Addr)
+		return rhsHttp1ServerTLS.ListenAndServeTLS(config.Configuration.RHSServerCertPath, config.Configuration.RHSServerKeyPath)
 	})
 }

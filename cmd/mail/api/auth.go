@@ -30,7 +30,7 @@ func (api *AuthApi) Info() http.Handler {
 			}{
 				DomainName:        config.Configuration.DomainName,
 				Username:          user.Username,
-				MailboxServiceURL: protocol + config.Configuration.MailboxServiceBind,
+				MailboxServiceURL: protocol + config.Configuration.RHSBind,
 			}
 		} else {
 			info = struct {

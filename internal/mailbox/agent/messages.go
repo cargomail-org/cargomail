@@ -76,20 +76,20 @@ func (a *MessageSubmissionAgent) Post(ctx context.Context, message *repository.M
 
 	// log.Printf("Dns answer is :%v\n", dnsResp.String())
 
-	var hmsaHost string
-	var hmsaPort uint16
+	var mssHost string
+	var mssPort uint16
 
 	for _, a := range dnsResp.Answer {
 		t, ok := a.(*dns.SRV)
 		if !ok {
 			continue
 		}
-		hmsaHost = t.Target
-		hmsaHost = strings.TrimSuffix(hmsaHost, ".")
-		hmsaPort = t.Port
+		mssHost = t.Target
+		mssHost = strings.TrimSuffix(mssHost, ".")
+		mssPort = t.Port
 	}
 
-	URL := url.URL{Scheme: "https", Host: net.JoinHostPort(hmsaHost, strconv.Itoa(int(hmsaPort))), Path: "/api/v1/messages/post"}
+	URL := url.URL{Scheme: "https", Host: net.JoinHostPort(mssHost, strconv.Itoa(int(mssPort))), Path: "/api/v1/messages/post"}
 
 	messageJSON, err := json.Marshal(message)
 	if err != nil {

@@ -17,9 +17,9 @@ type Agent struct {
 }
 
 func NewAgent(repository repository.Repository) Agent {
-	certFile := config.Configuration.MailboxServiceCertPath
-	keyFile := config.Configuration.MailboxServiceKeyPath
-	// rootCertPath := config.Configuration.MailboxServiceRootCertPath
+	certFile := config.Configuration.MHSServerCertPath
+	keyFile := config.Configuration.MHSServerKeyPath
+	// rootCertPath := config.Configuration.MHSServerRootCertPath
 
 	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
 	if err != nil {
