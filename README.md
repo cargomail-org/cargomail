@@ -6,7 +6,11 @@ Please do not use the code from this repo, as it is unlikely to function properl
 
 Despite the importance of email infrastructure, the whole ecosystem still relies on more than 40-year-old push-based architecture and protocol design. While conceptually sound as a communication means, the email system is structurally obsolete and functionally deficient.
 
-Cargomail, a revised email system, uses an architecture with push and pull request layers. The main benefit of using this architecture is the privacy embedded into the design. It supports <i>mailbox portability</i>—the ability to move from one hosting partner to another without changing your email address.
+Cargomail, a revised email system, utilizes an architecture with push and pull request layers to separate a mailbox (locator) from an email address (identifier). The primary benefits of using this architecture include:
+
+* Mailbox Portability—the ability to move a mailbox from one hosting partner to another without changing your email address.
+* Enhanced Spam Protection—the separated identifier and the locator of the address/mailbox pair allow for a more detailed assessment of the sender's reputation.
+* Content of Any Size or Quantity—the capability to exchange large volumes of documents, images, videos, and audio of unlimited size.
 
 ## White Paper
 
@@ -14,21 +18,19 @@ This project is constantly evolving. You can download the latest revision of the
 
 ## Architecture
 
-The Cargomail architecture separates the mailbox from the email address. It uses a mechanism of push-then-pull requests over different routes to enable data exchange between mailboxes. The origin and destination of push requests differ from the origin and destination of pull requests. This mechanism has the potential to address privacy and attachment issues more effectively than the current push-only email system. An additional pull layer facilitates the efficient transfer of data of any size.
+The Cargomail architecture separates the mailbox from the email address. It uses a mechanism of push-then-pull requests over different routes to enable data exchange between mailboxes. This mechanism has the potential to address privacy and attachment issues more effectively than the current push-only email system. An additional pull layer facilitates the efficient transfer of data of any size.
 
 ![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
 #### *Key Points*
 
-• Each email consists of an envelope, a <i>placeholder message</i> created in the <i>resource mailbox</i>, and related external resources (message bodies) stored in the same <i>resource mailbox</i>. The <i>placeholder message</i> also acts as an access control list to external resources.
+• Each email consists of a <i>placeholder message</i> created in the <i>mailbox</i> and related external resources (message bodies) stored in the same <i>mailbox</i>. The <i>placeholder message</i> also acts as an access control list to its external body resources.
 
-• The resources owned by the sender, stored in the origin <i>resource mailbox</i> (mailbox&#46;foo&#46;com), are temporarily shared with recipients. Following a successful sharing process, a <i>placeholder message</i> is sent to each recipient through the push layer. The <i>placeholder message</i> contains the origin <i>resource mailbox</i> URL, the cryptographic hash values of the referenced resources (Content-IDs), and the category of correspondence, e.g., personal, business, or healthcare (see Appendix A for a <i>placeholder message</i> example).
+• The body resources owned by the sender, stored in the origin <i>mailbox</i> (mailbox&#46;foo&#46;com), are temporarily shared with recipients. Following a successful sharing process, a <i>placeholder message</i> is sent to each recipient through the push layer. The <i>placeholder message</i> contains the origin <i>mailbox</i> URL, the cryptographic hash values of the referenced body resources (Content-IDs), and the category of correspondence, e.g., personal, business, or healthcare (see Appendix A for a <i>placeholder message</i> example).
 
-• After receiving the <i>placeholder message</i>, the recipient's <i>resource broker</i> determines (according to the user's preferences and the category of correspondence) which destination <i>resource mailbox</i> will be used for communication. Once the destination <i>resource mailbox</i> (mailbox&#46;bar&#46;com) is determined, the <i>resource broker</i> adds the header with the <i>destination resource</i> mailbox URL to the <i>placeholder message</i> and posts it to the resolved destination <i>resource mailbox</i> using the GRIP authentication mechanism.
+• After receiving the <i>placeholder message</i>, the recipient's Message Delivery Agent (MDA) determines (according to the user's preferences and the category of correspondence) which destination <i>mailbox</i> will be used for communication. Once the destination <i>mailbox</i> (mailbox&#46;bar&#46;com) is determined, the MDA adds the header with the destination <i>mailbox</i> URL to the <i>placeholder message</i> and delivers it to the resolved destination <i>mailbox</i> using the [GRIP](whitepaper/GRIP.md) authentication mechanism.
 
-• The <i>resource transfer agent</i> at the destination server gets the origin <i>resource mailbox</i> URL and the cryptographic hash values of the referenced resources in the <i>placeholder message</i>. Using the GRIP authentication mechanism, the agent tries to retrieve the external resources from the origin <i>resource mailbox</i>. After successful authentication, the data is retrieved and stored in the destination <i>resource mailbox</i>. Finally, the <i>email application</i> downloads the relevant data from the destination <i>resource mailbox</i> and reconstructs the original message according to the <i>placeholder message</i> template.
-
-<sup>1</sup>While the [whitepaper](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf) implies the use of  SMTP/DKIM protocols at the push layer, this implementation uses HTTP/GRIP protocols at both layers.
+• The Resource Fetch Agent (RFA) at the destination server gets the origin <i>mailbox</i> URL and the cryptographic hash values of the referenced body resources in the <i>placeholder message</i>. Using the GRIP authentication mechanism, the agent tries to fetch the external body resources from the origin <i>mailbox</i>. After successful authentication, the data is fetched and stored in the destination <i>mailbox</i>. Finally, the <i>email application</i> gets the relevant data from the destination <i>mailbox</i> and reconstructs the original message according to the <i>placeholder message</i> template.
 
 ## Appendix A—Placeholder Message
 
