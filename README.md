@@ -4,7 +4,7 @@ Please do not use the code from this repo, as it is unlikely to function properl
 
 ## Introduction
 
-Despite the importance of email infrastructure, the whole ecosystem still relies on more than 40-year-old push-based architecture and protocol design. While conceptually sound as a communication means, the email system is structurally obsolete and functionally deficient.
+Despite the importance of email infrastructure, the whole ecosystem still relies on more than 40-year-old push-based architecture and protocol design. While conceptually sound as a means of communication, the email system is structurally obsolete and functionally deficient.
 
 Cargomail, a revised email system, utilizes an architecture with push and pull request layers to separate a mailbox (locator) from an email address (identifier). The primary benefits of using this architecture include:
 
