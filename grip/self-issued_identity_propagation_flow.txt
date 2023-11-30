@@ -10,5 +10,5 @@ Client->Client:1. Client generates a token — a signed, using the Client's priv
 
 
 Client->RS:2. Send an HTTP request to the RS with the token using mTLS
-RS->RS:3. Authorization decision\n    1. the client is authenticated via the DNS\n       using the TXT record and the custom OID from the public Client's certificate\n    2. verify the token signature\n    3. validate proof-of-possession\n    4. verify the aud claim\n    5. (optional) evaluate embedded tokens\n    6. the domain part of the user's email address and the domain part of the custom OID value\n       from the public Client's certificate must match\n    7. check that the user's email address is present in the placeholder message\n
+RS->RS:3. Authorization decision\n    1. the client is authenticated via the DNS using the TXT record and the custom OID value\n       from the public Client's certificate\n    2. verify the token signature\n    3. validate proof-of-possession\n    4. verify the aud claim\n    5. (optional) evaluate embedded tokens\n    6. the domain part of the user's email address and the domain part of the custom OID value\n       from the public Client's certificate must match\n    7. check that the user's email address is present in the placeholder message\n
 RS->Client:4. Return the HTTP response, typically with 200, 201 status code
