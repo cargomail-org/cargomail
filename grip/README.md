@@ -8,6 +8,7 @@ Furthermore, instead of using MX records to determine the communication route, C
 
 Cargomail GRIP uses special jargon. For the sake of brevity of this document, the following list of acronyms will be used:
 <pre>
+MHS     Message Handling Service
 DNS     Domain Name System
 CA      Certificate Authority
 CN      Common Name
@@ -22,7 +23,7 @@ JWK     JSON Web Key
 
 ## Cargomail Self-Issued Identity Propagation
 
-The sequence diagram illustrated in Figure&nbsp;1 shows the self-issued identity propagation flow without an authorization server and end-user involvement. The client requests access to resources stored on the RS on behalf of the impersonated user using a self-issued token.
+The sequence diagram illustrated in Figure&nbsp;1 shows the self-issued identity propagation flow without end-user involvement. The client requests access to the server on behalf of the impersonated user using a self-issued token.
 
 The sequence diagram is self-explanatory.
 
