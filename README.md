@@ -14,7 +14,7 @@ This project is constantly evolving. You can download the latest revision of the
 
 ## Architecture
 
-The Cargomail architecture separates the mailbox from the email address. It uses a mechanism of push-then-pull requests over different routes to enable data exchange between mailboxes. This mechanism has the potential to address privacy and attachment issues more effectively than the current push-only email system. An additional pull layer facilitates the efficient transfer of data of any size. The architecture enhances the [Internet Mail Architecture, IETF RFC 5598](https://www.rfc-editor.org/rfc/rfc5598.html).
+The Cargomail architecture enhances the [Internet Mail Architecture, IETF RFC 5598](https://www.rfc-editor.org/rfc/rfc5598.html). It separates the mailbox from the email address and uses a mechanism of push-and-pull requests over different routes to enable data exchange between mailboxes. This mechanism has the potential to address privacy and attachment issues more effectively than the current push-only email system. An additional pull layer facilitates the efficient transfer of data of any size.
 
 ![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
