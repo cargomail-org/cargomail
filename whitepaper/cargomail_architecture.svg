@@ -458,7 +458,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id5">
         <rect class="BoundingBox" stroke="none" fill="none" x="14902" y="3583" width="7650" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="16011" y="4136"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. SMTP or HTTP mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="15153" y="4644"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">transfer placeholder message</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="15858" y="4136"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. SMTP or HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="15153" y="4644"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">transfer placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -949,8 +949,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id8">
-        <rect class="BoundingBox" stroke="none" fill="none" x="2853" y="8850" width="6774" height="1280"/>
-        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="4584" y="9403"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">3. HTTP mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="3104" y="9911"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post placeholder message</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="2853" y="8850" width="6774" height="1279"/>
+        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="4432" y="9403"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">3. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="3104" y="9911"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1273,20 +1273,20 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id13">
-        <rect class="BoundingBox" stroke="none" fill="none" x="16808" y="9589" width="3814" height="1787"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="17059" y="10142"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">6. HTTP mTLS</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="18100" y="10650"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">fetch</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="17544" y="11158"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">resources</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="16655" y="9565" width="4119" height="1787"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="16906" y="10118"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">6. HTTPS mTLS</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="18100" y="10626"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">fetch</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="17543" y="11134"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">resources</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id14">
-        <rect class="BoundingBox" stroke="none" fill="none" x="7311" y="11667" width="4047" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="8405" y="12220"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">1. HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7562" y="12728"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post resources</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="7383" y="11667" width="4047" height="1279"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="8129" y="12220"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">1. HTTP(S)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7634" y="12728"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post resources</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id15">
-        <rect class="BoundingBox" stroke="none" fill="none" x="26968" y="11079" width="3789" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="27933" y="11632"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">7. HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="27219" y="12140"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">get resources</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="26968" y="11055" width="3789" height="1279"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="27585" y="11608"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">7. HTTP(S)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="27219" y="12116"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">get resources</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1443,8 +1443,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id17">
-        <rect class="BoundingBox" stroke="none" fill="none" x="27121" y="9663" width="7370" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="29150" y="10216"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. HTTP mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="27372" y="10724"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">deliver placeholder message</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="27121" y="9662" width="7370" height="1280"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="28998" y="10216"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="27372" y="10724"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">deliver placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1846,24 +1846,30 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id28">
         <rect class="BoundingBox" stroke="none" fill="none" x="11800" y="10636" width="2135" height="662"/>
-        <path fill="rgb(247,209,213)" stroke="none" d="M 12867,11284 L 11813,11284 11813,10649 13921,10649 13921,11284 12867,11284 Z"/>
+        <path fill="rgb(180,199,220)" stroke="none" d="M 12867,11284 L 11813,11284 11813,10649 13921,10649 13921,11284 12867,11284 Z"/>
         <g>
          <defs>
           <pattern id="pattern12" x="11813" y="10649" width="2109" height="636" patternUnits="userSpaceOnUse">
            <g transform="translate(-11813,-10649)">
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="11999" y1="10649" x2="11999" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="12211" y1="10649" x2="12211" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="12423" y1="10649" x2="12423" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="12635" y1="10649" x2="12635" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="12847" y1="10649" x2="12847" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="13059" y1="10649" x2="13059" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="13271" y1="10649" x2="13271" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="13483" y1="10649" x2="13483" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="13695" y1="10649" x2="13695" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="13907" y1="10649" x2="13907" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="11813" y1="10835" x2="13921" y2="10835"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="11813" y1="11047" x2="13921" y2="11047"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="11813" y1="11259" x2="13921" y2="11259"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11813" y1="10897" x2="12061" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11813" y1="11197" x2="12361" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12026" y1="11284" x2="12661" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12326" y1="11284" x2="12961" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12626" y1="11284" x2="13261" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12926" y1="11284" x2="13561" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="13226" y1="11284" x2="13861" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="13526" y1="11284" x2="13921" y2="10889"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="13826" y1="11284" x2="13921" y2="11189"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="13913" y1="10649" x2="13921" y2="10657"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="13613" y1="10649" x2="13921" y2="10957"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="13313" y1="10649" x2="13921" y2="11257"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="13013" y1="10649" x2="13648" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12713" y1="10649" x2="13348" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12413" y1="10649" x2="13048" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12113" y1="10649" x2="12748" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11813" y1="10649" x2="12448" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11813" y1="10949" x2="12148" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11813" y1="11249" x2="11848" y2="11284"/>
            </g>
           </pattern>
          </defs>
@@ -1883,7 +1889,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id30">
-        <rect class="BoundingBox" stroke="none" fill="none" x="7834" y="1013" width="5686" height="771"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="7834" y="1013" width="5686" height="772"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="8084" y="1566"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">author alice@foo.com</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -1895,19 +1901,19 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id32">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="15349" width="13945" height="771"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="15349" width="13945" height="772"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23176" y="15902"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">hMDA, rMDA — (MHS/recipient) Message Delivery Agent</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id33">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22927" y="17445" width="6270" height="771"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22927" y="17445" width="6270" height="772"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23177" y="17998"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RS</tspan></tspan><tspan class="TextPosition" x="24447" y="17998"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">— Resource Server</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id34">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="16782" width="7583" height="771"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="16782" width="7583" height="772"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23177" y="17335"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RFA</tspan></tspan><tspan class="TextPosition" x="24447" y="17335"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">— Resource Fetch Agent</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -2193,7 +2199,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id47">
         <rect class="BoundingBox" stroke="none" fill="none" x="2584" y="10286" width="7366" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="5337" y="10839"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">2. HTTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="2835" y="11347"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">submit placeholder message</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="4990" y="10839"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">2. HTTP(S)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="2835" y="11347"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">submit placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -2248,24 +2254,30 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id52">
         <rect class="BoundingBox" stroke="none" fill="none" x="23416" y="10636" width="2135" height="662"/>
-        <path fill="rgb(247,209,213)" stroke="none" d="M 24483,11284 L 23429,11284 23429,10649 25537,10649 25537,11284 24483,11284 Z"/>
+        <path fill="rgb(180,199,220)" stroke="none" d="M 24483,11284 L 23429,11284 23429,10649 25537,10649 25537,11284 24483,11284 Z"/>
         <g>
          <defs>
           <pattern id="pattern20" x="23429" y="10649" width="2109" height="636" patternUnits="userSpaceOnUse">
            <g transform="translate(-23429,-10649)">
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="23615" y1="10649" x2="23615" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="23827" y1="10649" x2="23827" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="24039" y1="10649" x2="24039" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="24251" y1="10649" x2="24251" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="24463" y1="10649" x2="24463" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="24675" y1="10649" x2="24675" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="24887" y1="10649" x2="24887" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="25099" y1="10649" x2="25099" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="25311" y1="10649" x2="25311" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="25523" y1="10649" x2="25523" y2="11284"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="23429" y1="10835" x2="25537" y2="10835"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="23429" y1="11047" x2="25537" y2="11047"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="23429" y1="11259" x2="25537" y2="11259"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="23429" y1="10897" x2="23677" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="23429" y1="11197" x2="23977" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="23642" y1="11284" x2="24277" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="23942" y1="11284" x2="24577" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24242" y1="11284" x2="24877" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24542" y1="11284" x2="25177" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24842" y1="11284" x2="25477" y2="10649"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25142" y1="11284" x2="25537" y2="10889"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25442" y1="11284" x2="25537" y2="11189"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25529" y1="10649" x2="25537" y2="10657"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25229" y1="10649" x2="25537" y2="10957"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24929" y1="10649" x2="25537" y2="11257"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24629" y1="10649" x2="25264" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24329" y1="10649" x2="24964" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24029" y1="10649" x2="24664" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="23729" y1="10649" x2="24364" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="23429" y1="10649" x2="24064" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="23429" y1="10949" x2="23764" y2="11284"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="23429" y1="11249" x2="23464" y2="11284"/>
            </g>
           </pattern>
          </defs>
@@ -2277,8 +2289,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id53">
-        <rect class="BoundingBox" stroke="none" fill="none" x="7302" y="12947" width="5571" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7552" y="13500"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">return</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7552" y="14008"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">placeholder message</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="7374" y="12947" width="5571" height="1279"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7624" y="13500"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">return</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7624" y="14008"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -2290,14 +2302,14 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id55">
-        <rect class="BoundingBox" stroke="none" fill="none" x="14481" y="1015" width="8412" height="771"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="14731" y="1568"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Handling Service (MHS)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="14483" y="1015" width="8412" height="772"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="14733" y="1568"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Handling Service (MHS)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id56">
-        <rect class="BoundingBox" stroke="none" fill="none" x="14476" y="8015" width="8425" height="771"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="14726" y="8568"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Resource Handling Service (RHS)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="14478" y="8014" width="8425" height="772"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="14728" y="8568"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Resource Handling Service (RHS)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2308,7 +2320,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id58">
-        <rect class="BoundingBox" stroke="none" fill="none" x="26468" y="8015" width="8243" height="771"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="26468" y="8014" width="8243" height="772"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="26718" y="8568"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Delivery Service (MDS)</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -2380,7 +2392,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id64">
-        <rect class="BoundingBox" stroke="none" fill="none" x="21706" y="8915" width="3222" height="771"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="21706" y="8915" width="3222" height="772"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="21956" y="9468"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">destination</tspan></tspan></tspan></text>
        </g>
       </g>
