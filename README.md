@@ -18,7 +18,7 @@ The Cargomail architecture separates the mailbox from the email address. It uses
 
 ![Alt Cargomail architecture](whitepaper/cargomail_architecture.png)
 
-Mail Service and Mailbox Service providers can be independent Administrative Management Domains (ADMDs) with their own administrative authority.
+Mail Service and Mailbox Service providers can be unrelated Administrative Management Domains (ADMDs) with zero trust between security domains.
 
 #### *Key Points*
 
