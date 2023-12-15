@@ -457,8 +457,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id5">
-        <rect class="BoundingBox" stroke="none" fill="none" x="14580" y="3583" width="8293" height="1279"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="15858" y="4136"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. SMTP or HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="14831" y="4644"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">transfer placeholder message(s)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="14902" y="3583" width="7650" height="1279"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="15858" y="4136"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. SMTP or HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="15153" y="4644"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">transfer placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -949,8 +949,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id8">
-        <rect class="BoundingBox" stroke="none" fill="none" x="2531" y="8850" width="7417" height="1279"/>
-        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="4431" y="9403"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">3. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="2782" y="9911"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post placeholder message(s)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="2853" y="8850" width="6774" height="1279"/>
+        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="4432" y="9403"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">3. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="3104" y="9911"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1443,8 +1443,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id17">
-        <rect class="BoundingBox" stroke="none" fill="none" x="26800" y="9663" width="8014" height="1280"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="28999" y="10216"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="27051" y="10724"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">deliver placeholder message(s)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="27121" y="9662" width="7370" height="1280"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="28998" y="10216"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="27372" y="10724"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">deliver placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
