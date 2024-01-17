@@ -57,7 +57,6 @@
    <glyph unicode="3" horiz-adv-x="1139" d="M 954,805 C 1055,779 1131,734 1184,670 1236,605 1262,523 1262,424 1262,276 1205,164 1092,87 979,10 813,-29 596,-29 519,-29 443,-23 366,-11 289,2 212,20 137,45 L 137,342 C 209,306 281,279 352,261 423,242 492,233 561,233 663,233 741,251 796,286 850,321 877,372 877,438 877,506 849,558 794,593 738,628 656,645 547,645 L 393,645 393,893 555,893 C 652,893 724,908 771,939 818,969 842,1015 842,1077 842,1134 819,1179 773,1210 727,1241 662,1257 578,1257 516,1257 453,1250 390,1236 327,1222 264,1201 201,1174 L 201,1456 C 277,1477 352,1493 427,1504 502,1515 575,1520 647,1520 841,1520 986,1488 1083,1425 1179,1361 1227,1265 1227,1137 1227,1050 1204,978 1158,923 1112,867 1044,828 954,805 Z"/>
    <glyph unicode="2" horiz-adv-x="1086" d="M 590,283 L 1247,283 1247,0 162,0 162,283 707,764 C 756,808 792,851 815,893 838,935 850,979 850,1024 850,1094 827,1150 780,1193 733,1236 670,1257 592,1257 532,1257 466,1244 395,1219 324,1193 247,1155 166,1104 L 166,1432 C 253,1461 338,1483 423,1498 508,1513 591,1520 672,1520 851,1520 990,1481 1089,1402 1188,1323 1237,1214 1237,1073 1237,992 1216,916 1174,846 1132,775 1044,681 909,563 L 590,283 Z"/>
    <glyph unicode="1" horiz-adv-x="1085" d="M 240,266 L 580,266 580,1231 231,1159 231,1421 578,1493 944,1493 944,266 1284,266 1284,0 240,0 240,266 Z"/>
-   <glyph unicode="/" horiz-adv-x="768" d="M 526,1493 L 748,1493 221,-190 0,-190 526,1493 Z"/>
    <glyph unicode="." horiz-adv-x="398" d="M 209,387 L 569,387 569,0 209,0 209,387 Z"/>
    <glyph unicode="," horiz-adv-x="477" d="M 209,387 L 569,387 569,82 322,-291 109,-291 209,82 209,387 Z"/>
    <glyph unicode=")" horiz-adv-x="609" d="M 164,-270 C 249,-111 313,44 356,195 399,346 420,496 420,643 420,790 399,940 356,1091 313,1242 249,1396 164,1554 L 461,1554 C 562,1391 638,1234 687,1085 736,935 760,787 760,641 760,495 736,348 687,200 638,51 563,-105 461,-270 L 164,-270 Z"/>
@@ -1517,55 +1516,57 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id22">
-        <rect class="BoundingBox" stroke="none" fill="none" x="14988" y="6295" width="7053" height="1399"/>
-        <path fill="rgb(247,209,213)" stroke="none" d="M 22040,6652 L 16330,6652 16330,6295 14988,6994 16330,7693 16330,7336 22040,7336 22040,6652 Z"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="14816" y="6295" width="7522" height="1399"/>
+        <path fill="rgb(247,209,213)" stroke="none" d="M 22336,6652 L 16248,6652 16248,6295 14816,6994 16248,7693 16248,7336 22336,7336 22336,6652 Z"/>
         <g>
          <defs>
-          <pattern id="pattern9" x="14988" y="6295" width="7053" height="1399" patternUnits="userSpaceOnUse">
-           <g transform="translate(-14988,-6295)">
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15174" y1="6897" x2="15174" y2="7091"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15386" y1="6787" x2="15386" y2="7201"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15598" y1="6676" x2="15598" y2="7312"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15810" y1="6566" x2="15810" y2="7422"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16022" y1="6455" x2="16022" y2="7533"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16234" y1="6345" x2="16234" y2="7643"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16446" y1="6652" x2="16446" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16658" y1="6652" x2="16658" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16870" y1="6652" x2="16870" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17082" y1="6652" x2="17082" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17294" y1="6652" x2="17294" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17506" y1="6652" x2="17506" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17718" y1="6652" x2="17718" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17930" y1="6652" x2="17930" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18142" y1="6652" x2="18142" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18354" y1="6652" x2="18354" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18566" y1="6652" x2="18566" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18778" y1="6652" x2="18778" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18990" y1="6652" x2="18990" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19202" y1="6652" x2="19202" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19414" y1="6652" x2="19414" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19626" y1="6652" x2="19626" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19838" y1="6652" x2="19838" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20050" y1="6652" x2="20050" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20262" y1="6652" x2="20262" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20474" y1="6652" x2="20474" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20686" y1="6652" x2="20686" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20898" y1="6652" x2="20898" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21110" y1="6652" x2="21110" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21322" y1="6652" x2="21322" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21534" y1="6652" x2="21534" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21746" y1="6652" x2="21746" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21958" y1="6652" x2="21958" y2="7336"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15973" y1="6481" x2="16330" y2="6481"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15566" y1="6693" x2="22040" y2="6693"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15159" y1="6905" x2="22040" y2="6905"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15224" y1="7117" x2="22040" y2="7117"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15631" y1="7329" x2="22040" y2="7329"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16038" y1="7541" x2="16330" y2="7541"/>
+          <pattern id="pattern9" x="14816" y="6295" width="7521" height="1399" patternUnits="userSpaceOnUse">
+           <g transform="translate(-14816,-6295)">
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15002" y1="6903" x2="15002" y2="7085"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15214" y1="6800" x2="15214" y2="7188"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15426" y1="6696" x2="15426" y2="7292"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15638" y1="6593" x2="15638" y2="7395"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15850" y1="6489" x2="15850" y2="7499"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16062" y1="6386" x2="16062" y2="7602"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16274" y1="6652" x2="16274" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16486" y1="6652" x2="16486" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16698" y1="6652" x2="16698" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16910" y1="6652" x2="16910" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17122" y1="6652" x2="17122" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17334" y1="6652" x2="17334" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17546" y1="6652" x2="17546" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17758" y1="6652" x2="17758" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17970" y1="6652" x2="17970" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18182" y1="6652" x2="18182" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18394" y1="6652" x2="18394" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18606" y1="6652" x2="18606" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18818" y1="6652" x2="18818" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19030" y1="6652" x2="19030" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19242" y1="6652" x2="19242" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19454" y1="6652" x2="19454" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19666" y1="6652" x2="19666" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19878" y1="6652" x2="19878" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20090" y1="6652" x2="20090" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20302" y1="6652" x2="20302" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20514" y1="6652" x2="20514" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20726" y1="6652" x2="20726" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20938" y1="6652" x2="20938" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21150" y1="6652" x2="21150" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21362" y1="6652" x2="21362" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21574" y1="6652" x2="21574" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21786" y1="6652" x2="21786" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21998" y1="6652" x2="21998" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22210" y1="6652" x2="22210" y2="7336"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15867" y1="6481" x2="16248" y2="6481"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15433" y1="6693" x2="22336" y2="6693"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14998" y1="6905" x2="22336" y2="6905"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15068" y1="7117" x2="22336" y2="7117"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15502" y1="7329" x2="22336" y2="7329"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15937" y1="7541" x2="16248" y2="7541"/>
            </g>
           </pattern>
          </defs>
-         <path style="fill:url(#pattern9)" d="M 22040,6652 L 16330,6652 16330,6295 14988,6994 16330,7693 16330,7336 22040,7336 22040,6652 Z"/>
+         <path style="fill:url(#pattern9)" d="M 22336,6652 L 16248,6652 16248,6295 14816,6994 16248,7693 16248,7336 22336,7336 22336,6652 Z"/>
         </g>
        </g>
       </g>
@@ -1772,75 +1773,79 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id26">
-        <rect class="BoundingBox" stroke="none" fill="none" x="24488" y="6295" width="7053" height="1399"/>
-        <path fill="rgb(180,199,220)" stroke="none" d="M 31540,6652 L 25830,6652 25830,6295 24488,6994 25830,7693 25830,7336 31540,7336 31540,6652 Z"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="24241" y="6295" width="7623" height="1399"/>
+        <path fill="rgb(180,199,220)" stroke="none" d="M 31862,6652 L 25692,6652 25692,6295 24241,6994 25692,7693 25692,7336 31862,7336 31862,6652 Z"/>
         <g>
          <defs>
-          <pattern id="pattern11" x="24488" y="6295" width="7053" height="1399" patternUnits="userSpaceOnUse">
-           <g transform="translate(-24488,-6295)">
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24586" y1="7045" x2="24799" y2="6832"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24783" y1="7148" x2="25425" y2="6506"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24980" y1="7251" x2="25830" y2="6401"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25178" y1="7353" x2="25879" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25375" y1="7456" x2="26179" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25572" y1="7559" x2="26479" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25770" y1="7661" x2="25830" y2="7601"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26095" y1="7336" x2="26779" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26395" y1="7336" x2="27079" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26695" y1="7336" x2="27379" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26995" y1="7336" x2="27679" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27295" y1="7336" x2="27979" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27595" y1="7336" x2="28279" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27895" y1="7336" x2="28579" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28195" y1="7336" x2="28879" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28495" y1="7336" x2="29179" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28795" y1="7336" x2="29479" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29095" y1="7336" x2="29779" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29395" y1="7336" x2="30079" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29695" y1="7336" x2="30379" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29995" y1="7336" x2="30679" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30295" y1="7336" x2="30979" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30595" y1="7336" x2="31279" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30895" y1="7336" x2="31540" y2="6691"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31195" y1="7336" x2="31540" y2="6991"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31495" y1="7336" x2="31540" y2="7291"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31445" y1="6652" x2="31540" y2="6747"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31145" y1="6652" x2="31540" y2="7047"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30845" y1="6652" x2="31529" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30545" y1="6652" x2="31229" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30245" y1="6652" x2="30929" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29945" y1="6652" x2="30629" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29645" y1="6652" x2="30329" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29345" y1="6652" x2="30029" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29045" y1="6652" x2="29729" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28745" y1="6652" x2="29429" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28445" y1="6652" x2="29129" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28145" y1="6652" x2="28829" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27845" y1="6652" x2="28529" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27545" y1="6652" x2="28229" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27245" y1="6652" x2="27929" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26945" y1="6652" x2="27629" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26645" y1="6652" x2="27329" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26345" y1="6652" x2="27029" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25737" y1="6344" x2="25830" y2="6437"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26045" y1="6652" x2="26729" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25539" y1="6446" x2="26429" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25342" y1="6549" x2="26129" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25145" y1="6652" x2="25830" y2="7337"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24948" y1="6755" x2="25830" y2="7637"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24750" y1="6857" x2="25321" y2="7428"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24553" y1="6960" x2="24695" y2="7102"/>
+          <pattern id="pattern11" x="24241" y="6295" width="7622" height="1399" patternUnits="userSpaceOnUse">
+           <g transform="translate(-24241,-6295)">
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24342" y1="7042" x2="24528" y2="6856"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24544" y1="7140" x2="25107" y2="6577"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24746" y1="7238" x2="25686" y2="6298"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24949" y1="7335" x2="25692" y2="6592"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25151" y1="7433" x2="25932" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25354" y1="7530" x2="26232" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25556" y1="7628" x2="25692" y2="7492"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25848" y1="7336" x2="26532" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26148" y1="7336" x2="26832" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26448" y1="7336" x2="27132" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26748" y1="7336" x2="27432" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27048" y1="7336" x2="27732" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27348" y1="7336" x2="28032" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27648" y1="7336" x2="28332" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27948" y1="7336" x2="28632" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28248" y1="7336" x2="28932" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28548" y1="7336" x2="29232" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28848" y1="7336" x2="29532" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29148" y1="7336" x2="29832" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29448" y1="7336" x2="30132" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29748" y1="7336" x2="30432" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30048" y1="7336" x2="30732" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30348" y1="7336" x2="31032" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30648" y1="7336" x2="31332" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30948" y1="7336" x2="31632" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31248" y1="7336" x2="31862" y2="6722"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31548" y1="7336" x2="31862" y2="7022"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31848" y1="7336" x2="31862" y2="7322"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31798" y1="6652" x2="31862" y2="6716"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31498" y1="6652" x2="31862" y2="7016"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="31198" y1="6652" x2="31862" y2="7316"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30898" y1="6652" x2="31582" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30598" y1="6652" x2="31282" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="30298" y1="6652" x2="30982" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29998" y1="6652" x2="30682" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29698" y1="6652" x2="30382" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29398" y1="6652" x2="30082" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="29098" y1="6652" x2="29782" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28798" y1="6652" x2="29482" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28498" y1="6652" x2="29182" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="28198" y1="6652" x2="28882" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27898" y1="6652" x2="28582" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27598" y1="6652" x2="28282" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="27298" y1="6652" x2="27982" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26998" y1="6652" x2="27682" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26698" y1="6652" x2="27382" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26398" y1="6652" x2="27082" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="26098" y1="6652" x2="26782" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25523" y1="6377" x2="25692" y2="6546"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25798" y1="6652" x2="26482" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25320" y1="6474" x2="26182" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="25118" y1="6572" x2="25882" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24915" y1="6669" x2="25692" y2="7446"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24713" y1="6767" x2="25590" y2="7644"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24510" y1="6864" x2="25011" y2="7365"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="24308" y1="6962" x2="24432" y2="7086"/>
            </g>
           </pattern>
          </defs>
-         <path style="fill:url(#pattern11)" d="M 31540,6652 L 25830,6652 25830,6295 24488,6994 25830,7693 25830,7336 31540,7336 31540,6652 Z"/>
+         <path style="fill:url(#pattern11)" d="M 31862,6652 L 25692,6652 25692,6295 24241,6994 25692,7693 25692,7336 31862,7336 31862,6652 Z"/>
         </g>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id27">
-        <rect class="BoundingBox" stroke="none" fill="none" x="25708" y="6593" width="5288" height="771"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="25959" y="7146"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="24691" y="6592" width="7325" height="772"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="24942" y="7146"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Local or GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1889,26 +1894,26 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id30">
-        <rect class="BoundingBox" stroke="none" fill="none" x="7834" y="1013" width="5686" height="772"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="8084" y="1566"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">author alice@foo.com</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="7813" y="1013" width="5728" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="8063" y="1566"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Author alice@foo.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id31">
-        <rect class="BoundingBox" stroke="none" fill="none" x="23758" y="1013" width="5986" height="771"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="24008" y="1566"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">recipient bob@bar.com</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="23696" y="1013" width="6106" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23947" y="1566"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Recipient bob@bar.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id32">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="15349" width="13945" height="772"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23176" y="15902"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">hMDA, rMDA — (MHS/recipient) Message Delivery Agent</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22927" y="15349" width="14216" height="772"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23177" y="15902"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">hMDA, rMDA — (MHS, Recipient) Message Delivery Agent</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id33">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="17445" width="11621" height="771"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23176" y="17998"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aRS, rRS — (author/recipient) Resource Server</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="17445" width="11876" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23176" y="17998"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aRS, rRS — (Author, Recipient) Resource Server</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1955,75 +1960,79 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id37">
-        <rect class="BoundingBox" stroke="none" fill="none" x="5788" y="6295" width="7054" height="1399"/>
-        <path fill="rgb(180,199,220)" stroke="none" d="M 12840,6652 L 7130,6652 7130,6295 5788,6994 7130,7693 7130,7336 12840,7336 12840,6652 Z"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="5572" y="6295" width="7622" height="1399"/>
+        <path fill="rgb(180,199,220)" stroke="none" d="M 13193,6652 L 7023,6652 7023,6295 5572,6994 7023,7693 7023,7336 13193,7336 13193,6652 Z"/>
         <g>
          <defs>
-          <pattern id="pattern14" x="5788" y="6295" width="7053" height="1399" patternUnits="userSpaceOnUse">
-           <g transform="translate(-5788,-6295)">
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="5886" y1="7045" x2="6099" y2="6832"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6083" y1="7148" x2="6725" y2="6506"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6280" y1="7251" x2="7130" y2="6401"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6478" y1="7353" x2="7179" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6675" y1="7456" x2="7479" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6872" y1="7559" x2="7779" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7070" y1="7661" x2="7130" y2="7601"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7395" y1="7336" x2="8079" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7695" y1="7336" x2="8379" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7995" y1="7336" x2="8679" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8295" y1="7336" x2="8979" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8595" y1="7336" x2="9279" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8895" y1="7336" x2="9579" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9195" y1="7336" x2="9879" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9495" y1="7336" x2="10179" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9795" y1="7336" x2="10479" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10095" y1="7336" x2="10779" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10395" y1="7336" x2="11079" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10695" y1="7336" x2="11379" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10995" y1="7336" x2="11679" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11295" y1="7336" x2="11979" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11595" y1="7336" x2="12279" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11895" y1="7336" x2="12579" y2="6652"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12195" y1="7336" x2="12840" y2="6691"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12495" y1="7336" x2="12840" y2="6991"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12795" y1="7336" x2="12840" y2="7291"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12745" y1="6652" x2="12840" y2="6747"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12445" y1="6652" x2="12840" y2="7047"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12145" y1="6652" x2="12829" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11845" y1="6652" x2="12529" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11545" y1="6652" x2="12229" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11245" y1="6652" x2="11929" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10945" y1="6652" x2="11629" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10645" y1="6652" x2="11329" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10345" y1="6652" x2="11029" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10045" y1="6652" x2="10729" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9745" y1="6652" x2="10429" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9445" y1="6652" x2="10129" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9145" y1="6652" x2="9829" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8845" y1="6652" x2="9529" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8545" y1="6652" x2="9229" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8245" y1="6652" x2="8929" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7945" y1="6652" x2="8629" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7645" y1="6652" x2="8329" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7037" y1="6344" x2="7130" y2="6437"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7345" y1="6652" x2="8029" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6839" y1="6446" x2="7729" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6642" y1="6549" x2="7429" y2="7336"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6445" y1="6652" x2="7130" y2="7337"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6248" y1="6755" x2="7130" y2="7637"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6050" y1="6857" x2="6621" y2="7428"/>
-            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="5853" y1="6960" x2="5995" y2="7102"/>
+          <pattern id="pattern14" x="5572" y="6295" width="7622" height="1399" patternUnits="userSpaceOnUse">
+           <g transform="translate(-5572,-6295)">
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="5673" y1="7042" x2="5859" y2="6856"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="5875" y1="7140" x2="6438" y2="6577"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6077" y1="7238" x2="7017" y2="6298"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6280" y1="7335" x2="7023" y2="6592"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6482" y1="7433" x2="7263" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6685" y1="7530" x2="7563" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6887" y1="7628" x2="7023" y2="7492"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7179" y1="7336" x2="7863" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7479" y1="7336" x2="8163" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7779" y1="7336" x2="8463" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8079" y1="7336" x2="8763" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8379" y1="7336" x2="9063" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8679" y1="7336" x2="9363" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8979" y1="7336" x2="9663" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9279" y1="7336" x2="9963" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9579" y1="7336" x2="10263" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9879" y1="7336" x2="10563" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10179" y1="7336" x2="10863" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10479" y1="7336" x2="11163" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10779" y1="7336" x2="11463" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11079" y1="7336" x2="11763" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11379" y1="7336" x2="12063" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11679" y1="7336" x2="12363" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11979" y1="7336" x2="12663" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12279" y1="7336" x2="12963" y2="6652"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12579" y1="7336" x2="13193" y2="6722"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12879" y1="7336" x2="13193" y2="7022"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="13179" y1="7336" x2="13193" y2="7322"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="13129" y1="6652" x2="13193" y2="6716"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12829" y1="6652" x2="13193" y2="7016"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12529" y1="6652" x2="13193" y2="7316"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="12229" y1="6652" x2="12913" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11929" y1="6652" x2="12613" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11629" y1="6652" x2="12313" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11329" y1="6652" x2="12013" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="11029" y1="6652" x2="11713" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10729" y1="6652" x2="11413" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10429" y1="6652" x2="11113" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="10129" y1="6652" x2="10813" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9829" y1="6652" x2="10513" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9529" y1="6652" x2="10213" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="9229" y1="6652" x2="9913" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8929" y1="6652" x2="9613" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8629" y1="6652" x2="9313" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8329" y1="6652" x2="9013" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="8029" y1="6652" x2="8713" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7729" y1="6652" x2="8413" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7429" y1="6652" x2="8113" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6854" y1="6377" x2="7023" y2="6546"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="7129" y1="6652" x2="7813" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6651" y1="6474" x2="7513" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6449" y1="6572" x2="7213" y2="7336"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6246" y1="6669" x2="7023" y2="7446"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="6044" y1="6767" x2="6921" y2="7644"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="5841" y1="6864" x2="6342" y2="7365"/>
+            <line fill="rgb(155,181,207)" stroke="rgb(155,181,207)" x1="5639" y1="6962" x2="5763" y2="7086"/>
            </g>
           </pattern>
          </defs>
-         <path style="fill:url(#pattern14)" d="M 12840,6652 L 7130,6652 7130,6295 5788,6994 7130,7693 7130,7336 12840,7336 12840,6652 Z"/>
+         <path style="fill:url(#pattern14)" d="M 13193,6652 L 7023,6652 7023,6295 5572,6994 7023,7693 7023,7336 13193,7336 13193,6652 Z"/>
         </g>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id38">
-        <rect class="BoundingBox" stroke="none" fill="none" x="7008" y="6593" width="5288" height="771"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7259" y="7146"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="5991" y="6592" width="7325" height="772"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="6242" y="7146"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Local or GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2034,8 +2043,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id40">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22915" y="14637" width="14153" height="771"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23166" y="15190"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aMSA, hMSA — (author/MHS) Message Submission Agent</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22916" y="14637" width="14289" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="23166" y="15190"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aMSA, hMSA — (Author, MHS) Message Submission Agent</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
