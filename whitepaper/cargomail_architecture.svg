@@ -1516,7 +1516,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id22">
-        <rect class="BoundingBox" stroke="none" fill="none" x="14816" y="6295" width="7522" height="1399"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="14816" y="6295" width="7521" height="1399"/>
         <path fill="rgb(247,209,213)" stroke="none" d="M 22336,6652 L 16248,6652 16248,6295 14816,6994 16248,7693 16248,7336 22336,7336 22336,6652 Z"/>
         <g>
          <defs>
@@ -1844,8 +1844,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id27">
-        <rect class="BoundingBox" stroke="none" fill="none" x="24691" y="6592" width="7325" height="772"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="24942" y="7146"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Local or GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="24753" y="6593" width="7198" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="25004" y="7146"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">local or GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2031,8 +2031,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id38">
-        <rect class="BoundingBox" stroke="none" fill="none" x="5991" y="6592" width="7325" height="772"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="6242" y="7146"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Local or GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="6053" y="6593" width="7197" height="771"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Syntax" font-size="423px" font-weight="700"><tspan class="TextPosition" x="6304" y="7146"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">local or GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
