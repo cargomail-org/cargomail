@@ -23,7 +23,7 @@ JWK     JSON Web Key
 
 ## Cargomail Self-Issued Identity Propagation
 
-The sequence diagram illustrated in Figure&nbsp;1 shows the self-issued identity propagation flow without end-user involvement. The client requests access to the server on behalf of the impersonated user using a self-issued token. The server is capable of making authorization decisions both before and after data transmission. 
+The sequence diagram illustrated in Figure&nbsp;1 shows the self-issued identity propagation flow without end-user involvement. The client requests access to the server on behalf of the impersonated user using a self-issued security token. The server is capable of making authorization decisions both before and after data transmission. 
 
 The sequence diagram is self-explanatory.
 
