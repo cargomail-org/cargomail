@@ -4,7 +4,7 @@ Cargomail uses the Global Reference Identity Protocol (GRIP) for email authentic
 
 Furthermore, instead of using MX records to determine the communication route, Cargomail relies on DNS SRV records.
 
-## Cargomail GRIP Acronyms
+#### GRIP Acronyms
 
 Cargomail GRIP uses special jargon. For the sake of brevity of this document, the following list of acronyms will be used:
 <pre>
@@ -21,7 +21,7 @@ JWT     JSON Web Token
 JWK     JSON Web Key
 </pre>
 
-## Cargomail Self-Issued Identity Propagation
+## Identity Propagation
 
 The sequence diagram illustrated in Figure&nbsp;1 shows the self-issued identity propagation flow without end-user involvement. The client requests access to the server on behalf of the impersonated user using a self-issued security token. The server is capable of making authorization decisions both before and after data transmission. 
 
@@ -34,3 +34,7 @@ The sequence diagram is self-explanatory.
 <p class="figure">
 Fig.&nbsp;1.&emsp;Self-Issued Identity Propagation flow
 </p>
+
+## Provenance
+
+TBD
