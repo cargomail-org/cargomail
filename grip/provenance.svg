@@ -51,7 +51,7 @@
   </font>
  </defs>
  <defs class="TextShapeIndex">
-  <g ooo:slide="id1" ooo:id-list="id3 id4 id5 id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22"/>
+  <g ooo:slide="id1" ooo:id-list="id3 id4 id5 id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23"/>
  </defs>
  <defs class="EmbeddedBulletChars">
   <g id="bullet-char-template-57356" transform="scale(0.00048828125,-0.00048828125)">
@@ -103,6 +103,13 @@
       </defs>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id3">
+        <rect class="BoundingBox" stroke="none" fill="none" x="-272" y="-144" width="18164" height="7877"/>
+        <path fill="rgb(255,255,255)" stroke="none" d="M 8810,7731 L -271,7731 -271,-143 17890,-143 17890,7731 8810,7731 Z"/>
+        <path fill="none" stroke="rgb(52,101,164)" d="M 8810,7731 L -271,7731 -271,-143 17890,-143 17890,7731 8810,7731 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape">
+       <g id="id4">
         <rect class="BoundingBox" stroke="none" fill="none" x="246" y="618" width="4693" height="6607"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 2592,7223 L 2484,7223"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 2403,7223 L 2296,7223"/>
@@ -228,42 +235,42 @@
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id4">
+       <g id="id5">
         <rect class="BoundingBox" stroke="none" fill="none" x="377" y="5813" width="4447" height="1287"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 2600,7086 L 390,7086 390,5826 4810,5826 4810,7086 2600,7086 Z"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="635" y="6371"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Digital Resource</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="697" y="6879"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(Msg/BLOB/File)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id5">
+       <g id="id6">
         <rect class="BoundingBox" stroke="none" fill="none" x="377" y="1449" width="4447" height="1351"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 2600,2786 L 390,2786 390,1462 4810,1462 4810,2786 2600,2786 Z"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="847" y="2039"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Security Token</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="521" y="2547"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(DNS-Bound JWT)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id6">
+       <g id="id7">
         <rect class="BoundingBox" stroke="none" fill="none" x="377" y="3653" width="4447" height="1246"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 2600,4885 L 390,4885 390,3666 4810,3666 4810,4885 2600,4885 Z"/>
         <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="1101" y="4190"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Tokenization</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="1808" y="4698"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(Hash)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id7">
+       <g id="id8">
         <rect class="BoundingBox" stroke="none" fill="none" x="2450" y="4886" width="301" height="942"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 2600,5826 L 2600,5166"/>
         <path fill="rgb(0,0,0)" stroke="none" d="M 2450,5186 L 2600,4886 2750,5186 2450,5186 Z"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id8">
+       <g id="id9">
         <rect class="BoundingBox" stroke="none" fill="none" x="2450" y="2786" width="301" height="883"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 2600,3667 L 2600,3066"/>
         <path fill="rgb(0,0,0)" stroke="none" d="M 2450,3086 L 2600,2786 2750,3086 2450,3086 Z"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id9">
+       <g id="id10">
         <rect class="BoundingBox" stroke="none" fill="none" x="6646" y="618" width="4693" height="6607"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 8992,7223 L 8884,7223"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 8803,7223 L 8696,7223"/>
@@ -389,42 +396,42 @@
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id10">
+       <g id="id11">
         <rect class="BoundingBox" stroke="none" fill="none" x="6777" y="5813" width="4447" height="1287"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 9000,7086 L 6790,7086 6790,5826 11210,5826 11210,7086 9000,7086 Z"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7035" y="6371"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Digital Resource</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7097" y="6879"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(Msg/BLOB/File)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id11">
+       <g id="id12">
         <rect class="BoundingBox" stroke="none" fill="none" x="6777" y="1449" width="4447" height="1351"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 9000,2786 L 6790,2786 6790,1462 11210,1462 11210,2786 9000,2786 Z"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7247" y="2039"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Security Token</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="6921" y="2547"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(DNS-Bound JWT)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id12">
+       <g id="id13">
         <rect class="BoundingBox" stroke="none" fill="none" x="6777" y="3653" width="4447" height="1246"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 9000,4885 L 6790,4885 6790,3666 11210,3666 11210,4885 9000,4885 Z"/>
         <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="7501" y="4190"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Tokenization</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="8208" y="4698"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(Hash)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id13">
+       <g id="id14">
         <rect class="BoundingBox" stroke="none" fill="none" x="9485" y="4886" width="301" height="942"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 9635,5826 L 9635,5166"/>
         <path fill="rgb(0,0,0)" stroke="none" d="M 9485,5186 L 9635,4886 9785,5186 9485,5186 Z"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id14">
+       <g id="id15">
         <rect class="BoundingBox" stroke="none" fill="none" x="8850" y="2786" width="301" height="883"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 9000,3667 L 9000,3066"/>
         <path fill="rgb(0,0,0)" stroke="none" d="M 8850,3086 L 9000,2786 9150,3086 8850,3086 Z"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id15">
+       <g id="id16">
         <rect class="BoundingBox" stroke="none" fill="none" x="12846" y="618" width="4693" height="6607"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 15192,7223 L 15084,7223"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 15003,7223 L 14896,7223"/>
@@ -550,49 +557,49 @@
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id16">
+       <g id="id17">
         <rect class="BoundingBox" stroke="none" fill="none" x="12977" y="5813" width="4447" height="1287"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 15200,7086 L 12990,7086 12990,5826 17410,5826 17410,7086 15200,7086 Z"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="13235" y="6371"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Digital Resource</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="13297" y="6879"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(Msg/BLOB/File)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id17">
+       <g id="id18">
         <rect class="BoundingBox" stroke="none" fill="none" x="12977" y="1449" width="4447" height="1351"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 15200,2786 L 12990,2786 12990,1462 17410,1462 17410,2786 15200,2786 Z"/>
         <text class="SVGTextShape"><tspan class="TextParagraph" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="13447" y="2039"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Security Token</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="13121" y="2547"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(DNS-Bound JWT)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id18">
+       <g id="id19">
         <rect class="BoundingBox" stroke="none" fill="none" x="12977" y="3653" width="4447" height="1246"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 15200,4885 L 12990,4885 12990,3666 17410,3666 17410,4885 15200,4885 Z"/>
         <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="13701" y="4190"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Tokenization</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="DejaVu Sans, sans-serif" font-size="423px" font-weight="700"><tspan class="TextPosition" x="14408" y="4698"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">(Hash)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id19">
+       <g id="id20">
         <rect class="BoundingBox" stroke="none" fill="none" x="15708" y="4886" width="301" height="942"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 15858,5826 L 15858,5166"/>
         <path fill="rgb(0,0,0)" stroke="none" d="M 15708,5186 L 15858,4886 16008,5186 15708,5186 Z"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id20">
+       <g id="id21">
         <rect class="BoundingBox" stroke="none" fill="none" x="15050" y="2786" width="301" height="883"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 15200,3667 L 15200,3066"/>
         <path fill="rgb(0,0,0)" stroke="none" d="M 15050,3086 L 15200,2786 15350,3086 15050,3086 Z"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id21">
+       <g id="id22">
         <rect class="BoundingBox" stroke="none" fill="none" x="4936" y="4886" width="3582" height="693"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 4937,5577 L 8367,5577 8367,5166"/>
         <path fill="rgb(0,0,0)" stroke="none" d="M 8217,5186 L 8367,4886 8517,5186 8217,5186 Z"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id22">
+       <g id="id23">
         <rect class="BoundingBox" stroke="none" fill="none" x="11336" y="4886" width="3405" height="693"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 11337,5577 L 14590,5577 14590,5166"/>
         <path fill="rgb(0,0,0)" stroke="none" d="M 14440,5186 L 14590,4886 14740,5186 14440,5186 Z"/>
