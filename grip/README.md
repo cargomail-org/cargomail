@@ -38,3 +38,11 @@ Fig.&nbsp;1.&emsp;Self-Issued Identity Propagation flow
 ## Provenance
 
 TBD
+
+<div class="diagram">
+    <img src=./provenance.svg alt="Transactions">
+</div>
+
+<p class="figure">
+Fig.&nbsp;2.&emsp;HTTP(S) Transactions
+</p>
