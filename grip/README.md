@@ -29,20 +29,20 @@ The sequence diagram illustrated in Figure&nbsp;1 shows the self-issued identity
 
 The sequence diagram is self-explanatory.
 
-<div class="background: white;">
-    <img src=./self-issued_identity_propagation_flow.svg alt="Sequence Diagram" width="5000" style="background: white;">
+<div>
+    <img src=./self-issued_identity_propagation_flow.svg alt="Sequence Diagram">
 </div>
 
 <p class="figure">
-Fig.&nbsp;1.&emsp;Self-Issued Identity Propagation flow
+    Fig.&nbsp;1.&emsp;Self-Issued Identity Propagation flow
 </p>
 
 ## Provenance
 
 TBD
 
-<div class="background: white;">
-    <img src=./provenance.svg alt="Transactions" width="500" style="background: white;">
+<div>
+    <img src=./provenance.svg alt="Transactions" width="500">
 </div>
 
 <p class="figure">
