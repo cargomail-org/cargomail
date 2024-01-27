@@ -41,8 +41,8 @@ Fig.&nbsp;1.&emsp;Self-Issued Identity Propagation flow
 
 TBD
 
-<div class="diagram">
-    <img src=./provenance.svg alt="Transactions"  width="500">
+<div class="background: white;">
+    <img src=./provenance.svg alt="Transactions" width="500" style="background: white;">
 </div>
 
 <p class="figure">
