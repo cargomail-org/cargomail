@@ -29,8 +29,8 @@ The sequence diagram illustrated in Figure&nbsp;1 shows the self-issued identity
 
 The sequence diagram is self-explanatory.
 
-<div class="diagram">
-    <img src=./self-issued_identity_propagation_flow.svg alt="Sequence Diagram">
+<div class="background: white;">
+    <img src=./self-issued_identity_propagation_flow.svg alt="Sequence Diagram" width="5000" style="background: white;">
 </div>
 
 <p class="figure">
