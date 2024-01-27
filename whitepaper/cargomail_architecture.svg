@@ -117,9 +117,8 @@
       </defs>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id3">
-        <rect class="BoundingBox" stroke="none" fill="none" x="-17" y="-1" width="37611" height="18393"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="-16" y="0" width="37609" height="18391"/>
         <path fill="rgb(255,255,255)" stroke="none" d="M 18788,18390 L -16,18390 -16,0 37592,0 37592,18390 18788,18390 Z"/>
-        <path fill="none" stroke="rgb(52,101,164)" d="M 18788,18390 L -16,18390 -16,0 37592,0 37592,18390 18788,18390 Z"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
