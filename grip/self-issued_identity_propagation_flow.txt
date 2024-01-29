@@ -3,6 +3,8 @@ participant "server" as Server
 
 bottomparticipants
 
+fontfamily arial
+
 entryspacing 1.0
 note over Client:client:\n• supports mTLS authentication with X.509 certificates\n• uses a self-signed or CA-signed certificate with a certificate extension containing a custom OID and\n   ASN1:UTF8String value that serves as a global client identifier in respect of the service it represents,\n   e.g., 1.2.3.4.5.6.7.8=ASN1:UTF8String:client._mhs._grip.foo.com\n• the client's public key fingerprint is published on the client domain using DNS TXT record,\n   e.g., client._mhs._grip.foo.com IN TXT  "v=grip1; h=sha256; f=d2abde240d7cd3ee6b ... e971"
 note over Server:server:\n• supports mTLS authentication with X.509 certificates\n• uses a CA-signed certificate with an appropriate Subject Alternative Name (SAN)\n• uses a DNS SRV record to specify a host and port of the server, while identifies the respective service,\n   e.g., _mhs._tcp.bar.com IN SRV 100 1 2525 mhs-server.bar.com\n• uses the information in the assertion to identify the requesting party (user)
