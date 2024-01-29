@@ -1,5 +1,3 @@
-<!-- @import "style.less" -->
-
 ## Introduction
 
 Cargomail uses the Global Reference Identity Protocol (GRIP) for email authentication instead of the DomainKeys Identified Mail (DKIM) authentication method. GRIP employs [identity propagation and assertion apparatus](https://github.com/cargomail-org/grip) to convey identity information about the end user across different administrative authorities of the email services.
@@ -25,7 +23,7 @@ JWK     JSON Web Key
 
 ## Identity Propagation
 
-The sequence diagram illustrated in Figure&nbsp;1 shows the self-issued identity propagation flow without end-user involvement. The client requests access to the server on behalf of the impersonated user using a self-issued security token. The server is capable of making authorization decisions both before and after data transmission. 
+The sequence diagram illustrated in Figure&nbsp;1 shows the identity propagation flow without end-user involvement. The client requests access to the server on behalf of the impersonated user using a self-issued security token.
 
 The sequence diagram is self-explanatory.
 
@@ -34,7 +32,7 @@ The sequence diagram is self-explanatory.
 </div>
 
 <p class="figure">
-    Fig.&nbsp;1.&emsp;Self-Issued Identity Propagation flow
+    Fig.&nbsp;1.&emsp;Identity Propagation Flow
 </p>
 
 ## Provenance
