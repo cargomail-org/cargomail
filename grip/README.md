@@ -42,9 +42,9 @@ The sequence diagram is self-explanatory.
 TBD
 
 <div>
-    <img src=./provenance.svg alt="Transactions" width="500">
+    <img src=./provenance.svg alt="Chain of Transactions" width="500">
 </div>
 
 <p class="figure">
-Fig.&nbsp;2.&emsp;HTTP(S) Transactions
+Fig.&nbsp;2.&emsp;Chain of Transactions
 </p>

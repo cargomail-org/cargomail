@@ -621,15 +621,15 @@
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
        <g id="id22">
-        <rect class="BoundingBox" stroke="none" fill="none" x="5063" y="4753" width="3443" height="526"/>
-        <path fill="none" stroke="rgb(0,0,0)" d="M 5064,5277 L 8355,5277 8355,5033"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="4797" y="1748" width="3709" height="3519"/>
+        <path fill="none" stroke="rgb(0,0,0)" d="M 4798,1749 L 5788,1749 5788,5265 8355,5265 8355,5033"/>
         <path fill="rgb(0,0,0)" stroke="none" d="M 8205,5053 L 8355,4753 8505,5053 8205,5053 Z"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
        <g id="id23">
-        <rect class="BoundingBox" stroke="none" fill="none" x="11466" y="4753" width="3263" height="526"/>
-        <path fill="none" stroke="rgb(0,0,0)" d="M 11467,5277 L 14578,5277 14578,5033"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="11197" y="1748" width="3532" height="3519"/>
+        <path fill="none" stroke="rgb(0,0,0)" d="M 11198,1749 L 12088,1749 12088,5265 14578,5265 14578,5033"/>
         <path fill="rgb(0,0,0)" stroke="none" d="M 14428,5053 L 14578,4753 14728,5053 14428,5053 Z"/>
        </g>
       </g>
