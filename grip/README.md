@@ -35,12 +35,12 @@ The sequence diagram is self-explanatory.
     Fig.&nbsp;1.&emsp;Identity Propagation Flow
 </p>
 
-## Provenance
+## Data Provenance
 
 TBD
 
 <div>
-    <img src=./provenance.svg alt="Chain of Transactions" width="500">
+    <img src=./data_provenance.svg alt="Chain of Transactions" width="500">
 </div>
 
 <p class="figure">
