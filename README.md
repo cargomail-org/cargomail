@@ -10,9 +10,9 @@ Cargomail implements the [revised Internet Mail architecture](#revised-internet-
 * Enhanced Spam Protection—the separated identifier and the locator allow for a more detailed assessment of the sender's reputation.
 * Content of Any Size or Quantity—the capability to exchange large volumes of documents, images, videos, and audio of unlimited size.
 
-<!--## White Paper
+## White Paper
 
-This project is constantly evolving. You can download the latest revision of the whitepaper here: [Cargomail.pdf](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf).-->
+This project is constantly evolving. You can download the latest revision of the whitepaper here: [Cargomail.pdf](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf).
 
 ## Revised Internet Mail Architecture
 
