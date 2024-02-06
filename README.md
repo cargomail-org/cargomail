@@ -4,7 +4,7 @@
 
 Despite the importance of email infrastructure, the whole ecosystem still relies on more than 40-year-old push-based architecture and protocol design. While conceptually sound as a means of communication, the email system is structurally obsolete and functionally deficient.
 
-Cargomail, an implementation of the [revised Internet Mail architecture](#revised-internet-mail-architecture), introduces push and pull request layers to separate a mailbox (storage locator) from an email address (user identifier). The primary benefits of using this architecture include:
+Cargomail implements the [revised Internet Mail architecture](#revised-internet-mail-architecture) that utilizes push and pull request layers to separate a mailbox (storage locator) from an email address (user identifier). The primary benefits of using this architecture include:
 
 * Mailbox Portability—the ability to move a mailbox from one hosting partner to another without changing your email address.
 * Enhanced Spam Protection—the separated identifier and the locator allow for a more detailed assessment of the sender's reputation.
