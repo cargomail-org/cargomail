@@ -1,8 +1,10 @@
+# Cargomail
+
 ## Introduction
 
 Despite the importance of email infrastructure, the whole ecosystem still relies on more than 40-year-old push-based architecture and protocol design. While conceptually sound as a means of communication, the email system is structurally obsolete and functionally deficient.
 
-Cargomail, a revised email system, utilizes an architecture with push and pull request layers to separate a mailbox (storage locator) from an email address (user identifier). The primary benefits of using this architecture include:
+Cargomail, an implementation of the [revised Internet Mail architecture](), introduces push and pull request layers to separate a mailbox (storage locator) from an email address (user identifier). The primary benefits of using this architecture include:
 
 * Mailbox Portability—the ability to move a mailbox from one hosting partner to another without changing your email address.
 * Enhanced Spam Protection—the separated identifier and the locator allow for a more detailed assessment of the sender's reputation.
@@ -12,11 +14,11 @@ Cargomail, a revised email system, utilizes an architecture with push and pull r
 
 This project is constantly evolving. You can download the latest revision of the whitepaper here: [Cargomail.pdf](https://github.com/cargomail-org/cargomail/raw/main/whitepaper/Cargomail.pdf).-->
 
-## Architecture
+## Revised Internet Mail Architecture
 
 This section proposes a revised version of the [Internet Mail Architecture, IETF RFC 5598](https://www.rfc-editor.org/rfc/rfc5598.html). The revised architecture separates the mailbox from the email address and uses a mechanism of push-and-pull requests over different routes to enable data exchange between mailboxes. This mechanism has the potential to address privacy and attachment issues more effectively than the current push-only email system. An additional pull layer facilitates the efficient transfer of data of any size.
 
-![Alt Cargomail architecture](whitepaper/cargomail_architecture.svg)
+![Revised Internet Mail Architecture](whitepaper/revised_internet_mail_architecture.svg)
 
 Mail Service and Mailbox Service providers can be unrelated Administrative Management Domains (ADMDs) with zero trust between security domains.
 
