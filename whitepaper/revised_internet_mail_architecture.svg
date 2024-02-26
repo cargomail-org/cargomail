@@ -290,7 +290,7 @@
         <path fill="none" stroke="rgb(0,0,0)" d="M 34737,5578 L 34629,5578"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 34548,5578 L 34440,5578"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 34359,5578 L 34349,5578"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="32998" y="2444"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mail Service</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="33000" y="2444"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mail Service</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -462,13 +462,13 @@
         <path fill="none" stroke="rgb(0,0,0)" d="M 3603,5578 L 3495,5578"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 3414,5578 L 3306,5578"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 3225,5578 L 3215,5578"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="1864" y="2444"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mail Service</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="1866" y="2444"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mail Service</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id6">
-        <rect class="BoundingBox" stroke="none" fill="none" x="15207" y="3383" width="7040" height="1449"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="15871" y="4007"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. SMTP or HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="15458" y="4600"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">transfer placeholder message</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="15213" y="3383" width="7028" height="1449"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="15869" y="4007"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. SMTP or HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="15464" y="4600"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">transfer placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -711,7 +711,7 @@
          <image x="5657" y="13294" width="212" height="212" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAI0lEQVQImWN89+4dAzbAhFUUIXHkyBE0CUZyjSJKAmIfTjsAUT0NBJMX7ZQAAAAASUVORK5CYII="/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 3219,13390 L 590,13390 590,11714 5848,11714 5848,13390 3219,13390 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="1332" y="12748"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Application</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="1334" y="12748"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Application</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -954,13 +954,13 @@
          <image x="36779" y="13296" width="212" height="212" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAI0lEQVQImWN89+4dAzbAhFUUIXHkyBE0CUZyjSJKAmIfTjsAUT0NBJMX7ZQAAAAASUVORK5CYII="/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 34341,13392 L 31712,13392 31712,11716 36970,11716 36970,13392 34341,13392 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="32454" y="12750"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Application</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="32456" y="12750"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Application</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id9">
-        <rect class="BoundingBox" stroke="none" fill="none" x="3091" y="8675" width="6294" height="1449"/>
-        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="4424" y="9299"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">3. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="3342" y="9892"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post placeholder message</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="3097" y="8675" width="6283" height="1449"/>
+        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="4422" y="9299"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">3. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="3348" y="9892"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1112,7 +1112,7 @@
         <path fill="none" stroke="rgb(0,0,0)" d="M 14591,13548 L 14483,13548"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 14403,13548 L 14295,13548"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 14214,13548 L 14106,13548"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="12334" y="10457"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox Service</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="12338" y="10457"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox Service</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1160,7 +1160,7 @@
          <path style="fill:url(#pattern4)" d="M 14090,13381 L 11613,13381 11613,11540 16566,11540 16566,13381 14090,13381 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 14090,13381 L 11613,13381 11613,11540 16566,11540 16566,13381 14090,13381 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="13236" y="12065"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="12283" y="12658"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.foo.com</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="13608" y="13251"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aRS</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="13236" y="12065"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="12287" y="12658"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.foo.com</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="13608" y="13251"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aRS</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1220,7 +1220,7 @@
          <path style="fill:url(#pattern5)" d="M 3216,4174 L 739,4174 739,2625 5692,2625 5692,4174 3216,4174 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 3216,4174 L 739,4174 739,2625 5692,2625 5692,4174 3216,4174 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="1631" y="3300"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Address</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="1570" y="3893"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">alice@foo.com</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="1634" y="3300"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Address</tspan></tspan></tspan><tspan class="TextParagraph"><tspan class="TextPosition" x="1574" y="3893"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">alice@foo.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1280,25 +1280,25 @@
          <path style="fill:url(#pattern6)" d="M 34336,4174 L 31859,4174 31859,2625 36812,2625 36812,4174 34336,4174 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 34336,4174 L 31859,4174 31859,2625 36812,2625 36812,4174 34336,4174 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="32751" y="3300"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Address</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="32787" y="3893"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">bob@bar.com</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="32754" y="3300"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Email Address</tspan></tspan></tspan><tspan class="TextParagraph"><tspan class="TextPosition" x="32790" y="3893"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">bob@bar.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id14">
-        <rect class="BoundingBox" stroke="none" fill="none" x="16650" y="9316" width="4132" height="2042"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="16901" y="9940"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">6. HTTPS mTLS</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="18175" y="10533"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">fetch</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="17625" y="11126"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">resources</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="16648" y="9316" width="4137" height="2042"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="16899" y="9940"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">6. HTTPS mTLS</tspan></tspan></tspan><tspan class="TextParagraph"><tspan class="TextPosition" x="18180" y="10533"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">fetch</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="17629" y="11126"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">resources</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id15">
-        <rect class="BoundingBox" stroke="none" fill="none" x="7525" y="11740" width="3764" height="1449"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="8155" y="12364"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">1. HTTP(S)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="7776" y="12957"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post resources</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="7530" y="11740" width="3751" height="1449"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="8154" y="12364"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">1. HTTP(S)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="7781" y="12957"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post resources</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id16">
-        <rect class="BoundingBox" stroke="none" fill="none" x="27106" y="11145" width="3515" height="1449"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="27611" y="11769"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">7. HTTP(S)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="27357" y="12362"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">get resources</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="27111" y="11145" width="3502" height="1449"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="27610" y="11769"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">7. HTTP(S)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="27362" y="12362"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">get resources</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1450,13 +1450,13 @@
         <path fill="none" stroke="rgb(0,0,0)" d="M 23807,13548 L 23699,13548"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 23619,13548 L 23511,13548"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 23430,13548 L 23322,13548"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="21550" y="10457"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox Service</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="21554" y="10457"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox Service</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id18">
-        <rect class="BoundingBox" stroke="none" fill="none" x="27397" y="9562" width="6817" height="1450"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="28991" y="10187"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="27649" y="10780"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">deliver placeholder message</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="27401" y="9563" width="6807" height="1449"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="28988" y="10187"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="27652" y="10780"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">deliver placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1504,7 +1504,7 @@
          <path style="fill:url(#pattern8)" d="M 23307,13389 L 20839,13389 20839,11540 25775,11540 25775,13389 23307,13389 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 23307,13389 L 20839,13389 20839,11540 25775,11540 25775,13389 23307,13389 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="22453" y="12069"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="21501" y="12662"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.bar.com</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="22881" y="13255"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">rRS</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="22453" y="12069"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Mailbox</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="21505" y="12662"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">mailbox.bar.com</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="22881" y="13255"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">rRS</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -1585,8 +1585,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id24">
-        <rect class="BoundingBox" stroke="none" fill="none" x="16383" y="6144" width="4936" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="16634" y="6768"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="16387" y="6144" width="4928" height="857"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="16638" y="6768"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1780,8 +1780,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id26">
-        <rect class="BoundingBox" stroke="none" fill="none" x="15249" y="2422" width="6892" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="15500" y="3046"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">DKIM or GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="15254" y="2422" width="6879" height="857"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="15505" y="3046"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">DKIM or GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1857,8 +1857,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id28">
-        <rect class="BoundingBox" stroke="none" fill="none" x="25114" y="6144" width="6677" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="25365" y="6768"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">local or GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="25008" y="6144" width="6887" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="25259" y="6768"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SASL or GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1894,7 +1894,7 @@
          <path style="fill:url(#pattern12)" d="M 12867,11334 L 11813,11334 11813,10699 13921,10699 13921,11334 12867,11334 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 12867,11334 L 11813,11334 11813,10699 13921,10699 13921,11334 12867,11334 Z"/>
-        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="12193" y="11214"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aMSA</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="12193" y="11214"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aMSA</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -1907,32 +1907,32 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id31">
-        <rect class="BoundingBox" stroke="none" fill="none" x="7980" y="1013" width="5395" height="857"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="8230" y="1638"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Author alice@foo.com</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="7985" y="1013" width="5381" height="857"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="8235" y="1638"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Author alice@foo.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id32">
-        <rect class="BoundingBox" stroke="none" fill="none" x="23848" y="1014" width="5804" height="857"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="24098" y="1638"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Recipient bob@bar.com</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="23852" y="1013" width="5796" height="857"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="24102" y="1638"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Recipient bob@bar.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id33">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22927" y="15308" width="13424" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="23177" y="15932"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">hMDA, rMDA — (MHS, Recipient) Message Delivery Agent</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="15308" width="13411" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="23176" y="15932"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">hMDA, rMDA — (MHS, Recipient) Message Delivery Agent</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id34">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="17404" width="11341" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="23176" y="18028"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aRS, rRS — (Author, Recipient) Resource Server</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22927" y="17404" width="11320" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="23177" y="18028"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aRS, rRS — (Author, Recipient) Resource Server</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id35">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="16741" width="7315" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="23176" y="17365"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RFA</tspan></tspan><tspan class="TextPosition" x="24446" y="17365"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">— Resource Fetch Agent</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="16740" width="7308" height="857"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="23176" y="17365"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RFA</tspan></tspan><tspan class="TextPosition" x="24446" y="17365"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">— Resource Fetch Agent</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -1968,7 +1968,7 @@
          <path style="fill:url(#pattern13)" d="M 22083,11334 L 21029,11334 21029,10699 23137,10699 23137,11334 22083,11334 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 22083,11334 L 21029,11334 21029,10699 23137,10699 23137,11334 22083,11334 Z"/>
-        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="21602" y="11214"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RFA</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="21602" y="11214"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RFA</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2044,20 +2044,20 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id39">
-        <rect class="BoundingBox" stroke="none" fill="none" x="6464" y="6144" width="6676" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="6715" y="6768"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">local or GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="6358" y="6144" width="6888" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="6609" y="6768"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SASL or GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id40">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="16021" width="7780" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="23176" y="16645"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MTA</tspan></tspan><tspan class="TextPosition" x="24446" y="16645"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">— Message Transfer Agent</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="16021" width="7773" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="23176" y="16645"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MTA</tspan></tspan><tspan class="TextPosition" x="24446" y="16645"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">— Message Transfer Agent</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id41">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22915" y="14596" width="13623" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="23165" y="15220"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aMSA, hMSA — (Author, MHS) Message Submission Agent</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22916" y="14596" width="13606" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="23166" y="15220"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">aMSA, hMSA — (Author, MHS) Message Submission Agent</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2093,7 +2093,7 @@
          <path style="fill:url(#pattern15)" d="M 2047,5168 L 991,5168 991,4533 3102,4533 3102,5168 2047,5168 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 2047,5168 L 991,5168 991,4533 3102,4533 3102,5168 2047,5168 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="1373" y="5046"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">hMSA</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="1373" y="5046"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">hMSA</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2129,7 +2129,7 @@
          <path style="fill:url(#pattern16)" d="M 4395,5168 L 3339,5168 3339,4533 5450,4533 5450,5168 4395,5168 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 4395,5168 L 3339,5168 3339,4533 5450,4533 5450,5168 4395,5168 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="3890" y="5046"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MTA</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="3890" y="5046"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MTA</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -2172,7 +2172,7 @@
          <path style="fill:url(#pattern17)" d="M 33171,5168 L 32115,5168 32115,4533 34226,4533 34226,5168 33171,5168 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 33171,5168 L 32115,5168 32115,4533 34226,4533 34226,5168 33171,5168 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="32666" y="5046"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MTA</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="32666" y="5046"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MTA</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2208,7 +2208,7 @@
          <path style="fill:url(#pattern18)" d="M 35519,5168 L 34463,5168 34463,4533 36574,4533 36574,5168 35519,5168 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 35519,5168 L 34463,5168 34463,4533 36574,4533 36574,5168 35519,5168 Z"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="34832" y="5046"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">hMDA</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="34830" y="5046"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">hMDA</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -2220,8 +2220,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id48">
-        <rect class="BoundingBox" stroke="none" fill="none" x="2858" y="10186" width="6817" height="1449"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="5015" y="10810"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">2. HTTP(S)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="3110" y="11403"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">submit placeholder message</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="2862" y="10186" width="6807" height="1449"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="5014" y="10810"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">2. HTTP(S)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="3113" y="11403"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">submit placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -2270,7 +2270,7 @@
          <path style="fill:url(#pattern19)" d="M 15267,11334 L 14213,11334 14213,10699 16321,10699 16321,11334 15267,11334 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 15267,11334 L 14213,11334 14213,10699 16321,10699 16321,11334 15267,11334 Z"/>
-        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="14786" y="11214"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RFA</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="14786" y="11214"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RFA</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2306,13 +2306,13 @@
          <path style="fill:url(#pattern20)" d="M 24483,11334 L 23429,11334 23429,10699 25537,10699 25537,11334 24483,11334 Z"/>
         </g>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="26" stroke-linejoin="miter" d="M 24483,11334 L 23429,11334 23429,10699 25537,10699 25537,11334 24483,11334 Z"/>
-        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="23851" y="11214"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">rMDA</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="23851" y="11214"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">rMDA</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id54">
-        <rect class="BoundingBox" stroke="none" fill="none" x="7552" y="13192" width="5216" height="1449"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="7802" y="13816"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">return</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="7802" y="14409"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">placeholder message</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="7552" y="13192" width="5212" height="1449"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="7803" y="13816"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">return</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="7803" y="14409"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -2324,26 +2324,26 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id56">
-        <rect class="BoundingBox" stroke="none" fill="none" x="14703" y="1016" width="7968" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="14954" y="1640"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Handling Service (MHS)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="14705" y="1016" width="7964" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="14956" y="1640"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Handling Service (MHS)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id57">
-        <rect class="BoundingBox" stroke="none" fill="none" x="14680" y="7616" width="8023" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="14930" y="8240"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Resource Handling Service (RHS)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="14681" y="7616" width="8018" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="14932" y="8240"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Resource Handling Service (RHS)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id58">
-        <rect class="BoundingBox" stroke="none" fill="none" x="2313" y="7616" width="8552" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="2563" y="8240"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Submission Service (MSS)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="2318" y="7616" width="8539" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="2568" y="8240"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Submission Service (MSS)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id59">
-        <rect class="BoundingBox" stroke="none" fill="none" x="26686" y="7616" width="7807" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="26936" y="8240"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Delivery Service (MDS)</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="26693" y="7616" width="7795" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="26943" y="8240"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Delivery Service (MDS)</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2396,38 +2396,38 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id62">
-        <rect class="BoundingBox" stroke="none" fill="none" x="1763" y="14603" width="2849" height="856"/>
-        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="2013" y="15227"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Push layer</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="1763" y="14603" width="2841" height="856"/>
+        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="2013" y="15227"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Push layer</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id63">
-        <rect class="BoundingBox" stroke="none" fill="none" x="1764" y="15569" width="2544" height="856"/>
-        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="2014" y="16193"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Pull layer</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="1764" y="15569" width="2540" height="857"/>
+        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="2014" y="16193"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Pull layer</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id64">
         <rect class="BoundingBox" stroke="none" fill="none" x="13256" y="8916" width="1715" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="13506" y="9540"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">origin</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="13506" y="9540"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">origin</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id65">
-        <rect class="BoundingBox" stroke="none" fill="none" x="21865" y="8916" width="2905" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="22115" y="9540"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">destination</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="21869" y="8916" width="2897" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="22119" y="9540"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">destination</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id66">
-        <rect class="BoundingBox" stroke="none" fill="none" x="9522" y="116" width="2269" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="9772" y="740"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">foo.com</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="9524" y="116" width="2265" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="9774" y="740"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">foo.com</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id67">
-        <rect class="BoundingBox" stroke="none" fill="none" x="25564" y="157" width="2269" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400"><tspan class="TextPosition" x="25814" y="781"><tspan fill="rgb(0,0,0)" stroke="none" style="white-space: pre">bar.com</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="25566" y="157" width="2266" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="25816" y="781"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">bar.com</tspan></tspan></tspan></text>
        </g>
       </g>
      </g>
