@@ -468,7 +468,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id6">
         <rect class="BoundingBox" stroke="none" fill="none" x="15213" y="3383" width="7028" height="1449"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="15869" y="4007"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. SMTP or HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="15464" y="4600"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">transfer placeholder message</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="17763" y="4007"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. SMTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="15464" y="4600"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">transfer placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -960,7 +960,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id9">
         <rect class="BoundingBox" stroke="none" fill="none" x="3097" y="8675" width="6283" height="1449"/>
-        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="4422" y="9299"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">3. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="3348" y="9892"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post placeholder message</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="5275" y="9299"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">3. SMTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="3348" y="9892"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1456,7 +1456,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id18">
         <rect class="BoundingBox" stroke="none" fill="none" x="27401" y="9563" width="6807" height="1449"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="28988" y="10187"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. HTTPS mTLS</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="27652" y="10780"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">deliver placeholder message</tspan></tspan></tspan></text>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="29868" y="10187"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. LMTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="27652" y="10780"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">deliver placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1780,8 +1780,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id26">
-        <rect class="BoundingBox" stroke="none" fill="none" x="15254" y="2422" width="6879" height="857"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="15505" y="3046"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">DKIM or GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="16211" y="2422" width="4962" height="857"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="16462" y="3046"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">DKIM authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -1857,8 +1857,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id28">
-        <rect class="BoundingBox" stroke="none" fill="none" x="25008" y="6144" width="6887" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="25259" y="6768"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SASL or GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="25965" y="6144" width="4970" height="857"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="26216" y="6768"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SASL authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2044,8 +2044,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id39">
-        <rect class="BoundingBox" stroke="none" fill="none" x="6358" y="6144" width="6888" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="6609" y="6768"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SASL or GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="7315" y="6144" width="4970" height="857"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="7566" y="6768"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SASL authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
