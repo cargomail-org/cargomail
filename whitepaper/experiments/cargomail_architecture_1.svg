@@ -68,7 +68,7 @@
   </font>
  </defs>
  <defs class="TextShapeIndex">
-  <g ooo:slide="id1" ooo:id-list="id3 id4 id5 id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23 id24 id25 id26 id27 id28 id29 id30 id31 id32 id33 id34 id35 id36 id37 id38 id39 id40 id41 id42 id43 id44 id45 id46 id47 id48 id49 id50 id51 id52 id53 id54 id55 id56 id57 id58"/>
+  <g ooo:slide="id1" ooo:id-list="id3 id4 id5 id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23 id24 id25 id26 id27 id28 id29 id30 id31 id32 id33 id34 id35 id36 id37 id38 id39 id40 id41 id42 id43 id44 id45 id46 id47 id48 id49 id50 id51 id52 id53 id54 id55 id56"/>
  </defs>
  <defs class="EmbeddedBulletChars">
   <g id="bullet-char-template-57356" transform="scale(0.00048828125,-0.00048828125)">
@@ -2165,42 +2165,30 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id52">
-        <rect class="BoundingBox" stroke="none" fill="none" x="9524" y="116" width="2265" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="9774" y="740"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">foo.com</tspan></tspan></tspan></text>
-       </g>
-      </g>
-      <g class="com.sun.star.drawing.CustomShape">
-       <g id="id53">
-        <rect class="BoundingBox" stroke="none" fill="none" x="25566" y="157" width="2266" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="25816" y="781"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">bar.com</tspan></tspan></tspan></text>
-       </g>
-      </g>
-      <g class="com.sun.star.drawing.CustomShape">
-       <g id="id54">
         <rect class="BoundingBox" stroke="none" fill="none" x="16649" y="12916" width="4137" height="2635"/>
         <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="16900" y="13540"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">6. HTTPS mTLS</tspan></tspan></tspan><tspan class="TextParagraph"><tspan class="TextPosition" x="17093" y="14133"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">fetch response</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="18551" y="14726"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">&amp;</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="17630" y="15319"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">resources</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
-       <g id="id55">
+       <g id="id53">
         <rect class="BoundingBox" stroke="none" fill="none" x="22927" y="16009" width="7188" height="856"/>
         <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="23177" y="16633"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Add-on</tspan></tspan><tspan class="TextPosition" x="25717" y="16633"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MTA, RFA add-ons</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id56">
+       <g id="id54">
         <rect class="BoundingBox" stroke="none" fill="none" x="34226" y="4850" width="240" height="3"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 34227,4851 L 34464,4851"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id57">
+       <g id="id55">
         <rect class="BoundingBox" stroke="none" fill="none" x="3102" y="4850" width="240" height="3"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 3103,4851 L 3340,4851"/>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
-       <g id="id58">
+       <g id="id56">
         <rect class="BoundingBox" stroke="none" fill="none" x="23136" y="11016" width="295" height="3"/>
         <path fill="none" stroke="rgb(0,0,0)" d="M 23137,11017 L 23429,11017"/>
        </g>
