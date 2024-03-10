@@ -40,8 +40,8 @@ Here is a placeholder message in JSON format with external bodies accessible via
 {
   "headers":
     {
-      "X-Origin-Resource-Mailbox-URL": "mailbox.foo.com",
-      "X-Destination-Resource-Mailbox-URL": "mailbox.bar.com",
+      "X-Origin-Resource-Mailbox-URL": "https://foo.com/mbx",
+      "X-Destination-Resource-Mailbox-URL": "https://bar.com/mbx",
       "From": "Alice Sanders <alice@foo.com>",
       "Subject": "Meeting",
       "To": "Bob Sanders <bob@bar.com>",
