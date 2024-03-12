@@ -4,7 +4,7 @@
 
 Despite the importance of the email infrastructure, the entire ecosystem still relies on a push-based architecture and protocol design that is more than 40 years old. While conceptually sound as a means of communication, the Internet Mail system is structurally outdated and functionally deficient.
 
-Cargomail introduces a [revised Internet Mail architecture](#revised-internet-mail-architecture) that includes a new Resource Handling Service (RHS) alongside the existing Message Handling Service (MHS). This architecture offers several benefits, including advanced anti-spam protection that uses a challenge-response mechanism to ensure that only legitimate messages are delivered to the recipient. This means that while anyone can send you an email, those who want to spread spam en masse will find it difficult and time-consuming to do so. Additionally, this architecture allows for the exchange of large volumes of documents, images, videos, and audio files of unlimited size, making it a versatile and efficient way to handle email communication.
+Cargomail introduces a [revised Internet Mail architecture](#revised-internet-mail-architecture) that includes a new Resource Handling Service (RHS) alongside the existing Message Handling Service (MHS). The RHS performs data exchange between resource servers. The resource servers store email message resources such as message bodies and attachments. This architecture offers several benefits, including advanced anti-spam protection that uses a challenge-response mechanism to ensure that only legitimate messages are delivered to the recipient. This means that while anyone can send you an email, those who want to spread spam en masse will find it difficult and time-consuming to do so. Additionally, this architecture allows for the exchange of large volumes of documents, images, videos, and audio files of unlimited size, making it a versatile and efficient way to handle email communication.
 
 <!--
 ## White Paper
@@ -14,7 +14,7 @@ This project is constantly evolving. You can download the latest revision of the
 
 ## Revised Internet Mail Architecture
 
-This section proposes a revised version of the [Internet Mail Architecture, IETF RFC 5598](https://www.rfc-editor.org/rfc/rfc5598.html). The revised architecture separates the mailbox from the email address and uses a mechanism of push-and-pull requests over different routes to enable data exchange between mailboxes. This mechanism has the potential to address spam and attachment issues more effectively than the current push-only email system. An additional pull layer facilitates the efficient transfer of data of any size.
+This section proposes a revised version of the [Internet Mail Architecture, IETF RFC 5598](https://www.rfc-editor.org/rfc/rfc5598.html). The revised architecture separates the mailbox from the email address and uses a mechanism of push-and-pull requests over different routes to enable direct data exchange between resource servers. This mechanism has the potential to address spam and attachment issues more effectively than the current push-only email system. An additional pull layer facilitates the efficient transfer of data of any size.
 
 ![Revised Internet Mail Architecture](whitepaper/revised_internet_mail_architecture.svg)
 
