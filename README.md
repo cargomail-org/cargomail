@@ -28,6 +28,10 @@ Each email consists of a *placeholder message* and associated external resources
 
 - The Resource Fetch Agent (RFA) running on the destination *mailbox service* retrieves the *mailbox service* origin URL and the cryptographic hash values of the referenced body resources from the filtered list stored in the *Mailbox Service* queue. Using the [GRIP](https://github.com/cargomail-org/grip) authentication mechanism, the agent attempts to fetch the external body resources from the RS on the origin *mailbox service*. After successful authentication, the data is fetched and stored on the RS of the destination *mailbox service*. Finally, the *user agent* retrieves the relevant data from the RS on the destination *mailbox service* and reconstructs the original message according to the *placeholder message* source.
 
+#### *Anti-Spam Protection*
+
+TBD
+
 ## Appendix A—Placeholder Message
 
 Here is a placeholder message in JSON format with external bodies accessible via content-addressed URIs.
