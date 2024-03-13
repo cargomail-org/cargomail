@@ -20,13 +20,13 @@ This section proposes a revised version of the [Internet Mail Architecture, IETF
 
 #### *Key Points*
 
-• Each email consists of a *placeholder message* and associated external resources (message bodies) stored at the Resource Server (RS) on the respective *mailbox service*, where the *placeholder message* also acts as an access control list for its external body resources.
+Each email consists of a *placeholder message* and associated external resources (message bodies) stored at the Resource Server (RS) on the respective *mailbox service*, where the *placeholder message* also acts as an access control list for its external body resources. The information flow includes the following key points:
 
-• The body resources owned by the author, stored at the RS on the origin *mailbox service*, are temporarily shared with recipients. Following a successful sharing process, a *placeholder message* is sent to each recipient through the MHS. The *placeholder message* contains the origin *mailbox service* URL, the cryptographic hash values of the referenced body resources (Content-IDs), and the category of correspondence, e.g., personal, business, or healthcare (see Appendix A for a *placeholder message* example).
+• The body resources owned by the author, stored at the RS on the origin *mailbox service*, are temporarily shared with recipients. Following a successful sharing process, a *placeholder message* is sent to each recipient through the MHS. The *placeholder message* contains the *mailbox service* origin URL, the cryptographic hash values of the referenced body resources, and the category of correspondence, e.g., personal, business, or healthcare (see Appendix A for a *placeholder message* example).
 
-• After receiving the *placeholder message*, the recipient's Message Delivery Agent (MDA) determines (according to the user's preferences and the category of correspondence) which destination *mailbox service* will be used for communication. Once the destination *mailbox service* is determined, the MDA adds the header with the destination *mailbox service* URL to the *placeholder message* and delivers it to the resolved destination *mailbox service* using the [GRIP](https://github.com/cargomail-org/grip) authentication mechanism.
+• After receiving the *placeholder message*, the recipient's Message Delivery Agent (MDA) determines (according to the user's preferences and the category of correspondence) which destination *mailbox service* will be used for communication. Once the destination *mailbox service* is determined, the MDA adds the header with the *mailbox service* destination URL to the *placeholder message* and delivers it to the resolved destination *mailbox service* using the [GRIP](https://github.com/cargomail-org/grip) authentication mechanism.
 
-• The Resource Fetch Agent (RFA) running in the destination *mailbox service* gets the origin *mailbox service* URL and the cryptographic hash values of the referenced body resources in the *placeholder message*. Using the GRIP authentication mechanism, the agent tries to fetch the external body resources from the RS on the origin *mailbox service*. After successful authentication, the data is fetched and stored at the RS on the destination *mailbox service*. Finally, the *user agent* gets the relevant data from the RS on the destination *mailbox service* and reconstructs the original message according to the *placeholder message* source.
+• The Resource Fetch Agent (RFA) running in the destination *mailbox service* gets the *mailbox service* origin URL and the cryptographic hash values of the referenced body resources in the *placeholder message*. Using the GRIP authentication mechanism, the agent tries to fetch the external body resources from the RS on the origin *mailbox service*. After successful authentication, the data is fetched and stored at the RS on the destination *mailbox service*. Finally, the *user agent* gets the relevant data from the RS on the destination *mailbox service* and reconstructs the original message according to the *placeholder message* source.
 
 
 ## Appendix A—Placeholder Message
@@ -37,8 +37,8 @@ Here is a placeholder message in JSON format with external bodies accessible via
 {
   "headers":
     {
-      "X-Origin-Mailbox-Service-URL": "https://foo.com/mbx",
-      "X-Destination-Mailbox-Service-URL": "https://bar.com/mbx",
+      "X-Mailbox-Service-Origin-URL": "https://foo.com/mbx",
+      "X-Mailbox-Service-Destination-URL": "https://bar.com/mbx",
       "From": "Alice Sanders <alice@foo.com>",
       "Subject": "Meeting",
       "To": "Bob Sanders <bob@bar.com>",
@@ -114,3 +114,7 @@ Here is a placeholder message in JSON format with external bodies accessible via
     ],
 }
 ```
+
+- X-Mailbox-Service-Origin-URL: *Mailbox Service* origin URL
+- X-Mailbox-Service-Destination-URL: *Mailbox Service* destination URL
+- Contentd-ID: cryptographic hash value of the referenced body resource
