@@ -22,12 +22,11 @@ This section proposes a revised version of the [Internet Mail Architecture, IETF
 
 Each email consists of a *placeholder message* and associated external resources (message bodies) stored at the Resource Server (RS) on the respective *mailbox service*, where the *placeholder message* also acts as an access control list for its external body resources. The information flow includes the following key points:
 
-• The body resources owned by the author, stored at the RS on the origin *mailbox service*, are temporarily shared with recipients. Following a successful sharing process, a *placeholder message* is sent to each recipient through the MHS. The *placeholder message* contains the *mailbox service* origin URL, the cryptographic hash values of the referenced body resources, and the category of correspondence, e.g., personal, business, or healthcare (see Appendix A for a *placeholder message* example).
+• The body resources owned by the author, stored at the RS on the origin *mailbox service*, are temporarily shared with recipients. Following a successful sharing process, a *placeholder message* is sent to each recipient through the MHS. The *placeholder message* contains the *mailbox service* origin URL, the cryptographic hash values of the referenced body resources (see Appendix A for a *placeholder message* example).
 
-• After receiving the *placeholder message*, the recipient's Message Delivery Agent (MDA) determines (according to the user's preferences and the category of correspondence) which destination *mailbox service* will be used for communication. Once the destination *mailbox service* is determined, the MDA adds the header with the *mailbox service* destination URL to the *placeholder message* and delivers it to the resolved destination *mailbox service* using the [GRIP](https://github.com/cargomail-org/grip) authentication mechanism.
+• After receiving the *placeholder message*, the recipient's Message Transfer Agent (MTA) stores it in the mail queue. From the queue, the *placeholder message* is delivered to a content filter using an SMTP client.  The content filter adds the header containing the *mailbox service* destination URL to the *placeholder message* and filters out the list of referenced body resources based on predefined rules. The resulting list is then stored in the *mailbox service* queue. The *placeholder message* is sent back to the *mail service*, where it is further processed in the standard way, see [Postfix After-Queue Content Filter](https://www.postfix.org/FILTER_README.html#advanced_filter).
 
-• The Resource Fetch Agent (RFA) running in the destination *mailbox service* gets the *mailbox service* origin URL and the cryptographic hash values of the referenced body resources in the *placeholder message*. Using the GRIP authentication mechanism, the agent tries to fetch the external body resources from the RS on the origin *mailbox service*. After successful authentication, the data is fetched and stored at the RS on the destination *mailbox service*. Finally, the *user agent* gets the relevant data from the RS on the destination *mailbox service* and reconstructs the original message according to the *placeholder message* source.
-
+• The Resource Fetch Agent (RFA) running in the destination *mailbox service* gets the *mailbox service* origin URL and the cryptographic hash values of the referenced body resources from the filtered list stored in the *Mailbox Service* queue. Using the [GRIP](https://github.com/cargomail-org/grip) authentication mechanism, the agent tries to fetch the external body resources from the RS on the origin *mailbox service*. After successful authentication, the data is fetched and stored at the RS on the destination *mailbox service*. Finally, the *user agent* gets the relevant data from the RS on the destination *mailbox service* and reconstructs the original message according to the *placeholder message* source.
 
 ## Appendix A—Placeholder Message
 
@@ -42,11 +41,10 @@ Here is a placeholder message in JSON format with external bodies accessible via
       "From": "Alice Sanders <alice@foo.com>",
       "Subject": "Meeting",
       "To": "Bob Sanders <bob@bar.com>",
-      "Cc": "Carol <carol@bar.com>, Daniel <dan@bar.com>",
+      "Cc": "Carol <carol@bar.com>, Daniel <dan@bar.com>",—
       "Date": "Tue Sep 19 20:52:05 CEST 2023",
       "Message-ID": "<b07d0cdf-c6f4-4f67-b24c-cc847a4c2df4@foo.com>",
       "X-Thread-ID": "<68fb9177-6853-466a-8f7d-c96fbb885f81@foo.com>",
-      "X-Correspondence-Category": "primary",
       "Content-Type": "multipart/mixed",
     },
   "parts":
