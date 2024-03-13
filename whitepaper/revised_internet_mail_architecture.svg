@@ -475,7 +475,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id6">
-        <rect class="BoundingBox" stroke="none" fill="none" x="15214" y="2213" width="7028" height="1450"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="15214" y="2214" width="7028" height="1449"/>
         <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="17764" y="2838"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">3. SMTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="15465" y="3431"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">placeholder message transfer</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -1307,7 +1307,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id14">
-        <rect class="BoundingBox" stroke="none" fill="none" x="16579" y="8011" width="4272" height="3821"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="16579" y="8011" width="4272" height="3822"/>
         <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="16898" y="8635"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. HTTPS mTLS</tspan></tspan></tspan><tspan class="TextParagraph"><tspan class="TextPosition" x="17118" y="9228"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-style="italic" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">post</tspan><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> challenge</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="16830" y="10414"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">6. HTTPS mTLS </tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="17285" y="11007"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-style="italic" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">get</tspan></tspan><tspan class="TextPosition" x="17971" y="11007"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> response</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="17078" y="11600"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">and resources </tspan></tspan></tspan></text>
        </g>
       </g>
@@ -1495,7 +1495,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id18">
-        <rect class="BoundingBox" stroke="none" fill="none" x="25937" y="10129" width="9559" height="1449"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="25937" y="10129" width="9559" height="1450"/>
         <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="29753" y="10753"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">4. SMTP</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="26188" y="11346"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">evaluate &amp; process placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -1824,8 +1824,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id27">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22927" y="16661" width="9213" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="23177" y="17285"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RFA</tspan></tspan><tspan class="TextPosition" x="26987" y="17285"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Resource Fetch Agent</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="26327" y="16661" width="9213" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="26577" y="17285"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">RFA</tspan></tspan><tspan class="TextPosition" x="30387" y="17285"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Resource Fetch Agent</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -1861,14 +1861,14 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id30">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="15998" width="9683" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="23177" y="16622"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MTA</tspan></tspan><tspan class="TextPosition" x="26987" y="16622"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Transfer Agent</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="26326" y="15998" width="9683" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="26577" y="16622"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MTA</tspan></tspan><tspan class="TextPosition" x="30387" y="16622"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Transfer Agent</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id31">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22915" y="15329" width="10423" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="23165" y="15953"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MSA</tspan></tspan><tspan class="TextPosition" x="26975" y="15953"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Submission Agent</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="26315" y="15329" width="10423" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="26565" y="15953"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">MSA</tspan></tspan><tspan class="TextPosition" x="30375" y="15953"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Message Submission Agent</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2139,7 +2139,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id43">
-        <rect class="BoundingBox" stroke="none" fill="none" x="13256" y="7121" width="1715" height="856"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="13256" y="7120" width="1715" height="857"/>
         <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="13506" y="7745"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">origin</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -2171,8 +2171,8 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id48">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22926" y="17348" width="7083" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="23176" y="17972"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Content Filter</tspan></tspan><tspan class="TextPosition" x="26986" y="17972"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SMTP Relay</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="26326" y="17348" width="7083" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="26576" y="17972"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">Content Filter</tspan></tspan><tspan class="TextPosition" x="30386" y="17972"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">SMTP Relay</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
