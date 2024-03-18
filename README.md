@@ -14,7 +14,7 @@ This project is constantly evolving. You can download the latest revision of the
 
 ## Revised Internet Mail Architecture
 
-This section proposes a revised version of the [Internet Mail Architecture, IETF RFC 5598](https://www.rfc-editor.org/rfc/rfc5598.html). The revised architecture separates the mailbox from the email address and uses a mechanism of push-and-pull requests over different routes to enable direct data exchange between resource servers. This mechanism has the potential to address spam and attachment issues more effectively than the current push-only email system. An additional pull layer facilitates the efficient transfer of data of any size.
+This section proposes a revised version of the [Internet Mail Architecture, IETF RFC 5598](https://www.rfc-editor.org/rfc/rfc5598.html). The revised architecture separates the mailbox from the email address and uses a mechanism of data push-then-pull over different routes to enable direct data exchange between resource servers. The extra data-pull request layer consists of servers, agents, and protocols. Together, they form the RHS that allows the resource owner (author) control over access to their digital resources through the use of email messages. The RHS extends the capabilities of the current Internet mail system, and has the potential to address spam and attachment issues more effectively than the MHS-only email system.
 
 ![Revised Internet Mail Architecture](images/revised_internet_mail_architecture.svg)
 
@@ -24,7 +24,7 @@ This section proposes a revised version of the [Internet Mail Architecture, IETF
 
 #### *Key Points*
 
-Each email consists of a *placeholder message* and associated external resources (message bodies) stored on the Resource Server (RS) of the respective *mailbox service*. The *placeholder message* also functions as an access control list for its external body resources. The information flow illustrated in the Figure 1 includes the following key points:
+Each email object consists of a *placeholder message* and associated external resources (message bodies) stored on the Resource Server (RS) of the respective *mailbox service*. The *placeholder message* also functions as an access control list for its external body resources. The information flow illustrated in the Figure 1 includes the following key points:
 
 - The body resources owned by the author, stored on the RS of the origin *mailbox service*, are temporarily shared with recipients. Following a successful sharing process, a *placeholder message* is sent to each recipient through the MHS. This *placeholder message* contains the *mailbox service* origin URL and the cryptographic hash values of the referenced body resources (see Appendix A for a *placeholder message* example).
 
