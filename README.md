@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Despite the importance of the email infrastructure, the entire ecosystem still relies on a push-based architecture and protocol design that is more than 40 years old. While conceptually sound as a means of communication, the Internet Mail system is structurally outdated and functionally deficient.
+Despite the importance of the email infrastructure, the entire ecosystem still relies on a push-based architecture and protocol design that is more than 40 years old. While conceptually sound as a means of communication, the Internet mail system is structurally outdated and functionally deficient.
 
-Cargomail introduces a [revised Internet Mail architecture](#revised-internet-mail-architecture) that includes a new Resource Handling Service (RHS) alongside the existing Message Handling Service (MHS). The RHS performs data exchange between resource servers. These servers store email message bodies, including attachments. Such an architecture offers several benefits, including advanced anti-spam protection that uses a challenge-response mechanism to ensure that only legitimate messages are delivered to the recipient. The challenge-response mechanism requires a certain amount of computational effort on the sender's part to make bulk spamming costly. This means that while anyone can send you an email, those who want to spread spam en masse will find it difficult and time-consuming to do so. Additionally, this architecture allows for the exchange of large volumes of documents, images, videos, and audio files of unlimited size, making it a versatile and efficient way to handle email communication.
+Cargomail introduces a revised Internet mail architecture that includes a new Resource Handling Service (RHS) alongside the existing Message Handling Service (MHS). The RHS performs data exchange between resource servers. These servers store email message bodies, including attachments. Such an architecture offers several benefits, including advanced anti-spam protection that uses a challenge-response mechanism to ensure that only legitimate messages are delivered to the recipient. The challenge-response mechanism requires a certain amount of computational effort on the sender's part to make bulk spamming costly. It means that anyone can send you an email, but those who want to spread spam in large quantities will find it difficult and time-consuming. Additionally, this architecture allows for the exchange of large volumes of documents, images, videos, and audio files of unlimited size, making it a versatile and efficient way to handle email communication.
 
 <!--
 ## White Paper
@@ -18,15 +18,19 @@ This section proposes a revised version of the [Internet Mail Architecture, IETF
 
 ![Revised Internet Mail Architecture](images/revised_internet_mail_architecture.svg)
 
+<p class="figure">
+    Fig.&nbsp;1.&emsp;The revised Internet mail architecture
+</p>
+
 #### *Key Points*
 
-Each email consists of a *placeholder message* and associated external resources (message bodies) stored on the Resource Server (RS) of the respective *mailbox service*. The *placeholder message* also functions as an access control list for its external body resources. The information flow includes the following key points:
+Each email consists of a *placeholder message* and associated external resources (message bodies) stored on the Resource Server (RS) of the respective *mailbox service*. The *placeholder message* also functions as an access control list for its external body resources. The information flow illustrated in the Figure 1 includes the following key points:
 
 - The body resources owned by the author, stored on the RS of the origin *mailbox service*, are temporarily shared with recipients. Following a successful sharing process, a *placeholder message* is sent to each recipient through the MHS. This *placeholder message* contains the *mailbox service* origin URL and the cryptographic hash values of the referenced body resources (see Appendix A for a *placeholder message* example).
 
-- After receiving the *placeholder message*, the recipient's Message Transfer Agent (MTA) stores it in the mail queue. From there, the *placeholder message* is delivered to a content filter using an SMTP client. The content filter adds a header containing the *mailbox service* destination URL to the *placeholder message* and filters out the list of referenced body resources based on predefined rules. The resulting list is then stored in the *mailbox service* queue. The *placeholder message* is sent back to the *mail service*, where it is further processed in the standard way, see [Postfix After-Queue Content Filter](https://www.postfix.org/FILTER_README.html#advanced_filter).
+- After receiving the *placeholder message*, the recipient's Message Transfer Agent (MTA) stores it in the mail queue. From there, the *placeholder message* is delivered to a content filter using an SMTP connection. The content filter adds a header containing the *mailbox service* destination URL to the *placeholder message* and filters out the list of referenced body resources based on predefined rules. The resulting list is then stored in the *mailbox service* queue. The *placeholder message* is sent back to the *mail service*, where it is further processed in the standard way, see [Postfix After-Queue Content Filter](https://www.postfix.org/FILTER_README.html#advanced_filter).
 
-- The Resource Fetch Agent (RFA) running on the destination *mailbox service* retrieves the *mailbox service* origin URL and the cryptographic hash values of the referenced body resources from the filtered list stored in the *Mailbox Service* queue. Using the [GRIP](https://github.com/cargomail-org/grip) authentication mechanism, the agent attempts to fetch the external body resources from the RS on the origin *mailbox service*. After successful authentication, the data is fetched and stored on the RS of the destination *mailbox service*. Finally, the *user agent* retrieves the relevant data from the RS on the destination *mailbox service* and reconstructs the original message according to the *placeholder message* source.
+- The Resource Fetch Agent (RFA) running on the destination *mailbox service* retrieves the *mailbox service* origin URL and the cryptographic hash values of the referenced body resources from the filtered list stored in the *Mailbox Service* queue. Using the [GRIP](https://github.com/cargomail-org/grip) authentication mechanism, the agent attempts to fetch the external body resources from the RS on the origin *mailbox service*. After successful authentication, the data is fetched and stored on the RS of the destination *mailbox service*. Finally, the *user agent* retrieves the relevant data from the RS of the destination *mailbox service* and reconstructs the original message according to the *placeholder message* source.
 
 #### *Anti-Spam Protection*
 
