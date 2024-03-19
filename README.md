@@ -24,7 +24,7 @@ This section proposes a revised version of the [Internet Mail Architecture, IETF
 
 #### *Key Points*
 
-Each email object consists of a *placeholder message* and associated external resources (message bodies) stored on the Resource Server (RS) of the respective *mailbox service*. The *placeholder message* also functions as an access control list for its external body resources. The information flow illustrated in the Figure 1 includes the following key points.
+Each email object consists of a *placeholder message* and associated external resources (message bodies) stored on the Resource Server (RS) of the respective *mailbox service*. The *placeholder message* also functions as an access control list for its external body resources. The information flow illustrated in the Figure 1 includes the following key points:
 
 - The body resources owned by the author stored on the RS of the origin *mailbox service* are temporarily shared with recipients by creating a *placeholder message* which also acts as an access control list. Following a successful sharing process, the *placeholder message* is sent to each recipient through the MHS. This *placeholder message* stores, in its headers, the URL of the origin *mailbox service* and the cryptographic hash values of the referenced body resources (see Appendix A for a *placeholder message* example).
 
