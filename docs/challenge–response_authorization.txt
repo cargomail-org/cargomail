@@ -7,7 +7,7 @@ fontfamily arial
 
 entryspacing 1.0
 note over Server:server:\n• stores shared digital resources\n• acts as a prover\n• proves to the verifier that a certain amount of a specific computational effort has been expended\n• returns requested digital resources
-note over Client:client:\n• fetches the shared digital resources from the server\n• acts as a verifier\n• generates a puzzle and challenges the prover to solve it\n• verifies the solution to the puzzle and accepts or aborts the transmission of digital resources
+note over Client:client:\n• fetches the shared digital resources from the server\n• acts as a verifier\n• generates a puzzle and challenges the prover to solve it\n• verifies the solution to the puzzle and accepts or aborts the transfer of digital resources
 Client->Server:1. POST //challenge//
 Server->Client:2. Return the HTTP response, typically with 202 status code
 parallel
@@ -17,4 +17,4 @@ parallel off
 Client->Server:5. GET //response// and resources
 Server->Client:6. Return the HTTP response, typically with 200 status code, and the\n    solved puzzle (//response//) and digital resources in the response body
 
-Client->Client:7. Authorization decision\n    • verify the puzzle solution in the //response// to the //challenge//,\n      and accept or abort the transmission of digital resources
+Client->Client:7. Authorization decision\n    • verify the puzzle solution in the //response// to the //challenge//,\n      and accept or abort the transfer of digital resources
