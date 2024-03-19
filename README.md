@@ -53,11 +53,11 @@ Here is a placeholder message in JSON format with external bodies accessible via
       "From": "Alice Sanders <alice@foo.com>",
       "Subject": "Meeting",
       "To": "Bob Sanders <bob@bar.com>",
-      "Cc": "Carol <carol@bar.com>, Daniel <dan@bar.com>",—
+      "Cc": "Carol <carol@bar.com>, Daniel <dan@bar.com>",
       "Date": "Tue Sep 19 20:52:05 CEST 2023",
       "Message-ID": "<b07d0cdf-c6f4-4f67-b24c-cc847a4c2df4@foo.com>",
       "X-Thread-ID": "<68fb9177-6853-466a-8f7d-c96fbb885f81@foo.com>",
-      "Content-Type": "multipart/mixed",
+      "Content-Type": "multipart/mixed"
     },
   "parts":
     [
@@ -72,10 +72,10 @@ Here is a placeholder message in JSON format with external bodies accessible via
                   "Content-ID": "<aSQnmlBT6RndpDnwTSStJUVhlh9XL9_y2QXX42NhKuI>",
                   "Content-Type":
                     [
-                      'message/external-body; access-type="x-content-addressed-uri"; hash-algorithm="sha256"; size="42"',
-                      "text/plain; charset=UTF-8",
-                    ],
-                },
+                      "message/external-body; access-type='x-content-addressed-uri'; hash-algorithm='sha256'; size='42'",
+                      "text/plain; charset=UTF-8"
+                    ]
+                }
             },
             {
               "headers":
@@ -84,12 +84,12 @@ Here is a placeholder message in JSON format with external bodies accessible via
                   "Content-ID": "<Y_ION3g8WQuqGzhsDlVrhAgQ0D7AbXu9T-HSv3w--zY>",
                   "Content-Type":
                     [
-                      'message/external-body; access-type="x-content-addressed-uri"; hash-algorithm="sha256"; size="109"',
-                      "text/html; charset=UTF-8",
-                    ],
-                },
-            },
-          ],
+                      "message/external-body; access-type='x-content-addressed-uri'; hash-algorithm='sha256'; size='109'",
+                      "text/html; charset=UTF-8"
+                    ]
+                }
+            }
+          ]
       },
       {
         "headers": { "Content-Type": "multipart/mixed" },
@@ -98,30 +98,30 @@ Here is a placeholder message in JSON format with external bodies accessible via
             {
               "headers":
                 {
-                  "Content-Disposition": 'attachment; filename="cargomail_architecture.svg"',
+                  "Content-Disposition": "attachment; filename='cargomail_architecture.svg'",
                   "Content-ID": "<1pzyqfFWbfhJ3hrydjL9jO9Qgeg70TgZQ_zpOkt4HOU>",
                   "Content-Type":
                     [
-                      'message/external-body; access-type="x-content-addressed-uri"; hash-algorithm="sha256"; size="52247"',
-                      "image/svg+xml",
-                    ],
-                },
+                      "message/external-body; access-type='x-content-addressed-uri'; hash-algorithm='sha256'; size='52247'",
+                      "image/svg+xml"
+                    ]
+                }
             },
             {
               "headers":
                 {
-                  "Content-Disposition": 'attachment; filename="Cargomail.pdf"',
+                  "Content-Disposition": "attachment; filename='Cargomail.pdf'",
                   "Content-ID": "<6G6Mkapa3-Om7B6BVhPUBEsCLP6t6LAVP4bHxhQF5nc>",
                   "Content-Type":
                     [
-                      'message/external-body; access-type="x-content-addressed-uri"; hash-algorithm="sha256"; size="153403"',
-                      "application/pdf",
-                    ],
-                },
-            },
-          ],
-      },
-    ],
+                      "message/external-body; access-type='x-content-addressed-uri'; hash-algorithm='sha256'; size='153403'",
+                      "application/pdf"
+                    ]
+                }
+            }
+          ]
+      }
+    ]
 }
 ```
 
