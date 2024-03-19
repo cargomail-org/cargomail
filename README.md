@@ -4,7 +4,7 @@
 
 Despite the importance of the email infrastructure, the entire ecosystem still relies on a push-based architecture and protocol design that is more than 40 years old. While conceptually sound as a means of communication, the Internet mail system is structurally outdated and functionally deficient.
 
-Cargomail introduces a revised Internet mail architecture that includes a new Resource Handling Service (RHS) alongside the existing Message Handling Service (MHS). The RHS performs data exchange between resource servers. These servers store email message bodies, including attachments. Such an architecture offers several benefits, including advanced anti-spam protection that uses a challenge-response mechanism to ensure that only legitimate messages are delivered to the recipient. The challenge-response mechanism requires a certain amount of computational effort on the sender's part to make bulk spamming costly. It means that anyone can send you an email, but those who want to spread spam in large quantities will find it difficult and time-consuming. Additionally, this architecture allows for the exchange of large volumes of documents, images, videos, and audio files of unlimited size, making it a versatile and efficient way to handle email communication.
+Cargomail introduces a revised Internet mail architecture that includes a new Resource Handling Service (RHS) alongside the existing Message Handling Service (MHS). The RHS performs secure data exchange between resource servers. These servers store email message bodies, including attachments. Such an architecture offers several benefits, including advanced anti-spam protection that uses a challenge-response mechanism to ensure that only legitimate messages are delivered to the recipient. The challenge-response mechanism requires a certain amount of computational effort on the sender's part to make bulk spamming costly. It means that anyone can send you an email, but those who want to spread spam in large quantities will find it difficult and time-consuming. Additionally, this architecture allows for the exchange of large volumes of documents, images, videos, and audio files of unlimited size, making it a versatile and efficient way to handle email communication.
 
 <!--
 ## White Paper
@@ -14,7 +14,7 @@ This project is constantly evolving. You can download the latest revision of the
 
 ## Revised Internet Mail Architecture
 
-This section proposes a revised version of the [Internet Mail Architecture, IETF RFC 5598](https://www.rfc-editor.org/rfc/rfc5598.html). The revised architecture separates the mailbox from the email address and uses a mechanism of data push-then-pull over different routes to enable direct data exchange between resource servers. The extra data-pull request layer consists of servers, agents, and protocols. Together, they form the RHS that allows the resource owner (author) control over access to their digital resources through the use of email messages. The RHS extends the capabilities of the current Internet mail system, and has the potential to address spam and attachment issues more effectively than the MHS-only email system.
+This section proposes a revised version of the [Internet Mail Architecture, IETF RFC 5598](https://www.rfc-editor.org/rfc/rfc5598.html). The revised architecture separates the mailbox from the email address and uses an authorization layer that allows individuals to control access to their digital resources across Administrative Management Domain (ADMD) boundaries through email messages. This extra authorization layer, together with the transport layer, comprises servers, agents, and protocols working collectively to create the RHS—a complementary service to the MHS. The RHS extends the capabilities of the current Internet mail system and has the potential to address spam and attachment issues more effectively than the MHS-only email system.
 
 ![Revised Internet Mail Architecture](images/revised_internet_mail_architecture.svg)
 
@@ -24,7 +24,7 @@ This section proposes a revised version of the [Internet Mail Architecture, IETF
 
 #### *Key Points*
 
-Each email object consists of a *placeholder message* and associated external resources (message bodies) stored on the Resource Server (RS) of the respective *mailbox service*. The *placeholder message* also functions as an access control list for its external body resources. The information flow illustrated in the Figure 1 includes the following key points:
+Each email object consists of a *placeholder message* and associated external resources (message bodies) stored on the Resource Server (RS) of the respective *mailbox service*. The *placeholder message* also functions as an access control list for its external body resources. The information flow illustrated in Figure 1 includes the following key points:
 
 - The body resources owned by the author stored on the RS of the origin *mailbox service* are temporarily shared with recipients by creating a *placeholder message* which also acts as an access control list. Following a successful sharing process, the *placeholder message* is sent to each recipient through the MHS. This *placeholder message* stores, in its headers, the URL of the origin *mailbox service* and the cryptographic hash values of the referenced body resources (see Appendix A for a *placeholder message* example).
 
