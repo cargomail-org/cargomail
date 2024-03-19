@@ -48,8 +48,8 @@ Here is a placeholder message in JSON format with external bodies accessible via
 {
   "headers":
     {
-      "X-Mailbox-Service-Origin-URL": "https://foo.com/mbx",
-      "X-Mailbox-Service-Destination-URL": "https://bar.com/mbx",
+      "X-Origin-Mailbox-Service-URL": "https://foo.com/mbx",
+      "X-Destination-Mailbox-Service-URL": "https://bar.com/mbx",
       "From": "Alice Sanders <alice@foo.com>",
       "Subject": "Meeting",
       "To": "Bob Sanders <bob@bar.com>",
@@ -125,6 +125,6 @@ Here is a placeholder message in JSON format with external bodies accessible via
 }
 ```
 
-- X-Mailbox-Service-Origin-URL: *Mailbox Service* origin URL
-- X-Mailbox-Service-Destination-URL: *Mailbox Service* destination URL
-- Contentd-ID: cryptographic hash value of the referenced body resource
+- X-Origin-Mailbox-Service-URL: The origin *mailbox service* URL.
+- X-Destination-Mailbox-Service-URL: The destination *mailbox service* URL.
+- Contentd-ID: Cryptographic hash value of the referenced body resource.
