@@ -1,5 +1,7 @@
 # Cargomail
 
+Development have been moved to the [Federizer](https://github.com/federizer) organization.
+
 ## Introduction
 
 Despite the importance of the email infrastructure, the entire ecosystem still relies on a vintage architecture and protocol design that is more than 40 years old. While conceptually sound as a means of communication, the Internet mail system is structurally incomplete and functionally deficient.
