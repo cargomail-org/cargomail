@@ -25,6 +25,7 @@
    <glyph unicode="n" horiz-adv-x="874" d="M 825,0 L 825,686 C 825,757 818,813 804,852 790,891 768,920 737,937 706,954 661,963 602,963 515,963 447,933 397,874 347,815 322,732 322,627 L 322,0 142,0 142,851 C 142,977 140,1054 136,1082 L 306,1082 C 307,1079 307,1070 308,1055 309,1040 310,1024 311,1005 312,986 313,950 314,897 L 317,897 C 358,972 406,1025 461,1056 515,1087 582,1102 663,1102 782,1102 869,1073 924,1014 979,955 1006,857 1006,721 L 1006,0 825,0 Z"/>
    <glyph unicode="m" horiz-adv-x="1457" d="M 768,0 L 768,686 C 768,791 754,863 725,903 696,943 645,963 570,963 493,963 433,934 388,875 343,816 321,734 321,627 L 321,0 142,0 142,851 C 142,977 140,1054 136,1082 L 306,1082 C 307,1079 307,1070 308,1055 309,1040 310,1024 311,1005 312,986 313,950 314,897 L 317,897 C 356,974 400,1027 450,1057 500,1087 561,1102 633,1102 715,1102 780,1086 828,1053 875,1020 908,968 927,897 L 930,897 C 967,970 1013,1022 1066,1054 1119,1086 1183,1102 1258,1102 1367,1102 1447,1072 1497,1013 1546,954 1571,856 1571,721 L 1571,0 1393,0 1393,686 C 1393,791 1379,863 1350,903 1321,943 1270,963 1195,963 1116,963 1055,934 1012,876 968,817 946,734 946,627 L 946,0 768,0 Z"/>
    <glyph unicode="l" horiz-adv-x="187" d="M 138,0 L 138,1484 318,1484 318,0 138,0 Z"/>
+   <glyph unicode="k" horiz-adv-x="901" d="M 816,0 L 450,494 318,385 318,0 138,0 138,1484 318,1484 318,557 793,1082 1004,1082 565,617 1027,0 816,0 Z"/>
    <glyph unicode="i" horiz-adv-x="187" d="M 137,1312 L 137,1484 317,1484 317,1312 137,1312 Z M 137,0 L 137,1082 317,1082 317,0 137,0 Z"/>
    <glyph unicode="h" horiz-adv-x="874" d="M 317,897 C 356,968 402,1020 457,1053 511,1086 580,1102 663,1102 780,1102 867,1073 923,1015 978,956 1006,858 1006,721 L 1006,0 825,0 825,686 C 825,762 818,819 804,856 790,893 767,920 735,937 703,954 659,963 602,963 517,963 450,934 399,875 348,816 322,737 322,638 L 322,0 142,0 142,1484 322,1484 322,1098 C 322,1057 321,1015 319,972 316,929 315,904 314,897 L 317,897 Z"/>
    <glyph unicode="g" horiz-adv-x="927" d="M 548,-425 C 430,-425 336,-402 266,-356 196,-309 151,-243 131,-158 L 312,-132 C 324,-182 351,-220 392,-248 433,-274 486,-288 553,-288 732,-288 822,-183 822,27 L 822,201 820,201 C 786,132 739,80 680,45 621,10 551,-8 472,-8 339,-8 242,36 180,124 117,212 86,350 86,539 86,730 120,872 187,963 254,1054 355,1099 492,1099 569,1099 635,1082 692,1047 748,1012 791,962 822,897 L 824,897 C 824,917 825,952 828,1001 831,1050 833,1077 836,1082 L 1007,1082 C 1003,1046 1001,971 1001,858 L 1001,31 C 1001,-273 850,-425 548,-425 Z M 822,541 C 822,629 810,705 786,769 762,832 728,881 685,915 641,948 591,965 536,965 444,965 377,932 335,865 293,798 272,690 272,541 272,393 292,287 331,222 370,157 438,125 533,125 590,125 640,142 684,175 728,208 762,256 786,319 810,381 822,455 822,541 Z"/>
@@ -1312,13 +1313,13 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id14">
-        <rect class="BoundingBox" stroke="none" fill="none" x="16226" y="7537" width="4982" height="4414"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="17340" y="8161"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. (optional) </tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="17175" y="8754"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">HTTPS mTLS</tspan></tspan></tspan><tspan class="TextParagraph"><tspan class="TextPosition" x="16917" y="9347"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">POST</tspan><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> </tspan><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-style="italic" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">challenge</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="16832" y="10533"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">6. HTTPS mTLS </tspan></tspan></tspan><tspan class="TextParagraph"><tspan class="TextPosition" x="16477" y="11126"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GET</tspan><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> </tspan><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-style="italic" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">response</tspan><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> (opt.)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="17080" y="11719"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">and resources </tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="16580" y="6936" width="4272" height="5007"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="16899" y="7560"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">5. HTTPS mTLS</tspan></tspan></tspan><tspan class="TextParagraph"><tspan class="TextPosition" x="16916" y="8153"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">POST</tspan><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> </tspan><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-style="italic" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">challenge</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="18070" y="8746"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">return</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="16872" y="9339"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">permission ticket</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="16831" y="10525"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">6. HTTPS mTLS </tspan></tspan></tspan><tspan class="TextParagraph"><tspan class="TextPosition" x="17122" y="11118"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GET</tspan><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> </tspan><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-style="italic" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">response</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="17147" y="11711"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">and resources</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id15">
-        <rect class="BoundingBox" stroke="none" fill="none" x="5851" y="10415" width="5211" height="2635"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="5851" y="10415" width="5211" height="2636"/>
         <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="7205" y="11039"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">1. HTTP(S)</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="6627" y="11632"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">POST</tspan></tspan><tspan class="TextPosition" x="7973" y="11632"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> resources</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="7743" y="12225"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre"> </tspan></tspan><tspan class="TextPosition" x="7878" y="12225"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">return</tspan></tspan></tspan><tspan ooo:numbering-type="number-style" class="ListItem"><tspan class="TextPosition" x="6102" y="12818"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">placeholder message</tspan></tspan></tspan></text>
        </g>
       </g>
@@ -1572,73 +1573,73 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id23">
-        <rect class="BoundingBox" stroke="none" fill="none" x="13816" y="5741" width="9438" height="1336"/>
-        <path fill="rgb(247,209,213)" stroke="none" d="M 23253,6065 L 15276,6065 15276,5741 13816,6408 15276,7076 15276,6751 23253,6751 23253,6065 Z"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="13816" y="5441" width="9438" height="1336"/>
+        <path fill="rgb(247,209,213)" stroke="none" d="M 23253,5765 L 15276,5765 15276,5441 13816,6108 15276,6776 15276,6451 23253,6451 23253,5765 Z"/>
         <g>
          <defs>
-          <pattern id="pattern9" x="13816" y="5741" width="9438" height="1336" patternUnits="userSpaceOnUse">
-           <g transform="translate(-13816,-5741)">
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14002" y1="6323" x2="14002" y2="6493"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14214" y1="6226" x2="14214" y2="6590"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14426" y1="6129" x2="14426" y2="6687"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14638" y1="6032" x2="14638" y2="6784"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14850" y1="5936" x2="14850" y2="6881"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15062" y1="5839" x2="15062" y2="6978"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15274" y1="5742" x2="15274" y2="7075"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15486" y1="6065" x2="15486" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15698" y1="6065" x2="15698" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15910" y1="6065" x2="15910" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16122" y1="6065" x2="16122" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16334" y1="6065" x2="16334" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16546" y1="6065" x2="16546" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16758" y1="6065" x2="16758" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16970" y1="6065" x2="16970" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17182" y1="6065" x2="17182" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17394" y1="6065" x2="17394" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17606" y1="6065" x2="17606" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17818" y1="6065" x2="17818" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18030" y1="6065" x2="18030" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18242" y1="6065" x2="18242" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18454" y1="6065" x2="18454" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18666" y1="6065" x2="18666" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18878" y1="6065" x2="18878" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19090" y1="6065" x2="19090" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19302" y1="6065" x2="19302" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19514" y1="6065" x2="19514" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19726" y1="6065" x2="19726" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19938" y1="6065" x2="19938" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20150" y1="6065" x2="20150" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20362" y1="6065" x2="20362" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20574" y1="6065" x2="20574" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20786" y1="6065" x2="20786" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20998" y1="6065" x2="20998" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21210" y1="6065" x2="21210" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21422" y1="6065" x2="21422" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21634" y1="6065" x2="21634" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21846" y1="6065" x2="21846" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22058" y1="6065" x2="22058" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22270" y1="6065" x2="22270" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22482" y1="6065" x2="22482" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22694" y1="6065" x2="22694" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22906" y1="6065" x2="22906" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="23118" y1="6065" x2="23118" y2="6751"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14869" y1="5927" x2="15276" y2="5927"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14405" y1="6139" x2="23253" y2="6139"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="13941" y1="6351" x2="23253" y2="6351"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14155" y1="6563" x2="23253" y2="6563"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14618" y1="6775" x2="15276" y2="6775"/>
-            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15081" y1="6987" x2="15276" y2="6987"/>
+          <pattern id="pattern9" x="13816" y="5441" width="9438" height="1336" patternUnits="userSpaceOnUse">
+           <g transform="translate(-13816,-5441)">
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14002" y1="6023" x2="14002" y2="6193"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14214" y1="5926" x2="14214" y2="6290"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14426" y1="5829" x2="14426" y2="6387"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14638" y1="5732" x2="14638" y2="6484"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14850" y1="5636" x2="14850" y2="6581"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15062" y1="5539" x2="15062" y2="6678"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15274" y1="5442" x2="15274" y2="6775"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15486" y1="5765" x2="15486" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15698" y1="5765" x2="15698" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15910" y1="5765" x2="15910" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16122" y1="5765" x2="16122" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16334" y1="5765" x2="16334" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16546" y1="5765" x2="16546" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16758" y1="5765" x2="16758" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="16970" y1="5765" x2="16970" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17182" y1="5765" x2="17182" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17394" y1="5765" x2="17394" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17606" y1="5765" x2="17606" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="17818" y1="5765" x2="17818" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18030" y1="5765" x2="18030" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18242" y1="5765" x2="18242" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18454" y1="5765" x2="18454" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18666" y1="5765" x2="18666" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="18878" y1="5765" x2="18878" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19090" y1="5765" x2="19090" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19302" y1="5765" x2="19302" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19514" y1="5765" x2="19514" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19726" y1="5765" x2="19726" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="19938" y1="5765" x2="19938" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20150" y1="5765" x2="20150" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20362" y1="5765" x2="20362" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20574" y1="5765" x2="20574" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20786" y1="5765" x2="20786" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="20998" y1="5765" x2="20998" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21210" y1="5765" x2="21210" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21422" y1="5765" x2="21422" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21634" y1="5765" x2="21634" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="21846" y1="5765" x2="21846" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22058" y1="5765" x2="22058" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22270" y1="5765" x2="22270" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22482" y1="5765" x2="22482" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22694" y1="5765" x2="22694" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="22906" y1="5765" x2="22906" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="23118" y1="5765" x2="23118" y2="6451"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14869" y1="5627" x2="15276" y2="5627"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14405" y1="5839" x2="23253" y2="5839"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="13941" y1="6051" x2="23253" y2="6051"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14155" y1="6263" x2="23253" y2="6263"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="14618" y1="6475" x2="15276" y2="6475"/>
+            <line fill="rgb(236,184,190)" stroke="rgb(236,184,190)" x1="15081" y1="6687" x2="15276" y2="6687"/>
            </g>
           </pattern>
          </defs>
-         <path style="fill:url(#pattern9)" d="M 23253,6065 L 15276,6065 15276,5741 13816,6408 15276,7076 15276,6751 23253,6751 23253,6065 Z"/>
+         <path style="fill:url(#pattern9)" d="M 23253,5765 L 15276,5765 15276,5441 13816,6108 15276,6776 15276,6451 23253,6451 23253,5765 Z"/>
         </g>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id24">
-        <rect class="BoundingBox" stroke="none" fill="none" x="16387" y="5978" width="4928" height="856"/>
-        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="16638" y="6602"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GRIP authentication</tspan></tspan></tspan></text>
+        <rect class="BoundingBox" stroke="none" fill="none" x="16387" y="5678" width="4928" height="856"/>
+        <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="16638" y="6302"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">GRIP authentication</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -2159,7 +2160,7 @@
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id44">
-        <rect class="BoundingBox" stroke="none" fill="none" x="22369" y="7120" width="2896" height="857"/>
+        <rect class="BoundingBox" stroke="none" fill="none" x="22369" y="7120" width="2897" height="857"/>
         <text class="SVGTextShape"><tspan class="TextParagraph"><tspan class="TextPosition" x="22619" y="7745"><tspan font-family="Liberation Sans, sans-serif" font-size="494px" font-weight="400" fill="rgb(0,0,0)" stroke="none" style="white-space: pre">destination</tspan></tspan></tspan></text>
        </g>
       </g>
