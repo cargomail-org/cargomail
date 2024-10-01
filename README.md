@@ -1,6 +1,6 @@
 # Cargomail
 
-Development have been moved to the [Federizer](https://github.com/federizer) organization.
+Development has been moved to the [Federizer](https://github.com/federizer) organization.
 
 ## Introduction
 
